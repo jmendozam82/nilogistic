@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <!-- Secretos locales: dotnet user-secrets set "ConnectionStrings:Nilogistic" "..." (nunca en el repositorio) -->
+    <UserSecretsId>nilogistic-aplicacion-dev</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- MVC: nunca referencia DAL ni Entity (ADR-01). El host monta la API y el IOC. -->
+    <ProjectReference Include="..\Nilogistic.API\Nilogistic.API.csproj" />
+    <ProjectReference Include="..\Nilogistic.BLL\Nilogistic.BLL.csproj" />
+    <ProjectReference Include="..\Nilogistic.DTO\Nilogistic.DTO.csproj" />
+    <ProjectReference Include="..\Nilogistic.IOC\Nilogistic.IOC.csproj" />
+    <ProjectReference Include="..\Nilogistic.Utility\Nilogistic.Utility.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Formatting.Compact" />
+  </ItemGroup>
+</Project>

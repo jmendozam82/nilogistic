@@ -1,0 +1,10 @@
+# Nombres de otros proyectos que NUNCA deben aparecer en namespaces, código, SQL ni configuración de Nilogistic.
+# Una palabra o frase por línea; sin distinguir mayúsculas. HU-001 E3.
+PE-GOL
+PEGOL
+PE GOL
+Vittal
+Freiroute
+Viajeros
+Nacel
+Dicegsa

@@ -1,0 +1,96 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-y-pruebas:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      CI: "true"
+      DOTNET_NOLOGO: "1"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restaurar
+        run: dotnet restore Nilogistic.slnx
+
+      - name: Compilar (advertencias como errores, NuGetAudit alto)
+        run: dotnet build Nilogistic.slnx --no-restore -c Release
+
+      - name: Pruebas de arquitectura (obligatorio)
+        run: dotnet test tests/Nilogistic.Arquitectura.Tests --no-build -c Release
+
+      - name: Pruebas BLL con cobertura
+        run: >
+          dotnet test tests/Nilogistic.BLL.Tests --no-build -c Release
+          --collect:"XPlat Code Coverage" --results-directory ./TestResults/bll
+
+      - name: Pruebas de aplicación (API, cabeceras, guardia de entorno)
+        run: dotnet test tests/Nilogistic.Aplicacion.Tests --no-build -c Release
+
+      - name: Pruebas DAL (Testcontainers PostgreSQL 17)
+        run: dotnet test tests/Nilogistic.DAL.Tests --no-build -c Release
+
+      - name: Umbral de cobertura BLL (>= 70 %)
+        run: python3 scripts/ci/verificar_cobertura.py --minimo 70 --directorio TestResults/bll
+
+      - name: Trazabilidad escenarios Gherkin sin prueba
+        run: python3 scripts/trazabilidad/escenarios_sin_prueba.py --hu-dir docs/hu --pruebas tests --sprint S0
+
+      - name: Pruebas de los scripts
+        run: python3 -m unittest discover -s scripts/tests -v
+
+  secretos:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks (binario, sin licencia de acción)
+        run: |
+          set -euo pipefail
+          v=8.21.2
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${v}/gitleaks_${v}_linux_x64.tar.gz" | tar -xz gitleaks
+          ./gitleaks detect --source . --redact --no-banner
+
+  sql:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: ci
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Aplicar migraciones dos veces (idempotencia)
+        env:
+          PGPASSWORD: ci
+        run: |
+          set -euo pipefail
+          for pasada in 1 2; do
+            for f in supabase/migrations/*.sql; do
+              psql -h localhost -U postgres -v ON_ERROR_STOP=1 -f "$f" >/dev/null
+            done
+          done

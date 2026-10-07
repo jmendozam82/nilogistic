@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Nilogistic.BLL\Nilogistic.BLL.csproj" />
+    <ProjectReference Include="..\..\src\Nilogistic.DAL\Nilogistic.DAL.csproj" />
+    <ProjectReference Include="..\..\src\Nilogistic.DTO\Nilogistic.DTO.csproj" />
+    <ProjectReference Include="..\..\src\Nilogistic.Utility\Nilogistic.Utility.csproj" />
+    <ProjectReference Include="..\Nilogistic.Pruebas.Base\Nilogistic.Pruebas.Base.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <Using Include="FluentAssertions" />
+    <Using Include="Moq" />
+    <Using Include="Nilogistic.Pruebas.Base" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,23 @@
+# Blueprint de Render. Los secretos (sync: false) se cargan en el panel, nunca aquí.
+services:
+  - type: web
+    name: nilogistic-staging
+    runtime: docker
+    plan: starter
+    branch: develop
+    healthCheckPath: /health/live
+    autoDeploy: false
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Staging
+      - key: ConnectionStrings__Nilogistic
+        sync: false
+      - key: Supabase__ReferenciaProyecto
+        sync: false
+      - key: Seguridad__Csp__Modo
+        value: Reporte
+      - key: Seguridad__IndexacionHabilitada
+        value: "false"
+      # Spike de proxy (S0, solo Staging). HU-013 la reemplaza por Proxy__Redes.
+      - key: Proxy__ConfiarEnCualquierProxy
+        value: "true"

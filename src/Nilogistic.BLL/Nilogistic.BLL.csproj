@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <!-- BLL usa del DAL solo el namespace Nilogistic.DAL.Interfaces (lo verifica la prueba de arquitectura) -->
+    <ProjectReference Include="..\Nilogistic.DAL\Nilogistic.DAL.csproj" />
+    <ProjectReference Include="..\Nilogistic.Entity\Nilogistic.Entity.csproj" />
+    <ProjectReference Include="..\Nilogistic.DTO\Nilogistic.DTO.csproj" />
+    <ProjectReference Include="..\Nilogistic.Utility\Nilogistic.Utility.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+</Project>

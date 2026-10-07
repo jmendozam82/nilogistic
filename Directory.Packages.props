@@ -1,0 +1,35 @@
+<Project>
+  <!-- Gestión central de versiones. Los rangos flotantes (10.0.*) toman el último parche LTS;
+       fijar con packages.lock.json cuando se estabilice (D-082). Verificar en el primer restore. -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Datos -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.*" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.*" />
+    <PackageVersion Include="Npgsql" Version="10.0.*" />
+    <!-- Extensiones -->
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.*" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.*" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.*" />
+    <!-- API -->
+    <PackageVersion Include="Asp.Versioning.Mvc" Version="8.1.*" />
+    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.*" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.*" />
+    <!-- Logging -->
+    <PackageVersion Include="Serilog.AspNetCore" Version="9.*" />
+    <PackageVersion Include="Serilog.Formatting.Compact" Version="3.*" />
+    <!-- Pruebas. FluentAssertions queda en 7.x: desde la 8.0 exige licencia comercial (D-083) -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageVersion Include="xunit" Version="2.9.*" />
+    <PackageVersion Include="xunit.extensibility.core" Version="2.9.*" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.*" />
+    <PackageVersion Include="FluentAssertions" Version="7.*" />
+    <PackageVersion Include="Moq" Version="4.20.*" />
+    <PackageVersion Include="coverlet.collector" Version="6.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.*" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="4.*" />
+    <PackageVersion Include="NetArchTest.Rules" Version="1.3.*" />
+  </ItemGroup>
+</Project>

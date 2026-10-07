@@ -1,0 +1,10 @@
+**/bin
+**/obj
+.git
+.github
+tests
+docs
+supabase
+TestResults
+*.pfx
+.env*

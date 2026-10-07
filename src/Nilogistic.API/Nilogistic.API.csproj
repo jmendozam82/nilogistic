@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- API: solo BLL, DTO y Utility (extraíble a otro host sin cambios, ADR-01) -->
+    <ProjectReference Include="..\Nilogistic.BLL\Nilogistic.BLL.csproj" />
+    <ProjectReference Include="..\Nilogistic.DTO\Nilogistic.DTO.csproj" />
+    <ProjectReference Include="..\Nilogistic.Utility\Nilogistic.Utility.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+  </ItemGroup>
+</Project>

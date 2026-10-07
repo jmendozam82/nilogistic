@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Nilogistic.Aplicacion/Nilogistic.Aplicacion.csproj" />
+    <Project Path="src/Nilogistic.API/Nilogistic.API.csproj" />
+    <Project Path="src/Nilogistic.BLL/Nilogistic.BLL.csproj" />
+    <Project Path="src/Nilogistic.DAL/Nilogistic.DAL.csproj" />
+    <Project Path="src/Nilogistic.Entity/Nilogistic.Entity.csproj" />
+    <Project Path="src/Nilogistic.DTO/Nilogistic.DTO.csproj" />
+    <Project Path="src/Nilogistic.IOC/Nilogistic.IOC.csproj" />
+    <Project Path="src/Nilogistic.Utility/Nilogistic.Utility.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Nilogistic.Pruebas.Base/Nilogistic.Pruebas.Base.csproj" />
+    <Project Path="tests/Nilogistic.BLL.Tests/Nilogistic.BLL.Tests.csproj" />
+    <Project Path="tests/Nilogistic.DAL.Tests/Nilogistic.DAL.Tests.csproj" />
+    <Project Path="tests/Nilogistic.Aplicacion.Tests/Nilogistic.Aplicacion.Tests.csproj" />
+    <Project Path="tests/Nilogistic.Arquitectura.Tests/Nilogistic.Arquitectura.Tests.csproj" />
+  </Folder>
+</Solution>
