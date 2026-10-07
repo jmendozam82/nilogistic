@@ -84,13 +84,35 @@ jobs:
           --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
-      - name: Aplicar migraciones dos veces (idempotencia)
+      - name: Aplicar migraciones dos veces (idempotencia, psql -1 transaccional)
         env:
           PGPASSWORD: ci
         run: |
           set -euo pipefail
           for pasada in 1 2; do
             for f in supabase/migrations/*.sql; do
-              psql -h localhost -U postgres -v ON_ERROR_STOP=1 -f "$f" >/dev/null
+              psql -h localhost -U postgres -1 -v ON_ERROR_STOP=1 -f "$f" >/dev/null
             done
           done
+      - name: Migracion con fallo a mitad no deja cambios parciales (E3)
+        env:
+          PGPASSWORD: ci
+        run: |
+          set -euo pipefail
+          psql -h localhost -U postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE mig_prueba_atomica"
+          cat > /tmp/migracion_con_error.sql <<'EOF'
+          CREATE TABLE parcial_no_persistida (id integer primary key);
+          ESTO_NO_ES_SQL_VALIDO;
+          EOF
+          set +e
+          psql -h localhost -U postgres -d mig_prueba_atomica -1 -v ON_ERROR_STOP=1 -f /tmp/migracion_con_error.sql >/dev/null
+          codigo=$?
+          set -e
+          if [ "$codigo" -eq 0 ]; then
+            echo "ERROR: la migracion debio fallar"; exit 1
+          fi
+          existe=$(psql -h localhost -U postgres -d mig_prueba_atomica -tAc "SELECT count(*) FROM pg_tables WHERE tablename='parcial_no_persistida'")
+          if [ "$existe" != "0" ]; then
+            echo "ERROR: quedaron cambios parciales tras el fallo"; exit 1
+          fi
+          echo "OK: rollback total ante error a mitad de migracion"
