@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 0 — Fundaciones |
-| HU actual | HU-002 — API base: Swagger, versionado y health checks (FT-001) |
-| Criterio de aceptación actual | E1 — Swagger disponible en Staging con endpoints bajo /api/v1 |
+| HU actual | HU-003 — Proyecto Supabase y migraciones versionadas (FT-002) |
+| Criterio de aceptación actual | E1 — Base local desde cero (esquema completo e idéntico al esperado) |
 | Paso actual del ciclo | Paso 1 — Preparar |
-| Rama de trabajo | feature/HU-002 |
+| Rama de trabajo | feature/HU-003 |
 | Última actualización | 2026-10-07 |
 
 ## 2. Fases del ciclo de vida
@@ -62,7 +62,8 @@
 | HU | Título | Pts | Estado | CA cumplidos | Pruebas | Auditoría | Estado.md actualizado |
 |---|---|---|---|---|---|---|---|
 | HU-001 | Estructura de solución N-Capas Nilogistic (FT-001) | 5 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
-| HU-002 | API base: Swagger, versionado y health checks (FT-001) | 3 | 🔄 | 0/3 | ⬜ | ⬜ | ⬜ |
+| HU-002 | API base: Swagger, versionado y health checks (FT-001) | 3 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
+| HU-003 | Proyecto Supabase y migraciones versionadas (FT-002) | 5 | 🔄 | 0/4 | ⬜ | ⬜ | ⬜ |
 
 ## 6. Deuda y pendientes
 
@@ -85,6 +86,6 @@
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.3 — 2026-10-07 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.4 — 2026-10-07 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
