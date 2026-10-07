@@ -17,3 +17,5 @@ secrets.json
 *.pem
 __pycache__/
 *.pyc
+.secrets.local
+supabase/.temp/

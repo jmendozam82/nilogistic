@@ -47,7 +47,7 @@
 | Pruebas de arquitectura (NetArchTest) en CI | ⬜ |
 | CI GitHub Actions: build + tests obligatorios | ⬜ |
 | Docker + despliegue base en Render | ⬜ |
-| Supabase CLI: migraciones SQL, RLS deny-by-default, rol nilogistic_app sin DELETE | ⬜ |
+| Supabase CLI: migraciones SQL, RLS deny-by-default, rol nilogistic_app sin DELETE | ✅ |
 | Identity (cookie) + 2FA TOTP + códigos de respaldo | ⬜ |
 | Data Protection: llaves en PostgreSQL + certificado X.509 | ⬜ |
 | Auditoría transversal (quién, qué, cuándo, antes/después, IP) | ⬜ |
@@ -77,12 +77,13 @@
 | D-08 | Restricción | 2026-12-04 no disponible; sin corte de DNS en Semana Santa 2027 | — | ⬜ |
 | D-09 | Documental | Confirmar versiones/fechas de aprobación de Fases 4 y 5 | Próxima sesión | ⬜ |
 | D-10 | Técnica | (deuda técnica generada durante implementación) | — | — |
+| D-11 | Infra | Proyecto Supabase **nilogistic** ref `gpribzfgwvlzxcpdzezs` (East US, Free). Contraseñas owner/app en `scripts/db/.secrets.local` (ignorado). Conectar Render Staging/Production a `Supabase__ReferenciaProyecto` | Antes de HU-006 | ✅ |
 
 ## 7. Versiones
 
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.1 — 2026-10-07 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.2 — 2026-10-07 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
-| Esquema de BD (última migración aplicada) | — |
+| Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
