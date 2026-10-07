@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 0 — Fundaciones |
-| HU actual | HU-001 — Estructura de solución N-Capas Nilogistic (FT-001) |
-| Criterio de aceptación actual | E1 — La solución compila con los 8 proyectos |
+| HU actual | HU-002 — API base: Swagger, versionado y health checks (FT-001) |
+| Criterio de aceptación actual | E1 — Swagger disponible en Staging con endpoints bajo /api/v1 |
 | Paso actual del ciclo | Paso 1 — Preparar |
-| Rama de trabajo | feature/HU-001 |
+| Rama de trabajo | feature/HU-002 |
 | Última actualización | 2026-10-07 |
 
 ## 2. Fases del ciclo de vida
@@ -43,9 +43,9 @@
 
 | Fundación | Estado |
 |---|---|
-| Solución con 8 proyectos y referencias entre capas | ⬜ |
-| Pruebas de arquitectura (NetArchTest) en CI | ⬜ |
-| CI GitHub Actions: build + tests obligatorios | ⬜ |
+| Solución con 8 proyectos y referencias entre capas | ✅ |
+| Pruebas de arquitectura (NetArchTest) en CI | ✅ |
+| CI GitHub Actions: build + tests obligatorios | ✅ |
 | Docker + despliegue base en Render | ⬜ |
 | Supabase CLI: migraciones SQL, RLS deny-by-default, rol nilogistic_app sin DELETE | ✅ |
 | Identity (cookie) + 2FA TOTP + códigos de respaldo | ⬜ |
@@ -61,7 +61,8 @@
 
 | HU | Título | Pts | Estado | CA cumplidos | Pruebas | Auditoría | Estado.md actualizado |
 |---|---|---|---|---|---|---|---|
-| HU-001 | Estructura de solución N-Capas Nilogistic (FT-001) | 5 | 🔄 | 0/4 | ⬜ | ⬜ | ⬜ |
+| HU-001 | Estructura de solución N-Capas Nilogistic (FT-001) | 5 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
+| HU-002 | API base: Swagger, versionado y health checks (FT-001) | 3 | 🔄 | 0/3 | ⬜ | ⬜ | ⬜ |
 
 ## 6. Deuda y pendientes
 
@@ -84,6 +85,6 @@
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.2 — 2026-10-07 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.3 — 2026-10-07 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
