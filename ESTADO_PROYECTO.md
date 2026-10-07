@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 0 — Fundaciones |
-| HU actual | HU-___ (asignar al iniciar; ver backlog del Sprint 0) |
-| Criterio de aceptación actual | CA-1 de la HU actual (Gherkin) |
+| HU actual | HU-001 — Estructura de solución N-Capas Nilogistic (FT-001) |
+| Criterio de aceptación actual | E1 — La solución compila con los 8 proyectos |
 | Paso actual del ciclo | Paso 1 — Preparar |
-| Rama de trabajo | feature/HU-___ |
+| Rama de trabajo | feature/HU-001 |
 | Última actualización | 2026-10-07 |
 
 ## 2. Fases del ciclo de vida
@@ -47,7 +47,7 @@
 | Pruebas de arquitectura (NetArchTest) en CI | ⬜ |
 | CI GitHub Actions: build + tests obligatorios | ⬜ |
 | Docker + despliegue base en Render | ⬜ |
-| Supabase CLI: migraciones SQL, RLS deny-by-default, rol nilogistic_app sin DELETE | ⬜ |
+| Supabase CLI: migraciones SQL, RLS deny-by-default, rol nilogistic_app sin DELETE | ✅ |
 | Identity (cookie) + 2FA TOTP + códigos de respaldo | ⬜ |
 | Data Protection: llaves en PostgreSQL + certificado X.509 | ⬜ |
 | Auditoría transversal (quién, qué, cuándo, antes/después, IP) | ⬜ |
@@ -61,7 +61,7 @@
 
 | HU | Título | Pts | Estado | CA cumplidos | Pruebas | Auditoría | Estado.md actualizado |
 |---|---|---|---|---|---|---|---|
-| HU-___ | (completar desde backlog del Sprint 0) | | ⬜ | 0/0 | ⬜ | ⬜ | ⬜ |
+| HU-001 | Estructura de solución N-Capas Nilogistic (FT-001) | 5 | 🔄 | 0/4 | ⬜ | ⬜ | ⬜ |
 
 ## 6. Deuda y pendientes
 
@@ -77,12 +77,13 @@
 | D-08 | Restricción | 2026-12-04 no disponible; sin corte de DNS en Semana Santa 2027 | — | ⬜ |
 | D-09 | Documental | Confirmar versiones/fechas de aprobación de Fases 4 y 5 | Próxima sesión | ⬜ |
 | D-10 | Técnica | (deuda técnica generada durante implementación) | — | — |
+| D-11 | Infra | Proyecto Supabase **nilogistic** ref `gpribzfgwvlzxcpdzezs` (East US, Free). Contraseñas owner/app en `scripts/db/.secrets.local` (ignorado). Conectar Render Staging/Production a `Supabase__ReferenciaProyecto` | Antes de HU-006 | ✅ |
 
 ## 7. Versiones
 
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.1 — 2026-10-07 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.2 — 2026-10-07 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
-| Esquema de BD (última migración aplicada) | — |
+| Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
