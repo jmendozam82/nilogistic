@@ -116,3 +116,10 @@ jobs:
             echo "ERROR: quedaron cambios parciales tras el fallo"; exit 1
           fi
           echo "OK: rollback total ante error a mitad de migracion"
+      - name: Guardia RLS deny-by-default (HU-004 DoD)
+        env:
+          PGPASSWORD: ci
+        run: |
+          set -euo pipefail
+          psql -h localhost -U postgres -d postgres -v ON_ERROR_STOP=1 -f scripts/ci/verificar_rls.sql >/dev/null
+          echo "OK: RLS en todas las tablas de negocio, sin acceso anon y public vacio"
