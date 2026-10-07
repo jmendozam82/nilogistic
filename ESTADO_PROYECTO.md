@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 0 — Fundaciones |
-| HU actual | HU-006 — Despliegue en Render con migraciones desde CI (FT-003) |
-| Criterio de aceptación actual | E1 — Despliegue automático al merge a main en Staging |
+| HU actual | HU-012 — Cabeceras de seguridad y HTTPS (FT-008) |
+| Criterio de aceptación actual | E1 — Redirección permanente a HTTPS y cabeceras mínimas |
 | Paso actual del ciclo | Paso 1 — Preparar |
-| Rama de trabajo | feature/HU-006 |
+| Rama de trabajo | feature/HU-012 |
 | Última actualización | 2026-10-07 |
 
 ## 2. Fases del ciclo de vida
@@ -66,7 +66,7 @@
 | HU-003 | Proyecto Supabase y migraciones versionadas (FT-002) | 5 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
 | HU-004 | Seguridad base: RLS y buckets privados (FT-002) | 3 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
 | HU-005 | Integración continua con bloqueo de merge (FT-003) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — | ✅ |
-| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | 🔄 | 0/5 | ⬜ | ⬜ | ⬜ |
+| HU-012 | Cabeceras de seguridad y HTTPS (FT-008) | 3 | 🔄 | 0/4 | ⬜ | ⬜ | ⬜ |
 
 ## 6. Deuda y pendientes
 
@@ -89,6 +89,6 @@
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.7 — 2026-10-07 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.8 — 2026-10-07 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
