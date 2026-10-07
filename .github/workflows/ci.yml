@@ -39,7 +39,7 @@ jobs:
       - name: Pruebas de arquitectura (obligatorio)
         run: dotnet test tests/Nilogistic.Arquitectura.Tests --no-build -c Release
 
-- name: Pruebas BLL con cobertura
+      - name: Pruebas BLL con cobertura
         run: >
           dotnet test tests/Nilogistic.BLL.Tests --no-build -c Release
           --collect:"XPlat Code Coverage" --results-directory ./TestResults/bll
