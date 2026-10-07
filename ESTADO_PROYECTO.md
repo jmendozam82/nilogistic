@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 0 — Fundaciones |
-| HU actual | HU-___ (asignar al iniciar; ver backlog del Sprint 0) |
-| Criterio de aceptación actual | CA-1 de la HU actual (Gherkin) |
+| HU actual | HU-001 — Estructura de solución N-Capas Nilogistic (FT-001) |
+| Criterio de aceptación actual | E1 — La solución compila con los 8 proyectos |
 | Paso actual del ciclo | Paso 1 — Preparar |
-| Rama de trabajo | feature/HU-___ |
+| Rama de trabajo | feature/HU-001 |
 | Última actualización | 2026-10-07 |
 
 ## 2. Fases del ciclo de vida
@@ -61,7 +61,7 @@
 
 | HU | Título | Pts | Estado | CA cumplidos | Pruebas | Auditoría | Estado.md actualizado |
 |---|---|---|---|---|---|---|---|
-| HU-___ | (completar desde backlog del Sprint 0) | | ⬜ | 0/0 | ⬜ | ⬜ | ⬜ |
+| HU-001 | Estructura de solución N-Capas Nilogistic (FT-001) | 5 | 🔄 | 0/4 | ⬜ | ⬜ | ⬜ |
 
 ## 6. Deuda y pendientes
 
