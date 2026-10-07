@@ -71,6 +71,11 @@ jobs:
           v=8.21.2
           curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${v}/gitleaks_${v}_linux_x64.tar.gz" | tar -xz gitleaks
           ./gitleaks detect --source . --redact --no-banner
+        run: |
+          set -euo pipefail
+          v=8.21.2
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${v}/gitleaks_${v}_linux_x64.tar.gz" | tar -xz gitleaks
+          ./gitleaks detect --source . --redact --no-banner
 
   sql:
     runs-on: ubuntu-24.04
@@ -123,3 +128,12 @@ jobs:
           set -euo pipefail
           psql -h localhost -U postgres -d postgres -v ON_ERROR_STOP=1 -f scripts/ci/verificar_rls.sql >/dev/null
           echo "OK: RLS en todas las tablas de negocio, sin acceso anon y public vacio"
+
+  conventional-commits:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validar Conventional Commits del rango (HU-005)
+        run: python3 scripts/ci/validar_conventional_commits.py --base origin/${{ github.event.pull_request.base.ref || 'main' }}
