@@ -136,4 +136,4 @@ jobs:
         with:
           fetch-depth: 0
       - name: Validar Conventional Commits del rango (HU-005)
-        run: python3 scripts/ci/validar_conventional_commits.py --base origin/${{ github.event.pull_request.base.ref || 'main' }}
+        run: python3 scripts/ci/validar_conventional_commits.py --base origin/main
