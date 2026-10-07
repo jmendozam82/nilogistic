@@ -127,6 +127,7 @@ public class ReglasDeTipoTests
             .SelectMany(e => e.GetTypes())
             .Where(t => t.Namespace is not null && !t.Namespace.StartsWith("Nilogistic", StringComparison.Ordinal))
             .Where(t => !t.Namespace!.StartsWith("AspNetCoreGeneratedDocument", StringComparison.Ordinal))
+            .Where(t => !t.Namespace!.StartsWith("Coverlet.Core.Instrumentation.Tracker", StringComparison.Ordinal))
             .Where(t => !t.Namespace!.StartsWith("System.", StringComparison.Ordinal) &&
                         !t.Namespace!.StartsWith("Microsoft.", StringComparison.Ordinal))
             .Select(t => t.FullName)
