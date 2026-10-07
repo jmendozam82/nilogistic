@@ -123,3 +123,12 @@ jobs:
           set -euo pipefail
           psql -h localhost -U postgres -d postgres -v ON_ERROR_STOP=1 -f scripts/ci/verificar_rls.sql >/dev/null
           echo "OK: RLS en todas las tablas de negocio, sin acceso anon y public vacio"
+
+  conventional-commits:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validar Conventional Commits del rango (HU-005)
+        run: python3 scripts/ci/validar_conventional_commits.py --base origin/main
