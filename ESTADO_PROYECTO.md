@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 0 — Fundaciones |
-| HU actual | HU-004 — Seguridad base: RLS y buckets privados (FT-002) |
-| Criterio de aceptación actual | E1 — Tabla nueva sin políticas no devuelve filas con la API REST |
+| HU actual | HU-005 — Integración continua con bloqueo de merge (FT-003) |
+| Criterio de aceptación actual | E1 — Un PR con pruebas en verde puede integrarse |
 | Paso actual del ciclo | Paso 1 — Preparar |
-| Rama de trabajo | feature/HU-004 |
+| Rama de trabajo | feature/HU-005 |
 | Última actualización | 2026-10-07 |
 
 ## 2. Fases del ciclo de vida
@@ -64,7 +64,8 @@
 | HU-001 | Estructura de solución N-Capas Nilogistic (FT-001) | 5 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
 | HU-002 | API base: Swagger, versionado y health checks (FT-001) | 3 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
 | HU-003 | Proyecto Supabase y migraciones versionadas (FT-002) | 5 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
-| HU-004 | Seguridad base: RLS y buckets privados (FT-002) | 3 | 🔄 | 0/4 | ⬜ | ⬜ | ⬜ |
+| HU-004 | Seguridad base: RLS y buckets privados (FT-002) | 3 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
+| HU-005 | Integración continua con bloqueo de merge (FT-003) | 3 | 🔄 | 0/5 | ⬜ | ⬜ | ⬜ |
 
 ## 6. Deuda y pendientes
 
@@ -87,6 +88,6 @@
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.5 — 2026-10-07 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.6 — 2026-10-07 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
