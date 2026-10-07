@@ -20,7 +20,7 @@ public sealed class CspReportesController(ILogger<CspReportesController> registr
     [HttpPost]
     [IgnoreAntiforgeryToken]
     [RequestSizeLimit(LimiteBytes)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(204)]
     public async Task<IActionResult> Recibir(CancellationToken cancelacion)
     {
         var buffer = new byte[LimiteBytes];

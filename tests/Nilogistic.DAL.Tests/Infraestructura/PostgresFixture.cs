@@ -12,7 +12,9 @@ public sealed class PostgresFixture : IAsyncLifetime
     public const string PasswordApp = "clave-solo-para-pruebas";
     private const string Plantilla = "nilogistic_plantilla";
 
-    private readonly PostgreSqlContainer _contenedor = new PostgreSqlBuilder("postgres:17-alpine").Build();
+    private readonly PostgreSqlContainer _contenedor = new PostgreSqlBuilder()
+        .WithImage("postgres:17-alpine")
+        .Build();
 
     public async Task InitializeAsync()
     {

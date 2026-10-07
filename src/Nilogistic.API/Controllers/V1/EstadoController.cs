@@ -13,7 +13,7 @@ public sealed class EstadoController(IServicioSalud servicio) : ControllerBase
 {
     /// <summary>Estado público mínimo del sistema.</summary>
     [HttpGet]
-    [ProducesResponseType<EstadoSistemaResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<EstadoSistemaResponse>(200)]
     public async Task<ActionResult<EstadoSistemaResponse>> Obtener(CancellationToken cancelacion) =>
         Ok(await servicio.ObtenerEstadoAsync(cancelacion));
 }
