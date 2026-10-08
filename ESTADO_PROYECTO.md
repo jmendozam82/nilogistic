@@ -10,11 +10,11 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 0 — Fundaciones |
-| HU actual | HU-012 — Cabeceras de seguridad y HTTPS (FT-008) |
+| HU actual | Sprint 0 — Finalizado |
 | Criterio de aceptación actual | E1 — Redirección permanente a HTTPS y cabeceras mínimas |
 | Paso actual del ciclo | Paso 1 — Preparar |
 | Rama de trabajo | feature/HU-012 |
-| Última actualización | 2026-10-07 |
+| Última actualización | 2026-10-07 (actualizado) |
 
 ## 2. Fases del ciclo de vida
 
@@ -66,7 +66,7 @@
 | HU-003 | Proyecto Supabase y migraciones versionadas (FT-002) | 5 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
 | HU-004 | Seguridad base: RLS y buckets privados (FT-002) | 3 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
 | HU-005 | Integración continua con bloqueo de merge (FT-003) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — | ✅ |
-| HU-012 | Cabeceras de seguridad y HTTPS (FT-008) | 3 | 🔄 | 0/4 | ⬜ | ⬜ | ⬜ |
+| HU-012 | Cabeceras de seguridad y HTTPS (FT-008) | 3 | ✅ | 7/7 (E1–E7) | ✅ | — | ✅ |
 
 ## 6. Deuda y pendientes
 
