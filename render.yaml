@@ -1,3 +1,5 @@
+# Especificación de referencia del servicio de Staging (D-111): hoy el servicio se crea a mano con estos
+# mismos valores (ver docs/runbooks/despliegue-y-rollback.md); se usará como Blueprint cuando haya tarjeta.
 # Blueprint de Render. Los secretos (sync: false) se cargan en el panel, nunca aquí.
 services:
   - type: web

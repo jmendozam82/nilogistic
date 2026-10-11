@@ -11,13 +11,34 @@ El primer merge de HU-006 a `develop` ejecuta `desplegar-staging` antes de que e
 Render. El paso «Comprobar configuracion del entorno» **falla a propósito, antes de migrar**, y lista
 lo que falta. Para completar:
 
-1. En Render: New → Blueprint, repositorio y rama `develop`; cargar los secretos
-   `ConnectionStrings__Nilogistic` (Session pooler, rol `nilogistic_app`) y
-   `Supabase__ReferenciaProyecto`.
+1. En Render: crear el servicio a mano según «Servicio de Staging en Render» (D-111): New → Web Service,
+   con los valores de la tabla de abajo. (Con tarjeta registrada puede usarse un Blueprint en su lugar.)
 2. Copiar el Deploy Hook (Settings del servicio) al secreto `RENDER_DEPLOY_HOOK` del entorno
    `staging` y la URL pública a la variable `URL_BASE`.
 3. En GitHub Actions, volver a ejecutar el job fallido («Re-run failed jobs»): aplica las migraciones
    pendientes y despliega. Ese es el primer comprobante de E1.
+
+## Servicio de Staging en Render (D-111)
+
+Render pide tarjeta para crear un Blueprint, así que el servicio se crea a mano con **estos valores,
+idénticos a `render.yaml`** (la especificación de referencia; si uno cambia, cambia el otro):
+
+| Campo en Render | Valor |
+|---|---|
+| Nombre | `nilogistic-staging` |
+| Origen | repositorio `jmendozam82/nilogistic`, rama `develop` |
+| Lenguaje / runtime | Docker (`./Dockerfile`, contexto `.`) |
+| Región | Virginia (US East), la más cercana al Supabase de Staging (East US) |
+| Instancia | **Free** |
+| Health Check Path | `/health/ready` |
+| Auto-Deploy | **No** (el despliegue lo dispara el Deploy Hook desde Actions) |
+| `PORT` | `8080` (el `Dockerfile` escucha en 8080) |
+| `ASPNETCORE_ENVIRONMENT` | `Staging` |
+| `ConnectionStrings__Nilogistic` | secreto: cadena clave=valor de Npgsql (Session pooler, rol `nilogistic_app`) |
+| `Supabase__ReferenciaProyecto` | `gpribzfgwvlzxcpdzezs` |
+| `Seguridad__Csp__Modo` | `Reporte` |
+| `Seguridad__IndexacionHabilitada` | `false` |
+| `Proxy__ConfiarEnCualquierProxy` | `true` (solo Staging, durante el spike SPK-01) |
 
 ## Flujo de despliegue
 

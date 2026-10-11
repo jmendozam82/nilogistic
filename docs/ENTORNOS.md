@@ -45,6 +45,7 @@
   con `nilogistic_app` (variable `ConnectionStrings__Nilogistic` en Render).
 - Producción usa el mismo flujo, disparado por `workflow_dispatch` desde `main` y con aprobación
   manual (entorno `produccion`); permanece **inactivo** hasta S10.
+- El servicio de Render de Staging se crea a mano (D-111), con la configuración de `render.yaml`.
 - Procedimiento completo y rollback: `docs/runbooks/despliegue-y-rollback.md`.
 
 ### Regla expandir/contraer (SUP-8)
