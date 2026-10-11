@@ -11,8 +11,8 @@
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
 | HU actual | HU-006 — Despliegue en Render con migraciones desde CI (D-107; HU-010 exige la cuenta de Resend; HU-036 exige D-02) |
-| Criterio de aceptación actual | — (ficha en borrador, pendiente de aprobar SUP-2..SUP-9) |
-| Paso actual del ciclo | Ficha de HU-006 escrita · a la espera de aprobación de Jorge |
+| Criterio de aceptación actual | — (ficha v0.2 aprobada; lista para el Pase A) |
+| Paso actual del ciclo | Ficha de HU-006 aprobada · Pase A pendiente de entrega a OpenCode |
 | Rama de trabajo | feature/HU-006 |
 | Última actualización | 2026-10-10 |
 
@@ -64,7 +64,7 @@
 | HU-007 | Base de dominio: soft delete, UTC y repositorio genérico (FT-004) | 5 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | ⬜ (E1 → HU-008, D-12) | ✅ |
 | HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — (D-12 análoga → HU-008) | ✅ |
 | HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ⬜ | – | ⬜ | – | ⬜ |
-| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | 🔄 | – (ficha v0.1) | ⬜ | – | ⬜ |
+| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | 🔄 | – (ficha v0.2 aprobada) | ⬜ | – | ⬜ |
 | HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 

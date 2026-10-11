@@ -1,0 +1,11 @@
+# NILOGISTIC — Registro vivo: decisiones D-107 a D-110 (10/10/2026)
+
+Continúa `Nilogistic_Registro_Decisiones_D105_D106.md`.
+
+| ID | Decisión | Afecta |
+|---|---|---|
+| D-107 | **HU-006 antes que HU-010.** Jorge creó la cuenta de Render, que desbloquea HU-006; la de Resend sigue pendiente. El orden de D-088 pasa a HU-006 → HU-010 → HU-036 y HU-037. El alcance de HU-006 en S1 es solo Staging. | Sprint 1, D-088 |
+| D-108 | **Datos de infraestructura confirmados por Jorge.** El proyecto Supabase `gpribzfgwvlzxcpdzezs` es el de Staging (D-11, East US, Free). El repositorio `jmendozam82/nilogistic` es **público**: los Environments de GitHub con revisores requeridos no tienen costo, y ningún job con secretos puede dispararse desde un fork. El Web Service creado a mano en Render queda descartado a favor del Blueprint. | HU-006, seguridad de CI |
+| D-109 | **HU-006: SUP-2 a SUP-9 aprobados por Jorge (10/10/2026).** Staging en plan Render `free`; `autoDeploy: false` con despliegue por Deploy Hook desde Actions tras las migraciones; CD como job dentro de `ci.yml` sin cancelar ejecuciones de `push`; migraciones con `supabase db push --db-url` por el pooler en modo sesión, CLI fijada en **2.116.0**; sondeo de salud sin verificar el commit (deuda D-18); job de Producción inactivo hasta S10 con entorno de aprobación manual; migraciones compatibles hacia atrás y correctivas hacia adelante; verificación con pruebas estructurales más evidencia real en Staging. | HU-006 |
+| D-110 | **Producción, postura inicial (provisional).** Jorge decidió mantener inicialmente en Producción el repositorio público y el plan gratuito de Render. **Excepción consciente a ADR-08, a RNF-DIS-02 y a la regla de HU-006 "Producción sin suspensión por inactividad":** el plan gratuito suspende el servicio tras 15 minutos sin tráfico y no es adecuado para el sitio público tras el corte de DNS. No tiene efecto hasta S10, cuando se crea Producción. Debe reconfirmarse al inicio de S10 y, a más tardar, antes de la puerta G7a (pre-corte); si se mantiene, hay que modificar la regla de HU-006 y RNF-DIS-02 con una nueva versión del Lote 1. El repositorio público es aceptable mientras no haya secretos en él (gitleaks en CI) y se mantenga la restricción de eventos de los jobs con secretos. | ADR-08, HU-006, S10, G7a |
+
