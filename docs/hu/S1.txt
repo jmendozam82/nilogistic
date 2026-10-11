@@ -1,5 +1,10 @@
-# Escenarios de S1 con prueba esperada. HU-007 (E4 ya consta en S0.txt). La CI evalúa todos los sprints (--sprint todos, D-15).
+# Escenarios de S1 con prueba esperada. HU-007 (E4 ya consta en S0.txt) y HU-034. La CI evalúa todos los sprints (--sprint todos, D-15).
 HU-007 E1
 HU-007 E2
 HU-007 E3
 HU-007 E5
+HU-034 E1
+HU-034 E2
+HU-034 E3
+HU-034 E4
+HU-034 E5

@@ -10,9 +10,9 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-034 — Ejecutor de tareas en segundo plano |
-| Criterio de aceptación actual | E1 — Ejecución programada (HU-034) |
-| Paso actual del ciclo | Paso 1 — Preparar |
+| HU actual | Por confirmar — consultar a Jorge (HU-010 exige D-01; HU-036 exige D-02) |
+| Criterio de aceptación actual | — (HU-034 cerrada; E1–E5 cumplidos) |
+| Paso actual del ciclo | Cierre de HU-034 · a la espera de confirmar la próxima HU |
 | Rama de trabajo | feature/HU-034 |
 | Última actualización | 2026-10-10 |
 
@@ -62,7 +62,7 @@
 | HU | Título | Pts | Estado | CA cumplidos | Pruebas | Auditoría | Estado.md actualizado |
 |---|---|---|---|---|---|---|---|
 | HU-007 | Base de dominio: soft delete, UTC y repositorio genérico (FT-004) | 5 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | ⬜ (E1 → HU-008, D-12) | ✅ |
-| HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ⬜ | – | ⬜ | – | ⬜ |
+| HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — (D-12 análoga → HU-008) | ✅ |
 | HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
@@ -108,6 +108,6 @@ Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01)
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.10 — 2026-10-10 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.11 — 2026-10-10 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
