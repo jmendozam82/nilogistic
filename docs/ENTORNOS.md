@@ -18,7 +18,7 @@
 |---|---|---|---|---|
 | Local | `supabase start` (Docker) o Testcontainers PG 17 | localhost | propietario | `supabase db reset` / CI |
 | Staging | `nilogistic` ref `gpribzfgwvlzxcpdzezs` (East US, Free) | staging pre-release | `nilogistic_app` | Supabase CLI (`supabase db push`), credenciales en `scripts/db/.secrets.local` (ignorado) |
-| Production | Proyecto propio (se crea en HU-006) | nilogistic.com | `nilogistic_app` (conexión distinta) | Supabase CLI; ningún cambio manual de esquema |
+| Production | Proyecto propio (se crea en S10, D-110) | nilogistic.com | `nilogistic_app` (conexión distinta) | Supabase CLI; ningún cambio manual de esquema |
 
 **PostgreSQL 17** en todos los entornos (decisión ADR-03 / config.toml `major_version = 17`; la versión efectiva de Staging se confirma con `supabase db query --linked --...` al primer despliegue).
 

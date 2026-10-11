@@ -5,6 +5,20 @@ falla la migración o la salud del servicio, el rollback de la aplicación en Re
 (fuego simulado) en Staging. Aplica al CD definido en `.github/workflows/ci.yml` (jobs
 `desplegar-staging` y `desplegar-produccion`) y al Blueprint `render.yaml`.
 
+## Primera puesta en marcha (una sola vez)
+
+El primer merge de HU-006 a `develop` ejecuta `desplegar-staging` antes de que exista el servicio en
+Render. El paso «Comprobar configuracion del entorno» **falla a propósito, antes de migrar**, y lista
+lo que falta. Para completar:
+
+1. En Render: New → Blueprint, repositorio y rama `develop`; cargar los secretos
+   `ConnectionStrings__Nilogistic` (Session pooler, rol `nilogistic_app`) y
+   `Supabase__ReferenciaProyecto`.
+2. Copiar el Deploy Hook (Settings del servicio) al secreto `RENDER_DEPLOY_HOOK` del entorno
+   `staging` y la URL pública a la variable `URL_BASE`.
+3. En GitHub Actions, volver a ejecutar el job fallido («Re-run failed jobs»): aplica las migraciones
+   pendientes y despliega. Ese es el primer comprobante de E1.
+
 ## Flujo de despliegue
 
 1. **Merge a `develop`.** El CI corre `build-y-pruebas`, `secretos`, `sql` y `conventional-commits`.
@@ -15,9 +29,10 @@ falla la migración o la salud del servicio, el rollback de la aplicación en Re
 3. **Disparo del despliegue.** Solo si la migración salió bien, el job hace `POST` al
    `RENDER_DEPLOY_HOOK` (secreto de entorno). `render.yaml` tiene `autoDeploy: false`: Render **no**
    despliega solo, lo hace el hook y siempre después de migrar.
-4. **Verificación de salud.** El job espera 90 s y sondea hasta 40 veces (≈ 10 min)
+4. **Comprobación previa.** Antes de migrar, el job verifica que existan `DB_URL`, `RENDER_DEPLOY_HOOK` y `URL_BASE`; si falta alguno, falla sin tocar la base.
+5. **Verificación de salud.** El job espera 90 s y sondea hasta 40 veces (≈ 10 min)
    `GET /health/ready` y `GET /api/v1/estado`. Si el sondeo no queda sano, el job falla.
-5. **Producción** (inactivo hasta S10): mismo flujo, disparado por `workflow_dispatch` desde `main`,
+6. **Producción** (inactivo hasta S10): mismo flujo, disparado por `workflow_dispatch` desde `main`,
    entorno `produccion` con **revisor requerido** (Jorge). Sin secretos cargados no puede ejecutarse.
 
 Evidencia: historial de GitHub Actions (quién ejecutó/aprobó) y de Render (cada despliegue con su
@@ -29,7 +44,7 @@ commit). En Producción, la aprobación manual queda registrada en la actividad 
 - El job se detiene **antes** de disparar el hook (`supabase db push` precede al `POST`): la versión
   anterior sigue sirviendo y **no se activa la versión nueva**.
 - El esquema de la migración abortada no queda a medias: la CLI aplica cada archivo en una
-  transacción (`psql -1`); un error hace rollback total de esa migración.
+  transacción; un error hace rollback total de esa migración.
 - Acción: corregir **hacia adelante** con una migración nueva (ver «Migración correctiva»), commitear
   a `develop` y dejar que el CI vuelva a aplicar. No se edita una migración ya aplicada.
 
@@ -79,8 +94,8 @@ Ensayo obligatorio antes de dar por buena la HU; se anota en la sección 14 de l
 1. **Despliegue automático (E1):** merge a `develop` con CI en verde; comprobar que el job
    `desplegar-staging` aplica migraciones y luego despliega.
 2. **Migración fallida (E3):** preparar una migración con error, observarla fallar en el job; la
-   versión anterior sigue sirviendo y no se dispara el hook. Retirar la migración de prueba con una
-   correctiva o un revert del commit (sin dejar el esquema a medias).
+   versión anterior sigue sirviendo y no se dispara el hook. Como no llegó a aplicarse, se retira
+   revirtiendo el commit de la migración de prueba (no hace falta migración correctiva).
 3. **Salud fallida (E4):** desplegar una versión que no pase `/health/ready`; comprobar que Render no
    le da tráfico y el job falla.
 4. **Rollback (E5):** ejecutar el rollback de la aplicación y medir el tiempo (objetivo ≤ 15
