@@ -80,7 +80,7 @@ Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01)
 | HU-004 | Seguridad base: RLS y buckets privados (FT-002) | 3 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
 | HU-005 | Integración continua con bloqueo de merge (FT-003) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — | ✅ |
 | HU-012 | Cabeceras de seguridad y HTTPS (FT-008) | 3 | ✅ | 7/7 (E1–E7) | ✅ | — | ✅ |
-| HU-038 | Plantilla de pruebas y umbral de cobertura (FT-010) | 3 | ✅ | 4/5 (E1, E3, E4, E5); E2 → puerta G1 (D-13) | ✅ | — | ✅ |
+| HU-038 | Plantilla de pruebas y umbral de cobertura (FT-010) | 3 | ✅ | 4/5 (E1, E3, E4, E5); E2 → puerta G1 (D-102; se verifica al cierre de S1) | ✅ | — | ✅ |
 
 ## 6. Deuda y pendientes
 
@@ -98,8 +98,8 @@ Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01)
 | D-10 | Técnica | (deuda técnica generada durante implementación) | — | — |
 | D-11 | Infra | Proyecto Supabase **nilogistic** ref `gpribzfgwvlzxcpdzezs` (East US, Free). Contraseñas owner/app en `scripts/db/.secrets.local` (ignorado). Conectar Render Staging/Production a `Supabase__ReferenciaProyecto` | Antes de HU-006 | ✅ |
 | D-12 | Trazabilidad | La cláusula de auditoría del escenario E1 de HU-007 se verifica con una prueba en HU-008 (decisión D-089) | Fin de S2 (HU-008) | ⬜ |
-| D-13 | Documental | Formalizar la decisión del 07/10/2026 sobre el umbral de cobertura (E2 de HU-038: puerta G1 al cierre de sprint, no bloquea el PR); no consta en el registro D-072..D-087 ni en el texto de HU-038 | Cierre de S1 | ⬜ |
-| D-14 | Documental | DoD-01 del Lote 1 dice MVC → API → BLL y contradice ADR-01 (MVC → BLL directo); archivar duplicados `Lote1 (1).md` (v1.1) y `Lote2.md` (v1.0). Ligado a D-09 | Próxima sesión | ⬜ |
+| D-13 | Documental | Formalizar la decisión del 07/10/2026 sobre el umbral de cobertura (E2 de HU-038: puerta G1 al cierre de sprint, no bloquea el PR). Registrada como D-102; HU-038 reescrita en Lote 2 v1.5 | Cierre de S1 | ✅ (10/10/2026) |
+| D-14 | Documental | DoD-01 del Lote 1 contradecía ADR-01. Corregido en Lote 1 v1.6 (D-103); duplicados archivados en `docs fase/_archivo/` (D-104). Ligado a D-09 (sigue abierta) | Próxima sesión | ✅ (10/10/2026) |
 | D-15 | CI | La CI evalúa la trazabilidad de todos los sprints (`--sprint todos`); `docs/hu/S1.txt` creado | Antes de cerrar HU-007 | ✅ |
 | D-16 | Técnica | Soporte de programación cron y política de purga/archivo de `app.tareas_ejecuciones` (sin DELETE); decidir con HU-035 (D-093) | Antes de HU-035 / primera tarea cron de R2 | ⬜ |
 
@@ -108,6 +108,6 @@ Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01)
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.11 — 2026-10-10 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.12 — 2026-10-10 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
