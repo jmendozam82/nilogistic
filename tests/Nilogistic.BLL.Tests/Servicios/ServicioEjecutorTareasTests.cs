@@ -112,6 +112,33 @@ public class ServicioEjecutorTareasTests
     }
 
     [Fact]
+    [Hu("HU-034", "E3")]
+    public async Task Renueva_el_lease_antes_de_cada_espera_con_el_margen_calculado()
+    {
+        var repositorio = new RepositorioTareasFalso { Reserva = new TareaReservada("correo", "intervalo:60", 30, 2) };
+        var manejador = new ManejadorFalso("correo", _ => Task.FromException(new InvalidOperationException("siempre falla")));
+        var servicio = Crear(repositorio, [manejador], new EsperaFalsa(), esperaBase: 5);
+
+        await servicio.EjecutarSiguienteAsync(CancellationToken.None);
+
+        repositorio.Renovaciones.Should().HaveCount(2, "una renovacion antes de cada espera, no tras el ultimo intento");
+        repositorio.Renovaciones[0].HastaUtc.Should().Be(Ahora.AddSeconds(5 + 30 + 60), "ahora + 5s + 30s + 60s");
+        repositorio.Renovaciones[1].HastaUtc.Should().Be(Ahora.AddSeconds(10 + 30 + 60), "ahora + 10s + 30s + 60s");
+    }
+
+    [Fact]
+    [Hu("HU-034", "E3")]
+    public async Task No_renueva_el_lease_si_el_primer_intento_tiene_exito()
+    {
+        var repositorio = new RepositorioTareasFalso { Reserva = new TareaReservada("correo", "intervalo:60", 30, 2) };
+        var servicio = Crear(repositorio, [new ManejadorFalso("correo")]);
+
+        await servicio.EjecutarSiguienteAsync(CancellationToken.None);
+
+        repositorio.Renovaciones.Should().BeEmpty();
+    }
+
+    [Fact]
     [Hu("HU-034", "E4")]
     public async Task Tarea_que_excede_el_tiempo_maximo_queda_cancelada_con_motivo()
     {
