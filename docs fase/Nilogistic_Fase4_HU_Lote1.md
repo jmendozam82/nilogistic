@@ -7,7 +7,7 @@
 | Fase | 4 de 9 — Historias de Usuario con criterios de aceptación |
 | Entrada | Fase 2 v1.4 y Backlog v1.2 |
 | Alcance del lote | 33 HU sobre 18 features de la ruta crítica de R1: 122 SP, 175 escenarios Gherkin |
-| Estado | Aprobado. Siguiente: Lote 2 (resto de R1) |
+| Estado | Aprobado (Fase 4 aprobada el 05/10/2026; D-105). Siguiente: Lote 2 (resto de R1) |
 
 ---
 

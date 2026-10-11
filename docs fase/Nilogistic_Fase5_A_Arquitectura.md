@@ -2,13 +2,13 @@
 
 | Campo | Valor |
 |---|---|
-| Versión | 0.1 (borrador para aprobación) |
+| Versión | **1.0** (aprobada; antes 0.1, borrador para aprobación) |
 | Fecha | 05/10/2026 |
 | Fase | 5 de 9 — Diseño (documento A de 3) |
 | Alcance | Arquitectura y decisiones técnicas para **R1 a R3** (condición de P-304) |
 | Entrada | Fase 2 v1.5, Backlog v1.3, Fase 4 Lotes 1 y 2 aprobados |
 | Documentos relacionados | (B) Modelo de datos · (C) UX, pantallas y contratos de API |
-| Meta de aprobación | 30/10/2026 |
+| Aprobación | 07/10/2026 (adelantada; meta original 30/10/2026; fecha consolidada en D-105) |
 
 ---
 

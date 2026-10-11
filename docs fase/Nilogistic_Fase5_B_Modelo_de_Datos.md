@@ -2,12 +2,12 @@
 
 | Campo | Valor |
 |---|---|
-| Versión | 0.1 (borrador para aprobación) |
+| Versión | **1.0** (aprobada; antes 0.1, borrador para aprobación) |
 | Fecha | 05/10/2026 |
 | Fase | 5 de 9 — Diseño (documento B de 3) |
 | Alcance | **R1 en detalle y listo para escribir migraciones** (40 tablas); R2 (15 tablas) y R3 (11 tablas) a nivel lógico, como pide P-304 |
 | Entrada | ADR-03, ADR-04, ADR-05, ADR-06, ADR-07, ADR-13 del documento A; Fase 2 v1.5; HU de los Lotes 1 y 2 |
-| Meta de aprobación | 30/10/2026 |
+| Aprobación | 07/10/2026 (adelantada; meta original 30/10/2026; fecha consolidada en D-105) |
 
 ---
 
