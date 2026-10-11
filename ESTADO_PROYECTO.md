@@ -10,11 +10,11 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | Por confirmar — consultar a Jorge (HU-010 exige D-01; HU-036 exige D-02) |
-| Criterio de aceptación actual | — (HU-034 cerrada; E1–E5 cumplidos) |
-| Paso actual del ciclo | Cierre de HU-034 · a la espera de confirmar la próxima HU |
-| Rama de trabajo | feature/HU-034 |
-| Última actualización | 2026-10-10 |
+| HU actual | HU-006 — Despliegue en Render con migraciones desde CI (D-107; HU-010 exige la cuenta de Resend; HU-036 exige D-02) |
+| Criterio de aceptación actual | E1–E5 con prueba estructural ✅; evidencia real en Staging ⬜ (SUP-9, la anota Jorge) |
+| Paso actual del ciclo | Pase B entregado (pruebas, trazabilidad y paso 8); cierre de la HU pendiente de la evidencia de Staging |
+| Rama de trabajo | feature/HU-006 |
+| Última actualización | 2026-10-11 |
 
 ## 2. Fases del ciclo de vida
 
@@ -64,11 +64,13 @@
 | HU-007 | Base de dominio: soft delete, UTC y repositorio genérico (FT-004) | 5 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | ⬜ (E1 → HU-008, D-12) | ✅ |
 | HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — (D-12 análoga → HU-008) | ✅ |
 | HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ⬜ | – | ⬜ | – | ⬜ |
-| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ⬜ | – | ⬜ | – | ⬜ |
+| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | 🔄 | 5/5 estructurales (E1–E5); real en Staging ⬜ (SUP-9) | ✅ | — | ✅ |
 | HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
-Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01); HU-036 y HU-037 requieren el diseño visual (D-02).
+Total S1: 23 SP. HU-010 requiere la cuenta de Resend (D-01; la de Render ya existe, D-107); HU-036 y HU-037 requieren el diseño visual (D-02).
+
+Prerrequisitos 4.0 de HU-006 (2026-10-11): (1) Web Service manual `nilogistic-staging` de Render eliminado ✅ · (2) entornos GitHub `staging` (rama `develop`) y `produccion` (rama `main`, revisor Jorge) creados ✅ · (3) secreto `DB_URL` (Session pooler, puerto 5432, rol owner) cargado en `staging` ✅ · (4) `main` protegido con el check `build-y-pruebas` ✅. Diferidos por diseño: `URL_BASE` y `RENDER_DEPLOY_HOOK` (tras el Blueprint).
 
 ### 5.1 HU del Sprint 0 (cerrado)
 
@@ -102,13 +104,14 @@ Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01)
 | D-14 | Documental | DoD-01 del Lote 1 contradecía ADR-01. Corregido en Lote 1 v1.6 (D-103); duplicados archivados en `docs fase/_archivo/` (D-104). Ligado a D-09 (sigue abierta) | Próxima sesión | ✅ (10/10/2026) |
 | D-15 | CI | La CI evalúa la trazabilidad de todos los sprints (`--sprint todos`); `docs/hu/S1.txt` creado | Antes de cerrar HU-007 | ✅ |
 | D-16 | Técnica | Soporte de programación cron y política de purga/archivo de `app.tareas_ejecuciones` (sin DELETE); decidir con HU-035 (D-093) | Antes de HU-035 / primera tarea cron de R2 | ⬜ |
-| D-17 | Proceso | Marcar `build-y-pruebas` como check requerido en la protección de `main` para que la puerta G1 (D-106) bloquee el merge; lo hace Jorge en GitHub | Antes del primer PR a `main` | ⬜ |
+| D-17 | Proceso | Marcar `build-y-pruebas` como check requerido en la protección de `main` para que la puerta G1 (D-106) bloquee el merge; lo hace Jorge en GitHub | Antes del primer PR a `main` | ✅ (11/10/2026) |
+| D-18 | Técnica | Exponer el commit desplegado (`RENDER_GIT_COMMIT`) en `/api/v1/estado` y verificarlo en el sondeo posterior al despliegue (HU-006, SUP-6) | Antes de S2 | ⬜ |
 
 ## 7. Versiones
 
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.13 — 2026-10-10 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.15 — 2026-10-11 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
