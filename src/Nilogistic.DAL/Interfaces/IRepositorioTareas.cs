@@ -21,6 +21,12 @@ public interface IRepositorioTareas
     /// </summary>
     Task<TareaReservada?> ReservarSiguienteAsync(DateTime ahoraUtc, int margenReservaSeg, CancellationToken cancelacion = default);
 
+    /// <summary>
+    /// Extiende la reserva (lease) de una tarea hasta <paramref name="hastaUtc"/> para cubrir la
+    /// espera exponencial entre reintentos sin que otra instancia la tome (seccion 4.4, paso 4).
+    /// </summary>
+    Task RenovarReservaAsync(string tareaNombre, DateTime hastaUtc, CancellationToken cancelacion = default);
+
     /// <summary>Abre un registro de ejecución y devuelve su id.</summary>
     Task<long> IniciarEjecucionAsync(string tareaNombre, DateTime inicioUtc, string instancia, CancellationToken cancelacion = default);
 

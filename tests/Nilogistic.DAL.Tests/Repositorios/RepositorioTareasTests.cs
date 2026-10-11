@@ -201,4 +201,56 @@ public class RepositorioTareasTests(PostgresFixture bd)
             $"select ultima_ejecucion_utc = '{Ahora:o}' and proxima_ejecucion_utc = '{proxima:o}' from app.tareas where nombre = 'correo'");
         estado.Should().BeTrue();
     }
+
+    [Fact]
+    [Hu("HU-034", "E2")]
+    public async Task Reservar_con_token_cancelado_lanza_y_no_modifica_la_proxima_ejecucion()
+    {
+        var nombre = await bd.CrearBaseAsync();
+        var cadena = bd.CadenaApp(nombre);
+        await SembrarAsync(nombre, "correo", proxima: Ahora.AddMinutes(-5));
+        using var contexto = CrearContexto(cadena);
+        var repositorio = Repositorio(contexto);
+        using var cancelacion = new CancellationTokenSource();
+        cancelacion.Cancel();
+
+        var accion = () => repositorio.ReservarSiguienteAsync(Ahora, margenReservaSeg: 60, cancelacion.Token);
+
+        await accion.Should().ThrowAsync<OperationCanceledException>();
+        var proxima = await bd.EscalarAsync<DateTime>(cadena, "select proxima_ejecucion_utc from app.tareas where nombre = 'correo'");
+        proxima.Should().Be(Ahora.AddMinutes(-5), "la reserva no debe haberse aplicado");
+    }
+
+    [Fact]
+    [Hu("HU-034", "E2")]
+    public async Task Renovar_reserva_difiere_la_disponibilidad_hasta_la_nueva_fecha()
+    {
+        var nombre = await bd.CrearBaseAsync();
+        var cadena = bd.CadenaApp(nombre);
+        await SembrarAsync(nombre, "correo", proxima: Ahora.AddMinutes(-5));
+        using var contexto = CrearContexto(cadena);
+        var repositorio = Repositorio(contexto);
+        (await repositorio.ReservarSiguienteAsync(Ahora, margenReservaSeg: 60)).Should().NotBeNull();
+        var hasta = Ahora.AddHours(1);
+
+        await repositorio.RenovarReservaAsync("correo", hasta);
+
+        (await repositorio.ReservarSiguienteAsync(hasta.AddSeconds(-1), margenReservaSeg: 60)).Should().BeNull();
+        (await repositorio.ReservarSiguienteAsync(hasta, margenReservaSeg: 60)).Should().NotBeNull();
+    }
+
+    [Fact]
+    [Hu("HU-034", "E2")]
+    public async Task Renovar_una_tarea_inexistente_no_lanza_ni_crea_filas()
+    {
+        var nombre = await bd.CrearBaseAsync();
+        var cadena = bd.CadenaApp(nombre);
+        using var contexto = CrearContexto(cadena);
+        var repositorio = Repositorio(contexto);
+
+        var accion = () => repositorio.RenovarReservaAsync("fantasma", Ahora.AddHours(1));
+
+        await accion.Should().NotThrowAsync();
+        (await bd.EscalarAsync<long>(cadena, "select count(*) from app.tareas")).Should().Be(0);
+    }
 }

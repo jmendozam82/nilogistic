@@ -11,7 +11,7 @@ namespace Nilogistic.DAL.Repositorios;
 /// </summary>
 public sealed class RepositorioTareas(NilogisticDbContext contexto) : IRepositorioTareas
 {
-    public Task<TareaReservada?> ReservarSiguienteAsync(
+    public async Task<TareaReservada?> ReservarSiguienteAsync(
         DateTime ahoraUtc,
         int margenReservaSeg,
         CancellationToken cancelacion = default)
@@ -27,11 +27,25 @@ public sealed class RepositorioTareas(NilogisticDbContext contexto) : IRepositor
             returning nombre as "Nombre", programacion as "Programacion", timeout_seg as "TimeoutSeg", max_reintentos as "MaxReintentos"
             """;
 
-        // SqlQuery envuelve el SQL en una subconsulta al componer; AsEnumerable ejecuta la
-        // sentencia tal cual (UPDATE ... RETURNING no es componible).
-        var reservada = contexto.Database.SqlQuery<TareaReservada>(sql).AsEnumerable().SingleOrDefault();
-        return Task.FromResult(reservada);
+        // SqlQuery envuelve el SQL en una subconsulta al componer; AsAsyncEnumerable ejecuta la
+        // sentencia tal cual (UPDATE ... RETURNING no es componible) y respeta la cancelacion.
+        await foreach (var fila in contexto.Database.SqlQuery<TareaReservada>(sql)
+            .AsAsyncEnumerable()
+            .WithCancellation(cancelacion))
+        {
+            return fila;
+        }
+
+        return null;
     }
+
+    public Task RenovarReservaAsync(
+        string tareaNombre,
+        DateTime hastaUtc,
+        CancellationToken cancelacion = default) =>
+        contexto.Database.ExecuteSqlInterpolatedAsync(
+            $"update app.tareas set proxima_ejecucion_utc = {hastaUtc} where nombre = {tareaNombre}",
+            cancelacion);
 
     public async Task<long> IniciarEjecucionAsync(
         string tareaNombre,
