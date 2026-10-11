@@ -1,4 +1,4 @@
-# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt) y HU-034. La CI evalúa todos los sprints (--sprint todos, D-15).
+# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt), HU-010 y HU-034. La CI evalúa todos los sprints (--sprint todos, D-15).
 HU-006 E1
 HU-006 E2
 HU-006 E3
@@ -14,3 +14,9 @@ HU-034 E2
 HU-034 E3
 HU-034 E4
 HU-034 E5
+HU-010 E1
+HU-010 E2
+HU-010 E3
+HU-010 E4
+HU-010 E5
+# HU-010 E1-E5: estructural (normalizados con espaciado de un solo espacio) mas pruebas unitarias BLL/Aplicacion; evidencia real Staging en Pase C.

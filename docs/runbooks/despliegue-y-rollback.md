@@ -39,6 +39,7 @@ idénticos a `render.yaml`** (la especificación de referencia; si uno cambia, c
 | `Seguridad__Csp__Modo` | `Reporte` |
 | `Seguridad__IndexacionHabilitada` | `false` |
 | `Proxy__ConfiarEnCualquierProxy` | `true` (solo Staging, durante el spike SPK-01) |
+| `Resend__ApiKey` | secreto (se añadió a `render.yaml` con HU-010): cargar en el panel del servicio |
 
 ## Flujo de despliegue
 
