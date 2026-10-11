@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | Por confirmar — consultar a Jorge (HU-010 exige D-01; HU-036 exige D-02) |
-| Criterio de aceptación actual | — (HU-034 cerrada; E1–E5 cumplidos) |
-| Paso actual del ciclo | Cierre de HU-034 · a la espera de confirmar la próxima HU |
-| Rama de trabajo | feature/HU-034 |
+| HU actual | HU-006 — Despliegue en Render con migraciones desde CI (D-107; HU-010 exige la cuenta de Resend; HU-036 exige D-02) |
+| Criterio de aceptación actual | — (ficha en borrador, pendiente de aprobar SUP-2..SUP-9) |
+| Paso actual del ciclo | Ficha de HU-006 escrita · a la espera de aprobación de Jorge |
+| Rama de trabajo | feature/HU-006 |
 | Última actualización | 2026-10-10 |
 
 ## 2. Fases del ciclo de vida
@@ -64,11 +64,11 @@
 | HU-007 | Base de dominio: soft delete, UTC y repositorio genérico (FT-004) | 5 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | ⬜ (E1 → HU-008, D-12) | ✅ |
 | HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — (D-12 análoga → HU-008) | ✅ |
 | HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ⬜ | – | ⬜ | – | ⬜ |
-| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ⬜ | – | ⬜ | – | ⬜ |
+| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | 🔄 | – (ficha v0.1) | ⬜ | – | ⬜ |
 | HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
-Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01); HU-036 y HU-037 requieren el diseño visual (D-02).
+Total S1: 23 SP. HU-010 requiere la cuenta de Resend (D-01; la de Render ya existe, D-107); HU-036 y HU-037 requieren el diseño visual (D-02).
 
 ### 5.1 HU del Sprint 0 (cerrado)
 
@@ -103,6 +103,7 @@ Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01)
 | D-15 | CI | La CI evalúa la trazabilidad de todos los sprints (`--sprint todos`); `docs/hu/S1.txt` creado | Antes de cerrar HU-007 | ✅ |
 | D-16 | Técnica | Soporte de programación cron y política de purga/archivo de `app.tareas_ejecuciones` (sin DELETE); decidir con HU-035 (D-093) | Antes de HU-035 / primera tarea cron de R2 | ⬜ |
 | D-17 | Proceso | Marcar `build-y-pruebas` como check requerido en la protección de `main` para que la puerta G1 (D-106) bloquee el merge; lo hace Jorge en GitHub | Antes del primer PR a `main` | ⬜ |
+| D-18 | Técnica | Exponer el commit desplegado (`RENDER_GIT_COMMIT`) en `/api/v1/estado` y verificarlo en el sondeo posterior al despliegue (HU-006, SUP-6) | Antes de S2 | ⬜ |
 
 ## 7. Versiones
 
