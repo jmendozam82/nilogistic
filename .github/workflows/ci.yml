@@ -151,6 +151,20 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 2.116.0
+      - name: Comprobar configuracion del entorno
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          URL_BASE: ${{ vars.URL_BASE }}
+        run: |
+          set -euo pipefail
+          faltan=""
+          [ -n "$DB_URL" ] || faltan="$faltan DB_URL"
+          [ -n "$RENDER_DEPLOY_HOOK" ] || faltan="$faltan RENDER_DEPLOY_HOOK"
+          [ -n "$URL_BASE" ] || faltan="$faltan URL_BASE"
+          if [ -n "$faltan" ]; then
+            echo "ERROR: faltan en el entorno staging:$faltan (ver docs/runbooks/despliegue-y-rollback.md)"; exit 1
+          fi
       - name: Aplicar migraciones en Staging
         env:
           DB_URL: ${{ secrets.DB_URL }}
@@ -192,6 +206,20 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 2.116.0
+      - name: Comprobar configuracion del entorno
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          URL_BASE: ${{ vars.URL_BASE }}
+        run: |
+          set -euo pipefail
+          faltan=""
+          [ -n "$DB_URL" ] || faltan="$faltan DB_URL"
+          [ -n "$RENDER_DEPLOY_HOOK" ] || faltan="$faltan RENDER_DEPLOY_HOOK"
+          [ -n "$URL_BASE" ] || faltan="$faltan URL_BASE"
+          if [ -n "$faltan" ]; then
+            echo "ERROR: faltan en el entorno produccion:$faltan (ver docs/runbooks/despliegue-y-rollback.md)"; exit 1
+          fi
       - name: Aplicar migraciones en Produccion
         env:
           DB_URL: ${{ secrets.DB_URL }}
