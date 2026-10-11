@@ -20,7 +20,7 @@ public sealed class ProveedorCorreoResend(HttpClient http, OpcionesResend opcion
     {
         cancelacion.ThrowIfCancellationRequested();
 
-        using var solicitud = new HttpRequestMessage(HttpMethod.Post, $"{opciones.UrlBase}/emails")
+        using var solicitud = new HttpRequestMessage(HttpMethod.Post, $"{opciones.UrlBase.TrimEnd('/')}/emails")
         {
             Content = new StringContent(ConstruirCuerpo(mensaje), Encoding.UTF8, "application/json")
         };

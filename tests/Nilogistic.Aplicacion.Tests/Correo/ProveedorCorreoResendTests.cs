@@ -78,6 +78,19 @@ public class ProveedorCorreoResendTests
         resultado.IdProveedor.Should().BeNull();
     }
 
+    [Fact]
+    [Hu("HU-010", "E1")]
+    public async Task UrlBase_con_barra_final_envia_a_emails_sin_doble_barra()
+    {
+        var manejador = new ManejadorFalso();
+        var http = new HttpClient(manejador);
+        var proveedor = new ProveedorCorreoResend(http, new OpcionesResend { ApiKey = Clave, UrlBase = UrlBase + "/" });
+
+        await proveedor.EnviarAsync(Mensaje(), CancellationToken.None);
+
+        manejador.Destino!.ToString().Should().Be($"{UrlBase}/emails");
+    }
+
     [Theory]
     [Hu("HU-010", "E2")]
     [InlineData(408)]
