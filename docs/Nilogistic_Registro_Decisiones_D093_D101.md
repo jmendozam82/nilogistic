@@ -1,4 +1,4 @@
-# NILOGISTIC — Registro vivo: decisiones D-093 a D-100 (10/10/2026)
+# NILOGISTIC — Registro vivo: decisiones D-093 a D-101 (10/10/2026)
 
 Continúa `Nilogistic_Registro_Decisiones_D088_D092.md`. Supuestos SUP-1 a SUP-8 de la ficha `docs/tareas/HU-034.md`, aprobados por Jorge el 10/10/2026.
 
@@ -12,3 +12,4 @@ Continúa `Nilogistic_Registro_Decisiones_D088_D092.md`. Supuestos SUP-1 a SUP-8
 | D-098 | **HU-034, SUP-6 (con cambio):** la lógica del ejecutor vive en la BLL; el `BackgroundService` vive en el host `Nilogistic.Aplicacion.Tareas`, sin dependencia del DAL ni de `Hosting.Abstractions` en la BLL. | HU-034 |
 | D-099 | **HU-034, SUP-7:** un timeout no se reintenta; solo se reintentan las excepciones (con espera exponencial). | HU-034 |
 | D-100 | **HU-034, SUP-8:** el campo `error` guarda solo el nombre del tipo de la excepción; el detalle completo va a los logs. | HU-034 |
+| D-101 | **Paquete `Microsoft.Extensions.Options.ConfigurationExtensions` 10.0.0 autorizado** (excepción a la regla de paquetes de las fichas) para enlazar secciones de configuración con el binder estándar (`Configure<T>(IConfiguration)`); lo usarán HU-010 y las siguientes. Aprobación de Jorge comunicada a través del informe del ejecutor del 10/10/2026. | HU-034, `Directory.Packages.props`, IOC |
