@@ -3,6 +3,7 @@ name: ci
 on:
   pull_request:
     branches: [develop, main]
+  workflow_dispatch:
   push:
     branches: [develop, main]
 
@@ -50,8 +51,11 @@ jobs:
       - name: Pruebas DAL (Testcontainers PostgreSQL 17)
         run: dotnet test tests/Nilogistic.DAL.Tests --no-build -c Release
 
-      # Umbral de cobertura BLL >= 70 %: puerta G1 de release, se evalua al cierre del Sprint (decisión 07/10/2026).
-      # No bloquea el merge de cada PR; la cobertura se recopila arriba como dato para la revisión (scripts/ci/verificar_cobertura.py).
+      # Puerta G1 (D-102, D-106): cobertura de BLL >= 70 %. No corre en PR a develop; se exige en PR a main
+      # (cierre de Sprint / release), al integrar en main y a demanda con workflow_dispatch.
+      - name: Puerta G1 - cobertura de BLL >= 70 %
+        if: ${{ github.event_name == 'workflow_dispatch' || github.base_ref == 'main' || github.ref == 'refs/heads/main' }}
+        run: python3 scripts/ci/verificar_cobertura.py --minimo 70 --directorio ./TestResults/bll
 
       - name: Trazabilidad escenarios Gherkin sin prueba
         run: python3 scripts/trazabilidad/escenarios_sin_prueba.py --hu-dir docs/hu --pruebas tests --sprint todos
