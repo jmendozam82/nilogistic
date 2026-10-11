@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-006 — Despliegue en Render con migraciones desde CI (D-107; HU-010 exige la cuenta de Resend; HU-036 exige D-02) |
-| Criterio de aceptación actual | E1–E5 con prueba estructural ✅; evidencia real en Staging ⬜ (SUP-9, la anota Jorge) |
-| Paso actual del ciclo | Pase B entregado (pruebas, trazabilidad y paso 8); cierre de la HU pendiente de la evidencia de Staging |
-| Rama de trabajo | feature/HU-006 |
+| HU actual | HU-010 — Servicio de correo transaccional con cola (HU-006 cerrada ✅ 2026-10-11; HU-036/037 exigen D-02) |
+| Criterio de aceptación actual | HU-010 sin iniciar: ficha pendiente (cuenta de Resend con dominio verificado ya disponible, D-01) |
+| Paso actual del ciclo | Redacción de la ficha de HU-010 (paso 1 del ciclo) |
+| Rama de trabajo | develop (sin rama de HU abierta) |
 | Última actualización | 2026-10-11 |
 
 ## 2. Fases del ciclo de vida
@@ -64,13 +64,15 @@
 | HU-007 | Base de dominio: soft delete, UTC y repositorio genérico (FT-004) | 5 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | ⬜ (E1 → HU-008, D-12) | ✅ |
 | HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — (D-12 análoga → HU-008) | ✅ |
 | HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ⬜ | – | ⬜ | – | ⬜ |
-| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | 🔄 | 5/5 estructurales (E1–E5); real en Staging ⬜ (SUP-9) | ✅ | — | ✅ |
+| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ✅ | 5/5 (E1–E5; estructurales y reales en Staging, SUP-9 cumplido) | ✅ | — | ✅ |
 | HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
-Total S1: 23 SP. HU-010 requiere la cuenta de Resend (D-01; la de Render ya existe, D-107); HU-036 y HU-037 requieren el diseño visual (D-02).
+Total S1: 23 SP (13 cerrados: HU-007, HU-034, HU-006). HU-010 tiene la cuenta de Resend con dominio verificado (D-01, confirmado 2026-10-11); HU-036 y HU-037 requieren el diseño visual (D-02).
 
-Prerrequisitos 4.0 de HU-006 (2026-10-11): (1) Web Service manual `nilogistic-staging` de Render eliminado ✅ · (2) entornos GitHub `staging` (rama `develop`) y `produccion` (rama `main`, revisor Jorge) creados ✅ · (3) secreto `DB_URL` (Session pooler, puerto 5432, rol owner) cargado en `staging` ✅ · (4) `main` protegido con el check `build-y-pruebas` ✅. Diferidos por diseño: `URL_BASE` y `RENDER_DEPLOY_HOOK` (tras el Blueprint).
+Prerrequisitos 4.0 de HU-006 (2026-10-11): (1) Web Service manual `nilogistic-staging` de Render eliminado ✅ · (2) entornos GitHub `staging` (rama `develop`) y `produccion` (rama `main`, revisor Jorge) creados ✅ · (3) secreto `DB_URL` (Session pooler, puerto 5432, rol owner) cargado en `staging` ✅ · (4) `main` protegido con el check `build-y-pruebas` ✅. `URL_BASE` y `RENDER_DEPLOY_HOOK` se cargaron después, con el servicio manual (D-111).
+
+Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698365 (migración fallida corta antes del hook; limpieza PR #14/#15); E4 `dep-db5rtve7bikc73drqs30` falla sin afectar al live; E5 rollback en 26 s (criterio ≤15 min). Detalle en `docs/tareas/HU-006.md` §14.
 
 ### 5.1 HU del Sprint 0 (cerrado)
 
@@ -88,7 +90,7 @@ Prerrequisitos 4.0 de HU-006 (2026-10-11): (1) Web Service manual `nilogistic-st
 
 | ID | Tipo | Descripción | Límite | Estado |
 |---|---|---|---|---|
-| D-01 | Insumo | Cuentas creadas (Render, Supabase, GitHub, Resend, Cloudflare) y acceso al DNS | Antes de Sprint 0 / despliegue | ⬜ |
+| D-01 | Insumo | Cuentas creadas (Render, Supabase, GitHub, Resend, Cloudflare) y acceso al DNS. Render, Supabase y GitHub ✅; Resend con dominio verificado ✅ (11/10/2026); pendiente confirmar Cloudflare Turnstile y DNS | Antes de HU-010 / HU-014 | 🔄 |
 | D-02 | Insumo | Diseño visual entregado por Jorge | 2026-11-20 | ⬜ |
 | D-03 | Negocio | Validar valores reales de planes antes del primer despliegue público | Pre-release R1 | ⬜ |
 | D-04 | Tarea | #8 Tarea de catálogos | Antes de 2026-12-21 (y antes del Sprint 3) | ⬜ |
@@ -107,12 +109,14 @@ Prerrequisitos 4.0 de HU-006 (2026-10-11): (1) Web Service manual `nilogistic-st
 | D-17 | Proceso | Marcar `build-y-pruebas` como check requerido en la protección de `main` para que la puerta G1 (D-106) bloquee el merge; lo hace Jorge en GitHub | Antes del primer PR a `main` | ✅ (11/10/2026) |
 | D-18 | Técnica | Exponer el commit desplegado (`RENDER_GIT_COMMIT`) en `/api/v1/estado` y verificarlo en el sondeo posterior al despliegue (HU-006, SUP-6) | Antes de S2 | ⬜ |
 | D-19 | Infra | Adoptar el Blueprint de Render (`render.yaml`) cuando haya tarjeta registrada y comprobar que el servicio creado a mano (D-111) coincide con él | Antes de crear Producción (S10) | ⬜ |
+| D-20 | Seguridad | Rotar la contraseña del rol `nilogistic_app` (un modelo del ejecutor leyó `.secrets.local`) y no reutilizarla en Producción | Antes de Producción (S10) | ⬜ |
+| D-21 | Proceso | Migraciones con timestamp creciente real (posterior a la última registrada); el ensayo E3 usó uno futuro y fue retirado | Permanente | ⬜ |
 
 ## 7. Versiones
 
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.16 — 2026-10-11 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.17 — 2026-10-11 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
-| Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
+| Esquema de BD (última migración aplicada) | 4 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs) |
