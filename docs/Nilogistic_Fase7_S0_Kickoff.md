@@ -29,7 +29,7 @@ Ruta crítica: HU-001 → (HU-002, HU-003, HU-005) → (HU-012, HU-004, HU-038).
 3. Instalar SDK .NET 10, Docker, Supabase CLI y Python 3.11+.
 4. `dotnet build Nilogistic.slnx` y corregir lo que salga. Luego `dotnet test`. Pásame la salida y lo corrijo.
 5. Crear el proyecto Supabase **de Staging** y aplicar las migraciones con la CLI; anotar la referencia del proyecto.
-6. Conectar el repositorio a Render (Blueprint `render.yaml`) solo cuando S0 esté en verde; el despliegue formal es HU-006 en S1.
+6. Conectar el repositorio a Render (Blueprint `render.yaml`; la API key de Render va solo en variables de entorno o GitHub Secrets, nunca en el repo) solo cuando S0 esté en verde; el despliegue formal es HU-006 en S1.
 7. Activar la protección de `develop` y `main` con los checks `build-y-pruebas`, `secretos` y `sql`.
 8. Conciliar `docs/hu/S0.txt` con los escenarios reales de Fase 4 (hoy contiene solo los escenarios que ya tienen prueba).
 

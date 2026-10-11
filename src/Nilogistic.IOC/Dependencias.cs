@@ -32,6 +32,7 @@ public static class Dependencias
 
         servicios.AddSingleton(new InformacionAplicacion("Nilogistic", version, entorno.EnvironmentName));
         servicios.AddSingleton<IRelojUtc, RelojSistema>();
+        servicios.AddScoped<IActorActual, ActorSistema>();
 
         servicios.AgregarPersistencia(cadenaConexion!);
 

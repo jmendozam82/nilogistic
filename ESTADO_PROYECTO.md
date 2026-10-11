@@ -9,12 +9,12 @@
 |---|---|
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
-| Sprint actual | Sprint 0 — Fundaciones |
-| HU actual | Sprint 0 — Finalizado |
-| Criterio de aceptación actual | E1 — Redirección permanente a HTTPS y cabeceras mínimas |
+| Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
+| HU actual | HU-034 — Ejecutor de tareas en segundo plano |
+| Criterio de aceptación actual | E1 — Ejecución programada (HU-034) |
 | Paso actual del ciclo | Paso 1 — Preparar |
-| Rama de trabajo | feature/HU-012 |
-| Última actualización | 2026-10-07 (actualizado) |
+| Rama de trabajo | feature/HU-034 |
+| Última actualización | 2026-10-10 |
 
 ## 2. Fases del ciclo de vida
 
@@ -26,7 +26,7 @@
 | 4 | Historias de Usuario (R1: Lotes 1 y 2) | ✅ | verificar versión |
 | 5 | Diseño: arquitectura y modelo de datos (ADR-01..17) | ✅ | Nilogistic_Fase5_A_Arquitectura.md |
 | 6 | Planificación de Sprints | ✅ | Fase 6 v0.5 (aprobada 2026-10-07) |
-| 7 | Implementación por Sprint | 🔄 | Sprint 0 |
+| 7 | Implementación por Sprint | 🔄 | Sprint 1 (S0 cerrado) |
 | 8 | Pruebas unitarias + validación visual (por Sprint) | ⬜ | — |
 | 9 | Despliegue, release y retrospectiva | ⬜ | — |
 
@@ -39,7 +39,7 @@
 | R3 | Cursos y E-Commerce; reportes y métricas de Empresa | ⬜ |
 | R4 | Evolución (panel Gerente, BI externo) | ⬜ |
 
-## 4. Sprint actual — Sprint 0 (Fundaciones)
+## 4. Fundaciones técnicas (Sprint 0 cerrado; los ⬜ se entregan con las HU de S1 en adelante)
 
 | Fundación | Estado |
 |---|---|
@@ -57,7 +57,20 @@
 | Datos semilla de planes (provisionales) | ⬜ |
 | Layout base Razor + Bootstrap (a la espera del diseño visual) | ⬜ |
 
-## 5. HU del sprint actual
+## 5. HU del sprint actual — Sprint 1 (Plataforma operativa; iniciado 2026-10-09, adelantado desde el 23/11/2026)
+
+| HU | Título | Pts | Estado | CA cumplidos | Pruebas | Auditoría | Estado.md actualizado |
+|---|---|---|---|---|---|---|---|
+| HU-007 | Base de dominio: soft delete, UTC y repositorio genérico (FT-004) | 5 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | ⬜ (E1 → HU-008, D-12) | ✅ |
+| HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ⬜ | – | ⬜ | – | ⬜ |
+| HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ⬜ | – | ⬜ | – | ⬜ |
+| HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ⬜ | – | ⬜ | – | ⬜ |
+| HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
+| HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
+
+Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01); HU-036 y HU-037 requieren el diseño visual (D-02).
+
+### 5.1 HU del Sprint 0 (cerrado)
 
 | HU | Título | Pts | Estado | CA cumplidos | Pruebas | Auditoría | Estado.md actualizado |
 |---|---|---|---|---|---|---|---|
@@ -67,6 +80,7 @@
 | HU-004 | Seguridad base: RLS y buckets privados (FT-002) | 3 | ✅ | 4/4 (E1, E2, E3, E4) | ✅ | — | ✅ |
 | HU-005 | Integración continua con bloqueo de merge (FT-003) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — | ✅ |
 | HU-012 | Cabeceras de seguridad y HTTPS (FT-008) | 3 | ✅ | 7/7 (E1–E7) | ✅ | — | ✅ |
+| HU-038 | Plantilla de pruebas y umbral de cobertura (FT-010) | 3 | ✅ | 4/5 (E1, E3, E4, E5); E2 → puerta G1 (D-13) | ✅ | — | ✅ |
 
 ## 6. Deuda y pendientes
 
@@ -83,12 +97,16 @@
 | D-09 | Documental | Confirmar versiones/fechas de aprobación de Fases 4 y 5 | Próxima sesión | ⬜ |
 | D-10 | Técnica | (deuda técnica generada durante implementación) | — | — |
 | D-11 | Infra | Proyecto Supabase **nilogistic** ref `gpribzfgwvlzxcpdzezs` (East US, Free). Contraseñas owner/app en `scripts/db/.secrets.local` (ignorado). Conectar Render Staging/Production a `Supabase__ReferenciaProyecto` | Antes de HU-006 | ✅ |
+| D-12 | Trazabilidad | La cláusula de auditoría del escenario E1 de HU-007 se verifica con una prueba en HU-008 (decisión D-089) | Fin de S2 (HU-008) | ⬜ |
+| D-13 | Documental | Formalizar la decisión del 07/10/2026 sobre el umbral de cobertura (E2 de HU-038: puerta G1 al cierre de sprint, no bloquea el PR); no consta en el registro D-072..D-087 ni en el texto de HU-038 | Cierre de S1 | ⬜ |
+| D-14 | Documental | DoD-01 del Lote 1 dice MVC → API → BLL y contradice ADR-01 (MVC → BLL directo); archivar duplicados `Lote1 (1).md` (v1.1) y `Lote2.md` (v1.0). Ligado a D-09 | Próxima sesión | ⬜ |
+| D-15 | CI | La CI evalúa la trazabilidad de todos los sprints (`--sprint todos`); `docs/hu/S1.txt` creado | Antes de cerrar HU-007 | ✅ |
 
 ## 7. Versiones
 
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.8 — 2026-10-07 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.10 — 2026-10-10 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |

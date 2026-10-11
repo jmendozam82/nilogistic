@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -54,6 +55,27 @@ class TrazabilidadTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             self.assertEqual(esp.main(["--hu-dir", d, "--pruebas", d, "--sprint", "S0"]), 0)
 
+    def _sprints(self, d, pruebas):
+        escribir(os.path.join(d, "hu", "S0.txt"), "HU-001 E1\n")
+        escribir(os.path.join(d, "hu", "S1.txt"), "HU-007 E1\nHU-007 E2\n")
+        escribir(os.path.join(d, "t", "A.cs"), pruebas)
+        return ["--hu-dir", os.path.join(d, "hu"), "--pruebas", os.path.join(d, "t")]
+
+    def test_todos_falla_si_falta_un_escenario_de_cualquier_sprint(self):
+        with tempfile.TemporaryDirectory() as d:
+            base = self._sprints(d, '[Hu("HU-001","E1")]\n[Hu("HU-007","E1")]')
+            self.assertEqual(esp.main(base + ["--sprint", "todos"]), 1)
+
+    def test_todos_ok_si_cada_sprint_tiene_sus_pruebas(self):
+        with tempfile.TemporaryDirectory() as d:
+            base = self._sprints(d, '[Hu("HU-001","E1")]\n[Hu("HU-007","E1")]\n[Hu("HU-007","E2")]')
+            self.assertEqual(esp.main(base + ["--sprint", "todos"]), 0)
+
+    def test_un_sprint_concreto_no_evalua_los_demas(self):
+        with tempfile.TemporaryDirectory() as d:
+            base = self._sprints(d, '[Hu("HU-001","E1")]')
+            self.assertEqual(esp.main(base + ["--sprint", "S0"]), 0)
+
 
 class ConventionalCommitsTests(unittest.TestCase):
     def test_acepta_tipos_convencionales(self):
@@ -82,6 +104,48 @@ class ConventionalCommitsTests(unittest.TestCase):
 
     def test_rechaza_descripcion_muy_larga(self):
         self.assertFalse(cvc.validar(["feat: " + "x" * 73]))
+
+    def test_ignora_commits_de_merge(self):
+        with tempfile.TemporaryDirectory() as d:
+            def git(*args):
+                subprocess.run(
+                    ["git", *args], cwd=d, check=True,
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                )
+
+            git("init", "-q")
+            git("config", "user.email", "prueba@nilogistic.test")
+            git("config", "user.name", "Prueba")
+            escribir(os.path.join(d, "a.txt"), "a")
+            git("add", "a.txt")
+            git("commit", "-q", "-m", "feat: base del repositorio")
+            primero = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=d,
+                capture_output=True, text=True, check=True,
+            ).stdout.strip()
+            rama = subprocess.run(
+                ["git", "symbolic-ref", "--short", "HEAD"], cwd=d,
+                capture_output=True, text=True, check=True,
+            ).stdout.strip()
+            git("checkout", "-q", "-b", "rama")
+            escribir(os.path.join(d, "b.txt"), "b")
+            git("add", "b.txt")
+            git("commit", "-q", "-m", "fix: trabajo en la rama")
+            git("checkout", "-q", rama)
+            escribir(os.path.join(d, "c.txt"), "c")
+            git("add", "c.txt")
+            git("commit", "-q", "-m", "docs: avance en la base")
+            git("merge", "-q", "--no-ff", "rama", "-m", "Merge branch 'rama'")
+
+            previo = os.getcwd()
+            os.chdir(d)
+            try:
+                mensajes = cvc.commits_del_rango(primero)
+            finally:
+                os.chdir(previo)
+
+        self.assertIn("fix: trabajo en la rama", mensajes)
+        self.assertNotIn("Merge branch 'rama'", mensajes)
 
 
 if __name__ == "__main__":
