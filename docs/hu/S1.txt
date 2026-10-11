@@ -1,0 +1,5 @@
+# Escenarios de S1 con prueba esperada. HU-007 (E4 ya consta en S0.txt). Deuda D-15: la CI aún evalúa --sprint S0.
+HU-007 E1
+HU-007 E2
+HU-007 E3
+HU-007 E5
