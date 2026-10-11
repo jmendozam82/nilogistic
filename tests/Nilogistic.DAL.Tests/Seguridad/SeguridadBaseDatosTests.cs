@@ -144,4 +144,52 @@ public class SeguridadBaseDatosTests(PostgresFixture bd)
 
         existe.Should().BeFalse();
     }
+
+    [Fact]
+    [Hu("HU-034", "DoD")]
+    public async Task Las_tablas_de_tareas_tienen_RLS_y_politicas_por_comando_sin_delete()
+    {
+        var nombre = await bd.CrearBaseAsync();
+        var cadena = bd.CadenaAdmin(nombre);
+
+        var conRls = await bd.EscalarAsync<bool>(cadena, """
+            select bool_and(c.relrowsecurity)
+            from pg_class c
+            where c.relnamespace = 'app'::regnamespace
+              and c.relname in ('tareas', 'tareas_ejecuciones')
+            """);
+        conRls.Should().BeTrue("ambas tablas exigen RLS de denegación por defecto (HU-034)");
+
+        var comandos = new List<string>();
+        await using var conexion = new NpgsqlConnection(cadena);
+        await conexion.OpenAsync();
+        await using var comando = new NpgsqlCommand("""
+            select distinct cmd from pg_policies
+            where schemaname = 'app' and tablename in ('tareas', 'tareas_ejecuciones')
+            """, conexion);
+        await using var lector = await comando.ExecuteReaderAsync();
+        while (await lector.ReadAsync())
+        {
+            comandos.Add(lector.GetString(0));
+        }
+
+        comandos.Should().Contain("SELECT").And.Contain("INSERT").And.Contain("UPDATE");
+        comandos.Should().NotContain("DELETE").And.NotContain("ALL", "no se concede eliminación (SUP-2)");
+    }
+
+    [Fact]
+    [Hu("HU-034", "DoD")]
+    public async Task El_rol_de_la_aplicacion_no_puede_borrar_en_las_tablas_de_tareas()
+    {
+        var nombre = await bd.CrearBaseAsync();
+        var cadena = bd.CadenaApp(nombre);
+
+        var borrarEjecuciones = () => ComoAsync<long>(cadena, "delete from app.tareas_ejecuciones");
+        var borrarTareas = () => ComoAsync<long>(cadena, "delete from app.tareas");
+        var actualizar = () => ComoAsync<long>(cadena, "update app.tareas set activa = false");
+
+        (await borrarEjecuciones.Should().ThrowAsync<PostgresException>()).Which.SqlState.Should().Be(PermisoDenegado);
+        (await borrarTareas.Should().ThrowAsync<PostgresException>()).Which.SqlState.Should().Be(PermisoDenegado);
+        await actualizar.Should().NotThrowAsync("UPDATE sí está permitido (el historial no se purga)");
+    }
 }
