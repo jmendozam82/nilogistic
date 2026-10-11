@@ -37,6 +37,11 @@ public static class Dependencias
         servicios.AgregarPersistencia(cadenaConexion!);
 
         servicios.AddScoped<IServicioSalud, ServicioSalud>();
+
+        // Ejecutor de tareas (HU-034). Binder estandar de configuracion (D-101).
+        servicios.AddSingleton<IEspera, EsperaSistema>();
+        servicios.Configure<OpcionesEjecutorTareas>(configuracion.GetSection("TareasSegundoPlano"));
+        servicios.AddScoped<IServicioEjecutorTareas, ServicioEjecutorTareas>();
         return servicios;
     }
 }

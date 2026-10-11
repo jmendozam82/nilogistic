@@ -23,6 +23,8 @@ public sealed class FabricaAplicacion(
         constructor.UseSetting("ConnectionStrings:Nilogistic",
             $"Host=127.0.0.1;Port=1;Database=postgres;Username=postgres.{ReferenciaProyecto};Password=no-se-usa;Timeout=1");
         constructor.UseSetting("Supabase:ReferenciaProyecto", ReferenciaProyecto);
+        // El ejecutor de tareas no debe consultar una base inexistente en las pruebas web (HU-034).
+        constructor.UseSetting("TareasSegundoPlano:Habilitado", "false");
 
         foreach (var (clave, valor) in ajustes ?? new Dictionary<string, string>())
         {

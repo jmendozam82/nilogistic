@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Nilogistic.API.Configuracion;
 using Nilogistic.Aplicacion.Seguridad;
+using Nilogistic.Aplicacion.Tareas;
 using Nilogistic.IOC;
 using Nilogistic.Utility.Constantes;
 using Nilogistic.Utility.Seguridad;
@@ -67,6 +68,7 @@ public static class NilogisticWebExtensions
 
         servicios.AgregarNilogistic(configuracion, entorno);
         servicios.AgregarNilogisticApi(configuracion, entorno);
+        servicios.AddHostedService<EjecutorTareasHostedService>();
         return servicios;
     }
 
