@@ -122,6 +122,15 @@ Ensayo obligatorio antes de dar por buena la HU; se anota en la sección 14 de l
 4. **Rollback (E5):** ejecutar el rollback de la aplicación y medir el tiempo (objetivo ≤ 15
    minutos).
 
+### Resultado del ensayo (Staging, 2026-10-11)
+
+- **E1:** merge a `develop` con CI en verde → job `desplegar-staging` en verde («OK: Staging responde»).
+- **E3:** una migración de prueba que falla solo en Staging detuvo el job en «Aplicar migraciones en Staging»; «Disparar el despliegue en Render» y «Verificar salud tras el despliegue» quedaron **skipped** y Render no recibió ningún deploy nuevo.
+- **E4:** un despliegue con la guardia de entorno abortada quedó en `update_failed`; la versión anterior siguió sirviendo (`/health/ready` 200).
+- **E5:** rollback medido en **26 s** (de la orden a `/health/ready` 200), muy por debajo del límite de 15 minutos.
+
+**Lección de E3 (limpieza):** una migración que falla **no** queda registrada en `supabase_migrations.schema_migrations`, así que `supabase db push` la reintentaría en cada despliegue. Ante una migración de ensayo fallida, primero se corrige el estado en la base (DROP del marcador con el rol propietario) y **después** se revierte el commit de la migración; si se hace al revés, el siguiente despliegue vuelve a fallar.
+
 ## Límites conocidos
 
 - El sondeo de salud **no** garantiza que la versión desplegada sea el commit exacto mientras la
