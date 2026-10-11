@@ -57,7 +57,9 @@ idénticos a `render.yaml`** (la especificación de referencia; si uno cambia, c
    nulo (SUP-10).
 4. **Comprobación previa.** Antes de migrar, el job verifica que existan `DB_URL`, `RENDER_DEPLOY_HOOK` y `URL_BASE`; si falta alguno, falla sin tocar la base.
 5. **Verificación de salud.** El job espera 90 s y sondea hasta 40 veces (≈ 10 min)
-   `GET /health/ready` y `GET /api/v1/estado`. Si el sondeo no queda sano, el job falla.
+   `GET /health/ready` y `GET /api/v1/estado`. El sondeo lee el `commit` de la respuesta y lo
+   compara con `GITHUB_SHA`: si coincide, o si el commit servido es descendiente (merge consecutivo),
+   el paso pasa; de lo contrario sigue esperando. Si no queda sano, el job falla.
 6. **Producción** (inactivo hasta S10): mismo flujo, disparado por `workflow_dispatch` desde `main`,
    entorno `produccion` con **revisor requerido** (Jorge). Sin secretos cargados no puede ejecutarse.
 
@@ -86,11 +88,14 @@ commit). En Producción, la aprobación manual queda registrada en la actividad 
 Objetivo: volver a la versión anterior en **15 minutos** o menos.
 
 1. Render → servicio (`nilogistic-staging`) → **Deploys**.
-2. Localizar el **último despliegue exitoso** anterior (Live / “Deployed”).
+2. Localizar el **último despliegue exitoso** anterior (Live / "Deployed").
 3. Menú **⋮ / Rollback** de ese despliegue y confirmar (o *Redeploy* del mismo commit).
 4. Esperar a que el health check vuelva a responder; verificar `GET /health/ready` y
    `GET /api/v1/estado`.
 5. Anotar hora de inicio y fin del rollback; el objetivo es **15 minutos** o menos.
+
+Tras un rollback, `GET /api/v1/estado` muestra `commit` con el SHA del commit anterior a propósito:
+el sondeo de CI verifica el commit del despliegue, no el del rollback.
 
 El rollback de la aplicación no revierte el esquema: si la versión anterior no es compatible con el
 esquema nuevo, primero se corrige el esquema (migración correctiva) o se despliega una versión
@@ -138,9 +143,10 @@ Ensayo obligatorio antes de dar por buena la HU; se anota en la sección 14 de l
 
 ## Límites conocidos
 
-- El sondeo de salud **no** garantiza que la versión desplegada sea el commit exacto mientras la
-  versión anterior siga viva; se corrige exponiendo `RENDER_GIT_COMMIT` en `/api/v1/estado` (deuda
-  D-18).
+- El primer despliegue con verificación de commit puede fallar el sondeo: mientras Render sirva la
+  versión anterior (sin el campo `commit`), el sondeo no ve el valor y sigue esperando. Cuando la
+  versión nueva arranca, sí lo ve. Un único rojo por carrera de arranque se resuelve reejecutando
+  el job.
 - Supabase Free **pausa** el proyecto tras una semana sin actividad; si está pausado, reactivarlo
   antes de desplegar.
 - Staging usa el plan **free** de Render: se suspende tras 15 min sin tráfico, así que el primer
