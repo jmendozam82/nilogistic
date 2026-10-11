@@ -31,7 +31,11 @@ public static class Dependencias
         var version = typeof(Dependencias).Assembly
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0";
 
-        servicios.AddSingleton(new InformacionAplicacion("Nilogistic", version, entorno.EnvironmentName));
+        servicios.AddSingleton(new InformacionAplicacion(
+            "Nilogistic",
+            version,
+            entorno.EnvironmentName,
+            CommitDespliegue.Normalizar(configuracion["RENDER_GIT_COMMIT"])));
         servicios.AddSingleton<IRelojUtc, RelojSistema>();
         servicios.AddScoped<IActorActual, ActorSistema>();
 

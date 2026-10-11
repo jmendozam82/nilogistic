@@ -148,6 +148,8 @@ jobs:
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: supabase/setup-cli@v1
         with:
           version: 2.116.0
@@ -186,12 +188,26 @@ jobs:
           set -euo pipefail
           sleep 90
           for intento in $(seq 1 40); do
-            if curl -fsS "$URL_BASE/health/ready" >/dev/null && curl -fsS "$URL_BASE/api/v1/estado" >/dev/null; then
-              echo "OK: Staging responde"; exit 0
+            if ! curl -fsS "$URL_BASE/health/ready" >/dev/null; then
+              sleep 15
+              continue
+            fi
+            estado=$(curl -fsS "$URL_BASE/api/v1/estado") || { sleep 15; continue; }
+            desplegado=$(echo "$estado" | jq -r '.commit // empty' 2>/dev/null) || desplegado=""
+            if [ -z "$desplegado" ]; then
+              sleep 15
+              continue
+            fi
+            if [ "$desplegado" = "$GITHUB_SHA" ]; then
+              echo "OK: Staging sirve el commit $desplegado"; exit 0
+            fi
+            git fetch --quiet origin develop
+            if git merge-base --is-ancestor "$GITHUB_SHA" "$desplegado"; then
+              echo "OK: Staging sirve $desplegado, descendiente de $GITHUB_SHA"; exit 0
             fi
             sleep 15
           done
-          echo "ERROR: Staging no quedo sano a tiempo"; exit 1
+          echo "ERROR: Staging sirve ${desplegado:-sin commit}, se esperaba $GITHUB_SHA"; exit 1
 
   desplegar-produccion:
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
@@ -203,6 +219,8 @@ jobs:
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: supabase/setup-cli@v1
         with:
           version: 2.116.0
@@ -241,9 +259,23 @@ jobs:
           set -euo pipefail
           sleep 90
           for intento in $(seq 1 40); do
-            if curl -fsS "$URL_BASE/health/ready" >/dev/null; then
-              echo "OK: Produccion responde"; exit 0
+            if ! curl -fsS "$URL_BASE/health/ready" >/dev/null; then
+              sleep 15
+              continue
+            fi
+            estado=$(curl -fsS "$URL_BASE/api/v1/estado") || { sleep 15; continue; }
+            desplegado=$(echo "$estado" | jq -r '.commit // empty' 2>/dev/null) || desplegado=""
+            if [ -z "$desplegado" ]; then
+              sleep 15
+              continue
+            fi
+            if [ "$desplegado" = "$GITHUB_SHA" ]; then
+              echo "OK: Produccion sirve el commit $desplegado"; exit 0
+            fi
+            git fetch --quiet origin main
+            if git merge-base --is-ancestor "$GITHUB_SHA" "$desplegado"; then
+              echo "OK: Produccion sirve $desplegado, descendiente de $GITHUB_SHA"; exit 0
             fi
             sleep 15
           done
-          echo "ERROR: Produccion no quedo sano a tiempo"; exit 1
+          echo "ERROR: Produccion sirve ${desplegado:-sin commit}, se esperaba $GITHUB_SHA"; exit 1

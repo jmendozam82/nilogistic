@@ -13,6 +13,7 @@
 | `Proxy__Redes` | Render | CIDR de confianza (HU-013, S4) |
 | `Resend__ApiKey` | Render (secret) | Clave del proveedor de correo (HU-010); nunca versionada |
 | `Resend__UrlBase` | Render | Por defecto `https://api.resend.com` |
+| `RENDER_GIT_COMMIT` | Render | Define Render con el SHA del commit desplegado; se expone en `/api/v1/estado` (D-18); no se configura a mano |
 | `Correo__ForzarBuzon` | Pruf (local/tests) | Fuerza el buzón en memoria; **prohibido en Production** |
 | `Correo__Remitentes__Transaccional` / `Contacto` | Render | Por defecto `Nilogistic <no-reply@nilogistic.com>` |
 

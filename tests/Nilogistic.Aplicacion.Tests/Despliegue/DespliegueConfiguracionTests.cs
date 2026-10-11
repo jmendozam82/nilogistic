@@ -217,6 +217,60 @@ public class DespliegueConfiguracionTests
             because: $"{ArchivoRender}: Resend__ApiKey nunca lleva valor versionado");
     }
 
+    [Fact]
+    public void Ambos_jobs_verifican_el_commit_desplegado_en_el_sondeo()
+    {
+        var ci = Leer(ArchivoCi);
+
+        foreach (var nombre in JobsDeDespliegue)
+        {
+            var job = Job(ci, nombre);
+            job.Should().NotBeEmpty(because: $"{ArchivoCi} debe contener el job '{nombre}'");
+
+            var checkout = job.IndexOf("actions/checkout@v4", StringComparison.Ordinal);
+            checkout.Should().BeGreaterThanOrEqualTo(0,
+                because: $"{ArchivoCi}: '{nombre}' debe usar actions/checkout@v4");
+            job[checkout..].Should().Contain("fetch-depth: 0",
+                because: $"{ArchivoCi}: '{nombre}' debe clonar con fetch-depth: 0 para comparar commits");
+
+            var verificar = job.IndexOf("Verificar salud tras el despliegue", StringComparison.Ordinal);
+            verificar.Should().BeGreaterThanOrEqualTo(0,
+                because: $"{ArchivoCi}: '{nombre}' debe tener el paso 'Verificar salud tras el despliegue'");
+
+            var paso = job[verificar..];
+            paso.Should().Contain("jq -r '.commit // empty'",
+                because: $"{ArchivoCi}: '{nombre}' debe leer el commit de la respuesta con jq");
+            paso.Should().Contain("git merge-base --is-ancestor",
+                because: $"{ArchivoCi}: '{nombre}' debe aceptar descendientes con merge-base");
+            paso.Should().Contain("GITHUB_SHA",
+                because: $"{ArchivoCi}: '{nombre}' debe comparar contra GITHUB_SHA");
+            paso.Should().Contain("ERROR:",
+                because: $"{ArchivoCi}: '{nombre}' debe reportar el error con los SHAs");
+        }
+
+        ci.Should().NotContain("$DB_URL\n", because: $"{ArchivoCi}: no puede imprimir secretos");
+    }
+
+    [Fact]
+    public void Ambos_jobs_toleran_fallos_transitorios_de_captura_del_estado()
+    {
+        var ci = Leer(ArchivoCi);
+
+        foreach (var nombre in JobsDeDespliegue)
+        {
+            var job = Job(ci, nombre);
+            var verificar = job.IndexOf("Verificar salud tras el despliegue", StringComparison.Ordinal);
+            verificar.Should().BeGreaterThanOrEqualTo(0,
+                because: $"{ArchivoCi}: '{nombre}' debe tener el paso 'Verificar salud tras el despliegue'");
+
+            var paso = job[verificar..];
+            paso.Should().Contain("|| { sleep 15; continue; }",
+                because: $"{ArchivoCi}: '{nombre}' debe tolerar fallos de curl con reintento");
+            paso.Should().Contain("jq -r '.commit // empty' 2>/dev/null",
+                because: $"{ArchivoCi}: '{nombre}' debe tolerar un JSON inválido sin abortar");
+        }
+    }
+
     private static string Leer(string rutaRelativa)
     {
         var ruta = Path.Combine(RaizRepositorio.Encontrar(), rutaRelativa.Replace('/', Path.DirectorySeparatorChar));
