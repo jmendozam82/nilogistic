@@ -2,12 +2,12 @@
 
 | Campo | Valor |
 |---|---|
-| Versión | 0.1 (borrador para aprobación) |
+| Versión | **1.0** (aprobada; antes 0.1, borrador para aprobación) |
 | Fecha | 05/10/2026 |
 | Fase | 5 de 9 — Diseño (documento C de 3) |
 | Alcance | Arquitectura de información, inventario de 61 pantallas de R1, flujos clave, entregables del diseño visual y contratos de API de R1 |
 | Nota | **El diseño visual lo aportas tú** y se entrega antes del 20/11/2026, separado de la Fase 5. Este documento define *qué* debe cubrir y *cuándo* se necesita cada pieza |
-| Meta de aprobación | 30/10/2026 |
+| Aprobación | 07/10/2026 (adelantada; meta original 30/10/2026; fecha consolidada en D-105) |
 
 ---
 

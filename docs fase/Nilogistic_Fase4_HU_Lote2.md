@@ -8,7 +8,7 @@
 | Entrada | Fase 2 v1.5, Backlog v1.3 y Lote 1 v1.1 (aprobado) |
 | Alcance del lote | 39 HU sobre 29 features: 145 SP y 221 escenarios Gherkin |
 | Resultado | Con este lote, **las 46 features de R1 tienen HU** (72 HU, 267 SP, 396 escenarios entre ambos lotes) |
-| Estado | Aprobado. Fase 4 cerrada para R1; siguiente: Fase 5 |
+| Estado | Aprobado. Fase 4 cerrada para R1 y aprobada el 05/10/2026 (D-105); siguiente: Fase 5 |
 
 ---
 
