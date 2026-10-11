@@ -101,6 +101,7 @@ Total S1: 23 SP. HU-010 y HU-006 requieren las cuentas de Resend y Render (D-01)
 | D-13 | Documental | Formalizar la decisión del 07/10/2026 sobre el umbral de cobertura (E2 de HU-038: puerta G1 al cierre de sprint, no bloquea el PR); no consta en el registro D-072..D-087 ni en el texto de HU-038 | Cierre de S1 | ⬜ |
 | D-14 | Documental | DoD-01 del Lote 1 dice MVC → API → BLL y contradice ADR-01 (MVC → BLL directo); archivar duplicados `Lote1 (1).md` (v1.1) y `Lote2.md` (v1.0). Ligado a D-09 | Próxima sesión | ⬜ |
 | D-15 | CI | La CI evalúa la trazabilidad de todos los sprints (`--sprint todos`); `docs/hu/S1.txt` creado | Antes de cerrar HU-007 | ✅ |
+| D-16 | Técnica | Soporte de programación cron y política de purga/archivo de `app.tareas_ejecuciones` (sin DELETE); decidir con HU-035 (D-093) | Antes de HU-035 / primera tarea cron de R2 | ⬜ |
 
 ## 7. Versiones
 
