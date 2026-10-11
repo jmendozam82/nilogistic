@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Nilogistic.DAL.Contexto;
+using Nilogistic.DAL.Interceptores;
 using Nilogistic.DAL.Interfaces;
 using Nilogistic.DAL.Repositorios;
 using Npgsql;
@@ -33,9 +34,14 @@ public static class PersistenciaExtensions
 
         var cadenaFinal = constructor.ConnectionString;
 
-        servicios.AddDbContext<NilogisticDbContext>(opciones =>
-            opciones.UseNpgsql(cadenaFinal, npgsql => npgsql.CommandTimeout(TimeoutComandoSegundos)));
+        servicios.AddScoped<InterceptorColumnasBase>();
 
+        servicios.AddDbContext<NilogisticDbContext>((proveedor, opciones) =>
+            opciones
+                .UseNpgsql(cadenaFinal, npgsql => npgsql.CommandTimeout(TimeoutComandoSegundos))
+                .AddInterceptors(proveedor.GetRequiredService<InterceptorColumnasBase>()));
+
+        servicios.AddScoped(typeof(IRepositorioBase<>), typeof(RepositorioBase<>));
         servicios.AddScoped<IRepositorioSalud, RepositorioSalud>();
         return servicios;
     }

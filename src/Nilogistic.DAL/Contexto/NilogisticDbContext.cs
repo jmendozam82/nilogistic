@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Nilogistic.DAL.Mapeos;
 
 namespace Nilogistic.DAL.Contexto;
 
@@ -12,5 +13,6 @@ public class NilogisticDbContext(DbContextOptions<NilogisticDbContext> opciones)
     {
         base.OnModelCreating(constructor);
         constructor.ApplyConfigurationsFromAssembly(typeof(NilogisticDbContext).Assembly);
+        constructor.AplicarConvencionesEntidadBase();
     }
 }
