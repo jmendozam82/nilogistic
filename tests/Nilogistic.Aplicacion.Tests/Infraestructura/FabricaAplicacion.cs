@@ -25,6 +25,18 @@ public sealed class FabricaAplicacion(
         constructor.UseSetting("Supabase:ReferenciaProyecto", ReferenciaProyecto);
         // El ejecutor de tareas no debe consultar una base inexistente en las pruebas web (HU-034).
         constructor.UseSetting("TareasSegundoPlano:Habilitado", "false");
+        // El entorno por defecto de la fábrica es Staging: sin una clave real, el correo va al buzón
+        // (HU-010); la prueba que quiera Resend lo sobrescribe en ajustes. En Produccion el buzon
+        // esta prohibido, asi que se usa una clave de prueba (jamas se llama al proveedor).
+        if (string.Equals(entorno, "Production", StringComparison.OrdinalIgnoreCase))
+        {
+            constructor.UseSetting("Correo:ForzarBuzon", "false");
+            constructor.UseSetting("Resend:ApiKey", "clave-de-prueba");
+        }
+        else
+        {
+            constructor.UseSetting("Correo:ForzarBuzon", "true");
+        }
 
         foreach (var (clave, valor) in ajustes ?? new Dictionary<string, string>())
         {

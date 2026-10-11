@@ -18,7 +18,6 @@ public static class GuardiaCorreo
     public static void Validar(string entorno, OpcionesCorreo correo, OpcionesResend resend)
     {
         var esProduccion = string.Equals(entorno, Entornos.Produccion, StringComparison.OrdinalIgnoreCase);
-        var esStaging = string.Equals(entorno, Entornos.Staging, StringComparison.OrdinalIgnoreCase);
 
         if (esProduccion && correo.ForzarBuzon)
         {
@@ -26,8 +25,7 @@ public static class GuardiaCorreo
                 "Correo:ForzarBuzon no puede estar activo en Producción: el correo quedaría apagado en silencio.");
         }
 
-        var usaResend = (esProduccion || esStaging) && !correo.ForzarBuzon;
-        if (!usaResend)
+        if (!UsaResend(entorno, correo.ForzarBuzon))
         {
             return;
         }
@@ -55,6 +53,18 @@ public static class GuardiaCorreo
             throw new InvalidOperationException(
                 "Correo:Remitentes:Contacto debe ser un correo válido (correo@dominio o 'Nombre <correo@dominio>').");
         }
+    }
+
+    /// <summary>
+    /// Decide el proveedor segun el entorno (SUP-1): Staging y Production envian por Resend salvo que
+    /// <paramref name="forzarBuzon"/> este activo (prohibido en Production, ver <see cref="Validar"/>).
+    /// Lo usa el host (CorreoExtensions) y la guardia de arranque; una sola fuente de verdad.
+    /// </summary>
+    public static bool UsaResend(string entorno, bool forzarBuzon)
+    {
+        var esProduccion = string.Equals(entorno, Entornos.Produccion, StringComparison.OrdinalIgnoreCase);
+        var esStaging = string.Equals(entorno, Entornos.Staging, StringComparison.OrdinalIgnoreCase);
+        return (esProduccion || esStaging) && !forzarBuzon;
     }
 
     private static bool EsRemitenteValido(string? valor)

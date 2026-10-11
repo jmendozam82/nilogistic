@@ -1,3 +1,8 @@
+using Microsoft.Extensions.DependencyInjection;
+using Nilogistic.Aplicacion.Tests.Infraestructura;
+using Nilogistic.BLL.Interfaces;
+using Nilogistic.BLL.Servicios;
+using Nilogistic.BLL.Tareas;
 using Nilogistic.Utility.Configuracion;
 using Nilogistic.Utility.Contratos;
 using Nilogistic.Utility.Correo;
@@ -114,5 +119,49 @@ public class CorreoConfiguracionTests
 
         accion.Should().Throw<InvalidOperationException>()
             .Which.Message.Should().NotContain(clave);
+    }
+
+    [Fact]
+    [Hu("HU-010", "E5")]
+    public void En_Development_el_host_usa_el_buzon_de_pruebas()
+    {
+        using var fabrica = new FabricaAplicacion(entorno: "Development");
+
+        fabrica.Services.GetRequiredService<IProveedorCorreo>().Should().BeOfType<ProveedorCorreoBuzon>();
+        fabrica.Services.GetRequiredService<IBuzonPruebas>().Should().BeOfType<ProveedorCorreoBuzon>();
+    }
+
+    [Fact]
+    [Hu("HU-010", "E5")]
+    public void En_Staging_por_omision_la_fabrica_forza_el_buzon()
+    {
+        using var fabrica = new FabricaAplicacion();
+
+        fabrica.Services.GetRequiredService<IProveedorCorreo>().Should().BeOfType<ProveedorCorreoBuzon>();
+    }
+
+    [Fact]
+    [Hu("HU-010", "E5")]
+    public void En_Staging_con_clave_el_host_selecciona_resend()
+    {
+        using var fabrica = new FabricaAplicacion("Staging", new Dictionary<string, string>
+        {
+            ["Correo:ForzarBuzon"] = "false",
+            ["Resend:ApiKey"] = "clave-de-prueba",
+            ["Resend:UrlBase"] = "https://api.resend.com"
+        });
+
+        fabrica.Services.GetRequiredService<IProveedorCorreo>().Should().BeOfType<ProveedorCorreoResend>();
+    }
+
+    [Fact]
+    [Hu("HU-010", "E5")]
+    public void El_host_registra_el_servicio_y_la_tarea_de_correo()
+    {
+        using var fabrica = new FabricaAplicacion();
+
+        fabrica.Services.GetRequiredService<IServicioCorreo>().Should().BeOfType<ServicioCorreo>();
+        fabrica.Services.GetServices<ITareaProgramada>()
+            .Should().Contain(t => t.Nombre == "procesar_cola_correo");
     }
 }

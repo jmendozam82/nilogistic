@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nilogistic.BLL.Interfaces;
 using Nilogistic.BLL.Servicios;
+using Nilogistic.BLL.Tareas;
 using Nilogistic.DAL.Extensiones;
 using Nilogistic.Utility.Configuracion;
 using Nilogistic.Utility.Contratos;
@@ -42,6 +43,11 @@ public static class Dependencias
         servicios.AddSingleton<IEspera, EsperaSistema>();
         servicios.Configure<OpcionesEjecutorTareas>(configuracion.GetSection("TareasSegundoPlano"));
         servicios.AddScoped<IServicioEjecutorTareas, ServicioEjecutorTareas>();
+
+        // Cola de correo (HU-010). El proveedor (Resend o buzon) lo registra el host en CorreoExtensions.
+        servicios.Configure<OpcionesCorreo>(configuracion.GetSection("Correo"));
+        servicios.AddScoped<IServicioCorreo, ServicioCorreo>();
+        servicios.AddScoped<ITareaProgramada, TareaProcesarColaCorreo>();
         return servicios;
     }
 }
