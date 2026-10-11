@@ -251,6 +251,26 @@ public class DespliegueConfiguracionTests
         ci.Should().NotContain("$DB_URL\n", because: $"{ArchivoCi}: no puede imprimir secretos");
     }
 
+    [Fact]
+    public void Ambos_jobs_toleran_fallos_transitorios_de_captura_del_estado()
+    {
+        var ci = Leer(ArchivoCi);
+
+        foreach (var nombre in JobsDeDespliegue)
+        {
+            var job = Job(ci, nombre);
+            var verificar = job.IndexOf("Verificar salud tras el despliegue", StringComparison.Ordinal);
+            verificar.Should().BeGreaterThanOrEqualTo(0,
+                because: $"{ArchivoCi}: '{nombre}' debe tener el paso 'Verificar salud tras el despliegue'");
+
+            var paso = job[verificar..];
+            paso.Should().Contain("|| { sleep 15; continue; }",
+                because: $"{ArchivoCi}: '{nombre}' debe tolerar fallos de curl con reintento");
+            paso.Should().Contain("jq -r '.commit // empty' 2>/dev/null",
+                because: $"{ArchivoCi}: '{nombre}' debe tolerar un JSON inválido sin abortar");
+        }
+    }
+
     private static string Leer(string rutaRelativa)
     {
         var ruta = Path.Combine(RaizRepositorio.Encontrar(), rutaRelativa.Replace('/', Path.DirectorySeparatorChar));

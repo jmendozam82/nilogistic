@@ -192,8 +192,8 @@ jobs:
               sleep 15
               continue
             fi
-            estado=$(curl -fsS "$URL_BASE/api/v1/estado")
-            desplegado=$(echo "$estado" | jq -r '.commit // empty')
+            estado=$(curl -fsS "$URL_BASE/api/v1/estado") || { sleep 15; continue; }
+            desplegado=$(echo "$estado" | jq -r '.commit // empty' 2>/dev/null) || desplegado=""
             if [ -z "$desplegado" ]; then
               sleep 15
               continue
@@ -263,8 +263,8 @@ jobs:
               sleep 15
               continue
             fi
-            estado=$(curl -fsS "$URL_BASE/api/v1/estado")
-            desplegado=$(echo "$estado" | jq -r '.commit // empty')
+            estado=$(curl -fsS "$URL_BASE/api/v1/estado") || { sleep 15; continue; }
+            desplegado=$(echo "$estado" | jq -r '.commit // empty' 2>/dev/null) || desplegado=""
             if [ -z "$desplegado" ]; then
               sleep 15
               continue
