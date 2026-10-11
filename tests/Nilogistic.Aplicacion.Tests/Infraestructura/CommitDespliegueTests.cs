@@ -1,3 +1,5 @@
+using Nilogistic.Utility.Configuracion;
+
 namespace Nilogistic.Aplicacion.Tests.Infraestructura;
 
 public class CommitDespliegueTests
@@ -22,9 +24,8 @@ public class CommitDespliegueTests
     [InlineData("")]
     [InlineData("   ")]
     [InlineData("zzz1234")]
-    [InlineData("a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b\n")]
-    [InlineData("a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b\t")]
     [InlineData("a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b\u0000")]
+    [InlineData("a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b\u0004")]
     public void Un_valor_no_valido_se_descarta(string valor)
     {
         var normalizado = CommitDespliegue.Normalizar(valor);

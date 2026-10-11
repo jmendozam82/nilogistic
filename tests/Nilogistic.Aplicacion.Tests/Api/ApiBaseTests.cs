@@ -100,7 +100,7 @@ public class ApiBaseTests
     }
 
     [Fact]
-    public async Task Estado_sin_commit_no_incluye_el_campo()
+    public async Task Estado_sin_commit_devuelve_null()
     {
         using var fabrica = new FabricaAplicacion("Staging", servicios: Reemplazos.Repositorio(true));
         using var cliente = fabrica.ClienteHttps();
@@ -109,7 +109,9 @@ public class ApiBaseTests
         using var documento = JsonDocument.Parse(await respuesta.Content.ReadAsStringAsync());
 
         respuesta.StatusCode.Should().Be(HttpStatusCode.OK);
-        documento.RootElement.TryGetProperty("commit", out _).Should().BeFalse();
+        documento.RootElement.GetProperty("commit").ValueKind.Should().Be(JsonValueKind.Null);
+        documento.RootElement.GetProperty("aplicacion").GetString().Should().Be("Nilogistic");
+        documento.RootElement.GetProperty("baseDatosDisponible").GetBoolean().Should().BeTrue();
     }
 
     [Fact]
