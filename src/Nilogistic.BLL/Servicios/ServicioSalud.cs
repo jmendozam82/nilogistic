@@ -39,6 +39,7 @@ public sealed class ServicioSalud(
             informacion.Version,
             informacion.Entorno,
             baseDatos,
-            reloj.AhoraUtc);
+            reloj.AhoraUtc,
+            informacion.Commit);
     }
 }

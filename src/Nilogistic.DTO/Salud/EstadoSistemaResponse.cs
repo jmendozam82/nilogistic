@@ -6,4 +6,5 @@ public sealed record EstadoSistemaResponse(
     string Version,
     string Entorno,
     bool BaseDatosDisponible,
-    DateTime FechaUtc);
+    DateTime FechaUtc,
+    string? Commit);
