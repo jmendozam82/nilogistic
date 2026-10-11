@@ -4,6 +4,7 @@ HU-006 E2
 HU-006 E3
 HU-006 E4
 HU-006 E5
+# HU-006 E1-E5: verificados en Staging (evidencia en docs/tareas/HU-006.md, seccion 14; runs 38152145726, 38157698365, 38158003702).
 HU-007 E1
 HU-007 E2
 HU-007 E3
