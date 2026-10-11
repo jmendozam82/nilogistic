@@ -32,5 +32,45 @@
 
 1. Cada migración es un archivo `supabase/migrations/AAAAMMDD*_descripcion.sql`, transaccional (Supabase CLI y CI la aplican con transacción).
 2. En local: `supabase start` → `supabase db reset` (o `db push`).
-3. En Staging/Production: `supabase db push --linked` desde un entorno autenticado.
-4. CI valida idempotencia (aplica dos veces seguidas) y atomicidad ante fallo a mitad (E3) en PostgreSQL 17 limpio.
+3. CI valida idempotencia (aplica dos veces seguidas) y atomicidad ante fallo a mitad (E3) en PostgreSQL 17 limpio.
+
+### Desde CI (HU-006)
+
+- El CD vive dentro de `.github/workflows/ci.yml`. En `push` a `develop`, tras el CI en verde, el job
+  `desplegar-staging` aplica las migraciones con la CLI de Supabase **2.116.0**:
+  `supabase db push --db-url "$DB_URL"`. Solo si la migración sale bien dispara el despliegue de
+  Render con el `RENDER_DEPLOY_HOOK` (en `render.yaml`, `autoDeploy: false`).
+- `DB_URL` usa el **Session pooler** (puerto 5432) con el **rol propietario** (`postgres.<ref>`), no
+  `nilogistic_app`: las migraciones necesitan el propietario. La aplicación, en cambio, se conecta
+  con `nilogistic_app` (variable `ConnectionStrings__Nilogistic` en Render).
+- Producción usa el mismo flujo, disparado por `workflow_dispatch` desde `main` y con aprobación
+  manual (entorno `produccion`); permanece **inactivo** hasta S10.
+- Procedimiento completo y rollback: `docs/runbooks/despliegue-y-rollback.md`.
+
+### Regla expandir/contraer (SUP-8)
+
+Las migraciones deben ser **compatibles hacia atrás** y aplicarse en dos pasos: primero **expandir**
+(añadir lo nuevo sin romper lo anterior) y solo después **contraer** (retirar lo viejo). No hay
+migraciones “down”: un error se corrige con una **migración correctiva** hacia adelante. Así, mientras
+corre la migración, la versión anterior de la aplicación sigue sirviendo con el esquema nuevo.
+
+## Secretos y variables por entorno de GitHub
+
+En el repositorio solo viven **nombres**, nunca valores. Los valores se cargan como *Environment
+secrets* / *Environment variables* del entorno de GitHub correspondiente.
+
+| Entorno GitHub | Deploy | Secrets (nombres) | Variables (nombres) |
+|---|---|---|---|
+| `staging` | rama `develop` | `DB_URL`, `RENDER_DEPLOY_HOOK` | `URL_BASE` |
+| `produccion` | rama `main`, con revisor | `DB_URL`, `RENDER_DEPLOY_HOOK` (se cargan en S10) | `URL_BASE` (se carga en S10) |
+
+- `DB_URL`: cadena del Session pooler (5432) con el rol propietario; la usan los jobs de migración.
+- `RENDER_DEPLOY_HOOK`: URL del Deploy Hook del servicio (Render → Settings → Deploy Hook).
+- `URL_BASE`: URL pública del servicio, **sin barra final** (p. ej. `https://nilogistic-staging.onrender.com`).
+- `URL_BASE` y `RENDER_DEPLOY_HOOK` dependen de que el servicio exista: se cargan tras crear el
+  Blueprint (paso posterior al merge de HU-006).
+
+## Aviso — Supabase Free
+
+El proyecto de Staging está en el plan **Free**, que **pausa** el proyecto tras una semana sin
+actividad. Si ocurre, reactivarlo desde el panel de Supabase antes de desplegar o de ejecutar el CI.
