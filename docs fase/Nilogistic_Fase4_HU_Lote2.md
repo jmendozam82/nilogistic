@@ -2,12 +2,12 @@
 
 | Campo | Valor |
 |---|---|
-| Versión | **1.0** (aprobado con ajustes de Q-501 a Q-505) |
+| Versión | **1.5** (10/10/2026: HU-038 define el umbral de cobertura como puerta G1 de cierre de Sprint y no como bloqueo por PR (D-102); antes 1.4: 07/10/2026: HU-044 declara el plazo de supresión de datos y la retención de analítica de 24 meses (P-313, D-069), +2 escenarios; antes 1.3: HU-039 dividida en HU-039a y HU-039b, 5 SP en total; antes 1.2: 07/10/2026: S-415 con 10 acuses por hora y 40 por día en HU-043 y HU-062; alta inicial del primer Administrador en HU-039a; antes: DA-1 a DA-7 en HU-038, 043, 044, 048) |
 | Fecha | 05/10/2026 |
 | Fase | 4 de 9 — Historias de Usuario con criterios de aceptación |
 | Entrada | Fase 2 v1.5, Backlog v1.3 y Lote 1 v1.1 (aprobado) |
-| Alcance del lote | 38 HU sobre 29 features: 143 SP y 209 escenarios Gherkin |
-| Resultado | Con este lote, **las 46 features de R1 tienen HU** (71 HU, 265 SP, 372 escenarios entre ambos lotes) |
+| Alcance del lote | 39 HU sobre 29 features: 145 SP y 221 escenarios Gherkin |
+| Resultado | Con este lote, **las 46 features de R1 tienen HU** (72 HU, 267 SP, 396 escenarios entre ambos lotes) |
 | Estado | Aprobado. Fase 4 cerrada para R1; siguiente: Fase 5 |
 
 ---
@@ -51,10 +51,11 @@ Por la aprobación de P-304, la Fase 4 que condiciona el Sprint 0 cubre solo R1.
 | HU-036 | FT-009 | Layout base y sistema de diseño | Visitante o usuario autenticado | Must | 3 | HU-001, HU-012 |
 | HU-037 | FT-009 | Accesibilidad base (WCAG 2.2 AA) | Usuario con tecnologías de apoyo | Must | 2 | HU-036 |
 | HU-038 | FT-010 | Plantilla de pruebas y umbral de cobertura | Desarrollador | Must | 3 | HU-001, HU-005 |
-| HU-039 | FT-011 | Datos semilla provisionales | Desarrollador y Administrador | Must | 3 | HU-007, HU-019 |
+| HU-039a | FT-011 | Datos semilla: catálogos y planes provisionales | Desarrollador y Administrador | Must | 2 | HU-007 |
+| HU-039b | FT-011 | Datos semilla: roles, permisos y alta inicial del Administrador | Desarrollador y Administrador | Must | 3 | HU-016, HU-019, HU-021 |
 | HU-040 | FT-012 | Página de Inicio | Visitante | Must | 5 | HU-036, HU-037, HU-051, HU-053, HU-060 |
 | HU-041 | FT-013 | Página Quiénes Somos | Visitante | Must | 3 | HU-036, HU-037 |
-| HU-042 | FT-014 | Servicios y Membresías (informativa) | Visitante | Must | 3 | HU-036, HU-039, HU-062 |
+| HU-042 | FT-014 | Servicios y Membresías (informativa) | Visitante | Must | 3 | HU-036, HU-039a, HU-062 |
 | HU-043 | FT-015 | Contacto con formulario protegido | Visitante | Must | 3 | HU-010, HU-013, HU-035, HU-063 |
 | HU-044 | FT-016 | Páginas legales publicadas | Visitante | Must | 3 | HU-032, HU-036 |
 | HU-045 | FT-016 | Banner de consentimiento de cookies | Visitante | Must | 2 | HU-036, HU-044 |
@@ -73,7 +74,7 @@ Por la aprobación de P-304, la Fase 4 que condiciona el Sprint 0 cubre solo R1.
 | HU-058 | FT-047 | Estado y trazabilidad del envío | Gerente (o Administrador) | Must | 3 | HU-057 |
 | HU-059 | FT-050 | Gestión de eventos | Administrador | Must | 5 | HU-020, HU-008, HU-062, HU-071 |
 | HU-060 | FT-051 | Eventos públicos: listado y detalle | Visitante | Must | 5 | HU-059, HU-068, HU-036 |
-| HU-061 | FT-098 | Catálogos maestros | Administrador | Must | 5 | HU-007, HU-020, HU-039 |
+| HU-061 | FT-098 | Catálogos maestros | Administrador | Must | 5 | HU-007, HU-020, HU-039a |
 | HU-062 | FT-099 | Configuración general y parámetros de seguridad | Administrador | Must | 8 | HU-007, HU-008, HU-020, HU-022 |
 | HU-063 | FT-099 | Remitentes y destinatarios de avisos | Administrador | Must | 3 | HU-062, HU-011 |
 | HU-064 | FT-105 | Consulta de auditoría y eventos de seguridad | Administrador | Must | 5 | HU-008, HU-009, HU-020 |
@@ -99,7 +100,7 @@ Por la aprobación de P-304, la Fase 4 que condiciona el Sprint 0 cubre solo R1.
 | FT-008 | Seguridad transversal: HSTS/CSP, CSRF, rate limiting, anti-bot y logging estructurado | 8 | 8 | HU-012, HU-013 | 1 |
 | FT-009 | Layout base y sistema de diseño (diseño visual de Jorge), accesibilidad base | 5 | 5 | HU-036, HU-037 | 2 |
 | FT-010 | Plantilla de pruebas xUnit + Moq + FluentAssertions y umbral de cobertura | 3 | 3 | HU-038 | 2 |
-| FT-011 | Datos semilla provisionales (roles, módulos, catálogos, planes) con marca de provisional | 3 | 3 | HU-039 | 2 |
+| FT-011 | Datos semilla provisionales (roles, módulos, catálogos, planes) con marca de provisional | 5 | 5 | HU-039a, HU-039b | 2 |
 | FT-012 | Página de Inicio | 5 | 5 | HU-040 | 2 |
 | FT-013 | Página Quiénes Somos | 3 | 3 | HU-041 | 2 |
 | FT-014 | Página Servicios / Membresías (comparativo informativo; se vuelve dinámica en R2) | 3 | 3 | HU-042 | 2 |
@@ -367,7 +368,8 @@ Escenario: E5 — Control automático en CI
 - Proyectos de pruebas para BLL y DAL con xUnit, Moq y FluentAssertions.
 - Convención de nombre PU-HU-nnn-E#, con rasgo (trait) que enlaza cada prueba con su HU y escenario.
 - Base de datos de pruebas aislada y descartable para pruebas de integración.
-- Informe de cobertura en CI; el umbral de cobertura de BLL es 70 %.
+- La base de pruebas de integración usa Testcontainers con PostgreSQL 17 y es obligatoria en CI (DA-3): verifica que el rol nilogistic_app no puede ejecutar DELETE y que RLS deniega por defecto.
+- La cobertura de BLL se mide con `scripts/ci/verificar_cobertura.py`; el umbral de 70 % es la puerta G1 que se evalúa al cierre de cada Sprint y en cada release (D-102). Por pull request solo se genera el informe, sin bloquear el merge.
 - Un script lista los escenarios de las HU que aún no tienen prueba.
 
 **Permisos:** –  
@@ -384,10 +386,11 @@ Escenario: E1 — Una prueba por escenario
   Cuando se escribe su prueba
   Entonces se nombra PU-HU-014-E3 y queda enlazada a la HU y al escenario
 
-Escenario: E2 (borde) — Cobertura bajo el umbral
-  Dado una rama con cobertura de BLL menor al 70 %
-  Cuando corre el pipeline
-  Entonces el pipeline falla y muestra el porcentaje
+Escenario: E2 (borde) — Cobertura bajo el umbral en el cierre de Sprint
+  Dado el cierre de un Sprint con cobertura de BLL menor al 70 %
+  Cuando se evalúa la puerta G1 con el script de cobertura
+  Entonces la puerta no se supera y se muestra el porcentaje
+  Y el Sprint no se da por cerrado hasta cubrir la diferencia o aprobar una excepción registrada
 
 Escenario: E3 — Escenarios sin prueba
   Dado el repositorio con HU documentadas
@@ -398,27 +401,32 @@ Escenario: E4 — Base de pruebas aislada
   Dado una prueba de integración
   Cuando se ejecuta dos veces seguidas
   Entonces cada ejecución parte de una base limpia
+
+Escenario: E5 (borde) — Prueba obligatoria de permisos de base de datos
+  Dado un contenedor PostgreSQL 17 con las migraciones SQL aplicadas
+  Cuando la aplicación intenta un DELETE con el rol nilogistic_app
+  Entonces la base lo rechaza
+  Y la prueba falla el pipeline si el rechazo no ocurre
 ```
 
 **Definición de hecho:** DoD-01, DoD-02, DoD-07 y DoD-08.
-**Pruebas previstas:** PU-HU-038-E1, PU-HU-038-E2, PU-HU-038-E3, PU-HU-038-E4
+**Pruebas previstas:** PU-HU-038-E1, PU-HU-038-E2, PU-HU-038-E3, PU-HU-038-E4, PU-HU-038-E5
 
 ### FT-011 — Datos semilla provisionales (roles, módulos, catálogos, planes) con marca de provisional  ·  EP-00 Fundaciones técnicas (enablers)
 
-#### HU-039 — Datos semilla provisionales
+#### HU-039a — Datos semilla: catálogos y planes provisionales
 
-**Feature:** FT-011 · **Épica:** EP-00 · **Prioridad:** Must · **Puntos:** 3 · **Dependencias:** HU-007, HU-019
+**Feature:** FT-011 · **Épica:** EP-00 · **Prioridad:** Must · **Puntos:** 2 · **Dependencias:** HU-007
 
 **Requerimientos:** RN-056, D-019
 
-**Historia:** Como **Desarrollador y Administrador**, quiero datos semilla de roles, permisos, catálogos y planes con marca de provisional, para arrancar el sistema con información inicial sin confundirla con valores reales validados.
+**Historia:** Como **Desarrollador y Administrador**, quiero datos semilla de catálogos y planes con marca de provisional, para arrancar el sistema con información inicial sin confundirla con valores reales validados.
 
 **Reglas y validaciones:**
-- Semilla de roles y de la matriz de permisos de la Fase 2 (HU-019).
 - Catálogos provisionales: áreas logísticas, ubicaciones y tipos de contrato (respaldo mientras se cierra la tarea #8).
 - Planes provisionales (Profesional Básico y Premium; Empresa Básica y Plus), con precios, descuentos y límites de prueba.
 - Todo registro semilla de catálogos o planes lleva la marca "Provisional".
-- La semilla es idempotente.
+- La semilla es idempotente y está disponible antes del Sprint 4, porque HU-025 y HU-026 la consumen.
 - La puerta G6 falla si hay valores de planes provisionales publicados o activos en el primer despliegue público (RN-056).
 
 **Permisos:** –  
@@ -432,8 +440,8 @@ Escenario: E4 — Base de pruebas aislada
 # language: es
 Escenario: E1 — Semilla en una base vacía
   Dado una base de datos recién migrada
-  Cuando se aplica la semilla
-  Entonces existen los roles, los permisos, los catálogos y los planes provisionales
+  Cuando se aplica la semilla de catálogos y planes
+  Entonces existen los catálogos y los planes provisionales
 
 Escenario: E2 (borde) — La semilla es idempotente
   Dado una base que ya tiene la semilla
@@ -457,7 +465,63 @@ Escenario: E5 — Validación de un valor real
 ```
 
 **Definición de hecho:** DoD-01, DoD-02, DoD-07 y DoD-08.
-**Pruebas previstas:** PU-HU-039-E1, PU-HU-039-E2, PU-HU-039-E3, PU-HU-039-E4, PU-HU-039-E5
+**Pruebas previstas:** PU-HU-039a-E1, PU-HU-039a-E2, PU-HU-039a-E3, PU-HU-039a-E4, PU-HU-039a-E5
+
+#### HU-039b — Datos semilla: roles, permisos y alta inicial del Administrador
+
+**Feature:** FT-011 · **Épica:** EP-00 · **Prioridad:** Must · **Puntos:** 3 · **Dependencias:** HU-016, HU-019, HU-021
+
+**Requerimientos:** D-019
+
+**Historia:** Como **Desarrollador y Administrador**, quiero la semilla de roles y de la matriz de permisos y un alta inicial controlada del primer Administrador, para poder entrar al panel y crear al resto de usuarios sin dejar credenciales en el repositorio.
+
+**Reglas y validaciones:**
+- Semilla de roles y de la matriz de permisos de la Fase 2 (HU-019); idempotente.
+- **Alta inicial del primer Administrador:** comando idempotente que crea la cuenta con el correo tomado de una variable de entorno (secreto fuera del repositorio), en estado pendiente de activación con enlace de activación (HU-016) y con 2FA obligatorio en el primer acceso (HU-021).
+- Solo se ejecuta si no existe ningún Administrador; se audita con actor "Sistema".
+- El segundo Administrador (tarea #13) lo crea el primero con HU-023.
+- El comando no se incluye en las migraciones.
+
+**Permisos:** –  
+**Auditoría:** La carga de la semilla y el alta inicial se auditan con actor "Sistema".  
+**Notificaciones:** Enlace de activación al correo inicial.  
+**Analítica:** –
+
+**Criterios de aceptación:**
+
+```gherkin
+# language: es
+Escenario: E1 — Semilla de roles y permisos
+  Dado una base recién migrada
+  Cuando se aplica la semilla de roles y permisos
+  Entonces existen los roles y la matriz de permisos de la Fase 2
+
+Escenario: E2 (borde) — La semilla es idempotente
+  Dado una base que ya tiene la semilla de roles y permisos
+  Cuando se aplica de nuevo
+  Entonces no se duplican registros
+
+Escenario: E3 — Alta inicial del primer Administrador
+  Dado una base sin ningún Administrador y el correo inicial configurado como variable de entorno
+  Cuando se ejecuta el comando de alta inicial
+  Entonces se crea una cuenta de Administrador pendiente de activación
+  Y se envía el enlace de activación
+  Y la creación se audita con actor "Sistema"
+
+Escenario: E4 (borde) — Ya existe un Administrador o falta el correo
+  Dado una base con un Administrador, o sin la variable de entorno del correo inicial
+  Cuando se ejecuta el comando de alta inicial
+  Entonces no se crea ninguna cuenta
+  Y el comando termina con un mensaje claro
+
+Escenario: E5 — Primer acceso con 2FA obligatorio
+  Dado el Administrador inicial con la cuenta activada
+  Cuando inicia sesión por primera vez
+  Entonces debe enrolar el 2FA antes de acceder al panel
+```
+
+**Definición de hecho:** DoD-01, DoD-02, DoD-07 y DoD-08.
+**Pruebas previstas:** PU-HU-039b-E1, PU-HU-039b-E2, PU-HU-039b-E3, PU-HU-039b-E4, PU-HU-039b-E5
 
 ### FT-012 — Página de Inicio  ·  EP-01 Sitio público
 
@@ -566,7 +630,7 @@ Escenario: E4 — Metadatos
 
 #### HU-042 — Servicios y Membresías (informativa)
 
-**Feature:** FT-014 · **Épica:** EP-01 · **Prioridad:** Must · **Puntos:** 3 · **Dependencias:** HU-036, HU-039, HU-062
+**Feature:** FT-014 · **Épica:** EP-01 · **Prioridad:** Must · **Puntos:** 3 · **Dependencias:** HU-036, HU-039a, HU-062
 
 **Requerimientos:** RF-PUB-03, RN-056
 
@@ -627,7 +691,8 @@ Escenario: E4 — Llamada a la acción
 - Se neutralizan saltos de línea en campos de cabecera (inyección de cabeceras) y se escapa todo contenido.
 - El mensaje se envía por la cola de correo a los destinatarios de contacto (mínimo 2, uno de ellos un buzón compartido, HU-063). Se conserva hasta confirmar el envío; si el fallo es definitivo se conserva 30 días y se alerta a Administración (HU-035). En R1 no hay bandeja de contactos.
 - El correo a Administración lleva Reply-To con la dirección del visitante; el remitente (From) es siempre Nilogistic.
-- Límite por correo destino: máximo 3 acuses por día a una misma dirección, para que el formulario no sirva para saturar a terceros (interpretación de "límite por correo destino", a confirmar).
+- Límite por correo destino: máximo 3 acuses por día a una misma dirección, para que el formulario no sirva para saturar a terceros (confirmado).
+- Topes globales de acuses (contacto_recibido): máximo **10 por hora y 40 por día** en todo el sitio (S-415 aprobado), configurables en HU-062; al superarlos, el mensaje llega a Administración, no se envía el acuse y el evento se registra.
 - Plantillas nuevas en el catálogo de HU-030: contacto_nuevo (a Administración) y contacto_recibido (acuse al remitente).
 
 **Permisos:** Visitante sin autenticación.  
@@ -681,10 +746,24 @@ Escenario: E8 (borde) — Fallo definitivo
   Cuando se agotan los reintentos
   Entonces el mensaje se conserva por 30 días
   Y se envía una alerta a Administración
+
+Escenario: E9 (borde) — Tope global de acuses
+  Dado que ya se enviaron 10 acuses en la última hora
+  Cuando un visitante envía un mensaje válido
+  Entonces el mensaje se entrega a Administración
+  Y no se envía el acuse al remitente
+  Y se registra el evento
+
+Escenario: E10 (borde) — Tope diario de acuses
+  Dado que ya se enviaron 40 acuses en el día
+  Cuando un visitante envía un mensaje válido
+  Entonces el mensaje se entrega a Administración
+  Y no se envía el acuse al remitente
+  Y se registra el evento
 ```
 
 **Definición de hecho:** DoD-01 a DoD-09.
-**Pruebas previstas:** PU-HU-043-E1, PU-HU-043-E2, PU-HU-043-E3, PU-HU-043-E4, PU-HU-043-E5, PU-HU-043-E6, PU-HU-043-E7, PU-HU-043-E8
+**Pruebas previstas:** PU-HU-043-E1, PU-HU-043-E2, PU-HU-043-E3, PU-HU-043-E4, PU-HU-043-E5, PU-HU-043-E6, PU-HU-043-E7, PU-HU-043-E8, PU-HU-043-E9, PU-HU-043-E10
 
 ### FT-016 — Páginas legales con **versionado mínimo** (versión y fecha de vigencia, registro de la versión aceptada) y banner de consentimiento de cookies  ·  EP-01 Sitio público
 
@@ -702,6 +781,9 @@ Escenario: E8 (borde) — Fallo definitivo
 - Enlaces desde el pie y desde los formularios que piden consentimiento.
 - Contenido revisado con asesoría legal, incluida la Ley 787 (tarea #6).
 - Sin una versión vigente, el sitio no publica la página y la puerta G6 lo detecta.
+- La política de privacidad declara el uso de Cloudflare Turnstile como proveedor anti-bot y sus datos tratados (DA-7).
+- La política de privacidad declara el **procedimiento y el plazo de supresión** de datos de suscriptores de newsletter y de contactos: el titular lo solicita por el canal de contacto y Administración lo atiende con el runbook manual T-SUPR dentro del plazo declarado (propuesta: 15 días hábiles; el valor final lo valida el asesor legal, tarea #6). R1 no incluye la acción de anonimización de usuarios (RN-004; FT-101, R2) (P-313, S-613).
+- La política de privacidad declara la **retención de 24 meses** de los eventos de analítica con propiedades permitidas (RN-057, RN-071).
 
 **Permisos:** Visitante sin autenticación.  
 **Auditoría:** –  
@@ -731,10 +813,25 @@ Escenario: E4 — Enlaces desde formularios
   Dado un formulario que pide consentimiento
   Cuando el usuario lo ve
   Entonces los enlaces a privacidad y términos abren la versión vigente
+
+Escenario: E5 — Mención de Turnstile
+  Dado la política de privacidad vigente
+  Cuando un visitante la lee
+  Entonces encuentra la mención del proveedor anti-bot y los datos que procesa
+
+Escenario: E6 — Procedimiento y plazo de supresión de datos
+  Dado la política de privacidad vigente
+  Cuando un visitante la lee
+  Entonces encuentra cómo solicitar la supresión de sus datos de newsletter y de contacto y el plazo en días hábiles en que se atiende
+
+Escenario: E7 (borde) — Política sin plazo de supresión
+  Dado una versión de la política de privacidad sin el plazo de supresión declarado
+  Cuando se evalúa la puerta G6
+  Entonces falla y la versión no se publica como vigente
 ```
 
 **Definición de hecho:** DoD-01 a DoD-09.
-**Pruebas previstas:** PU-HU-044-E1, PU-HU-044-E2, PU-HU-044-E3, PU-HU-044-E4
+**Pruebas previstas:** PU-HU-044-E1, PU-HU-044-E2, PU-HU-044-E3, PU-HU-044-E4, PU-HU-044-E5, PU-HU-044-E6, PU-HU-044-E7
 
 #### HU-045 — Banner de consentimiento de cookies
 
@@ -921,6 +1018,7 @@ Escenario: E7 — Avisos transaccionales
 **Reglas y validaciones:**
 - Campos: título, slug, resumen, contenido enriquecido, imagen de portada con texto alternativo obligatorio, categoría, etiquetas, nombre del autor (texto en R1) y metadatos SEO (título y descripción).
 - Todo el contenido enriquecido se sanitiza en el servidor con una lista blanca (encabezados, párrafos, énfasis, listas, enlaces, imágenes con alt, citas y tablas); se eliminan scripts y atributos peligrosos (decisión técnica #12).
+- Editor: Quill 2; la licencia y la versión exactas se verifican en el repositorio oficial antes de integrar (DA-7, ADR-12).
 - El slug se genera del título, es único y estable; si cambia en un post publicado, se crea una redirección 301 desde el anterior.
 - Imágenes JPG, PNG o WebP de hasta 2 MB.
 - Guardado automático de borradores (HU-071) y control de concurrencia: si otro editor guardó antes, se avisa antes de sobrescribir.
@@ -969,10 +1067,15 @@ Escenario: E7 (borde) — Sin permiso
   Dado un Cliente-Profesional autenticado
   Cuando intenta abrir el editor
   Entonces recibe 403
+
+Escenario: E8 — Licencia del editor verificada
+  Dado la integración de Quill 2
+  Cuando se cierra la historia
+  Entonces la licencia y la versión quedan registradas en el README de dependencias
 ```
 
 **Definición de hecho:** DoD-01 a DoD-09; además: Prueba de sanitización con la lista de vectores XSS comunes.
-**Pruebas previstas:** PU-HU-048-E1, PU-HU-048-E2, PU-HU-048-E3, PU-HU-048-E4, PU-HU-048-E5, PU-HU-048-E6, PU-HU-048-E7
+**Pruebas previstas:** PU-HU-048-E1, PU-HU-048-E2, PU-HU-048-E3, PU-HU-048-E4, PU-HU-048-E5, PU-HU-048-E6, PU-HU-048-E7, PU-HU-048-E8
 
 #### HU-049 — Estados y programación de publicación
 
@@ -1670,7 +1773,7 @@ Escenario: E5 — Datos estructurados
 
 #### HU-061 — Catálogos maestros
 
-**Feature:** FT-098 · **Épica:** EP-13 · **Prioridad:** Must · **Puntos:** 5 · **Dependencias:** HU-007, HU-020, HU-039
+**Feature:** FT-098 · **Épica:** EP-13 · **Prioridad:** Must · **Puntos:** 5 · **Dependencias:** HU-007, HU-020, HU-039a
 
 **Requerimientos:** RF-ADM-03, RN-002, RN-003
 
@@ -1680,7 +1783,7 @@ Escenario: E5 — Datos estructurados
 - Catálogos de R1: áreas logísticas, ubicaciones (país y departamentos) y tipos de contrato. Los catálogos de R2 (categorías de servicio) reutilizan esta estructura.
 - Cada valor tiene nombre único dentro de su catálogo, orden de presentación y estado activo o inactivo.
 - Inactivar un valor lo oculta de nuevas selecciones sin alterar los registros que ya lo usan (RN-002); reactivar es un UPDATE (RN-003).
-- La carga inicial es provisional (HU-039) hasta cerrar la tarea #8; reemplazar un valor retira la marca de provisional.
+- La carga inicial es provisional (HU-039a) hasta cerrar la tarea #8; reemplazar un valor retira la marca de provisional.
 - Los formularios (HU-025 y HU-026) leen los catálogos activos.
 
 **Permisos:** Administrador (READ, CREATE y UPDATE).  
@@ -1733,12 +1836,12 @@ Escenario: E5 (borde) — Sin permiso
 **Historia:** Como **Administrador**, quiero ajustar desde el panel los parámetros de seguridad y de operación, para adaptar el sistema sin desplegar código y manteniendo mínimos de seguridad.
 
 **Reglas y validaciones:**
-- Grupos de parámetros: contraseña, bloqueo por cuenta e IP (incluido el desafío a los 10 y el bloqueo a los 20), sesión, vigencia de enlaces, 2FA, límites de frecuencia y publicación de valores de planes (HU-042).
+- Grupos de parámetros: contraseña, bloqueo por cuenta e IP (incluido el desafío a los 10 y el bloqueo a los 20), sesión, vigencia de enlaces, 2FA, límites de frecuencia, topes globales de acuses del contacto (10 por hora y 40 por día, HU-043) y publicación de valores de planes (HU-042).
 - Cada parámetro tiene un valor por defecto (sección 2.4 del Lote 1), un rango válido y una descripción.
 - **Mínimos de seguridad no relajables** (RN-069): contraseña de 12 caracteres o más; enlace de activación de 72 horas o menos; enlace de recuperación de 60 minutos o menos; sesión de Gerente y Administrador de 15 minutos o menos; duración absoluta de 12 horas o menos; bloqueo a los 10 intentos o menos por cuenta; el 2FA de Gerente y Administrador no se puede desactivar.
 - Los mínimos se validan en la BLL, no solo en la interfaz: una llamada directa a la API con un valor inválido se rechaza igual.
 - Cambiar un parámetro de seguridad exige reautenticar con un código 2FA y envía un aviso por correo a los Administradores.
-- Fase 6: esta HU se separa en el almacén de parámetros (S3) y la pantalla de configuración (S7).
+- Fase 6: esta HU se separa en el almacén de parámetros (S2, S-602 aprobado) y la pantalla de configuración (S7).
 - Los cambios rigen sin redespliegue (con caché que se invalida) y se pueden restaurar al valor por defecto.
 - Los parámetros de tipo de cambio y datos bancarios se amplían en R2.
 
@@ -2360,7 +2463,7 @@ La matriz completa de los 145 RF, con los de R2 y R3 marcados como pendientes de
 | RF-AUD-03 | HU-064 | PU-HU-064-E1..E6 |
 | RF-AUT-08 | HU-047 | PU-HU-047-E1..E7 |
 | RF-BI-01 | HU-069, HU-070 | PU-HU-069-E1..E5, PU-HU-070-E1..E5 |
-| RF-BLG-01 | HU-048 | PU-HU-048-E1..E7 |
+| RF-BLG-01 | HU-048 | PU-HU-048-E1..E8 |
 | RF-BLG-02 | HU-049 | PU-HU-049-E1..E6 |
 | RF-BLG-03 | HU-051 | PU-HU-051-E1..E5 |
 | RF-BLG-04 | HU-052 | PU-HU-052-E1..E5 |
@@ -2382,8 +2485,8 @@ La matriz completa de los 145 RF, con los de R2 y R3 marcados como pendientes de
 | RF-PUB-01 | HU-040 | PU-HU-040-E1..E5 |
 | RF-PUB-02 | HU-041 | PU-HU-041-E1..E4 |
 | RF-PUB-03 | HU-042 | PU-HU-042-E1..E4 |
-| RF-PUB-04 | HU-043 | PU-HU-043-E1..E8 |
-| RF-PUB-05 | HU-044 | PU-HU-044-E1..E4 |
+| RF-PUB-04 | HU-043 | PU-HU-043-E1..E10 |
+| RF-PUB-05 | HU-044 | PU-HU-044-E1..E7 |
 | RF-PUB-06 | HU-045 | PU-HU-045-E1..E5 |
 | RF-PUB-07 | HU-046 | PU-HU-046-E1..E4 |
 | RN-002 | HU-049, HU-050, HU-061 | PU-HU-049-E1..E6, PU-HU-050-E1..E4, PU-HU-061-E1..E5 |
@@ -2391,7 +2494,7 @@ La matriz completa de los 145 RF, con los de R2 y R3 marcados como pendientes de
 | RN-004 | HU-070 | PU-HU-070-E1..E5 |
 | RN-005 | HU-064 | PU-HU-064-E1..E6 |
 | RN-015 | HU-034, HU-035 | PU-HU-034-E1..E5, PU-HU-035-E1..E4 |
-| RN-020 | HU-048 | PU-HU-048-E1..E7 |
+| RN-020 | HU-048 | PU-HU-048-E1..E8 |
 | RN-021 | HU-059 | PU-HU-059-E1..E6 |
 | RN-030 | HU-053, HU-057 | PU-HU-053-E1..E7, PU-HU-057-E1..E6 |
 | RN-031 | HU-054, HU-057 | PU-HU-054-E1..E7, PU-HU-057-E1..E6 |
@@ -2400,14 +2503,15 @@ La matriz completa de los 145 RF, con los de R2 y R3 marcados como pendientes de
 | RN-042 | HU-059 | PU-HU-059-E1..E6 |
 | RN-045 | HU-034 | PU-HU-034-E1..E5 |
 | RN-051 | HU-034 | PU-HU-034-E1..E5 |
-| RN-056 | HU-039, HU-042 | PU-HU-039-E1..E5, PU-HU-042-E1..E4 |
+| D-019 | HU-039a, HU-039b | PU-HU-039a-E1..E5, PU-HU-039b-E1..E5 |
+| RN-056 | HU-039a, HU-042 | PU-HU-039a-E1..E5, PU-HU-042-E1..E4 |
 | RN-057 | HU-069, HU-070 | PU-HU-069-E1..E5, PU-HU-070-E1..E5 |
 | RN-060 | HU-064 | PU-HU-064-E1..E6 |
 | RN-069 | HU-062 | PU-HU-062-E1..E14 |
 | RN-070 | HU-047, HU-053, HU-054 | PU-HU-047-E1..E7, PU-HU-053-E1..E7, PU-HU-054-E1..E7 |
 | RN-071 | HU-070 | PU-HU-070-E1..E5 |
-| RNF-MAN-02 | HU-038 | PU-HU-038-E1..E4 |
-| RNF-PRI-02 | HU-044, HU-045 | PU-HU-044-E1..E4, PU-HU-045-E1..E5 |
+| RNF-MAN-02 | HU-038 | PU-HU-038-E1..E5 |
+| RNF-PRI-02 | HU-044, HU-045 | PU-HU-044-E1..E5, PU-HU-045-E1..E5 |
 | RNF-REN-05 | HU-069 | PU-HU-069-E1..E5 |
 | RNF-SEO-01 | HU-068 | PU-HU-068-E1..E5 |
 | RNF-SEO-02 | HU-068 | PU-HU-068-E1..E5 |

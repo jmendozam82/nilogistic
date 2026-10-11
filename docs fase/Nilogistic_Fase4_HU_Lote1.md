@@ -2,11 +2,11 @@
 
 | Campo | Valor |
 |---|---|
-| Versión | **1.4** (07/10/2026: indexación por entorno en HU-012 y HU-031, certificado X.509 y script de usuarios de prueba en HU-014, dependencia de HU-025 y HU-026 con HU-039a; antes 1.3: 07/10/2026: D-060 y cronograma de planes; antes: incorpora DA-1 a DA-7 aprobadas el 06/10/2026: HU-001, 005, 006, 013; antes: S-406 detallada y ajustes Q-401 a Q-404) |
+| Versión | **1.6** (10/10/2026: DoD-01 alineado con ADR-01 (D-103); antes 1.5: 07/10/2026: ciclo de vida del certificado en HU-014, con PFX y contraseña en lugares separados; antes 1.4: 07/10/2026: indexación por entorno en HU-012 y HU-031, certificado X.509 y script de usuarios de prueba en HU-014, dependencia de HU-025 y HU-026 con HU-039a; antes 1.3: 07/10/2026: D-060 y cronograma de planes; antes: incorpora DA-1 a DA-7 aprobadas el 06/10/2026: HU-001, 005, 006, 013; antes: S-406 detallada y ajustes Q-401 a Q-404) |
 | Fecha | 05/10/2026 |
 | Fase | 4 de 9 — Historias de Usuario con criterios de aceptación |
 | Entrada | Fase 2 v1.4 y Backlog v1.2 |
-| Alcance del lote | 33 HU sobre 18 features de la ruta crítica de R1: 122 SP, 173 escenarios Gherkin |
+| Alcance del lote | 33 HU sobre 18 features de la ruta crítica de R1: 122 SP, 175 escenarios Gherkin |
 | Estado | Aprobado. Siguiente: Lote 2 (resto de R1) |
 
 ---
@@ -48,7 +48,7 @@ Toda HU se considera terminada cuando cumple **DoD-01 a DoD-09**, más los crite
 
 | ID | Criterio |
 |---|---|
-| DoD-01 | El código respeta el flujo Vista → Controller MVC → API Controller → BLL → DAL, sin saltos de capa. |
+| DoD-01 | El código respeta el flujo Vista → Controller MVC → BLL → DAL → PostgreSQL; el API Controller (/api/v1) también entra por la BLL (ADR-01). Ningún controlador llama al DAL ni se salta una capa. |
 | DoD-02 | Pruebas unitarias (xUnit, Moq, FluentAssertions) para cada escenario aplicable; cobertura de BLL ≥ 70 % en lo nuevo. |
 | DoD-03 | Validación doble (servidor y cliente) donde haya formularios. |
 | DoD-04 | Permisos verificados en el servidor, con prueba negativa. |
@@ -886,7 +886,8 @@ Escenario: E8 (borde) — Turnstile no disponible (fallo cerrado)
 - Tras el login, el cliente va a "Mi cuenta" y Gerente o Administrador al panel de gestión; si el rol exige 2FA, se pasa antes por HU-022.
 - La URL de retorno solo admite rutas internas.
 - Cookie de sesión HttpOnly, Secure y SameSite; el mecanismo exacto depende de la decisión técnica #4.
-- Primer uso de ASP.NET Core Identity y de Data Protection: las claves se persisten en PostgreSQL (ADR-17) y tienen respaldo cifrado fuera del servicio, y la clave de aplicación se implementa como un **certificado X.509** con el que se protegen esas claves; el respaldo incluye el archivo PFX y su contraseña, guardados aparte del respaldo de las claves (D-060, D-065); la restauración se prueba en Staging antes de la puerta G3 (DA-2, RNF-DIS-06). Se ubica aquí porque las claves existen desde el primer inicio de sesión.
+- Primer uso de ASP.NET Core Identity y de Data Protection: las claves se persisten en PostgreSQL (ADR-17) y tienen respaldo cifrado fuera del servicio, y la clave de aplicación se implementa como un **certificado X.509** con el que se protegen esas claves; el respaldo incluye el archivo PFX y su contraseña, que se guardan **en lugares distintos entre sí y aparte del respaldo de las claves** (D-060, D-065); la restauración se prueba en Staging antes de la puerta G3 (DA-2, RNF-DIS-06). Se ubica aquí porque las claves existen desde el primer inicio de sesión.
+- **Ciclo de vida del certificado (S-612):** el certificado tiene una fecha de vencimiento registrada en la configuración; una tarea programada (HU-034, HU-035) avisa por correo a los Administradores 60 y 30 días antes. La rotación está documentada: se agrega el certificado nuevo, las claves existentes se re-protegen y solo entonces se retira el anterior, sin invalidar sesiones ni enlaces vigentes. La restauración desde el respaldo (PFX y contraseña desde sus dos lugares) se prueba en Staging durante S4.
 - **Usuarios de prueba:** el script que crea usuarios de prueba para Local y Staging vive fuera de las migraciones y se niega a ejecutarse en Producción (RP-9).
 
 **Permisos:** Cualquier visitante ve la página de login; las áreas protegidas exigen sesión.  
@@ -929,7 +930,7 @@ Escenario: E6 — Respaldo de claves de Data Protection
   Dado el almacén de claves de Data Protection en PostgreSQL
   Cuando se ejecuta el procedimiento de respaldo
   Entonces existe una copia cifrada fuera del servicio con fecha registrada
-  Y el PFX del certificado y su contraseña se guardan aparte del respaldo de las claves
+  Y el PFX y su contraseña se guardan en lugares distintos entre sí y aparte del respaldo de las claves
 
 Escenario: E7 (borde) — Restauración de claves tras pérdida
   Dado un Staging recreado sin las claves originales
@@ -941,10 +942,23 @@ Escenario: E8 (borde) — El script de usuarios de prueba no corre en Producció
   Cuando se intenta ejecutar contra el entorno de Producción
   Entonces el script se detiene sin crear ninguna cuenta
   Y las migraciones no contienen usuarios de prueba
+
+Escenario: E9 (borde) — Aviso de vencimiento del certificado
+  Dado un certificado que vence en 60 días o en 30 días
+  Cuando corre la tarea programada de revisión
+  Entonces los Administradores reciben un aviso por correo con la fecha de vencimiento
+  Y el aviso queda registrado
+
+Escenario: E10 — Rotación del certificado sin invalidar sesiones
+  Dado un certificado vigente y uno nuevo emitido para reemplazarlo
+  Cuando se ejecuta el procedimiento de rotación en Staging
+  Entonces las claves existentes se re-protegen con el certificado nuevo
+  Y las sesiones y los enlaces vigentes siguen siendo válidos
+  Y solo entonces se retira el certificado anterior
 ```
 
 **Definición de hecho:** DoD-01 a DoD-09; además: Pruebas de enumeración: tiempos de respuesta comparables con correo existente e inexistente. 
-**Pruebas previstas:** PU-HU-014-E1, PU-HU-014-E2, PU-HU-014-E3, PU-HU-014-E4, PU-HU-014-E5, PU-HU-014-E6, PU-HU-014-E7, PU-HU-014-E8
+**Pruebas previstas:** PU-HU-014-E1, PU-HU-014-E2, PU-HU-014-E3, PU-HU-014-E4, PU-HU-014-E5, PU-HU-014-E6, PU-HU-014-E7, PU-HU-014-E8, PU-HU-014-E9, PU-HU-014-E10
 
 #### HU-015 — Cierre de sesión y expiración por inactividad
 
@@ -2055,7 +2069,7 @@ Escenario: E4 (borde) — Formulario abierto durante un cambio de versión
 | RF-ADM-02 | HU-024 | PU-HU-024-E1..E5 |
 | RF-AUD-01 | HU-008 | PU-HU-008-E1..E5 |
 | RF-AUD-04 | HU-009 | PU-HU-009-E1..E4 |
-| RF-AUT-01 | HU-014 | PU-HU-014-E1..E8 |
+| RF-AUT-01 | HU-014 | PU-HU-014-E1..E10 |
 | RF-AUT-02 | HU-016 | PU-HU-016-E1..E5 |
 | RF-AUT-03 | HU-017 | PU-HU-017-E1..E5 |
 | RF-AUT-04 | HU-015 | PU-HU-015-E1..E5 |
@@ -2106,11 +2120,11 @@ Escenario: E4 (borde) — Formulario abierto durante un cambio de versión
 | RNF-SEG-05 | HU-005, HU-006 | PU-HU-005-E1..E5, PU-HU-006-E1..E5 |
 | RNF-SEG-06 | HU-004 | PU-HU-004-E1..E4 |
 | RNF-SEG-07 | HU-004 | PU-HU-004-E1..E4 |
-| RNF-SEG-08 | HU-014, HU-016, HU-017 | PU-HU-014-E1..E8, PU-HU-016-E1..E5, PU-HU-017-E1..E5 |
+| RNF-SEG-08 | HU-014, HU-016, HU-017 | PU-HU-014-E1..E10, PU-HU-016-E1..E5, PU-HU-017-E1..E5 |
 | RNF-SEG-09 | HU-005 | PU-HU-005-E1..E5 |
 | D-005 | HU-010, HU-011 | PU-HU-010-E1..E5, PU-HU-011-E1..E4 |
 
-Total: 58 requerimientos y reglas con trazabilidad en este lote; 173 pruebas previstas (una por escenario).
+Total: 58 requerimientos y reglas con trazabilidad en este lote; 175 pruebas previstas (una por escenario).
 
 ---
 
