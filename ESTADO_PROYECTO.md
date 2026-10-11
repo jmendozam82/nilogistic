@@ -106,12 +106,13 @@ Prerrequisitos 4.0 de HU-006 (2026-10-11): (1) Web Service manual `nilogistic-st
 | D-16 | Técnica | Soporte de programación cron y política de purga/archivo de `app.tareas_ejecuciones` (sin DELETE); decidir con HU-035 (D-093) | Antes de HU-035 / primera tarea cron de R2 | ⬜ |
 | D-17 | Proceso | Marcar `build-y-pruebas` como check requerido en la protección de `main` para que la puerta G1 (D-106) bloquee el merge; lo hace Jorge en GitHub | Antes del primer PR a `main` | ✅ (11/10/2026) |
 | D-18 | Técnica | Exponer el commit desplegado (`RENDER_GIT_COMMIT`) en `/api/v1/estado` y verificarlo en el sondeo posterior al despliegue (HU-006, SUP-6) | Antes de S2 | ⬜ |
+| D-19 | Infra | Adoptar el Blueprint de Render (`render.yaml`) cuando haya tarjeta registrada y comprobar que el servicio creado a mano (D-111) coincide con él | Antes de crear Producción (S10) | ⬜ |
 
 ## 7. Versiones
 
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.15 — 2026-10-11 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.16 — 2026-10-11 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 3 aplicadas en Supabase (gpribzfgwvlzxcpdzezs) |
