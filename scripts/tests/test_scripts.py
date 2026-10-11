@@ -54,6 +54,27 @@ class TrazabilidadTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             self.assertEqual(esp.main(["--hu-dir", d, "--pruebas", d, "--sprint", "S0"]), 0)
 
+    def _sprints(self, d, pruebas):
+        escribir(os.path.join(d, "hu", "S0.txt"), "HU-001 E1\n")
+        escribir(os.path.join(d, "hu", "S1.txt"), "HU-007 E1\nHU-007 E2\n")
+        escribir(os.path.join(d, "t", "A.cs"), pruebas)
+        return ["--hu-dir", os.path.join(d, "hu"), "--pruebas", os.path.join(d, "t")]
+
+    def test_todos_falla_si_falta_un_escenario_de_cualquier_sprint(self):
+        with tempfile.TemporaryDirectory() as d:
+            base = self._sprints(d, '[Hu("HU-001","E1")]\n[Hu("HU-007","E1")]')
+            self.assertEqual(esp.main(base + ["--sprint", "todos"]), 1)
+
+    def test_todos_ok_si_cada_sprint_tiene_sus_pruebas(self):
+        with tempfile.TemporaryDirectory() as d:
+            base = self._sprints(d, '[Hu("HU-001","E1")]\n[Hu("HU-007","E1")]\n[Hu("HU-007","E2")]')
+            self.assertEqual(esp.main(base + ["--sprint", "todos"]), 0)
+
+    def test_un_sprint_concreto_no_evalua_los_demas(self):
+        with tempfile.TemporaryDirectory() as d:
+            base = self._sprints(d, '[Hu("HU-001","E1")]')
+            self.assertEqual(esp.main(base + ["--sprint", "S0"]), 0)
+
 
 class ConventionalCommitsTests(unittest.TestCase):
     def test_acepta_tipos_convencionales(self):

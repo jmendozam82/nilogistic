@@ -54,7 +54,7 @@ jobs:
       # No bloquea el merge de cada PR; la cobertura se recopila arriba como dato para la revisión (scripts/ci/verificar_cobertura.py).
 
       - name: Trazabilidad escenarios Gherkin sin prueba
-        run: python3 scripts/trazabilidad/escenarios_sin_prueba.py --hu-dir docs/hu --pruebas tests --sprint S0
+        run: python3 scripts/trazabilidad/escenarios_sin_prueba.py --hu-dir docs/hu --pruebas tests --sprint todos
 
       - name: Pruebas de los scripts
         run: python3 -m unittest discover -s scripts/tests -v
