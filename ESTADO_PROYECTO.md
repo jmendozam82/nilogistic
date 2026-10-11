@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-010 — Servicio de correo transaccional con cola (Pase B en curso; HU-006 cerrada ✅ 2026-10-11; HU-036/037 exigen D-02) |
-| Criterio de aceptación actual | Pase B de HU-010: 4.4 BLL/DTO ✅, 4.5 host/IOC ✅, 4.6 retry del hook ✅, 4.7 docs/estado ⬜; sigue Pase C (evidencia real en Staging) |
-| Paso actual del ciclo | Pase B de HU-010 — documentación y verificación final (pasos 4–7) |
-| Rama de trabajo | feature/HU-010 |
+| HU actual | HU-036 — Layout base y sistema de diseño (bloqueada por D-02; HU-010 cerrada ✅ 2026-10-11) |
+| Criterio de aceptación actual | HU-036/HU-037 en espera del diseño visual de Jorge (D-02); sin features nuevas hasta tenerlo |
+| Paso actual del ciclo | Sprint 1: quedan HU-036 y HU-037, bloqueadas por D-02 (diseño) |
+| Rama de trabajo | develop |
 | Última actualización | 2026-10-11 |
 
 ## 2. Fases del ciclo de vida
@@ -63,14 +63,14 @@
 |---|---|---|---|---|---|---|---|
 | HU-007 | Base de dominio: soft delete, UTC y repositorio genérico (FT-004) | 5 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | ⬜ (E1 → HU-008, D-12) | ✅ |
 | HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — (D-12 análoga → HU-008) | ✅ |
-| HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | 🔄 | E1–E5: estructura + 238/238 pruebas verdes (R-1, 4.4, 4.5, 4.6) | ✅ | — | ✅ |
+| HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ✅ | 5/5 (E1–E5; estructurales + reales en Staging: S-E1, S-E4, S-E2/S-E3 y recuperación, SUP-9) | ✅ | — | ✅ |
 | HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ✅ | 5/5 (E1–E5; estructurales y reales en Staging, SUP-9 cumplido) | ✅ | — | ✅ |
 | HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
-Total S1: 23 SP (13 cerrados: HU-007, HU-034, HU-006). HU-010 tiene la cuenta de Resend con dominio verificado (D-01, confirmado 2026-10-11); HU-036 y HU-037 requieren el diseño visual (D-02).
+Total S1: 23 SP (18 cerrados: HU-007, HU-034, HU-006, HU-010). HU-036 y HU-037 quedan bloqueadas por el diseño visual (D-02).
 
-Avance de HU-010 (2026-10-11): Pase A cerrado (ficha §13/§14); R-1 (URL base de Resend sin barra final) ✅; 4.4 BLL/DTO ✅; 4.5 host/IOC ✅; 4.6 retry del hook de Render ✅; 4.7 docs/estado ✅. **Pendiente Pase C:** evidencia real en Staging (S-E1, S-E4, S-E2/S-E3 y recuperación) al hacer merge a develop.
+Cierre de HU-010 (2026-10-11): Pase A + Pase B (R-1, 4.4, 4.5, 4.6, 4.7) y Pase C con **evidencia real en Staging**: S-E1 envío real (Resend `delivered`, SPF/DKIM PASS), S-E4 idempotencia, S-E2/S-E3 fallo de red con 4 intentos y recuperación; servicio `/health/ready` 200 y config de Render restaurada. Detalle en `docs/tareas/HU-010.md` §14.
 
 Prerrequisitos 4.0 de HU-006 (2026-10-11): (1) Web Service manual `nilogistic-staging` de Render eliminado ✅ · (2) entornos GitHub `staging` (rama `develop`) y `produccion` (rama `main`, revisor Jorge) creados ✅ · (3) secreto `DB_URL` (Session pooler, puerto 5432, rol owner) cargado en `staging` ✅ · (4) `main` protegido con el check `build-y-pruebas` ✅. `URL_BASE` y `RENDER_DEPLOY_HOOK` se cargaron después, con el servicio manual (D-111).
 
@@ -120,6 +120,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.18 — 2026-10-11 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.19 — 2026-10-11 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 4 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs) |

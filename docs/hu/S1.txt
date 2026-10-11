@@ -19,4 +19,4 @@ HU-010 E2
 HU-010 E3
 HU-010 E4
 HU-010 E5
-# HU-010 E1-E5: estructural (normalizados con espaciado de un solo espacio) mas pruebas unitarias BLL/Aplicacion; evidencia real Staging en Pase C.
+# HU-010 E1-E5: verificados en Staging (S-E1 envio real, S-E4 idempotencia, S-E2/S-E3 fallo de red y recuperacion; evidencia en docs/tareas/HU-010.md, seccion 14).
