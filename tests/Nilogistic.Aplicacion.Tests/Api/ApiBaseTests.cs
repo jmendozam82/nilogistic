@@ -86,6 +86,33 @@ public class ApiBaseTests
     }
 
     [Fact]
+    public async Task Estado_incluye_el_commit_desplegado_cuando_existe()
+    {
+        var ajustes = new Dictionary<string, string> { ["RENDER_GIT_COMMIT"] = "A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0" };
+        using var fabrica = new FabricaAplicacion("Staging", ajustes: ajustes, servicios: Reemplazos.Repositorio(true));
+        using var cliente = fabrica.ClienteHttps();
+
+        var respuesta = await cliente.GetAsync("/api/v1/estado");
+        using var documento = JsonDocument.Parse(await respuesta.Content.ReadAsStringAsync());
+
+        respuesta.StatusCode.Should().Be(HttpStatusCode.OK);
+        documento.RootElement.GetProperty("commit").GetString().Should().Be("a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0");
+    }
+
+    [Fact]
+    public async Task Estado_sin_commit_no_incluye_el_campo()
+    {
+        using var fabrica = new FabricaAplicacion("Staging", servicios: Reemplazos.Repositorio(true));
+        using var cliente = fabrica.ClienteHttps();
+
+        var respuesta = await cliente.GetAsync("/api/v1/estado");
+        using var documento = JsonDocument.Parse(await respuesta.Content.ReadAsStringAsync());
+
+        respuesta.StatusCode.Should().Be(HttpStatusCode.OK);
+        documento.RootElement.TryGetProperty("commit", out _).Should().BeFalse();
+    }
+
+    [Fact]
     [Hu("HU-002", "E4")]
     public async Task Un_error_no_controlado_devuelve_ProblemDetails_500_sin_detalles_internos()
     {

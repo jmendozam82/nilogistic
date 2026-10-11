@@ -70,4 +70,32 @@ public class ServicioSaludTests
         estado.BaseDatosDisponible.Should().BeTrue();
         estado.FechaUtc.Should().Be(Ahora);
     }
+
+    [Fact]
+    public async Task Estado_incluye_el_commit_desplegado()
+    {
+        var repositorio = new Mock<IRepositorioSalud>();
+        repositorio.Setup(r => r.PuedeConectarAsync(It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+        var servicio = new ServicioSalud(
+            repositorio.Object,
+            new Mock<IRelojUtc>().Object,
+            new InformacionAplicacion("Nilogistic", "0.1.0", "Staging", "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0"),
+            NullLogger<ServicioSalud>.Instance);
+
+        var estado = await servicio.ObtenerEstadoAsync(CancellationToken.None);
+
+        estado.Commit.Should().Be("a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0");
+    }
+
+    [Fact]
+    public async Task Estado_sin_commit_devuelve_null()
+    {
+        var repositorio = new Mock<IRepositorioSalud>();
+        repositorio.Setup(r => r.PuedeConectarAsync(It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+        var estado = await Crear(repositorio).ObtenerEstadoAsync(CancellationToken.None);
+
+        estado.Commit.Should().BeNull();
+    }
 }
