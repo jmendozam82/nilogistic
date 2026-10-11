@@ -192,4 +192,49 @@ public class SeguridadBaseDatosTests(PostgresFixture bd)
         (await borrarTareas.Should().ThrowAsync<PostgresException>()).Which.SqlState.Should().Be(PermisoDenegado);
         await actualizar.Should().NotThrowAsync("UPDATE sí está permitido (el historial no se purga)");
     }
+
+    [Fact]
+    [Hu("HU-010", "DoD")]
+    public async Task La_cola_de_correo_tiene_RLS_y_politicas_por_comando_sin_delete()
+    {
+        var nombre = await bd.CrearBaseAsync();
+        var cadena = bd.CadenaAdmin(nombre);
+
+        var conRls = await bd.EscalarAsync<bool>(cadena, """
+            select bool_and(c.relrowsecurity)
+            from pg_class c
+            where c.relnamespace = 'app'::regnamespace and c.relname = 'cola_correo'
+            """);
+        conRls.Should().BeTrue("app.cola_correo exige RLS de denegación por defecto (HU-010)");
+
+        var comandos = new List<string>();
+        await using var conexion = new NpgsqlConnection(cadena);
+        await conexion.OpenAsync();
+        await using var comando = new NpgsqlCommand("""
+            select distinct cmd from pg_policies
+            where schemaname = 'app' and tablename = 'cola_correo'
+            """, conexion);
+        await using var lector = await comando.ExecuteReaderAsync();
+        while (await lector.ReadAsync())
+        {
+            comandos.Add(lector.GetString(0));
+        }
+
+        comandos.Should().Contain("SELECT").And.Contain("INSERT").And.Contain("UPDATE");
+        comandos.Should().NotContain("DELETE").And.NotContain("ALL", "no se concede eliminación (RN-001)");
+    }
+
+    [Fact]
+    [Hu("HU-010", "DoD")]
+    public async Task El_rol_de_la_aplicacion_no_puede_borrar_en_la_cola_de_correo()
+    {
+        var nombre = await bd.CrearBaseAsync();
+        var cadena = bd.CadenaApp(nombre);
+
+        var borrar = () => ComoAsync<long>(cadena, "delete from app.cola_correo");
+        var actualizar = () => ComoAsync<long>(cadena, "update app.cola_correo set error = null");
+
+        (await borrar.Should().ThrowAsync<PostgresException>()).Which.SqlState.Should().Be(PermisoDenegado);
+        await actualizar.Should().NotThrowAsync("UPDATE sí está permitido (las filas no se eliminan)");
+    }
 }

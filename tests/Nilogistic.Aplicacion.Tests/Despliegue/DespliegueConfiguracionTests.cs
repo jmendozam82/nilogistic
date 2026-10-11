@@ -176,6 +176,47 @@ public class DespliegueConfiguracionTests
         }
     }
 
+    [Fact]
+    public void Ambos_jobs_reintentan_el_deploy_hook()
+    {
+        var ci = Leer(ArchivoCi);
+
+        foreach (var nombre in JobsDeDespliegue)
+        {
+            var job = Job(ci, nombre);
+            var disparar = job.IndexOf("Disparar el despliegue en Render", StringComparison.Ordinal);
+            disparar.Should().BeGreaterThanOrEqualTo(0,
+                because: $"{ArchivoCi}: '{nombre}' debe tener el paso 'Disparar el despliegue en Render'");
+            var paso = job[disparar..];
+            paso.Should().Contain("curl -fsS --retry 3 --retry-delay 5 --retry-all-errors -X POST \"$RENDER_DEPLOY_HOOK\"",
+                because: $"{ArchivoCi}: '{nombre}' debe reintentar el hook (3 intentos, variable con mascara)");
+            paso.Should().Contain("add-mask::$RENDER_DEPLOY_HOOK",
+                because: $"{ArchivoCi}: '{nombre}' no puede imprimir el hook");
+        }
+    }
+
+    [Fact]
+    public void La_clave_de_resend_no_se_versiona_con_valor()
+    {
+        foreach (var archivo in new[] { "src/Nilogistic.Aplicacion/appsettings.json", "src/Nilogistic.Aplicacion/appsettings.Development.json" })
+        {
+            Leer(archivo).Should().NotContain("ApiKey",
+                because: $"{archivo} no puede declarar 'ApiKey' (ni vacía)");
+        }
+
+        var render = Leer(ArchivoRender);
+        var desde = render.IndexOf("- key: Resend__ApiKey", StringComparison.Ordinal);
+        desde.Should().BeGreaterThanOrEqualTo(0,
+            because: $"{ArchivoRender} debe declarar la variable Resend__ApiKey");
+        var bloque = render[desde..];
+        var hasta = bloque.IndexOf("\n      - key:", StringComparison.Ordinal);
+        var declaracion = hasta < 0 ? bloque : bloque[..hasta];
+        declaracion.Should().Contain("sync: false",
+            because: $"{ArchivoRender}: Resend__ApiKey debe ser un secreto sin valor");
+        declaracion.Should().NotContain("value:",
+            because: $"{ArchivoRender}: Resend__ApiKey nunca lleva valor versionado");
+    }
+
     private static string Leer(string rutaRelativa)
     {
         var ruta = Path.Combine(RaizRepositorio.Encontrar(), rutaRelativa.Replace('/', Path.DirectorySeparatorChar));

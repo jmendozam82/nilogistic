@@ -16,6 +16,9 @@ services:
         sync: false
       - key: Supabase__ReferenciaProyecto
         sync: false
+      # Secreto del proveedor Resend (HU-010): se carga en el panel, nunca con valor aqui.
+      - key: Resend__ApiKey
+        sync: false
       - key: Seguridad__Csp__Modo
         value: Reporte
       - key: Seguridad__IndexacionHabilitada

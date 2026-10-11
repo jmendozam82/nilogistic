@@ -39,6 +39,7 @@ idénticos a `render.yaml`** (la especificación de referencia; si uno cambia, c
 | `Seguridad__Csp__Modo` | `Reporte` |
 | `Seguridad__IndexacionHabilitada` | `false` |
 | `Proxy__ConfiarEnCualquierProxy` | `true` (solo Staging, durante el spike SPK-01) |
+| `Resend__ApiKey` | secreto (se añadió a `render.yaml` con HU-010): cargar en el panel del servicio |
 
 ## Flujo de despliegue
 
@@ -49,7 +50,11 @@ idénticos a `render.yaml`** (la especificación de referencia; si uno cambia, c
    **rol propietario** guardado en el secreto de entorno `DB_URL`.
 3. **Disparo del despliegue.** Solo si la migración salió bien, el job hace `POST` al
    `RENDER_DEPLOY_HOOK` (secreto de entorno). `render.yaml` tiene `autoDeploy: false`: Render **no**
-   despliega solo, lo hace el hook y siempre después de migrar.
+   despliega solo, lo hace el hook y siempre después de migrar. La orden usa
+   `curl --retry 3 --retry-delay 5 --retry-all-errors` (HU-010): ante un error transitorio del hook
+   (por ejemplo, HTTP 500) el job reintenta. Como el reintento puede repetir un `POST` que sí llegó,
+   un hook repetido encola, como máximo, un despliegue adicional equivalente en Render; el costo es
+   nulo (SUP-10).
 4. **Comprobación previa.** Antes de migrar, el job verifica que existan `DB_URL`, `RENDER_DEPLOY_HOOK` y `URL_BASE`; si falta alguno, falla sin tocar la base.
 5. **Verificación de salud.** El job espera 90 s y sondea hasta 40 veces (≈ 10 min)
    `GET /health/ready` y `GET /api/v1/estado`. Si el sondeo no queda sano, el job falla.

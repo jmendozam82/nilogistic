@@ -178,7 +178,7 @@ jobs:
         run: |
           set -euo pipefail
           echo "::add-mask::$RENDER_DEPLOY_HOOK"
-          curl -fsS -X POST "$RENDER_DEPLOY_HOOK" >/dev/null
+          curl -fsS --retry 3 --retry-delay 5 --retry-all-errors -X POST "$RENDER_DEPLOY_HOOK" >/dev/null
       - name: Verificar salud tras el despliegue
         env:
           URL_BASE: ${{ vars.URL_BASE }}
@@ -233,7 +233,7 @@ jobs:
         run: |
           set -euo pipefail
           echo "::add-mask::$RENDER_DEPLOY_HOOK"
-          curl -fsS -X POST "$RENDER_DEPLOY_HOOK" >/dev/null
+          curl -fsS --retry 3 --retry-delay 5 --retry-all-errors -X POST "$RENDER_DEPLOY_HOOK" >/dev/null
       - name: Verificar salud tras el despliegue
         env:
           URL_BASE: ${{ vars.URL_BASE }}

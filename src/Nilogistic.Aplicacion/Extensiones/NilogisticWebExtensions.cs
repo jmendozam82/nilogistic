@@ -67,6 +67,7 @@ public static class NilogisticWebExtensions
             .AddApplicationPart(typeof(ApiExtensions).Assembly);
 
         servicios.AgregarNilogistic(configuracion, entorno);
+        servicios.AgregarCorreoNilogistic(configuracion, entorno);
         servicios.AgregarNilogisticApi(configuracion, entorno);
         servicios.AddHostedService<EjecutorTareasHostedService>();
         return servicios;

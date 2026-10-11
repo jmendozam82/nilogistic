@@ -44,6 +44,7 @@ public static class PersistenciaExtensions
         servicios.AddScoped(typeof(IRepositorioBase<>), typeof(RepositorioBase<>));
         servicios.AddScoped<IRepositorioSalud, RepositorioSalud>();
         servicios.AddScoped<IRepositorioTareas, RepositorioTareas>();
+        servicios.AddScoped<IRepositorioCorreo, RepositorioCorreo>();
         return servicios;
     }
 

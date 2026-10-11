@@ -39,12 +39,22 @@ public class RepositorioTareasTests(PostgresFixture bd)
             baseDatos);
     }
 
+    /// <summary>
+    /// La migración de HU-010 siembra la tarea <c>procesar_cola_correo</c>; queda oculta para que cada
+    /// prueba aísle el escenario que planta y no invalida la siembra (se verifica en HU-010).
+    /// </summary>
+    private Task OcultarTareaSembradaAsync(string baseDatos) =>
+        bd.EjecutarComoAdminAsync(
+            "update app.tareas set activa = false where nombre = 'procesar_cola_correo'",
+            baseDatos);
+
     [Fact]
     [Hu("HU-034", "E1")]
     public async Task Reservar_devuelve_la_tarea_vencida_y_difiere_su_proxima_ejecucion()
     {
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
+        await OcultarTareaSembradaAsync(nombre);
         await SembrarAsync(nombre, "correo", proxima: Ahora.AddMinutes(-5));
         using var contexto = CrearContexto(cadena);
         var repositorio = Repositorio(contexto);
@@ -66,6 +76,7 @@ public class RepositorioTareasTests(PostgresFixture bd)
     {
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
+        await OcultarTareaSembradaAsync(nombre);
         await SembrarAsync(nombre, "correo", proxima: Ahora.AddMinutes(-5));
         using var primerContexto = CrearContexto(cadena);
         using var segundoContexto = CrearContexto(cadena);
@@ -85,6 +96,7 @@ public class RepositorioTareasTests(PostgresFixture bd)
     {
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
+        await OcultarTareaSembradaAsync(nombre);
         await SembrarAsync(nombre, "correo", proxima: Ahora.AddMinutes(-5));
         using var contexto = CrearContexto(cadena);
         var repositorio = Repositorio(contexto);
@@ -104,6 +116,7 @@ public class RepositorioTareasTests(PostgresFixture bd)
     {
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
+        await OcultarTareaSembradaAsync(nombre);
         await SembrarAsync(nombre, "reciente", proxima: Ahora.AddMinutes(-1));
         await SembrarAsync(nombre, "antigua", proxima: Ahora.AddMinutes(-30));
         using var contexto = CrearContexto(cadena);
@@ -135,6 +148,7 @@ public class RepositorioTareasTests(PostgresFixture bd)
     {
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
+        await OcultarTareaSembradaAsync(nombre);
         await SembrarAsync(nombre, "correo", activa: false, proxima: Ahora.AddMinutes(-5));
         using var contexto = CrearContexto(cadena);
         var repositorio = Repositorio(contexto);
@@ -150,6 +164,7 @@ public class RepositorioTareasTests(PostgresFixture bd)
     {
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
+        await OcultarTareaSembradaAsync(nombre);
         await SembrarAsync(nombre, "correo", proxima: Ahora.AddHours(1));
         using var contexto = CrearContexto(cadena);
         var repositorio = Repositorio(contexto);
@@ -227,6 +242,7 @@ public class RepositorioTareasTests(PostgresFixture bd)
     {
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
+        await OcultarTareaSembradaAsync(nombre);
         await SembrarAsync(nombre, "correo", proxima: Ahora.AddMinutes(-5));
         using var contexto = CrearContexto(cadena);
         var repositorio = Repositorio(contexto);
@@ -251,6 +267,7 @@ public class RepositorioTareasTests(PostgresFixture bd)
         var accion = () => repositorio.RenovarReservaAsync("fantasma", Ahora.AddHours(1));
 
         await accion.Should().NotThrowAsync();
-        (await bd.EscalarAsync<long>(cadena, "select count(*) from app.tareas")).Should().Be(0);
+        (await bd.EscalarAsync<long>(cadena, "select count(*) from app.tareas where nombre = 'fantasma'")).Should().Be(0,
+            "renovar no debe crear tareas");
     }
 }

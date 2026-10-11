@@ -11,6 +11,15 @@
 | `Seguridad__Csp__Modo` | Render | `Reporte` en Staging mientras se afina; `Aplicar` por defecto |
 | `Proxy__ConfiarEnCualquierProxy` | Render Staging | Solo durante el spike; en Production el arranque falla si está activa |
 | `Proxy__Redes` | Render | CIDR de confianza (HU-013, S4) |
+| `Resend__ApiKey` | Render (secret) | Clave del proveedor de correo (HU-010); nunca versionada |
+| `Resend__UrlBase` | Render | Por defecto `https://api.resend.com` |
+| `Correo__ForzarBuzon` | Pruf (local/tests) | Fuerza el buzón en memoria; **prohibido en Production** |
+| `Correo__Remitentes__Transaccional` / `Contacto` | Render | Por defecto `Nilogistic <no-reply@nilogistic.com>` |
+
+**Proveedor de correo (HU-010, SUP-1):** Staging y Production envían por **Resend** (se exige
+`Resend__ApiKey`); cualquier otro entorno usa el **buzón en memoria** salvo que `Correo:ForzarBuzon`
+esté activo, que solo se permite fuera de Producción (la guardia de arranque lo valida).
+`render.yaml` declara `Resend__ApiKey` con `sync: false`, sin valor.
 
 ## Matriz de entornos
 
