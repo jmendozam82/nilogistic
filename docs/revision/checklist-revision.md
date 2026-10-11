@@ -48,7 +48,7 @@
 - [ ] Si hay UI: etiquetas, foco, contraste y responsive (WCAG 2.2 AA).
 
 ## 7. Git y estado
-- [ ] Commits con Conventional Commits y mensajes coherentes con la HU.
+- [ ] Commits con Conventional Commits, asunto en ASCII sin acentos y descripción de 72 caracteres o menos (`python3 scripts/ci/validar_conventional_commits.py --base develop` sin errores).
 - [ ] Rama `feature/HU-XXX`; PR hacia `develop`.
 - [ ] `ESTADO_PROYECTO.md` actualizado (HU y CA marcados, "HU actual" movida, deuda con ID y fecha).
 

@@ -65,7 +65,7 @@ dotnet test
 Ambos deben terminar en verde. Pega en el PR la salida resumida (total de pruebas, fallidas, omitidas).
 
 ## 10. Entrega
-1. Commits con Conventional Commits (`feat(HU-XXX): …`, `test(HU-XXX): …`). Sin push a `develop` ni `main`.
+1. Commits con Conventional Commits (`feat(HU-XXX): …`, `test(HU-XXX): …`). Sin push a `develop` ni `main`. El asunto va en **ASCII sin acentos** y la descripción mide 72 caracteres o menos; comprueba con `python3 scripts/ci/validar_conventional_commits.py --base develop` antes de entregar.
 2. Actualiza `ESTADO_PROYECTO.md` según el paso 8 del ciclo (AGENTS.md §12).
 3. Completa la sección 11 y avisa a Jorge para pedir revisión a Claude.
 

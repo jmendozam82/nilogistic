@@ -32,7 +32,7 @@ Claude **no** implementa features completas salvo que Jorge lo pida de forma exp
 - Permisos solo READ, CREATE, UPDATE. **No existe DELETE** (soft delete activo/inactivo, también para el Administrador).
 - Toda gestión genera auditoría (quién, qué, cuándo, antes/después, IP).
 - Secretos fuera del repo: ni claves, ni tokens, ni cadenas de conexión en archivos versionados. Si ves uno, detente y avisa.
-- Conventional Commits y GitFlow ligero. **No hagas commit, push ni merge sin que Jorge lo pida.**
+- Conventional Commits y GitFlow ligero. **No hagas commit, push ni merge sin que Jorge lo pida.** El asunto del commit va en ASCII, sin acentos ni eñes, y su descripción mide 72 caracteres o menos: `scripts/ci/validar_conventional_commits.py` lo exige y la CI bloquea el merge si no se cumple.
 
 ## Comandos
 ```
