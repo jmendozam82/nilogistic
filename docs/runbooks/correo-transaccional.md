@@ -69,7 +69,7 @@ Acceso de lectura vía consola SQL de Supabase o `supabase db query`.
   cuerpos vaciados, SUP-6), con el rol propietario:
   `update app.cola_correo set estado='EnCola', intentos=0, error=null, siguiente_intento_utc=null, conservar_hasta_utc=null where id = '<id>' and estado='Fallido';`
 - **Correo de prueba** (sin endpoint público, SUP-9): insertando una fila con el rol propietario:
-  `insert into app.cola_correo (id, tipo, plantilla, version_plantilla, destinatario, responder_a, asunto, cuerpo_html, cuerpo_texto, clave_idempotencia, estado, intentos, siguiente_intento_utc, error, resend_id, creado_utc, enviado_utc, conservar_hasta_utc) values (gen_random_uuid(), 'transaccional', 'prueba', '1', '<buzón de Jorge>', null, 'Prueba Nilogistic', '<p>Prueba</p>', 'Prueba', 'prueba:<fecha-hora>', 'EnCola', 0, null, null, null, now() at time zone 'utc', null, null);`
+  `insert into app.cola_correo (id, tipo, plantilla, version_plantilla, destinatario, responder_a, asunto, cuerpo_html, cuerpo_texto, clave_idempotencia, estado, intentos, siguiente_intento_utc, error, resend_id, creado_utc, enviado_utc, conservar_hasta_utc) values (gen_random_uuid(), 'transaccional', 'prueba', '1', '<buzón de Jorge>', null, 'Prueba Nilogistic', '<p>Prueba</p>', 'Prueba', 'prueba:<fecha-hora>', 'EnCola', 0, null, null, null, now(), null, null);`
   La clave de idempotencia debe empezar por un prefijo real del negocio (p. ej. `solicitud_recibida:<id>`), nunca por `prueba:`, en producción.
 - **Rotación de la API key de Resend:** nueva key en el panel de Resend (Settings → API Keys),
   reemplazar `Resend__ApiKey` en Render (Settings → Environment del servicio) y redeployar;

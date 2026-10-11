@@ -113,7 +113,7 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-19 | Infra | Adoptar el Blueprint de Render (`render.yaml`) cuando haya tarjeta registrada y comprobar que el servicio creado a mano (D-111) coincide con él | Antes de crear Producción (S10) | ⬜ |
 | D-20 | Seguridad | Rotar la contraseña del rol `nilogistic_app` (un modelo del ejecutor leyó `.secrets.local`) y no reutilizarla en Producción | Antes de Producción (S10) | ⬜ |
 | D-21 | Proceso | Migraciones con timestamp creciente real (posterior a la última registrada); el ensayo E3 usó uno futuro y fue retirado | Permanente | ⬜ |
-| D-22 | Técnica | Deuda de HU-010: el modelo del ejecutor lee directamente en cada reserva `cuerpoHtml`/`cuerpoTexto` del mensaje fallido sin actualizar + superficie. Se paga con "Tarea de edición de documentos" (Fase 4) y `OpcionesCorreo.Superficie`, nuevo contrato de plantillas y versionado | Antes de HU-018 / primer despliegue público | ✅ (Pase A) |
+| D-22 | Pruebas | La siembra de la tarea `procesar_cola_correo` (migración de HU-010) rompía 8 pruebas de `RepositorioTareasTests` de HU-034, que asumían `app.tareas` vacía. Se adaptaron conservando su intención (ocultar la fila sembrada; el conteo de `Renovar...fantasma` filtra por nombre). Aprobada por Claude en la revisión del Pase A y aceptada por Jorge (11/10/2026) | HU-010 | ✅ (11/10/2026) |
 
 ## 7. Versiones
 
