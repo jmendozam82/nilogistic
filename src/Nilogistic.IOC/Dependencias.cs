@@ -6,6 +6,8 @@ using Nilogistic.BLL.Interfaces;
 using Nilogistic.BLL.Servicios;
 using Nilogistic.BLL.Tareas;
 using Nilogistic.DAL.Extensiones;
+using Nilogistic.DAL.Interfaces;
+using Nilogistic.DAL.Repositorios;
 using Nilogistic.Utility.Configuracion;
 using Nilogistic.Utility.Contratos;
 using Nilogistic.Utility.Utilidades;
@@ -52,6 +54,10 @@ public static class Dependencias
         servicios.Configure<OpcionesCorreo>(configuracion.GetSection("Correo"));
         servicios.AddScoped<IServicioCorreo, ServicioCorreo>();
         servicios.AddScoped<ITareaProgramada, TareaProcesarColaCorreo>();
+
+        // Bitacora de auditoria (HU-009): correccion como asiento nuevo; sin superficie HTTP (E3).
+        servicios.AddScoped<IRepositorioAuditoria, RepositorioAuditoria>();
+        servicios.AddScoped<IServicioAuditoria, ServicioAuditoria>();
         return servicios;
     }
 }

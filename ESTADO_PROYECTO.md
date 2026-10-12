@@ -10,7 +10,7 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-036 — Layout base y sistema de diseño (bloqueada por D-02; HU-008 cerrada ✅ 2026-10-11) |
+| HU actual | HU-036 — Layout base y sistema de diseño (bloqueada por D-02; HU-008 ✅ 2026-10-11, HU-009 cerrada ✅ 2026-10-12) |
 | Criterio de aceptación actual | HU-036/HU-037 en espera del diseño visual de Jorge (D-02); sin features nuevas hasta tenerlo |
 | Paso actual del ciclo | Sprint 1: quedan HU-036 y HU-037, bloqueadas por D-02 (diseño) |
 | Rama de trabajo | develop |
@@ -63,15 +63,18 @@
 |---|---|---|---|---|---|---|---|
 | HU-007 | Base de dominio: soft delete, UTC y repositorio genérico (FT-004) | 5 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | ✅ (E1 → HU-008, D-12 cerrada) | ✅ |
 | HU-008 | Registro de auditoría atómico (FT-005; adelantada de S2) | 5 | ✅ | 5/5 (E1–E5) | ✅ | ✅ (es la bitácora; cierra D-12) | ✅ |
+| HU-009 | Auditoría inmutable: trigger de defensa en profundidad y corrección como asiento nuevo (FT-005; adelantada de S2) | 3 | ✅ | 4/4 (E1–E4) | ✅ | ✅ (la corrección es un asiento de auditoría; sin superficie HTTP) | ✅ |
 | HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — (D-12 análoga → HU-008) | ✅ |
 | HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ✅ | 5/5 (E1–E5; estructurales + reales en Staging: S-E1, S-E4, S-E2/S-E3 y recuperación, SUP-9) | ✅ | — | ✅ |
 | HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ✅ | 5/5 (E1–E5; estructurales y reales en Staging, SUP-9 cumplido) | ✅ | — | ✅ |
 | HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
-Total S1: 28 SP (23 cerrados: HU-007, HU-008, HU-034, HU-006, HU-010). HU-036 y HU-037 quedan bloqueadas por el diseño visual (D-02). HU-008 se adelantó de S2 a S1 (28 SP sobre el plan de 26; recalibrar en D-06).
+Total S1: 31 SP (26 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010). HU-036 y HU-037 quedan bloqueadas por el diseño visual (D-02). HU-008 y HU-009 se adelantaron de S2 a S1 (31 SP sobre el plan de 26; recalibrar en D-06).
 
 Cierre de HU-008 (2026-10-11): Pase A (migración particionada, entidad, interceptor atómico) y Pase B (contexto HTTP de auditoría, prueba de D-12, runbook y estado). 278 pruebas en verde (DAL 77, BLL 78, Aplicación 106, Arquitectura 17). La migración se aplica en el despliegue y se comprueba en Staging según §12 (evidencia abajo, SUP-11); detalle en `docs/tareas/HU-008.md` §14.
+
+Cierre de HU-009 (2026-10-12): un solo pase — migración con trigger de inmutabilidad (E1/E2, incluso al propietario, heredado por particiones nuevas), corrección como asiento nuevo sin superficie HTTP (E4/E3) y runbook. 302 pruebas en verde (DAL 85, BLL 92, Aplicación 107, Arquitectura 18). `scripts/ci/verificar_rls.sql` verificado en verde con el trigger (migraciones ×2 en PostgreSQL 17). La migración se aplica en el despliegue y se comprueba en Staging según §12 (SUP-5); detalle en `docs/tareas/HU-009.md` §14.
 
 Evidencia de HU-008 en Staging (2026-10-12): merge del PR #26 (`825f91d`) a `develop`; run CI/CD **38187518883** `success` (migraciones aplicadas dos veces → despliegue en Render → salud). Comprobado con el rol propietario (secretos leídos desde `scripts/db/.secrets.local`, sin imprimir; denegación a `nilogistic_app` vía `has_table_privilege`, ver D-20):
 
@@ -135,6 +138,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.22 — 2026-10-12 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.23 — 2026-10-12 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
-| Esquema de BD (última migración aplicada) | 4 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs) |
+| Esquema de BD (última migración aplicada) | 6 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 7.ª (HU-009, trigger de inmutabilidad) se aplica con el despliegue |

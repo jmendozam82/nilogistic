@@ -1,4 +1,4 @@
-# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt), HU-008 (adelantada de S2), HU-010 y HU-034. La CI evalúa todos los sprints (--sprint todos, D-15).
+# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt), HU-008 y HU-009 (adelantadas de S2), HU-010 y HU-034. La CI evalúa todos los sprints (--sprint todos, D-15).
 HU-006 E1
 HU-006 E2
 HU-006 E3
@@ -26,3 +26,8 @@ HU-008 E3
 HU-008 E4
 HU-008 E5
 # HU-008 E1-E5: estructurales (DAL/Aplicacion, Testcontainers y host); sin ensayo propio en Staging (la migracion se aplica en el despliegue, SUP-11; evidencia en docs/tareas/HU-008.md, seccion 14). Adelantada de S2 a S1.
+HU-009 E1
+HU-009 E2
+HU-009 E3
+HU-009 E4
+# HU-009 E1-E4: estructurales (DAL/BLL/Aplicacion/Arquitectura, Testcontainers y host); sin ensayo propio en Staging (la migracion se aplica en el despliegue, SUP-5; comprobacion SQL en docs/tareas/HU-009.md, seccion 12). Adelantada de S2 a S1.
