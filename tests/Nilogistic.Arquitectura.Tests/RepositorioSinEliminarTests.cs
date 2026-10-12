@@ -6,7 +6,8 @@ namespace Nilogistic.Arquitectura.Tests;
 
 /// <summary>
 /// DoD de HU-007: el repositorio genérico no expone eliminación (RN-001) y no filtra tipos de EF Core,
-/// para que la BLL dependa solo del contrato.
+/// para que la BLL dependa solo del contrato. DoD de HU-062a: el repositorio de parámetros tampoco
+/// expone inserción: la tabla se siembra por migración (SUP-5).
 /// </summary>
 public class RepositorioSinEliminarTests
 {
@@ -14,6 +15,9 @@ public class RepositorioSinEliminarTests
 
     private static readonly string[] TerminosProhibidos =
         ["Eliminar", "Borrar", "Delete", "Remove", "Quitar", "Drop", "Purge", "Suprimir", "Purgar", "Vaciar"];
+
+    private static readonly string[] TerminosDeInsercion =
+        ["Insertar", "Insert", "Alta", "Crear", "Agregar", "Anadir", "Añadir", "Add"];
 
     private static IEnumerable<MethodInfo> Metodos(Type tipo) =>
         tipo.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
@@ -29,6 +33,27 @@ public class RepositorioSinEliminarTests
             .ToList();
 
         infractores.Should().BeEmpty("el repositorio solo desactiva y reactiva; no existe eliminación (RN-001)");
+    }
+
+    [Fact]
+    public void IRepositorioParametros_no_expone_eliminar_ni_insertar()
+    {
+        var tipos = new[] { typeof(IRepositorioParametros), typeof(RepositorioParametros) };
+
+        var infractores = tipos
+            .SelectMany(Metodos)
+            .Where(metodo => TerminosProhibidos
+                .Concat(TerminosDeInsercion)
+                .Any(termino => metodo.Name.Contains(termino, StringComparison.OrdinalIgnoreCase)))
+            .Select(metodo => metodo.DeclaringType!.Name + "." + metodo.Name)
+            .ToList();
+
+        infractores.Should().BeEmpty(
+            "el almacén de parámetros solo lee y actualiza el valor: la semilla y las bajas son de migración (HU-062a 4.2, SUP-5)");
+
+        var nombres = tipos[0].GetMethods().Select(metodo => metodo.Name).ToList();
+        nombres.Should().BeEquivalentTo(["ActualizarValorAsync", "ListarAsync", "ObtenerAsync"],
+            "exactamente los tres métodos de la ficha (HU-062a 4.2)");
     }
 
     [Fact]
