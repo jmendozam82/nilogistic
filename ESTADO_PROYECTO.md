@@ -71,7 +71,18 @@
 
 Total S1: 28 SP (23 cerrados: HU-007, HU-008, HU-034, HU-006, HU-010). HU-036 y HU-037 quedan bloqueadas por el diseño visual (D-02). HU-008 se adelantó de S2 a S1 (28 SP sobre el plan de 26; recalibrar en D-06).
 
-Cierre de HU-008 (2026-10-11): Pase A (migración particionada, entidad, interceptor atómico) y Pase B (contexto HTTP de auditoría, prueba de D-12, runbook y estado). 278 pruebas en verde (DAL 77, BLL 78, Aplicación 106, Arquitectura 17). Sin ensayo propio en Staging (la migración se aplica en el despliegue, SUP-11); detalle en `docs/tareas/HU-008.md` §14.
+Cierre de HU-008 (2026-10-11): Pase A (migración particionada, entidad, interceptor atómico) y Pase B (contexto HTTP de auditoría, prueba de D-12, runbook y estado). 278 pruebas en verde (DAL 77, BLL 78, Aplicación 106, Arquitectura 17). La migración se aplica en el despliegue y se comprueba en Staging según §12 (evidencia abajo, SUP-11); detalle en `docs/tareas/HU-008.md` §14.
+
+Evidencia de HU-008 en Staging (2026-10-12): merge del PR #26 (`825f91d`) a `develop`; run CI/CD **38187518883** `success` (migraciones aplicadas dos veces → despliegue en Render → salud). Comprobado con el rol propietario (secretos leídos desde `scripts/db/.secrets.local`, sin imprimir; denegación a `nilogistic_app` vía `has_table_privilege`, ver D-20):
+
+| Comprobación §12 | Valor medido | Esperado |
+|---|---|---|
+| `relkind` de `auditoria.registros` | `p` | `p` ✅ |
+| Particiones (tablas) | 16 (15 mensuales `registros_2026_10`…`registros_2027_12` + `registros_otros`) | 16 ✅ |
+| `nilogistic_app` → SELECT / INSERT | `true` / `true` | ✅ |
+| `nilogistic_app` → UPDATE / DELETE | `false` / `false` | ✅ |
+| Particiones con privilegios de `nilogistic_app` | 0 | 0 ✅ |
+| RLS en el padre / particiones sin RLS | `true` / 0 | ✅ |
 
 Cierre de HU-010 (2026-10-11): Pase A + Pase B (R-1, 4.4, 4.5, 4.6, 4.7) y Pase C con **evidencia real en Staging**: S-E1 envío real (Resend `delivered`, SPF/DKIM PASS), S-E4 idempotencia, S-E2/S-E3 fallo de red con 4 intentos y recuperación; servicio `/health/ready` 200 y config de Render restaurada. Detalle en `docs/tareas/HU-010.md` §14.
 
@@ -124,6 +135,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.21 — 2026-10-11 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.22 — 2026-10-12 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 4 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs) |
