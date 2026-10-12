@@ -76,6 +76,8 @@ Cierre de HU-008 (2026-10-11): Pase A (migración particionada, entidad, interce
 
 Cierre de HU-009 (2026-10-12): un solo pase — migración con trigger de inmutabilidad (E1/E2, incluso al propietario, heredado por particiones nuevas), corrección como asiento nuevo sin superficie HTTP (E4/E3) y runbook. 302 pruebas en verde (DAL 85, BLL 92, Aplicación 107, Arquitectura 18). `scripts/ci/verificar_rls.sql` verificado en verde con el trigger (migraciones ×2 en PostgreSQL 17). La migración se aplica en el despliegue y se comprueba en Staging según §12 (SUP-5); detalle en `docs/tareas/HU-009.md` §14.
 
+Evidencia de HU-009 en Staging (2026-10-12): merge del PR #28 (`3943180`) a `develop`; run CI/CD **38281166638** `success` (7.ª migración aplicada por `supabase db push`, despliegue y salud). Comprobado con el rol propietario dentro de una transacción con `rollback`: `trg_registros_inmutable` presente; `update … where false` no falla; `update` sobre una fila existente falla con «La auditoria es inmutable: UPDATE no esta permitido»; `filas_despues` = 0. Detalle en `docs/tareas/HU-009.md` §14.
+
 Evidencia de HU-008 en Staging (2026-10-12): merge del PR #26 (`825f91d`) a `develop`; run CI/CD **38187518883** `success` (migraciones aplicadas dos veces → despliegue en Render → salud). Comprobado con el rol propietario (secretos leídos desde `scripts/db/.secrets.local`, sin imprimir; denegación a `nilogistic_app` vía `has_table_privilege`, ver D-20):
 
 | Comprobación §12 | Valor medido | Esperado |
@@ -128,16 +130,17 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-17 | Proceso | Marcar `build-y-pruebas` como check requerido en la protección de `main` para que la puerta G1 (D-106) bloquee el merge; lo hace Jorge en GitHub | Antes del primer PR a `main` | ✅ (11/10/2026) |
 | D-18 | Técnica | Exponer el commit desplegado (`RENDER_GIT_COMMIT`) en `/api/v1/estado` y verificarlo en el sondeo posterior al despliegue (HU-006, SUP-6) | Antes de S2 | ✅ (11/10/2026) |
 | D-19 | Infra | Adoptar el Blueprint de Render (`render.yaml`) cuando haya tarjeta registrada y comprobar que el servicio creado a mano (D-111) coincide con él | Antes de crear Producción (S10) | ⬜ |
-| D-20 | Seguridad | Rotar la contraseña del rol `nilogistic_app` (un modelo del ejecutor leyó `.secrets.local`) y no reutilizarla en Producción | Antes de Producción (S10) | ⬜ |
+| D-20 | Seguridad | Rotar las contraseñas de `nilogistic_app` **y del rol propietario** (los ejecutores leyeron `.secrets.local` en HU-008 y HU-009; ver D-115) y no reutilizarlas en Producción | Antes de Producción (S10) | ⬜ |
 | D-21 | Proceso | Migraciones con timestamp creciente real (posterior a la última registrada); el ensayo E3 usó uno futuro y fue retirado | Permanente | ⬜ |
 | D-22 | Pruebas | La siembra de la tarea `procesar_cola_correo` (migración de HU-010) rompía 8 pruebas de `RepositorioTareasTests` de HU-034, que asumían `app.tareas` vacía. Se adaptaron conservando su intención (ocultar la fila sembrada; el conteo de `Renovar...fantasma` filtra por nombre). Aprobada por Claude en la revisión del Pase A y aceptada por Jorge (11/10/2026) | HU-010 | ✅ (11/10/2026) |
 | D-23 | Técnica | Tarea mensual que cree la partición siguiente de `auditoria.registros` (RLS activo + privilegios revocados) antes de que la partición `default` acumule filas de ese rango. Mientras tanto, el runbook documenta el procedimiento manual (HU-008 §4.6) | Antes de 2027-11-01 | ⬜ |
+| D-24 | Técnica | Unificar el registro de repositorios (hoy `PersistenciaExtensions` e `IOC/Dependencias.cs`) | Siguiente repositorio de negocio | ⬜ |
 
 ## 7. Versiones
 
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.23 — 2026-10-12 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.24 — 2026-10-12 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
-| Esquema de BD (última migración aplicada) | 6 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 7.ª (HU-009, trigger de inmutabilidad) se aplica con el despliegue |
+| Esquema de BD (última migración aplicada) | 7 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 7.ª (HU-009, trigger de inmutabilidad) verificada en el run 38281166638 |
