@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nilogistic.BLL.Interfaces;
+using Nilogistic.BLL.Parametros;
 using Nilogistic.BLL.Servicios;
 using Nilogistic.BLL.Tareas;
 using Nilogistic.DAL.Extensiones;
@@ -56,6 +57,11 @@ public static class Dependencias
         // Bitacora de auditoria (HU-009): correccion como asiento nuevo; sin superficie HTTP (E3).
         // IRepositorioAuditoria vive en PersistenciaExtensions desde HU-062a (D-24, SUP-10).
         servicios.AddScoped<IServicioAuditoria, ServicioAuditoria>();
+
+        // Almacen de parametros (HU-062a): cache singleton (TTL 60 s) y servicio scoped; sin
+        // superficie HTTP (SUP-3). El repositorio (scoped) se lo pasa el servicio a la cache.
+        servicios.AddSingleton<CacheParametros>();
+        servicios.AddScoped<IServicioParametros, ServicioParametros>();
         return servicios;
     }
 }
