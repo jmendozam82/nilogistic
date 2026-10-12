@@ -41,6 +41,11 @@ public sealed class InterceptorColumnasBase(IRelojUtc reloj, IActorActual actor)
 
         foreach (var entrada in contexto.ChangeTracker.Entries<EntidadBase>())
         {
+            if (entrada.State == EntityState.Added && entrada.Entity.Id == Guid.Empty)
+            {
+                entrada.Entity.Id = Guid.NewGuid();
+            }
+
             switch (entrada.State)
             {
                 case EntityState.Added:

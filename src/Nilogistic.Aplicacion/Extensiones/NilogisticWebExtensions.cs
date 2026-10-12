@@ -6,6 +6,7 @@ using Nilogistic.Aplicacion.Seguridad;
 using Nilogistic.Aplicacion.Tareas;
 using Nilogistic.IOC;
 using Nilogistic.Utility.Constantes;
+using Nilogistic.Utility.Contratos;
 using Nilogistic.Utility.Seguridad;
 using Serilog;
 
@@ -67,6 +68,9 @@ public static class NilogisticWebExtensions
             .AddApplicationPart(typeof(ApiExtensions).Assembly);
 
         servicios.AgregarNilogistic(configuracion, entorno);
+        // El contexto HTTP sustituye al de Sistema que registra el DAL (HU-008 E1/E4); debe ir después.
+        servicios.AddHttpContextAccessor();
+        servicios.AddScoped<IContextoAuditoria, ContextoAuditoriaHttp>();
         servicios.AgregarCorreoNilogistic(configuracion, entorno);
         servicios.AgregarNilogisticApi(configuracion, entorno);
         servicios.AddHostedService<EjecutorTareasHostedService>();
