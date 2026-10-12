@@ -271,6 +271,42 @@ public class InterceptorAuditoriaTests(PostgresFixture bd)
     }
 
     [Fact]
+    [Hu("HU-007", "E1")]
+    public async Task Desactivar_deja_el_registro_en_la_base_con_su_fila_de_auditoria()
+    {
+        var nombre = await PrepararBaseAsync();
+        var cadena = bd.CadenaApp(nombre);
+        var reloj = new RelojDePrueba();
+
+        using (var ctx = CrearContexto(cadena, reloj, new ContextoAuditoriaSistema()))
+        {
+            ctx.Set<EntidadAuditableDePrueba>().Add(new EntidadAuditableDePrueba { Nombre = "soft delete" });
+            await ctx.SaveChangesAsync();
+        }
+
+        using (var ctx = CrearContexto(cadena, reloj, new ContextoAuditoriaSistema()))
+        {
+            var entidad = await ctx.Set<EntidadAuditableDePrueba>().SingleAsync();
+            entidad.Activo = false;
+            await ctx.SaveChangesAsync();
+        }
+
+        var sigueEnBase = await bd.EscalarAsync<bool>(cadena, "select exists (select 1 from app.entidad_auditable)");
+        sigueEnBase.Should().BeTrue("el soft delete no borra la fila (HU-007 E1, D-12)");
+
+        var accion = await ObtenerAccionAuditoriaAsync(cadena);
+        accion.Should().Be("desactivar");
+
+        var antes = await ObtenerJsonAuditoriaAsync(cadena, "antes");
+        using var docAntes = JsonDocument.Parse(antes!);
+        docAntes.RootElement.GetProperty("activo").GetBoolean().Should().BeTrue();
+
+        var despues = await ObtenerJsonAuditoriaAsync(cadena, "despues");
+        using var docDespues = JsonDocument.Parse(despues!);
+        docDespues.RootElement.GetProperty("activo").GetBoolean().Should().BeFalse();
+    }
+
+    [Fact]
     [Hu("HU-008", "E1")]
     public async Task Cambiar_nombre_y_activo_a_la_vez_genera_accion_actualizar()
     {
