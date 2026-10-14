@@ -10,11 +10,11 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-036 — Layout base y sistema de diseño (bloqueada por D-02; HU-008 ✅ 2026-10-11, HU-009 cerrada ✅ 2026-10-12) |
-| Criterio de aceptación actual | HU-036/HU-037 en espera del diseño visual de Jorge (D-02); sin features nuevas hasta tenerlo |
-| Paso actual del ciclo | Sprint 1: quedan HU-036 y HU-037, bloqueadas por D-02 (diseño) |
-| Rama de trabajo | develop |
-| Última actualización | 2026-10-11 |
+| HU actual | HU-062a — Configuración: almacén de parámetros (Pase A ✅ 2026-10-12 mergeado en `develop`, PR #30; Pase B ✅ 2026-10-12). Siguiente: HU-036/HU-037 (bloqueadas por D-02) |
+| Criterio de aceptación actual | HU-062a completa (11/11: E1, E2, E3, E4, E6–E11, E14). HU-036/HU-037 en espera del diseño visual de Jorge (D-02) |
+| Paso actual del ciclo | Sprint 1: HU-062a cerrada (adelantada de S2); quedan HU-036 y HU-037, bloqueadas por D-02 (diseño) |
+| Rama de trabajo | `feature/HU-062a-pase-b` (Pase B sin push); `develop` con el Pase A mergeado |
+| Última actualización | 2026-10-12 |
 
 ## 2. Fases del ciclo de vida
 
@@ -67,14 +67,19 @@
 | HU-034 | Ejecutor de tareas en segundo plano (FT-007) | 3 | ✅ | 5/5 (E1, E2, E3, E4, E5) | ✅ | — (D-12 análoga → HU-008) | ✅ |
 | HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ✅ | 5/5 (E1–E5; estructurales + reales en Staging: S-E1, S-E4, S-E2/S-E3 y recuperación, SUP-9) | ✅ | — | ✅ |
 | HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ✅ | 5/5 (E1–E5; estructurales y reales en Staging, SUP-9 cumplido) | ✅ | — | ✅ |
+| HU-062a | Configuración: almacén de parámetros (FT-099, EP-13; adelantada de S2) | 3 | ✅ | 11/11 (E1, E2, E3, E4, E6–E11, E14) | ✅ | ✅ (asiento explícito `configuracion_actualizada`) | ✅ |
 | HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
-Total S1: 31 SP (26 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010). HU-036 y HU-037 quedan bloqueadas por el diseño visual (D-02). HU-008 y HU-009 se adelantaron de S2 a S1 (31 SP sobre el plan de 26; recalibrar en D-06).
+Total S1: 34 SP (29 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a). HU-036 y HU-037 quedan bloqueadas por el diseño visual (D-02). HU-008, HU-009 y HU-062a se adelantaron de S2 a S1 (34 SP sobre el plan de 26; recalibrar en D-06).
 
 Cierre de HU-008 (2026-10-11): Pase A (migración particionada, entidad, interceptor atómico) y Pase B (contexto HTTP de auditoría, prueba de D-12, runbook y estado). 278 pruebas en verde (DAL 77, BLL 78, Aplicación 106, Arquitectura 17). La migración se aplica en el despliegue y se comprueba en Staging según §12 (evidencia abajo, SUP-11); detalle en `docs/tareas/HU-008.md` §14.
 
 Cierre de HU-009 (2026-10-12): un solo pase — migración con trigger de inmutabilidad (E1/E2, incluso al propietario, heredado por particiones nuevas), corrección como asiento nuevo sin superficie HTTP (E4/E3) y runbook. 302 pruebas en verde (DAL 85, BLL 92, Aplicación 107, Arquitectura 18). `scripts/ci/verificar_rls.sql` verificado en verde con el trigger (migraciones ×2 en PostgreSQL 17). La migración se aplica en el despliegue y se comprueba en Staging según §12 (SUP-5); detalle en `docs/tareas/HU-009.md` §14.
+
+Cierre de HU-062a (2026-10-12): dos pases. **Pase A** (migración `20261109000900_parametros.sql` con semilla de los 19 parámetros, trigger de rango, RLS solo select/update y privilegios por columna; entidad sin `EntidadBase`; `IRepositorioParametros` con compare-and-set en transacción + asiento; D-24 resuelta moviendo `IRepositorioAuditoria` a `PersistenciaExtensions`) mergeado en `develop` (PR #30, `d2ff852`) y verificado en Staging. **Pase B** (Utility `ClavesParametro`; DTOs; BLL `ValidadorParametro`, `LimitesNoRelajables`, `ReglasRelacionales` R1–R3, `CacheParametros` con TTL de 60 s, `ServicioParametros` con lecturas tipadas, resultado tipado, SUP-8/SUP-11 y auditoría explícita; registro en IOC; pruebas BLL/Aplicación; runbook `docs/runbooks/parametros.md`). 389 pruebas en verde (DAL 94, BLL 168, Aplicación 108, Arquitectura 19). Sin endpoint, permiso, 2FA ni correo (HU-062b, S7). Detalle en `docs/tareas/HU-062a.md` §13 y §14.
+
+Evidencia de HU-062a (Pase A) en Staging (2026-10-12): merge del PR #30 (`d2ff852`) a `develop`; run CI/CD **38287470325** `success` (8.ª migración aplicada por `supabase db push`; despliegue y salud). Chequeo §12 con el rol propietario vía `supabase db query --linked` (sin leer `.secrets.local`, D-115): `count(*)` = 19; `valor = '8'` → `23514` con la clave y sin el valor; privilegios de `nilogistic_app` correctos por columna. **Desviación aprobada (D-116):** el paso (3) de §12 (`set local role nilogistic_app`) es inejecutable desde la Management API; se sustituyó por `has_table_privilege`/`has_column_privilege`. Detalle en `docs/tareas/HU-062a.md` §14.
 
 Evidencia de HU-009 en Staging (2026-10-12): merge del PR #28 (`3943180`) a `develop`; run CI/CD **38281166638** `success` (7.ª migración aplicada por `supabase db push`, despliegue y salud). Comprobado con el rol propietario dentro de una transacción con `rollback`: `trg_registros_inmutable` presente; `update … where false` no falla; `update` sobre una fila existente falla con «La auditoria es inmutable: UPDATE no esta permitido»; `filas_despues` = 0. Detalle en `docs/tareas/HU-009.md` §14.
 
@@ -134,13 +139,14 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-21 | Proceso | Migraciones con timestamp creciente real (posterior a la última registrada); el ensayo E3 usó uno futuro y fue retirado | Permanente | ⬜ |
 | D-22 | Pruebas | La siembra de la tarea `procesar_cola_correo` (migración de HU-010) rompía 8 pruebas de `RepositorioTareasTests` de HU-034, que asumían `app.tareas` vacía. Se adaptaron conservando su intención (ocultar la fila sembrada; el conteo de `Renovar...fantasma` filtra por nombre). Aprobada por Claude en la revisión del Pase A y aceptada por Jorge (11/10/2026) | HU-010 | ✅ (11/10/2026) |
 | D-23 | Técnica | Tarea mensual que cree la partición siguiente de `auditoria.registros` (RLS activo + privilegios revocados) antes de que la partición `default` acumule filas de ese rango. Mientras tanto, el runbook documenta el procedimiento manual (HU-008 §4.6) | Antes de 2027-11-01 | ⬜ |
-| D-24 | Técnica | Unificar el registro de repositorios (hoy `PersistenciaExtensions` e `IOC/Dependencias.cs`) | Siguiente repositorio de negocio | ⬜ |
+| D-24 | Técnica | Unificar el registro de repositorios (hoy `PersistenciaExtensions` e `IOC/Dependencias.cs`) | Siguiente repositorio de negocio | ✅ (12/10/2026; Pase A de HU-062a) |
+| D-116 | Proceso | Comprobaciones de Staging con el rol propietario vía `supabase db query --linked` y `SUPABASE_ACCESS_TOKEN`, **sin** leer `scripts/db/.secrets.local`; el paso §12 `set local role nilogistic_app` (inejecutable desde la Management API) se sustituye por `has_table_privilege`/`has_column_privilege`. D-20 (rotación de contraseñas) sigue vigente. Registro: `docs/Nilogistic_Registro_Decisiones_D116.md` (contiene también D-114 y D-115) | Futuras fichas (§12) | ✅ (12/10/2026) |
 
 ## 7. Versiones
 
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.24 — 2026-10-12 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.26 — 2026-10-12 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
-| Esquema de BD (última migración aplicada) | 7 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 7.ª (HU-009, trigger de inmutabilidad) verificada en el run 38281166638 |
+| Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |

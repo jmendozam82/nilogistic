@@ -175,6 +175,17 @@ values
 El original permanece idéntico; corregir una corrección crea un tercer asiento más, sin tocar los
 anteriores.
 
+### Evento `configuracion_actualizada` (HU-062a)
+
+El almacén de parámetros (`app.parametros`) no hereda `EntidadBase`, así que el interceptor no lo ve:
+su asiento es **explícito** (SUP-4) y lo escribe la BLL **en la misma transacción** que el `UPDATE`
+del valor (si la auditoría falla, el valor no cambia). Un cambio de valor deja un asiento
+`tipo = 'gestion'`, `accion = 'configuracion_actualizada'`, `entidad = 'app.parametros'`,
+`entidad_id = <clave>`, con `antes`/`despues` (`{"valor": …}`) y `detalle`
+(`{"clave","grupo","es_seguridad","restaurado_defecto"}`); restaurar el defecto usa la misma acción con
+`restaurado_defecto = true`. La **semilla** de la migración no se audita (es DDL de despliegue). Detalle
+en `docs/runbooks/parametros.md`.
+
 ### Retiro de datos antiguos
 
 La **única** vía para retirar datos antiguos es desprender y eliminar una **partición completa** con
