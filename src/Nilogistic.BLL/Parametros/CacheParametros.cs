@@ -19,6 +19,7 @@ public sealed class CacheParametros
     private readonly ILogger<CacheParametros> _log;
     private readonly SemaphoreSlim _candado = new(1, 1);
     private volatile Instantanea? _instantanea;
+    private int _generacion;
 
     public CacheParametros(IRelojUtc reloj, ILogger<CacheParametros> log)
     {
@@ -29,7 +30,9 @@ public sealed class CacheParametros
     /// <summary>
     /// Devuelve la instantánea vigente o, si no existe o venció, la carga con <paramref name="cargar"/>
     /// y la publica. Si un valor guardado no pasa la validación, deja una advertencia con la clave
-    /// (nunca el valor) al cargar la instantánea, no en cada lectura (SUP-11).
+    /// (nunca el valor) al cargar la instantánea, no en cada lectura (SUP-11). Si se llama a
+    /// <see cref="Invalidar"/> mientras la carga está en curso, los datos cargados se devuelven sin
+    /// publicar (la próxima lectura recarga), para no resucitar una instantánea ya invalidada.
     /// </summary>
     public async Task<IReadOnlyDictionary<string, Parametro>> ObtenerAsync(
         Func<CancellationToken, Task<IReadOnlyList<Parametro>>> cargar,
@@ -50,8 +53,16 @@ public sealed class CacheParametros
                 return vigente.Parametros;
             }
 
+            var generacionAntes = Volatile.Read(ref _generacion);
             var parametros = await cargar(cancelacion).ConfigureAwait(false);
-            var nueva = new Instantanea(CrearDiccionario(parametros), _reloj.AhoraUtc);
+            var diccionario = CrearDiccionario(parametros);
+
+            if (Volatile.Read(ref _generacion) != generacionAntes)
+            {
+                return diccionario;
+            }
+
+            var nueva = new Instantanea(diccionario, _reloj.AhoraUtc);
             AdvertirValoresInvalidos(nueva.Parametros);
             _instantanea = nueva;
             return nueva.Parametros;
@@ -62,8 +73,15 @@ public sealed class CacheParametros
         }
     }
 
-    /// <summary>Descarta la instantánea para que la próxima lectura recargue del repositorio.</summary>
-    public void Invalidar() => _instantanea = null;
+    /// <summary>
+    /// Descarta la instantánea para que la próxima lectura recargue del repositorio. La generación
+    /// permite que una carga en curso no vuelva a publicar datos ya invalidados.
+    /// </summary>
+    public void Invalidar()
+    {
+        Interlocked.Increment(ref _generacion);
+        _instantanea = null;
+    }
 
     private bool EstaVigente(Instantanea instantanea) =>
         _reloj.AhoraUtc - instantanea.CargadaUtc < TimeSpan.FromSeconds(TtlSegundos);
