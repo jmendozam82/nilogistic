@@ -58,7 +58,7 @@ DNS públicos (la clave DKIM es pública).
 | H1 | Confirmar en SiteGround los *nameservers* de `nilogistic.com` y si ya existe `_dmarc` (la foto «antes» lo muestra; si existe, **editar, no duplicar**). |
 | H2 | Confirmar que el buzón `analista@nilogistic.com` recibe correo (recibirá los reportes DMARC diarios). |
 | H3 | En Resend, agregar `news.nilogistic.com` (misma región que el dominio actual) y publicar en el DNS solo los registros que Resend indique. |
-| H4 | Publicar/ajustar `_dmarc.nilogistic.com`: `v=DMARC1; p=none; rua=mailto:analista@nilogistic.com`. |
+| H4 | **Editar** el `_dmarc.nilogistic.com` ya existente (D-121): conservar el `rua` de Brevo y añadir el buzón propio → `v=DMARC1; p=none; aspf=r; adkim=r; rua=mailto:rua@dmarc.brevo.com,mailto:analista@nilogistic.com`. Nunca crear un segundo registro. |
 | H5 | Esperar la propagación (TTL) y pulsar *Verify* en Resend para `news.nilogistic.com` hasta *Verified*. |
 | H6 | Revisar la cabecera del correo de prueba (*Mostrar original*): `spf=pass`, `dkim=pass`, `dmarc=pass`. Pegar solo las tres líneas `Authentication-Results`. |
 | H7 | Enviar y recibir un correo corporativo normal (E4). |
@@ -77,6 +77,11 @@ Authentication-Results: mx.google.com;
 Se consideran correctas las tres con `pass` **y alineación** (`header.from` del dominio propio).
 Si alguna sale `fail`, `softfail` o `neutral`, anotarlo y no dar el CA por bueno.
 
+La alineación de DMARC basta con **una** de las dos: puede venir por **DKIM** aunque el SPF use un
+*Return-Path* ajeno. Ejemplo real (HU-011, O-1): `spf=pass` desde una IP de Amazon SES
+(`54.240.11.153`, fuera del `TXT` de `send.nilogistic.com`) → SPF sin alinear, pero `dkim=pass`
+`d=nilogistic.com` da `dmarc=pass`. No es un fallo.
+
 ## 5. Rollback
 
 Todo lo publicado en esta HU es aditivo y no afecta al SPF ni al MX de la raíz:
@@ -90,8 +95,10 @@ El correo corporativo y el envío transaccional siguen funcionando: su SPF, DKIM
 ## 6. Escalamiento de DMARC (SUP-4, deuda D-120)
 
 - `p=none` durante **≥ 30 días** con reportes limpios en `analista@nilogistic.com`.
-- Solo entonces evaluar `p=quarantine`; `p=reject` únicamente tras revisar todas las fuentes
-  legítimas de correo del dominio (SiteGround y otras). Queda registrado como deuda **D-120**.
+- **A partir del 14/11/2026** (30 días desde la publicación, HU-011) y **antes del corte DNS
+  (HU-031)**, evaluar `p=quarantine`: primero **inventariar los emisores legítimos** con esos
+  reportes (**correo corporativo de SiteGround, Brevo y Resend**) para no bloquear ninguno.
+- `p=reject` únicamente después. Queda registrado como deuda **D-120**.
 
 ## 7. Foto «antes»
 
@@ -109,6 +116,9 @@ cambio:
 
 **Hallazgo para H4:** el `_dmarc` de la raíz **ya existe** y apunta los reportes a Brevo
 (`rua@dmarc.brevo.com`). Al publicar el de HU-011 hay que **editar ese mismo registro** (nunca
-crear un segundo `_dmarc`). Decidir si el `rua` de Brevo se conserva (varios `rua=` separados por
-coma, para no perder esos reportes) o se reemplaza por `analista@nilogistic.com` (SUP-3/H4). El
-`p=none` ya vigente se mantiene.
+crear un segundo `_dmarc`). El `p=none` ya vigente se mantiene.
+
+**Resuelto (D-121, 15/10/2026):** H4 se ejecutó **editando** ese registro y conservando el `rua` de
+Brevo, con el valor final `v=DMARC1; p=none; aspf=r; adkim=r;
+rua=mailto:rua@dmarc.brevo.com,mailto:analista@nilogistic.com` (verificado en
+`docs/runbooks/dns-correo/despues.json`). No se tocó Brevo ni su `brevo-code`.

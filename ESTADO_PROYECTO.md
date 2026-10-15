@@ -53,7 +53,7 @@
 | Auditoría transversal (quién, qué, cuándo, antes/después, IP) | ✅ |
 | Serilog + manejo global de errores | ⬜ |
 | HTTPS/HSTS/CSP, CSRF, rate limiting, Turnstile | ⬜ |
-| Resend: dominio con SPF/DKIM/DMARC | ⬜ |
+| Resend: dominio con SPF/DKIM/DMARC | ✅ (HU-011, 15/10/2026) |
 | Datos semilla de planes (provisionales) | ⬜ |
 | Layout base Razor + Bootstrap (a la espera del diseño visual) | ⬜ |
 
@@ -68,10 +68,13 @@
 | HU-010 | Servicio de correo transaccional con cola (FT-006) | 5 | ✅ | 5/5 (E1–E5; estructurales + reales en Staging: S-E1, S-E4, S-E2/S-E3 y recuperación, SUP-9) | ✅ | — | ✅ |
 | HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ✅ | 5/5 (E1–E5; estructurales y reales en Staging, SUP-9 cumplido) | ✅ | — | ✅ |
 | HU-062a | Configuración: almacén de parámetros (FT-099, EP-13; adelantada de S2) | 3 | ✅ | 11/11 (E1, E2, E3, E4, E6–E11, E14) | ✅ | ✅ (asiento explícito `configuracion_actualizada`) | ✅ |
+| HU-011 | Dominio de envío: SPF, DKIM y DMARC (FT-006; adelantada de S2, D-113) | 3 | ✅ | 4/4 (E1–E4; operativos: DNS, Resend y cabeceras) | ✅ (lógica del verificador) | — | ✅ |
 | HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
-Total S1: 34 SP (29 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a). HU-036 y HU-037 quedan bloqueadas por el diseño visual (D-02). HU-008, HU-009 y HU-062a se adelantaron de S2 a S1 (34 SP sobre el plan de 26; recalibrar en D-06).
+Total S1: 37 SP (32 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a y HU-011). HU-036 y HU-037 quedan bloqueadas por el diseño visual (D-02). HU-008, HU-009, HU-062a y HU-011 se adelantaron de S2 a S1 (37 SP sobre el plan de 26; recalibrar en D-06).
+
+Cierre de HU-011 (2026-10-15): HU operativa (un pase, dos paradas). Verificador de solo lectura `scripts/ops/dns_correo.py` (subcomandos `snapshot`/`verificar`, comprobaciones C1–C6 por DNS sobre HTTPS de Cloudflare) con pruebas en CI, runbook `docs/runbooks/dominio-correo.md` y fotos `docs/runbooks/dns-correo/antes.json`/`despues.json`. En Staging/DNS: `news.nilogistic.com` verificado en Resend (E1); correo real de la cola de Staging `Enviado` (`resend_id 01a141cc-84f6-7e63-85a2-2c451cc45e50`) con `spf=pass`, `dkim=pass` `d=nilogistic.com` y `dmarc=pass` (E2); SPF (C1) y MX de la raíz (C2) intactos (E3/E4) y correo corporativo OK. El DMARC de la raíz se editó conservando el `rua` de Brevo y añadiendo `analista@nilogistic.com` (D-121). Deuda nueva: D-120. Detalle en `docs/tareas/HU-011.md` §13 y §14.
 
 Cierre de HU-008 (2026-10-11): Pase A (migración particionada, entidad, interceptor atómico) y Pase B (contexto HTTP de auditoría, prueba de D-12, runbook y estado). 278 pruebas en verde (DAL 77, BLL 78, Aplicación 106, Arquitectura 17). La migración se aplica en el despliegue y se comprueba en Staging según §12 (evidencia abajo, SUP-11); detalle en `docs/tareas/HU-008.md` §14.
 
@@ -116,7 +119,7 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 
 | ID | Tipo | Descripción | Límite | Estado |
 |---|---|---|---|---|
-| D-01 | Insumo | Cuentas creadas (Render, Supabase, GitHub, Resend, Cloudflare) y acceso al DNS. Render, Supabase y GitHub ✅; Resend con dominio verificado ✅ (11/10/2026); pendiente confirmar Cloudflare Turnstile y DNS | Antes de HU-010 / HU-014 | 🔄 |
+| D-01 | Insumo | Cuentas creadas (Render, Supabase, GitHub, Resend, Cloudflare) y acceso al DNS. Render, Supabase y GitHub ✅; Resend con `nilogistic.com` verificado ✅ (11/10/2026) y `news.nilogistic.com` verificado ✅ (15/10/2026, HU-011); DNS de `nilogistic.com` confirmado en SiteGround ✅ (HU-011); pendiente confirmar Cloudflare Turnstile | Antes de HU-010 / HU-014 | 🔄 |
 | D-02 | Insumo | Diseño visual entregado por Jorge | 2026-11-20 | ⬜ |
 | D-03 | Negocio | Validar valores reales de planes antes del primer despliegue público | Pre-release R1 | ⬜ |
 | D-04 | Tarea | #8 Tarea de catálogos | Antes de 2026-12-21 (y antes del Sprint 3) | ⬜ |
@@ -144,6 +147,7 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-117 | Proceso | Dependabot apunta a `develop`, agrupa menores y parches e ignora versiones mayores (se evalúan a mano en una HU o ADR). FluentAssertions se queda en 7.x: desde la 8.x la licencia es de pago para uso comercial. Ver `docs/Nilogistic_Registro_Decisiones_D117_D118.md` | Permanente | ✅ (15/10/2026; PR #40) |
 | D-118 | Infra | Staging y Producción siguen en el plan gratuito de Render (la instancia se duerme; arranque en frío de 50 s o más) hasta que el cliente decida pagar. Las comprobaciones manuales usan calentamiento y timeout de 180 s | Decisión del cliente (antes de Producción) | ⬜ |
 | D-119 | Proceso | HU-011: SUP-1 a SUP-8 aprobados (transaccional en la raíz, `news.nilogistic.com`, DMARC `p=none` con `rua` a `analista@nilogistic.com`, verificación operativa). Ver `docs/Nilogistic_Registro_Decisiones_D119.md` | HU-011 | ✅ (15/10/2026) |
+| D-120 | Seguridad | DMARC: evaluar `p=quarantine` **a partir del 14/11/2026** (30 días de reportes con `p=none`), **antes del corte DNS (HU-031)** y tras inventariar los emisores legítimos (**SiteGround, Brevo y Resend**) con los reportes de `analista@nilogistic.com`. `p=reject` solo después (SUP-4) | 14/11/2026 (antes de HU-031) | ⬜ |
 | D-121 | Proceso | DMARC de la raíz: se conserva el registro existente (`rua` de Brevo) y se añade `analista@nilogistic.com` como segundo `rua`; antes de `p=quarantine` se inventarían los emisores (SiteGround, Brevo, Resend). Ver `docs/Nilogistic_Registro_Decisiones_D121.md` | HU-011 | ✅ (15/10/2026) |
 
 ## 7. Versiones
@@ -151,6 +155,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.29 — 2026-10-15 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.30 — 2026-10-15 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |
