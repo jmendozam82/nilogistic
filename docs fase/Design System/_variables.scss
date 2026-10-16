@@ -1,0 +1,66 @@
+// ============================================================================
+// NILOGISTIC — _variables.scss (v1.0)
+// Alternativa Sass: se importa ANTES de bootstrap para compilar un tema propio.
+// Mantiene los mismos valores que tokens.css (fuente de verdad); si compilas
+// con Sass, genera tokens.css desde aquí o mantenlos en sincronía.
+// ============================================================================
+
+// Paleta
+$nl-navy-900: #0F1B45;
+$nl-navy-800: #16275F;
+$nl-navy-700: #1D347D;
+$nl-navy-100: #E4E9F6;
+$nl-navy-50:  #F3F5FB;
+$nl-blue-700: #145D99;
+$nl-amber-500: #F7A915;
+$nl-amber-700: #8A5A00;
+$nl-amber-100: #FEF1D6;
+$nl-gray-900: #14181F;
+$nl-gray-600: #5A6472;
+$nl-gray-500: #7B8492;
+$nl-gray-200: #E2E5EA;
+$nl-gray-50:  #F7F8FA;
+$nl-green-700: #0A7A32;
+$nl-red-700:   #B42318;
+
+// Mapeo a Bootstrap 5.3
+$primary:   $nl-navy-700;
+$secondary: $nl-blue-700;
+$success:   $nl-green-700;
+$info:      $nl-blue-700;
+$warning:   $nl-amber-500;
+$danger:    $nl-red-700;
+$light:     $nl-gray-50;
+$dark:      $nl-navy-900;
+
+$body-color: $nl-gray-900;
+$body-bg: #FFFFFF;
+$body-secondary-color: $nl-gray-600;
+$headings-color: $nl-navy-900;
+$link-color: $nl-navy-700;
+$link-hover-color: $nl-navy-900;
+$border-color: $nl-gray-200;
+
+$font-family-sans-serif: "Inter", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+$headings-font-family: "Poppins", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+$font-size-base: 1.125rem;
+$line-height-base: 1.6;
+$headings-font-weight: 600;
+
+$border-radius: 4px;
+$border-radius-sm: 2px;
+$border-radius-lg: 6px;
+$border-radius-xl: 10px;
+
+$input-border-color: $nl-gray-500;
+$input-btn-focus-width: 3px;
+$input-btn-focus-color-opacity: .35;
+$input-btn-padding-y: .75rem;
+$input-btn-padding-x: 1rem;
+$btn-font-family: $headings-font-family;
+$btn-font-weight: 500;
+
+$enable-dark-mode: false; // UX-1: fuera de R1
+
+$grid-breakpoints: (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1280px, xxl: 1400px);
+$container-max-widths: (sm: 540px, md: 720px, lg: 960px, xl: 1240px, xxl: 1240px);
