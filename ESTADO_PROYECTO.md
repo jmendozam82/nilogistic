@@ -10,11 +10,11 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-062a — Configuración: almacén de parámetros (Pase A ✅ 2026-10-12 mergeado en `develop`, PR #30; Pase B ✅ 2026-10-12). Siguiente: HU-036/HU-037 (bloqueadas por D-02) |
-| Criterio de aceptación actual | HU-062a completa (11/11: E1, E2, E3, E4, E6–E11, E14). HU-036/HU-037 en espera del diseño visual de Jorge (D-02) |
-| Paso actual del ciclo | Sprint 1: HU-062a cerrada (adelantada de S2); quedan HU-036 y HU-037, bloqueadas por D-02 (diseño) |
-| Rama de trabajo | `feature/HU-062a-pase-b` (Pase B sin push); `develop` con el Pase A mergeado |
-| Última actualización | 2026-10-12 |
+| HU actual | HU-036 — Layout base y sistema de diseño (ficha v0.9 en borrador; pendiente la aprobación de SUP-1 a SUP-13, D-122 a D-126 y los logotipos). Siguiente: HU-037 |
+| Criterio de aceptación actual | HU-036 sin implementar (E1 a E5). HU-011 ✅ (PR #43) y HU-062a ✅ cerradas; el diseño N0 (D-02) ya está entregado |
+| Paso actual del ciclo | Sprint 1: orden D-113 cumplido (D-18, HU-008, HU-009, HU-062a y HU-011 cerradas); quedan HU-036 y HU-037 con el diseño N0 ya disponible |
+| Rama de trabajo | `docs/HU-036-ficha` (ficha, insumos del Design System y registro D-122 a D-126; sin push) |
+| Última actualización | 2026-10-16 |
 
 ## 2. Fases del ciclo de vida
 
@@ -69,10 +69,10 @@
 | HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ✅ | 5/5 (E1–E5; estructurales y reales en Staging, SUP-9 cumplido) | ✅ | — | ✅ |
 | HU-062a | Configuración: almacén de parámetros (FT-099, EP-13; adelantada de S2) | 3 | ✅ | 11/11 (E1, E2, E3, E4, E6–E11, E14) | ✅ | ✅ (asiento explícito `configuracion_actualizada`) | ✅ |
 | HU-011 | Dominio de envío: SPF, DKIM y DMARC (FT-006; adelantada de S2, D-113) | 3 | ✅ | 4/4 (E1–E4; operativos: DNS, Resend y cabeceras) | ✅ (lógica del verificador) | — | ✅ |
-| HU-036 | Layout base y sistema de diseño (FT-009) | 3 | ⬜ | – | ⬜ | – | ⬜ |
+| HU-036 | Layout base y sistema de diseño (FT-009; ficha v0.9, dos pases) | 3 | 🔄 | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
-Total S1: 37 SP (32 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a y HU-011). HU-036 y HU-037 quedan bloqueadas por el diseño visual (D-02). HU-008, HU-009, HU-062a y HU-011 se adelantaron de S2 a S1 (37 SP sobre el plan de 26; recalibrar en D-06).
+Total S1: 37 SP (32 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a y HU-011). HU-036 y HU-037 siguen abiertas; el diseño visual N0 (D-02) se entregó el 11/10/2026. HU-008, HU-009, HU-062a y HU-011 se adelantaron de S2 a S1 (37 SP sobre el plan de 26; recalibrar en D-06).
 
 Cierre de HU-011 (2026-10-15): HU operativa (un pase, dos paradas). Verificador de solo lectura `scripts/ops/dns_correo.py` (subcomandos `snapshot`/`verificar`, comprobaciones C1–C6 por DNS sobre HTTPS de Cloudflare) con pruebas en CI, runbook `docs/runbooks/dominio-correo.md` y fotos `docs/runbooks/dns-correo/antes.json`/`despues.json`. En Staging/DNS: `news.nilogistic.com` verificado en Resend (E1); correo real de la cola de Staging `Enviado` (`resend_id 01a141cc-84f6-7e63-85a2-2c451cc45e50`) con `spf=pass`, `dkim=pass` `d=nilogistic.com` y `dmarc=pass` (E2); SPF (C1) y MX de la raíz (C2) intactos (E3/E4) y correo corporativo OK. El DMARC de la raíz se editó conservando el `rua` de Brevo y añadiendo `analista@nilogistic.com` (D-121). Deuda nueva: D-120. Detalle en `docs/tareas/HU-011.md` §13 y §14.
 
@@ -120,7 +120,7 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | ID | Tipo | Descripción | Límite | Estado |
 |---|---|---|---|---|
 | D-01 | Insumo | Cuentas creadas (Render, Supabase, GitHub, Resend, Cloudflare) y acceso al DNS. Render, Supabase y GitHub ✅; Resend con `nilogistic.com` verificado ✅ (11/10/2026) y `news.nilogistic.com` verificado ✅ (15/10/2026, HU-011); DNS de `nilogistic.com` confirmado en SiteGround ✅ (HU-011); pendiente confirmar Cloudflare Turnstile | Antes de HU-010 / HU-014 | 🔄 |
-| D-02 | Insumo | Diseño visual entregado por Jorge | 2026-11-20 | ⬜ |
+| D-02 | Insumo | Diseño visual entregado por Jorge | 2026-11-20 | ✅ N0 entregado el 11/10/2026 (Design System del Project y `docs fase/Design System/`); faltan logotipos SVG, favicon y OG (D-25) |
 | D-03 | Negocio | Validar valores reales de planes antes del primer despliegue público | Pre-release R1 | ⬜ |
 | D-04 | Tarea | #8 Tarea de catálogos | Antes de 2026-12-21 (y antes del Sprint 3) | ⬜ |
 | D-05 | Tarea | #13 Segundo Administrador (mínimo 2 en producción) | Antes de HU-022 | ⬜ |
@@ -144,17 +144,19 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-23 | Técnica | Tarea mensual que cree la partición siguiente de `auditoria.registros` (RLS activo + privilegios revocados) antes de que la partición `default` acumule filas de ese rango. Mientras tanto, el runbook documenta el procedimiento manual (HU-008 §4.6) | Antes de 2027-11-01 | ⬜ |
 | D-24 | Técnica | Unificar el registro de repositorios (hoy `PersistenciaExtensions` e `IOC/Dependencias.cs`) | Siguiente repositorio de negocio | ✅ (12/10/2026; Pase A de HU-062a) |
 | D-116 | Proceso | Comprobaciones de Staging con el rol propietario vía `supabase db query --linked` y `SUPABASE_ACCESS_TOKEN`, **sin** leer `scripts/db/.secrets.local`; el paso §12 `set local role nilogistic_app` (inejecutable desde la Management API) se sustituye por `has_table_privilege`/`has_column_privilege`. D-20 (rotación de contraseñas) sigue vigente. Registro: `docs/Nilogistic_Registro_Decisiones_D116.md` (contiene también D-114 y D-115) | Futuras fichas (§12) | ✅ (12/10/2026) |
-| D-117 | Proceso | Dependabot apunta a `develop`, agrupa menores y parches e ignora versiones mayores (se evalúan a mano en una HU o ADR). FluentAssertions se queda en 7.x: desde la 8.x la licencia es de pago para uso comercial. Ver `docs/Nilogistic_Registro_Decisiones_D117_D118.md` | Permanente | ✅ (15/10/2026; PR #40) |
+| D-117 | Proceso | Dependabot apunta a `develop`, agrupa menores y parches e ignora versiones mayores (se evalúan a mano en una HU o ADR). FluentAssertions se queda en 7.x: desde la 8.x la licencia es de pago para uso comercial. Ver `docs/Nilogistic_Registro_Decisiones_D117_D118.md` | Permanente | ✅ (15/10/2026; PR #40) Efectivo desde `main`: PR #44 (1e74c62, trae `dependabot.yml` y el validador sin merges); primer PR agrupado #45 (14 actualizaciones menores y parches, 4494831) con Staging verde. Queda la referencia `Microsoft.Extensions.Configuration.Abstractions` en `Nilogistic.DAL.csproj` (redundante, la añadió Dependabot para resolver NU1605; se deja) |
 | D-118 | Infra | Staging y Producción siguen en el plan gratuito de Render (la instancia se duerme; arranque en frío de 50 s o más) hasta que el cliente decida pagar. Las comprobaciones manuales usan calentamiento y timeout de 180 s | Decisión del cliente (antes de Producción) | ⬜ |
 | D-119 | Proceso | HU-011: SUP-1 a SUP-8 aprobados (transaccional en la raíz, `news.nilogistic.com`, DMARC `p=none` con `rua` a `analista@nilogistic.com`, verificación operativa). Ver `docs/Nilogistic_Registro_Decisiones_D119.md` | HU-011 | ✅ (15/10/2026) |
 | D-120 | Seguridad | DMARC: evaluar `p=quarantine` **a partir del 14/11/2026** (30 días de reportes con `p=none`), **antes del corte DNS (HU-031)** y tras inventariar los emisores legítimos (**SiteGround, Brevo y Resend**) con los reportes de `analista@nilogistic.com`. `p=reject` solo después (SUP-4) | 14/11/2026 (antes de HU-031) | ⬜ |
 | D-121 | Proceso | DMARC de la raíz: se conserva el registro existente (`rua` de Brevo) y se añade `analista@nilogistic.com` como segundo `rua`; antes de `p=quarantine` se inventarían los emisores (SiteGround, Brevo, Resend). Ver `docs/Nilogistic_Registro_Decisiones_D121.md` | HU-011 | ✅ (15/10/2026) |
+| D-122..D-126 | Diseño | Decisiones del Design System N0, renumeradas por colisión con D-114 a D-118: D-122 paleta híbrida; D-123 Poppins + Inter autoalojadas; D-124 objetivos ≥44 px, foco 3 px, sin modo oscuro en R1; D-125 `tokens.css` fuente única; D-126 imágenes y video provisionales (RN-056). Ver `docs/Nilogistic_Registro_Decisiones_D122_D126.md` | HU-036, HU-037 | ⏳ propuesta (aprobación de Jorge) |
+| D-25 | Insumo | Marca y medios pendientes: logotipos SVG oficiales (claro y oscuro), icono solo para favicon, imagen Open Graph 1200×630, fotos y video reales de logística, cifras reales de la banda de estadísticas y versión blanca definitiva del logotipo (hoy derivada). Todo contenido provisional va marcado (RN-056) | Antes de HU-068, HU-040 y del corte DNS (HU-031) | ⬜ |
 
 ## 7. Versiones
 
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.30 — 2026-10-15 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.31 — 2026-10-16 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |
