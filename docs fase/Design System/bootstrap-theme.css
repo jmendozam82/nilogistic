@@ -1,0 +1,203 @@
+/* ==========================================================================
+   NILOGISTIC — bootstrap-theme.css  (v1.0)
+   Mapea los tokens --nl-* a las variables de Bootstrap 5.3. Se carga DESPUÉS
+   de bootstrap.min.css y de tokens.css. Sin estilos en línea (CSP, HU-012).
+   Los RGB de --bs-*-rgb se declaran como constantes porque Bootstrap los
+   usa en rgba(var(--bs-primary-rgb), .5); si cambia un color de marca,
+   actualizar también aquí (tokens.css sigue siendo la fuente de verdad).
+   ========================================================================== */
+
+:root,
+[data-bs-theme="light"] {
+  --bs-primary: var(--nl-color-primary);              --bs-primary-rgb: 29, 52, 125;
+  --bs-secondary: var(--nl-color-secondary);          --bs-secondary-rgb: 20, 93, 153;
+  --bs-success: var(--nl-color-success);              --bs-success-rgb: 10, 122, 50;
+  --bs-info: var(--nl-color-info);                    --bs-info-rgb: 20, 93, 153;
+  --bs-warning: var(--nl-amber-500);                  --bs-warning-rgb: 247, 169, 21;
+  --bs-danger: var(--nl-color-danger);                --bs-danger-rgb: 180, 35, 24;
+  --bs-light: var(--nl-gray-50);                      --bs-light-rgb: 247, 248, 250;
+  --bs-dark: var(--nl-navy-900);                      --bs-dark-rgb: 15, 27, 69;
+
+  --bs-primary-text-emphasis: var(--nl-navy-800);
+  --bs-success-text-emphasis: var(--nl-green-700);
+  --bs-info-text-emphasis: var(--nl-blue-700);
+  --bs-warning-text-emphasis: var(--nl-amber-800);
+  --bs-danger-text-emphasis: var(--nl-red-700);
+  --bs-primary-bg-subtle: var(--nl-navy-100);
+  --bs-success-bg-subtle: var(--nl-green-100);
+  --bs-info-bg-subtle: var(--nl-blue-100);
+  --bs-warning-bg-subtle: var(--nl-amber-100);
+  --bs-danger-bg-subtle: var(--nl-red-100);
+  --bs-primary-border-subtle: var(--nl-navy-300);
+
+  --bs-body-font-family: var(--nl-font-body);
+  --bs-body-font-size: var(--nl-fs-md);
+  --bs-body-font-weight: var(--nl-fw-regular);
+  --bs-body-line-height: var(--nl-lh-normal);
+  --bs-body-color: var(--nl-color-text);
+  --bs-body-color-rgb: 20, 24, 31;
+  --bs-body-bg: var(--nl-color-bg);
+  --bs-body-bg-rgb: 255, 255, 255;
+  --bs-secondary-color: var(--nl-color-text-muted);
+  --bs-secondary-bg: var(--nl-gray-100);
+  --bs-tertiary-bg: var(--nl-color-bg-subtle);
+  --bs-heading-color: var(--nl-navy-900);
+  --bs-emphasis-color: var(--nl-gray-950);
+
+  --bs-link-color: var(--nl-color-link);              --bs-link-color-rgb: 29, 52, 125;
+  --bs-link-hover-color: var(--nl-color-link-hover);  --bs-link-hover-color-rgb: 15, 27, 69;
+  --bs-link-decoration: underline;
+
+  --bs-border-color: var(--nl-color-border);
+  --bs-border-width: 1px;
+  --bs-border-radius: var(--nl-radius-md);
+  --bs-border-radius-sm: var(--nl-radius-sm);
+  --bs-border-radius-lg: var(--nl-radius-lg);
+  --bs-border-radius-xl: var(--nl-radius-xl);
+  --bs-border-radius-pill: var(--nl-radius-pill);
+
+  --bs-box-shadow: var(--nl-shadow-md);
+  --bs-box-shadow-sm: var(--nl-shadow-sm);
+  --bs-box-shadow-lg: var(--nl-shadow-lg);
+
+  --bs-focus-ring-width: var(--nl-focus-ring-width);
+  --bs-focus-ring-opacity: 1;
+  --bs-focus-ring-color: var(--nl-focus-ring-color);
+
+  --bs-gutter-x: var(--nl-gutter);
+  --bs-form-valid-color: var(--nl-color-success);
+  --bs-form-valid-border-color: var(--nl-color-success);
+  --bs-form-invalid-color: var(--nl-color-danger);
+  --bs-form-invalid-border-color: var(--nl-color-danger);
+}
+
+/* Tipografía de títulos */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .display-1, .display-2, .display-3 {
+  font-family: var(--nl-font-heading);
+  font-weight: var(--nl-fw-semibold);
+  line-height: var(--nl-lh-tight);
+  color: var(--bs-heading-color);
+}
+h1, .h1 { font-size: var(--nl-fs-3xl); }
+h2, .h2 { font-size: var(--nl-fs-2xl); }
+h3, .h3 { font-size: var(--nl-fs-xl); }
+h4, .h4 { font-size: var(--nl-fs-lg); }
+h5, .h5 { font-size: var(--nl-fs-md); }
+h6, .h6 { font-size: var(--nl-fs-sm); }
+@media (min-width: 992px) {
+  h1, .h1 { font-size: var(--nl-fs-4xl); }
+  h2, .h2 { font-size: var(--nl-fs-3xl); }
+  .display-1 { font-size: var(--nl-fs-5xl); }
+}
+
+/* Foco visible global */
+:focus-visible {
+  outline: var(--nl-focus-ring-width) solid var(--nl-focus-ring-color);
+  outline-offset: var(--nl-focus-ring-offset);
+}
+.on-dark :focus-visible, .bg-dark :focus-visible, .nl-footer :focus-visible {
+  outline-color: var(--nl-focus-ring-on-dark);
+}
+
+/* Botones */
+.btn {
+  --bs-btn-font-family: var(--nl-font-heading);
+  --bs-btn-font-weight: var(--nl-fw-medium);
+  --bs-btn-font-size: var(--nl-fs-sm);
+  --bs-btn-padding-x: var(--nl-space-5);
+  --bs-btn-padding-y: var(--nl-space-3);
+  --bs-btn-border-radius: var(--nl-radius-md);
+  --bs-btn-focus-box-shadow: none;
+  min-height: var(--nl-target-min);
+}
+.btn-primary {
+  --bs-btn-bg: var(--nl-color-primary);            --bs-btn-border-color: var(--nl-color-primary);
+  --bs-btn-color: var(--nl-color-on-primary);
+  --bs-btn-hover-bg: var(--nl-color-primary-hover); --bs-btn-hover-border-color: var(--nl-color-primary-hover);
+  --bs-btn-hover-color: var(--nl-color-on-primary);
+  --bs-btn-active-bg: var(--nl-color-primary-active); --bs-btn-active-border-color: var(--nl-color-primary-active);
+  --bs-btn-active-color: var(--nl-color-on-primary);
+  --bs-btn-disabled-bg: var(--nl-navy-300);        --bs-btn-disabled-border-color: var(--nl-navy-300);
+  --bs-btn-disabled-color: var(--nl-navy-900);
+}
+.btn-accent, .btn-warning {
+  --bs-btn-bg: var(--nl-color-accent);             --bs-btn-border-color: var(--nl-color-accent);
+  --bs-btn-color: var(--nl-color-on-accent);
+  --bs-btn-hover-bg: var(--nl-color-accent-hover); --bs-btn-hover-border-color: var(--nl-color-accent-hover);
+  --bs-btn-hover-color: var(--nl-color-on-accent);
+  --bs-btn-active-bg: var(--nl-amber-500);         --bs-btn-active-border-color: var(--nl-amber-700);
+  --bs-btn-active-color: var(--nl-color-on-accent);
+  --bs-btn-disabled-bg: var(--nl-amber-100);       --bs-btn-disabled-border-color: var(--nl-amber-100);
+  --bs-btn-disabled-color: var(--nl-amber-800);
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--nl-color-primary);         --bs-btn-border-color: var(--nl-color-primary);
+  --bs-btn-hover-bg: var(--nl-color-primary);      --bs-btn-hover-border-color: var(--nl-color-primary);
+  --bs-btn-hover-color: var(--nl-color-on-primary);
+  --bs-btn-active-bg: var(--nl-color-primary-active); --bs-btn-active-color: var(--nl-color-on-primary);
+}
+.btn-danger {
+  --bs-btn-bg: var(--nl-color-danger);             --bs-btn-border-color: var(--nl-color-danger);
+  --bs-btn-hover-bg: #8F1B12;                      --bs-btn-hover-border-color: #8F1B12;
+}
+
+/* Formularios */
+.form-label { font-weight: var(--nl-fw-medium); color: var(--nl-gray-800); }
+.form-control, .form-select {
+  min-height: var(--nl-target-min);
+  border-color: var(--nl-color-border-strong);      /* 3,78:1 */
+  border-radius: var(--nl-radius-md);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--nl-color-primary);
+  box-shadow: 0 0 0 var(--nl-focus-ring-width) rgba(29, 52, 125, 0.35);
+}
+.form-text { color: var(--nl-color-text-muted); font-size: var(--nl-fs-sm); }
+.form-check-input { width: 1.25rem; height: 1.25rem; border-color: var(--nl-color-border-strong); }
+.form-check-input:checked { background-color: var(--nl-color-primary); border-color: var(--nl-color-primary); }
+.invalid-feedback, .valid-feedback { font-size: var(--nl-fs-sm); font-weight: var(--nl-fw-medium); }
+
+/* Tarjetas */
+.card {
+  --bs-card-border-color: var(--nl-color-border);
+  --bs-card-border-radius: var(--nl-radius-lg);
+  --bs-card-box-shadow: var(--nl-shadow-sm);
+  --bs-card-cap-bg: var(--nl-color-bg-subtle);
+  --bs-card-spacer-x: var(--nl-space-5);
+  --bs-card-spacer-y: var(--nl-space-5);
+}
+
+/* Tablas */
+.table {
+  --bs-table-striped-bg: var(--nl-color-bg-subtle);
+  --bs-table-hover-bg: var(--nl-color-bg-tint);
+  --bs-table-border-color: var(--nl-color-border);
+}
+.table > thead {
+  --bs-table-bg: var(--nl-navy-900); --bs-table-color: var(--nl-white);
+  --bs-table-border-color: var(--nl-navy-700);
+}
+.table > thead th { background-color: var(--nl-navy-900); color: var(--nl-white); font-family: var(--nl-font-heading); font-weight: var(--nl-fw-semibold); }
+
+/* Alertas, navbar y paginación */
+.alert { --bs-alert-border-radius: var(--nl-radius-md); font-size: var(--nl-fs-sm); }
+.navbar { --bs-navbar-padding-y: var(--nl-space-3); --bs-navbar-brand-font-size: var(--nl-fs-lg); }
+.pagination {
+  --bs-pagination-color: var(--nl-color-primary);
+  --bs-pagination-hover-color: var(--nl-color-primary-hover);
+  --bs-pagination-active-bg: var(--nl-color-primary);
+  --bs-pagination-active-border-color: var(--nl-color-primary);
+  --bs-pagination-active-color: var(--nl-color-on-primary);
+  --bs-pagination-focus-box-shadow: none;
+  --bs-pagination-padding-x: var(--nl-space-4);
+  --bs-pagination-padding-y: var(--nl-space-3);
+  --bs-pagination-border-radius: var(--nl-radius-md);
+}
+
+/* Enlace "saltar al contenido" (HU-037) */
+.nl-skip-link {
+  position: absolute; left: var(--nl-space-4); top: -100px; z-index: 2000;
+  padding: var(--nl-space-3) var(--nl-space-4);
+  background: var(--nl-navy-900); color: var(--nl-white); border-radius: var(--nl-radius-md);
+}
+.nl-skip-link:focus { top: var(--nl-space-3); }
