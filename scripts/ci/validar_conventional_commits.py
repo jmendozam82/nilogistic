@@ -8,6 +8,9 @@ Falla (exit 1) si algún commit del rango <base>..HEAD no cumple:
     ^(feat|fix|docs|chore|refactor|test|build|ci|perf|style|revert|security)
     (\([a-z0-9][a-z0-9._-]*\))?(!)?: <descripcion>
 con tipo en minúsculas, sin acentos y descripción ≤ 72 caracteres.
+
+Se ignoran los commits de merge (`--no-merges`): GitHub los genera (merge-ref
+del PR y "Merge pull request ...") y no siguen Conventional Commits.
 """
 
 import re
@@ -28,7 +31,7 @@ TIPOS_VALIDOS = {
 
 def commits_del_rango(base: str) -> list[str]:
     salida = subprocess.run(
-        ["git", "log", f"{base}..HEAD", "--format=%s"],
+        ["git", "log", "--no-merges", f"{base}..HEAD", "--format=%s"],
         capture_output=True, text=True, check=False,
     )
     if salida.returncode != 0:
