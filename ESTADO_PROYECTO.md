@@ -10,7 +10,7 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-036 — Layout base y sistema de diseño (ficha v0.9 en borrador; pendiente la aprobación de SUP-1 a SUP-13, D-122 a D-126 y los logotipos). Siguiente: HU-037 |
+| HU actual | HU-036 — Layout base y sistema de diseño (ficha v1.0 aprobada; lista para el Pase A del ejecutor). Siguiente: HU-037 |
 | Criterio de aceptación actual | HU-036 sin implementar (E1 a E5). HU-011 ✅ (PR #43) y HU-062a ✅ cerradas; el diseño N0 (D-02) ya está entregado |
 | Paso actual del ciclo | Sprint 1: orden D-113 cumplido (D-18, HU-008, HU-009, HU-062a y HU-011 cerradas); quedan HU-036 y HU-037 con el diseño N0 ya disponible |
 | Rama de trabajo | `docs/HU-036-ficha` (ficha, insumos del Design System y registro D-122 a D-126; sin push) |
@@ -69,7 +69,7 @@
 | HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ✅ | 5/5 (E1–E5; estructurales y reales en Staging, SUP-9 cumplido) | ✅ | — | ✅ |
 | HU-062a | Configuración: almacén de parámetros (FT-099, EP-13; adelantada de S2) | 3 | ✅ | 11/11 (E1, E2, E3, E4, E6–E11, E14) | ✅ | ✅ (asiento explícito `configuracion_actualizada`) | ✅ |
 | HU-011 | Dominio de envío: SPF, DKIM y DMARC (FT-006; adelantada de S2, D-113) | 3 | ✅ | 4/4 (E1–E4; operativos: DNS, Resend y cabeceras) | ✅ (lógica del verificador) | — | ✅ |
-| HU-036 | Layout base y sistema de diseño (FT-009; ficha v0.9, dos pases) | 3 | 🔄 | – | ⬜ | – | ⬜ |
+| HU-036 | Layout base y sistema de diseño (FT-009; ficha v1.0, dos pases) | 3 | 🔄 | – | ⬜ | – | ⬜ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
 Total S1: 37 SP (32 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a y HU-011). HU-036 y HU-037 siguen abiertas; el diseño visual N0 (D-02) se entregó el 11/10/2026. HU-008, HU-009, HU-062a y HU-011 se adelantaron de S2 a S1 (37 SP sobre el plan de 26; recalibrar en D-06).
@@ -149,7 +149,8 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-119 | Proceso | HU-011: SUP-1 a SUP-8 aprobados (transaccional en la raíz, `news.nilogistic.com`, DMARC `p=none` con `rua` a `analista@nilogistic.com`, verificación operativa). Ver `docs/Nilogistic_Registro_Decisiones_D119.md` | HU-011 | ✅ (15/10/2026) |
 | D-120 | Seguridad | DMARC: evaluar `p=quarantine` **a partir del 14/11/2026** (30 días de reportes con `p=none`), **antes del corte DNS (HU-031)** y tras inventariar los emisores legítimos (**SiteGround, Brevo y Resend**) con los reportes de `analista@nilogistic.com`. `p=reject` solo después (SUP-4) | 14/11/2026 (antes de HU-031) | ⬜ |
 | D-121 | Proceso | DMARC de la raíz: se conserva el registro existente (`rua` de Brevo) y se añade `analista@nilogistic.com` como segundo `rua`; antes de `p=quarantine` se inventarían los emisores (SiteGround, Brevo, Resend). Ver `docs/Nilogistic_Registro_Decisiones_D121.md` | HU-011 | ✅ (15/10/2026) |
-| D-122..D-126 | Diseño | Decisiones del Design System N0, renumeradas por colisión con D-114 a D-118: D-122 paleta híbrida; D-123 Poppins + Inter autoalojadas; D-124 objetivos ≥44 px, foco 3 px, sin modo oscuro en R1; D-125 `tokens.css` fuente única; D-126 imágenes y video provisionales (RN-056). Ver `docs/Nilogistic_Registro_Decisiones_D122_D126.md` | HU-036, HU-037 | ⏳ propuesta (aprobación de Jorge) |
+| D-122..D-126 | Diseño | Decisiones del Design System N0, renumeradas por colisión con D-114 a D-118: D-122 paleta híbrida; D-123 Poppins + Inter autoalojadas; D-124 objetivos ≥44 px, foco 3 px, sin modo oscuro en R1; D-125 `tokens.css` fuente única; D-126 imágenes y video provisionales (RN-056). Ver `docs/Nilogistic_Registro_Decisiones_D122_D126.md` | HU-036, HU-037 | ✅ aprobadas (16/10/2026) |
+| D-127 | Proceso | Accesibilidad automática en CI (HU-037 E5): axe-core con Playwright en un job aparte; falla con violaciones graves o críticas; contraste calculado desde `tokens.css` | HU-037 | ✅ (16/10/2026) |
 | D-25 | Insumo | Marca y medios pendientes: logotipos SVG oficiales (claro y oscuro), icono solo para favicon, imagen Open Graph 1200×630, fotos y video reales de logística, cifras reales de la banda de estadísticas y versión blanca definitiva del logotipo (hoy derivada). Todo contenido provisional va marcado (RN-056) | Antes de HU-068, HU-040 y del corte DNS (HU-031) | ⬜ |
 
 ## 7. Versiones

@@ -1,6 +1,6 @@
 # NILOGISTIC — Registro vivo: decisiones D-122 a D-126 y deuda D-25 (16/10/2026)
 
-Continúa `Nilogistic_Registro_Decisiones_D121.md`. **Estado: propuestas pendientes de la aprobación de Jorge.**
+Continúa `Nilogistic_Registro_Decisiones_D121.md`. **Estado: D-122 a D-126 aprobadas por Jorge el 16/10/2026. D-127 aprobada el mismo día.**
 
 La entrega N0 del Design System (11/10/2026) numeró sus decisiones como D-114 a D-118, que ya estaban ocupadas (D-114 HU-009, D-115 contraseñas, D-116 comprobaciones en Staging, D-117 Dependabot, D-118 plan gratuito de Render). Se renumeran sin cambiar su contenido.
 
@@ -13,6 +13,8 @@ La entrega N0 del Design System (11/10/2026) numeró sus decisiones como D-114 a
 | D-126 (D-118) | **Imágenes y video de héroe provisionales** (marcador `nl-photo`) hasta recibir material real; todo contenido provisional se marca y no se publica (RN-056). | HU-040, HU-041, corte DNS (HU-031) |
 | D-25 (deuda nueva) | **Marca y medios pendientes:** logotipos SVG oficiales (claro y oscuro), icono solo para el favicon, imagen Open Graph 1200×630, fotos y video reales, cifras reales de la banda de estadísticas y versión blanca definitiva del logotipo (hoy derivada). Límite: antes de HU-068, HU-040 y del corte DNS. | HU-036, HU-068, HU-040, HU-031 |
 
+| D-127 | **Accesibilidad automática en CI (HU-037 E5):** axe-core con Playwright en un job aparte del CI, contra la aplicación publicada localmente; falla con violaciones graves o críticas. El contraste se verifica además con una prueba que calcula las razones desde `tokens.css`. | HU-037, CI |
+
 Notas de proceso:
-- Los insumos del Design System que no salen directamente del artefacto (`nilogistic.css` derivado, fuentes, vistas de referencia) se guardaron en `docs fase/Design System/` el 16/10/2026. Los logotipos PNG los aporta Jorge (P-1 de HU-036).
+- Los insumos del Design System que no salen directamente del artefacto (`nilogistic.css` derivado, fuentes, vistas de referencia) se guardaron en `docs fase/Design System/` el 16/10/2026. Jorge aportó los logotipos PNG (P-1 de HU-036, cumplida); Claude preparó copias web ligeras en `logos/web/`.
 - Observaciones técnicas al Design System: ver el final de `docs/tareas/HU-036.md`.
