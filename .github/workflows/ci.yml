@@ -63,6 +63,84 @@ jobs:
       - name: Pruebas de los scripts
         run: python3 -m unittest discover -s scripts/tests -v
 
+  # HU-037 Pase B (SUP-3): informa porque NO es un check requerido de la proteccion de rama (no bloquea el
+  # merge); el job si se pone rojo si hay defectos, para no ocultar fallos (invariante HU-006 E3, que prohibe
+  # los modificadores de exito condicional en este archivo; ver docs/tareas/HU-037.md seccion 13, punto 7).
+  # La aplicacion se levanta en Staging sin base de datos real (SUP-4) y se audita por HTTP local enviando
+  # X-Forwarded-Proto (la app confia en el proxy de bucle). El informe de axe queda como artefacto.
+  # Pasara a check requerido con D-129 (Jorge).
+  accesibilidad:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      CI: "true"
+      DOTNET_NOLOGO: "1"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      ASPNETCORE_ENVIRONMENT: "Staging"
+      ASPNETCORE_URLS: "http://127.0.0.1:5080"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      NILOGISTIC_URL_BASE: "http://127.0.0.1:5080"
+      ConnectionStrings__Nilogistic: "Host=127.0.0.1;Port=1;Database=postgres;Username=postgres.refpruebas;Password=no-se-usa;Timeout=1"
+      Supabase__ReferenciaProyecto: "refpruebas"
+      TareasSegundoPlano__Habilitado: "false"
+      Correo__ForzarBuzon: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restaurar
+        run: |
+          dotnet restore tests/Nilogistic.Accesibilidad.Tests
+          dotnet restore src/Nilogistic.Aplicacion
+
+      - name: Compilar (Release)
+        run: |
+          dotnet build tests/Nilogistic.Accesibilidad.Tests --no-restore -c Release
+          dotnet build src/Nilogistic.Aplicacion --no-restore -c Release
+
+      - name: Cache de navegadores de Playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ms-playwright-${{ runner.os }}-${{ hashFiles('tests/Nilogistic.Accesibilidad.Tests/Nilogistic.Accesibilidad.Tests.csproj', 'Directory.Packages.props') }}
+
+      - name: Instalar Chromium de Playwright
+        run: pwsh tests/Nilogistic.Accesibilidad.Tests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium
+
+      - name: Levantar la aplicación y esperar
+        run: |
+          set -euo pipefail
+          nohup dotnet run --no-build -c Release --project src/Nilogistic.Aplicacion > app.log 2>&1 &
+          for intento in $(seq 1 60); do
+            if curl -fsS -H "X-Forwarded-Proto: https" "$NILOGISTIC_URL_BASE/api/v1/estado" >/dev/null; then
+              echo "OK: la aplicación responde en $NILOGISTIC_URL_BASE"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "ERROR: la aplicación no respondió a tiempo"
+          exit 1
+
+      - name: Pruebas de navegador y axe
+        run: dotnet test tests/Nilogistic.Accesibilidad.Tests --no-build -c Release
+
+      - name: Registros de la aplicación
+        if: ${{ !cancelled() }}
+        run: cat app.log || true
+
+      - name: Subir informe de axe
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: axe
+          path: TestResults/axe
+          if-no-files-found: ignore
+
   secretos:
     runs-on: ubuntu-24.04
     steps:
