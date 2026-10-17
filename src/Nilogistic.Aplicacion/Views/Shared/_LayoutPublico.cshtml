@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (!string.IsNullOrEmpty(ViewData["Title"] as string))
+    {
+        <title>@ViewData["Title"] · Nilogistic</title>
+    }
+    else
+    {
+        <title>Nilogistic</title>
+    }
+    @if (!string.IsNullOrEmpty(ViewData["Descripcion"] as string))
+    {
+        <meta name="description" content="@(ViewData["Descripcion"])" />
+    }
+    <partial name="_EstilosBase" />
+    @RenderSection("Estilos", required: false)
+</head>
+<body>
+    <partial name="_SaltarContenido" />
+    <div class="nl-topbar">
+        <div class="container d-flex justify-content-between flex-wrap gap-2">
+            <span>Conectando profesionales, potenciando la logística.</span>
+            <partial name="_SesionUsuario" />
+        </div>
+    </div>
+    <partial name="_CabeceraPublica" />
+    <main id="main" tabindex="-1">
+        @RenderBody()
+    </main>
+    <partial name="_PiePublico" />
+    <partial name="_ScriptsBase" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

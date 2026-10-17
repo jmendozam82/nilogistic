@@ -1,0 +1,40 @@
+<footer class="nl-footer">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-4">
+                <a class="nl-footer__logo" href="/">
+                    <img src="~/img/nilogistic-logo-blanco.png" alt="Nilogistic">
+                </a>
+                <p class="mt-4">El punto de encuentro de la comunidad logística nicaragüense. Conectamos profesionales, empresas y soluciones.</p>
+                <a class="nl-footer__logo nl-footer__logo--cln" href="/">
+                    <img src="~/img/cln-logo.png" alt="Comunidad Logística Nicaragüense (CLN)">
+                </a>
+            </div>
+            <div class="col-6 col-lg-2">
+                <h2>Sitio</h2>
+                <ul>
+                    @foreach (var m in MenuNavegacion.Publico)
+                    {
+                        <li><a href="@m.Ruta">@m.Texto</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="col-6 col-lg-2">
+                <h2>Legal</h2>
+                <ul>
+                    <li><a href="/legal/privacidad">Política de privacidad</a></li>
+                    <li><a href="/legal/terminos">Términos y condiciones</a></li>
+                    <li><a href="/legal/cookies">Política de cookies</a></li>
+                    <li><partial name="_PreferenciasCookies" /></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <partial name="_BloqueSuscripcion" />
+            </div>
+        </div>
+        <div class="nl-footer__legal d-flex flex-wrap justify-content-between gap-2">
+            <span>&copy; @DateTime.UtcNow.Year Nilogistic. Todos los derechos reservados.</span>
+            <span>Managua, Nicaragua</span>
+        </div>
+    </div>
+</footer>

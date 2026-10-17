@@ -1,0 +1,23 @@
+<header>
+    <nav class="navbar navbar-expand-lg nl-navbar" aria-label="Principal">
+        <div class="container">
+            <a class="navbar-brand nl-navbar__brand" href="/">
+                <img src="~/img/nilogistic-logo.png" alt="Nilogistic, inicio" height="36">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-principal" aria-controls="menu-principal" aria-expanded="false" aria-label="Abrir menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menu-principal">
+                <ul class="navbar-nav ms-auto me-lg-3">
+                    @foreach (var m in MenuNavegacion.Publico)
+                    {
+                        var activo = MenuNavegacion.EsActivo(Context.Request.Path, m.Ruta);
+                        <li class="nav-item">
+                            <a class="nav-link @(activo ? "active" : "")" href="@m.Ruta" aria-current="@(activo ? "page" : null)">@m.Texto</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
