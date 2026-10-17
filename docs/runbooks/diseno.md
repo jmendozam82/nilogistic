@@ -107,11 +107,42 @@ Fuera de **Producción** hay una galería para validar visualmente los layouts. 
 | `/diseno/publico` | `_LayoutPublico` (Pase A) |
 | `/diseno/cuenta` | `_LayoutCuenta` (Pase B) |
 | `/diseno/panel` | `_LayoutPanel` (Pase B) |
+| `/diseno/componentes` | `_LayoutPublico` (galería de componentes, HU-037) |
 
 Parámetro `?sesion=anonimo|cliente|gerente|administrador` (por defecto `anonimo` en público y
 `administrador` en panel). Asigna a `HttpContext.User` una identidad de demostración **solo para esa
 petición** (nunca emite cookie ni afecta a otra petición). El contraste se ve en la propia galería; los
 contenidos van marcados como «provisional» (RN-056).
+
+`/diseno/componentes` (HU-037) muestra los componentes del Design System con el marcado accesible: botones,
+enlaces, formulario con error (resumen `nl-error-summary` y `aria-describedby`), campo 2FA, alertas, tabla,
+estados `nl-status`, paginación, modal de confirmación (acción «Inactivar post», RN-001) y banner de cookies.
+Los datos son de ejemplo. No usa estilos ni scripts en línea; el modal y el menú móvil usan Bootstrap.
+
+## Contraste de los tokens (HU-037 E4)
+
+La prueba `tests/Nilogistic.Aplicacion.Tests/Diseno/ContrasteTokensTests.cs` calcula el contraste WCAG 2.2 AA
+**desde `tokens.css`**, sin medir píxeles: lee las declaraciones `--nl-*`, resuelve las cadenas
+`var(--nl-…)` hasta el hexadecimal, convierte a luminancia relativa
+(`0,2126·R + 0,7152·G + 0,0722·B`, con la corrección `sRGB`) y aplica `(L_claro + 0,05) / (L_oscuro + 0,05)`.
+Los pares de texto exigen ≥ 4,5:1 y los de componentes y foco (borde, anillo) ≥ 3:1. Si un par no cumple,
+**no se editan los tokens** (SUP-6): se anota en la ficha y decide Claude. El texto sobre foto o vídeo queda
+fuera (depende del contenido).
+
+## Arreglo del menú del panel en móvil (HU-037)
+
+A menos de 992 px el menú lateral del panel es la fila `1fr` de una rejilla de una columna con
+`min-height: 100vh` (`nilogistic.css`); al abrirse se estiraba hasta llenar el viewport y dejaba un bloque
+navy desproporcionado. El ajuste vive en `css/sitio.css` (no se edita `nilogistic.css`, SUP-8):
+
+```css
+@media (max-width: 991.98px) {
+  .nl-panel { min-height: auto; grid-template-rows: auto; }
+}
+```
+
+Desde 992 px el comportamiento no cambia. El Pase B (Playwright) comprueba que la altura del sidebar no
+excede en más de 96 px la suma de la altura de sus hijos con el menú abierto.
 
 ## Validación visual (la hace Jorge en Staging, sección 12 de la ficha)
 

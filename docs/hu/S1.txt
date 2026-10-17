@@ -1,4 +1,4 @@
-# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt), HU-008 y HU-009 (adelantadas de S2), HU-010, HU-034, HU-062a (adelantada de S2), HU-011 (adelantada de S2; verificacion operativa, sin escenarios E#) y HU-036 (Pases A y B; E1/E2 cierran con validacion visual de Jorge, SUP-13; el Pase B repite E3/E4/E5 sobre Cuenta y Panel y cierra con la validacion visual de Jorge, SUP-18). La CI evalúa todos los sprints (--sprint todos, D-15).
+# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt), HU-008 y HU-009 (adelantadas de S2), HU-010, HU-034, HU-062a (adelantada de S2), HU-011 (adelantada de S2; verificacion operativa, sin escenarios E#) y HU-036 (Pases A y B; E1/E2 cierran con validacion visual de Jorge, SUP-13; el Pase B repite E3/E4/E5 sobre Cuenta y Panel y cierra con la validacion visual de Jorge, SUP-18) y HU-037 (Pase A: E3/E4 estructurales; el Pase B anade E1/E2/E5 con Playwright y axe en CI). La CI evalúa todos los sprints (--sprint todos, D-15).
 HU-006 E1
 HU-006 E2
 HU-006 E3
@@ -50,3 +50,6 @@ HU-036 E3
 HU-036 E4
 HU-036 E5
 # HU-036 E1-E5 (Pases A y B): estructurales en Aplicacion (host + AngleSharp) sobre los tres layouts (publico, Cuenta y Panel); E1, E2 y el cierre (SUP-18) dependen de la validacion visual de Jorge en Staging (/diseno/publico, /diseno/cuenta y /diseno/panel). Evidencia en docs/tareas/HU-036.md, seccion 14.
+HU-037 E3
+HU-037 E4
+# HU-037 Pase A: E3 (FormulariosAccesiblesTests, AngleSharp sobre /diseno/componentes) y E4 (ContrasteTokensTests, pares de tokens.css). E1, E2 y E5 son del Pase B (navegador, axe y CI); la galeria y el arreglo del menu del panel en movil entran en el Pase A. Evidencia en docs/tareas/HU-037.md, seccion 14.
