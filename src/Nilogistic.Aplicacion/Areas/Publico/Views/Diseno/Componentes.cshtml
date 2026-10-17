@@ -1,0 +1,235 @@
+@{
+    ViewData["Title"] = "Galería de diseño · Componentes";
+}
+<section class="nl-band">
+    <div class="container">
+        <p class="nl-eyebrow">Galería provisional</p>
+        <h1>Galería de componentes</h1>
+        <p class="nl-lead">Componentes del sistema de diseño con el marcado accesible de HU-037 (WCAG 2.2 AA). Los textos son datos de ejemplo (RN-056).</p>
+    </div>
+</section>
+<section class="nl-band nl-band--subtle" aria-labelledby="sec-botones">
+    <div class="container">
+        <h2 id="sec-botones">Botones</h2>
+        <div class="d-flex flex-wrap gap-3 align-items-center">
+            <button class="btn btn-primary" type="button">Guardar</button>
+            <button class="btn btn-secondary" type="button">Ver detalle</button>
+            <button class="btn btn-accent" type="button">Solicitar alta</button>
+            <button class="btn btn-danger" type="button">Inactivar post</button>
+            <button class="btn btn-outline-primary" type="button">Ver programa</button>
+            <button class="btn btn-link" type="button">Cancelar</button>
+            <button class="btn btn-primary" type="button" disabled>Cargando…</button>
+            <button class="btn btn-primary btn-lg" type="button">Primario grande</button>
+            <button class="btn btn-primary btn-sm" type="button">Primario pequeño</button>
+        </div>
+    </div>
+</section>
+<section class="nl-band" aria-labelledby="sec-enlaces">
+    <div class="container">
+        <h2 id="sec-enlaces">Enlaces</h2>
+        <p>Enlace en el cuerpo: <a href="/legal/privacidad">Política de privacidad</a>.</p>
+        <p>Enlace de navegación: <a href="/eventos">Ver todos los eventos</a>.</p>
+    </div>
+</section>
+<section class="nl-band nl-band--subtle" aria-labelledby="sec-formulario">
+    <div class="container">
+        <h2 id="sec-formulario">Formulario</h2>
+        <form class="row g-4" novalidate>
+            <div class="col-12">
+                <div class="nl-error-summary" role="alert" tabindex="-1">
+                    <h2>Revisa 2 campos antes de continuar</h2>
+                    <ul class="mb-0">
+                        <li><a href="#c-correo">Correo electrónico: escribe un correo válido.</a></li>
+                        <li><a href="#c-consent">Consentimiento: debes aceptar el tratamiento de tus datos.</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="c-nombre" class="form-label">Nombre completo</label>
+                <input id="c-nombre" class="form-control" type="text" autocomplete="name" aria-describedby="c-nombre-ayuda">
+                <div id="c-nombre-ayuda" class="form-text">Como aparece en tu documento de identidad.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="c-correo" class="form-label">Correo electrónico</label>
+                <input id="c-correo" class="form-control is-invalid" type="email" value="jorge@empresa" aria-invalid="true" aria-describedby="c-correo-ayuda c-correo-error">
+                <div id="c-correo-ayuda" class="form-text">Lo usamos para responderte; nunca lo publicamos.</div>
+                <div id="c-correo-error" class="invalid-feedback" aria-live="polite">Error: escribe un correo válido, por ejemplo nombre@empresa.com.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="c-ruc" class="form-label">RUC</label>
+                <input id="c-ruc" class="form-control is-valid" type="text" value="J0310000000001" aria-describedby="c-ruc-ok">
+                <div id="c-ruc-ok" class="valid-feedback">Formato válido. Administración lo verificará manualmente.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="c-area" class="form-label">Área de la cadena de suministro</label>
+                <select id="c-area" class="form-select" aria-describedby="c-area-ayuda">
+                    <option>Selecciona un área</option>
+                    <option>Transporte</option>
+                    <option>Almacenes</option>
+                    <option>Comercio exterior</option>
+                    <option>Compras</option>
+                </select>
+                <div id="c-area-ayuda" class="form-text">Elige el área que mejor describe tu experiencia.</div>
+            </div>
+            <div class="col-12">
+                <label for="c-msg" class="form-label">Mensaje</label>
+                <textarea id="c-msg" class="form-control" rows="3" aria-describedby="c-msg-ayuda"></textarea>
+                <div id="c-msg-ayuda" class="form-text">Cuéntanos tu caso con el mayor detalle posible.</div>
+                <div class="nl-draft-saved mt-2" role="status">Borrador guardado automáticamente a las 15:24.</div>
+            </div>
+            <div class="col-12">
+                <div class="form-check mb-2">
+                    <input class="form-check-input is-invalid" type="checkbox" id="c-consent" aria-invalid="true" aria-describedby="c-consent-error">
+                    <label class="form-check-label" for="c-consent">Acepto el tratamiento de mis datos según la política de privacidad.</label>
+                    <div id="c-consent-error" class="invalid-feedback" aria-live="polite">Error: debes aceptar para continuar.</div>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="c-tipo" id="c-tipo-profesional" checked>
+                    <label class="form-check-label" for="c-tipo-profesional">Profesional</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="c-tipo" id="c-tipo-empresa">
+                    <label class="form-check-label" for="c-tipo-empresa">Empresa</label>
+                </div>
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" role="switch" id="c-newsletter" checked>
+                    <label class="form-check-label" for="c-newsletter">Recibir la Newsletter (activado)</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="c-otp" class="form-label">Código de verificación de 6 dígitos</label>
+                <input id="c-otp" class="form-control nl-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" aria-describedby="c-otp-ayuda">
+                <div id="c-otp-ayuda" class="form-text">Ábrelo en tu aplicación de autenticación. ¿Sin acceso? Usa un código de respaldo.</div>
+            </div>
+            <div class="col-12 d-flex flex-wrap gap-3">
+                <button class="btn btn-primary" type="submit">Enviar solicitud</button>
+                <button class="btn btn-link" type="button">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</section>
+<section class="nl-band" aria-labelledby="sec-alertas">
+    <div class="container">
+        <h2 id="sec-alertas">Alertas</h2>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="alert alert-success" role="status">Se guardó el registro correctamente.</div>
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-danger" role="alert">No se pudo completar la acción. Inténtalo de nuevo.</div>
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-warning">Tu suscripción vence en 7 días; renueva para no perder acceso.</div>
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-info">Administración verificará tu RUC manualmente.</div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="nl-band nl-band--subtle" aria-labelledby="sec-tabla">
+    <div class="container">
+        <h2 id="sec-tabla">Tabla</h2>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <caption>Vacantes de ejemplo de la Bolsa de Empleo</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Puesto</th>
+                        <th scope="col">Empresa</th>
+                        <th scope="col">Publicado</th>
+                        <th scope="col">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Coordinador de almacén</th>
+                        <td>Logística del Pacífico</td>
+                        <td>15/10/2026</td>
+                        <td><span class="nl-status nl-status--publicado">Publicado</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Analista de comercio exterior</th>
+                        <td>Carga Managua</td>
+                        <td>14/10/2026</td>
+                        <td><span class="nl-status nl-status--revision">En revisión</span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Jefe de transporte</th>
+                        <td>Rutas del Norte</td>
+                        <td>12/10/2026</td>
+                        <td><span class="nl-status nl-status--pendiente">Pendiente</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<section class="nl-band" aria-labelledby="sec-estados">
+    <div class="container">
+        <h2 id="sec-estados">Estados</h2>
+        <div class="d-flex flex-wrap gap-3">
+            <span class="nl-status nl-status--borrador">Borrador</span>
+            <span class="nl-status nl-status--pendiente">Pendiente</span>
+            <span class="nl-status nl-status--revision">En revisión</span>
+            <span class="nl-status nl-status--publicado">Publicado</span>
+            <span class="nl-status nl-status--rechazada">Rechazada</span>
+            <span class="nl-status nl-status--programado">Programada</span>
+            <span class="nl-status nl-status--inactivo">Inactivo</span>
+        </div>
+    </div>
+</section>
+<section class="nl-band nl-band--subtle" aria-labelledby="sec-paginacion">
+    <div class="container">
+        <h2 id="sec-paginacion">Paginación</h2>
+        <nav aria-label="Paginación">
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-disabled="true" tabindex="-1">Anterior</a>
+                </li>
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<section class="nl-band" aria-labelledby="sec-modal">
+    <div class="container">
+        <h2 id="sec-modal">Modal de confirmación</h2>
+        <p>Las acciones destructivas piden confirmación y nombran su efecto (RN-001).</p>
+        <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#modal-inactivar">Inactivar post</button>
+        <div class="modal fade" id="modal-inactivar" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modal-inactivar-titulo">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title h5" id="modal-inactivar-titulo">¿Inactivar este post?</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">El post dejará de mostrarse en el sitio. Puedes reactivarlo cuando quieras; no se borra.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-link" type="button" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-danger" type="button">Inactivar post</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="nl-band nl-band--subtle" aria-labelledby="sec-cookies">
+    <div class="container">
+        <h2 id="sec-cookies">Banner de cookies</h2>
+        <div class="nl-cookie" role="region" aria-label="Preferencias de cookies">
+            <h3 class="h5">Usamos cookies</h3>
+            <p class="mb-3">Las necesarias siempre están activas. Las de analítica solo se activan si las aceptas. Puedes cambiarlo cuando quieras desde el pie de página. <a href="/legal/cookies">Política de cookies</a></p>
+            <div class="d-flex flex-wrap gap-3">
+                <button class="btn btn-primary" type="button">Aceptar todas</button>
+                <button class="btn btn-primary" type="button">Rechazar opcionales</button>
+                <button class="btn btn-outline-primary" type="button">Configurar</button>
+            </div>
+        </div>
+    </div>
+</section>

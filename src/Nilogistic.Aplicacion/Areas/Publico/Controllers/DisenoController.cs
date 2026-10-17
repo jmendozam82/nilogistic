@@ -24,6 +24,9 @@ public sealed class DisenoController : Controller
     [HttpGet("/diseno/panel")]
     public IActionResult Panel(string? sesion = "administrador") => VistaDemo(nameof(Panel), sesion, "administrador");
 
+    [HttpGet("/diseno/componentes")]
+    public IActionResult Componentes() => VistaDemo(nameof(Componentes), "anonimo", "anonimo");
+
     private IActionResult VistaDemo(string vista, string? sesion, string porDefecto)
     {
         if (_entorno.IsProduction())
