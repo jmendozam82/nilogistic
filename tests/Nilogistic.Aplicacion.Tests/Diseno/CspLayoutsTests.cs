@@ -16,7 +16,7 @@ public class CspLayoutsTests
         ["Seguridad:Csp:Modo"] = "Aplicar"
     };
 
-    public static TheoryData<string> Rutas => new() { "/", "/diseno/publico" };
+    public static TheoryData<string> Rutas => new() { "/", "/diseno/publico", "/diseno/cuenta", "/diseno/panel" };
 
     [Theory]
     [MemberData(nameof(Rutas))]
@@ -162,5 +162,7 @@ public class CspLayoutsTests
         using var cliente = fabrica.ClienteHttps();
 
         (await cliente.GetAsync("/diseno/publico")).StatusCode.Should().Be(HttpStatusCode.NotFound);
+        (await cliente.GetAsync("/diseno/cuenta")).StatusCode.Should().Be(HttpStatusCode.NotFound);
+        (await cliente.GetAsync("/diseno/panel")).StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 }

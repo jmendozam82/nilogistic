@@ -3,10 +3,9 @@ using System.Text.RegularExpressions;
 namespace Nilogistic.Aplicacion.Tests.Diseno;
 
 /// <summary>
-/// E5 (HU-036): una sola fuente de tokens. El layout público carga las mismas hojas en el mismo orden;
+/// E5 (HU-036): una sola fuente de tokens. Los tres layouts cargan las mismas hojas en el mismo orden;
 /// solo tokens.css declara colores hexadecimales (única tolerancia: #8F1B12 en bootstrap-theme.css) y
 /// las hojas propias usan únicamente variables --nl-* definidas en tokens.css.
-/// En el Pase B se repite sobre _LayoutCuenta y _LayoutPanel.
 /// </summary>
 public class FuenteDeTokensTests
 {
@@ -16,20 +15,24 @@ public class FuenteDeTokensTests
         "/css/tokens.css",
         "/css/fuentes.css",
         "/css/bootstrap-theme.css",
-        "/css/nilogistic.css"
+        "/css/nilogistic.css",
+        "/css/sitio.css"
     ];
+
+    public static TheoryData<string> RutasLayout => new() { "/", "/diseno/cuenta", "/diseno/panel" };
 
     private static string RutaCss =>
         Path.Combine(RaizRepositorio.Encontrar(), "src", "Nilogistic.Aplicacion", "wwwroot", "css");
 
-    [Fact]
+    [Theory]
+    [MemberData(nameof(RutasLayout))]
     [Hu("HU-036", "E5")]
-    public async Task Los_tres_layouts_cargan_las_mismas_hojas_en_el_mismo_orden()
+    public async Task Los_tres_layouts_cargan_las_mismas_hojas_en_el_mismo_orden(string ruta)
     {
         using var fabrica = AyudasDiseno.Fabrica();
         using var cliente = fabrica.ClienteHttps();
 
-        var documento = await AyudasDiseno.DocumentoOkAsync(cliente, "/");
+        var documento = await AyudasDiseno.DocumentoOkAsync(cliente, ruta);
 
         var hojas = documento.QuerySelectorAll("link[rel=stylesheet]")
             .Select(enlace => enlace.GetAttribute("href") ?? string.Empty)
@@ -81,7 +84,7 @@ public class FuenteDeTokensTests
             .Select(coincidencia => Regex.Match(coincidencia.Value, @"--nl-[a-z0-9-]+").Value)
             .ToHashSet(StringComparer.Ordinal);
 
-        foreach (var nombre in new[] { "bootstrap-theme.css", "nilogistic.css" })
+        foreach (var nombre in new[] { "bootstrap-theme.css", "nilogistic.css", "sitio.css" })
         {
             var contenido = File.ReadAllText(Path.Combine(RutaCss, nombre));
             var usadas = Regex.Matches(contenido, @"var\(\s*(--nl-[a-z0-9-]+)")

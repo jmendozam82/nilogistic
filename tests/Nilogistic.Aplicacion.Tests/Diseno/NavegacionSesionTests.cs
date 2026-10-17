@@ -4,8 +4,9 @@ namespace Nilogistic.Aplicacion.Tests.Diseno;
 /// E4 (HU-036): la navegación cambia según la sesión. Anónimo ve «Iniciar sesión» y «Solicitar alta»;
 /// autenticado ve «Mi cuenta» y «Cerrar sesión» (POST con antifalsificación); «Panel» solo Gerente y Administrador.
 /// Los roles se simulan con la cabecera X-Prueba-Rol (SUP-10). «Solicitar alta» vive en la barra de navegación
-/// principal (modelo <c>referencia/navbar.html</c>), no en la franja superior. Criterio de etiquetado <c>[Hu]</c>:
-/// los casos borde sin escenario propio se etiquetan con el más cercano (§13.5).
+/// principal (modelo <c>referencia/navbar.html</c>), no en la franja superior. El panel oculta «Administración»
+/// al Gerente (Pase B) y el formulario de cierre es un único parcial compartido (SUP-15). Criterio de
+/// etiquetado <c>[Hu]</c>: los casos borde sin escenario propio se etiquetan con el más cercano (§13.5).
 /// </summary>
 public class NavegacionSesionTests
 {
@@ -97,5 +98,65 @@ public class NavegacionSesionTests
         autenticado.QuerySelector("a[href='/solicitar-alta']")
             .Should().BeNull("los autenticados no ven «Solicitar alta»");
         autenticado.QuerySelector(".nl-topbar a[href='/cuenta']").Should().NotBeNull();
+    }
+
+    [Fact]
+    [Hu("HU-036", "E4")]
+    public async Task El_panel_oculta_administracion_al_gerente_y_la_muestra_al_administrador()
+    {
+        using var fabrica = AyudasDiseno.Fabrica();
+        using var cliente = fabrica.ClienteHttps();
+
+        var administrador = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/panel?sesion=administrador");
+        administrador.QuerySelector("nav#menu-panel a[href='/admin/usuarios']")
+            .Should().NotBeNull("el Administrador ve el grupo Administración");
+        administrador.QuerySelector("nav#menu-panel a[href='/contenido/posts']")
+            .Should().NotBeNull("el Administrador también ve Contenido");
+
+        var gerente = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/panel?sesion=gerente");
+        gerente.QuerySelector("nav#menu-panel a[href='/admin/usuarios']")
+            .Should().BeNull("el Gerente no ve el grupo Administración");
+        gerente.QuerySelector("nav#menu-panel a[href='/contenido/posts']")
+            .Should().NotBeNull("el Gerente ve Contenido");
+    }
+
+    [Fact]
+    [Hu("HU-036", "E4")]
+    public async Task El_panel_muestra_el_enlace_activo_con_aria_current()
+    {
+        using var fabrica = AyudasDiseno.Fabrica();
+        using var cliente = fabrica.ClienteHttps();
+
+        var documento = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/panel");
+
+        var activo = documento.QuerySelector("nav#menu-panel a[aria-current='page']");
+        activo.Should().NotBeNull();
+        activo!.GetAttribute("href").Should().Be("/admin/solicitudes");
+        documento.QuerySelectorAll("nav#menu-panel a[aria-current]").Should().HaveCount(1);
+    }
+
+    [Fact]
+    [Hu("HU-036", "E4")]
+    public async Task El_cierre_de_sesion_es_un_solo_parcial_en_topbar_y_panel()
+    {
+        using var fabrica = AyudasDiseno.Fabrica();
+        using var cliente = fabrica.ClienteHttps();
+
+        var publico = await AyudasDiseno.DocumentoOkAsync(cliente, "/", "Administrador");
+        var cierrePublico = publico.QuerySelector("form[action='/cuenta/cerrar-sesion']");
+        cierrePublico.Should().NotBeNull("la topbar pública renderiza el parcial de cierre");
+        cierrePublico!.GetAttribute("method").Should().Be("post");
+        cierrePublico.QuerySelector("input[name='__RequestVerificationToken']")
+            .Should().NotBeNull("el parcial emite el token antifalsificación");
+        publico.QuerySelectorAll("form[action='/cuenta/cerrar-sesion']").Should().HaveCount(1);
+
+        var panel = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/panel?sesion=administrador");
+        var cierrePanel = panel.QuerySelector("form[action='/cuenta/cerrar-sesion']");
+        cierrePanel.Should().NotBeNull("el panel reutiliza el mismo parcial (SUP-15)");
+        cierrePanel!.GetAttribute("method").Should().Be("post");
+        cierrePanel.QuerySelector("input[name='__RequestVerificationToken']")
+            .Should().NotBeNull("el parcial emite el token antifalsificación");
+        panel.QuerySelectorAll("form[action='/cuenta/cerrar-sesion']").Should().HaveCount(1,
+            "el panel no duplica el formulario de cierre");
     }
 }
