@@ -6,7 +6,8 @@ namespace Nilogistic.Aplicacion.Tests.Diseno;
 /// <summary>
 /// E3 (HU-036): con la CSP aplicada no hay violaciones por estilos ni scripts en línea, y todos los
 /// recursos locales del layout (hojas, scripts, imágenes y fuentes) responden 200.
-/// En el Pase B se repite sobre /diseno/cuenta y /diseno/panel.
+/// En el Pase B se repite sobre /diseno/cuenta y /diseno/panel. Criterio de etiquetado <c>[Hu]</c>: los
+/// casos borde sin escenario propio (caché, cabeceras, galería) se etiquetan con el más cercano (§13.5).
 /// </summary>
 public class CspLayoutsTests
 {
@@ -93,13 +94,39 @@ public class CspLayoutsTests
 
     [Fact]
     [Hu("HU-036", "E3")]
-    public async Task Las_rutas_de_la_galeria_estan_publicadas_y_su_sesion_desconocida_es_anonima()
+    public async Task La_galeria_trata_las_sesiones_desconocidas_o_vacias_como_anonimas()
     {
         using var fabrica = AyudasDiseno.Fabrica();
         using var cliente = fabrica.ClienteHttps();
 
         (await cliente.GetAsync("/diseno/publico")).StatusCode.Should().Be(HttpStatusCode.OK);
         (await cliente.GetAsync("/diseno/publico?sesion=desconocida")).StatusCode.Should().Be(HttpStatusCode.OK);
+        (await cliente.GetAsync("/diseno/publico?sesion=")).StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var desconocida = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/publico?sesion=desconocida");
+        desconocida.QuerySelector("a[href='/cuenta/iniciar-sesion']").Should().NotBeNull();
+        desconocida.QuerySelector("a[href='/cuenta']").Should().BeNull("un valor desconocido no autentica");
+
+        var vacia = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/publico?sesion=");
+        vacia.QuerySelector("a[href='/cuenta/iniciar-sesion']").Should().NotBeNull();
+        vacia.QuerySelector("a[href='/cuenta']").Should().BeNull("una sesión vacía no autentica");
+    }
+
+    [Fact]
+    [Hu("HU-036", "E3")]
+    public async Task El_pie_usa_el_logotipo_a_color_sobre_la_pastilla_clara()
+    {
+        using var fabrica = AyudasDiseno.Fabrica();
+        using var cliente = fabrica.ClienteHttps();
+
+        var documento = await AyudasDiseno.DocumentoOkAsync(cliente, "/");
+
+        var pie = documento.QuerySelector("footer.nl-footer");
+        pie.Should().NotBeNull();
+        pie!.QuerySelector("img[src*='nilogistic-logo.png']")
+            .Should().NotBeNull("el pie usa la versión a color sobre la pastilla blanca");
+        pie.QuerySelector("img[src*='nilogistic-logo-blanco.png']")
+            .Should().BeNull("la versión blanca no tiene contraste sobre la pastilla clara");
     }
 
     [Fact]

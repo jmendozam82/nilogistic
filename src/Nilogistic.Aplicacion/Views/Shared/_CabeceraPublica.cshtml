@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg nl-navbar" aria-label="Principal">
         <div class="container">
             <a class="navbar-brand nl-navbar__brand" href="/">
-                <img src="~/img/nilogistic-logo.png" alt="Nilogistic, inicio" height="36">
+                <img src="~/img/nilogistic-logo.png" alt="Nilogistic, inicio" width="480" height="243">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-principal" aria-controls="menu-principal" aria-expanded="false" aria-label="Abrir menú">
                 <span class="navbar-toggler-icon"></span>
@@ -17,6 +17,10 @@
                         </li>
                     }
                 </ul>
+                @if (User.Identity?.IsAuthenticated != true)
+                {
+                    <a class="btn btn-accent" href="@MenuNavegacion.SolicitarAlta.Ruta">@MenuNavegacion.SolicitarAlta.Texto</a>
+                }
             </div>
         </div>
     </nav>

@@ -4,7 +4,8 @@ namespace Nilogistic.Aplicacion.Tests.Diseno;
 
 /// <summary>
 /// Casos borde de HU-036 (Pase A): caché de estáticos (SUP-12), cabeceras de seguridad intactas (HU-012)
-/// y la sesión de demostración de la galería, que no persiste entre peticiones.
+/// y la sesión de demostración de la galería, que no persiste entre peticiones. Criterio de etiquetado
+/// <c>[Hu]</c>: los casos borde sin escenario propio se etiquetan con el más cercano (§13.5 de la ficha).
 /// </summary>
 public class DisenoCasosBordeTests
 {

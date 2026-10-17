@@ -11,7 +11,7 @@ public static class MenuNavegacion
     public static readonly IReadOnlyList<ElementoMenu> Publico = new List<ElementoMenu>
     {
         new("Inicio", "/"),
-        new("Quienes Somos", "/quienes-somos"),
+        new("Quiénes Somos", "/quienes-somos"),
         new("Servicios", "/servicios"),
         new("Eventos", "/eventos"),
         new("Blog", "/blog"),
@@ -25,16 +25,16 @@ public static class MenuNavegacion
         new("Contenido", null, new List<ElementoMenu>
         {
             new("Posts", "/contenido/posts"),
-            new("Categorias y etiquetas", "/contenido/categorias"),
+            new("Categorías y etiquetas", "/contenido/categorias"),
             new("Newsletters", "/contenido/newsletters")
         }.AsReadOnly()),
-        new("Administracion", Nilogistic.Utility.Seguridad.NombresRol.Administrador, new List<ElementoMenu>
+        new("Administración", Nilogistic.Utility.Seguridad.NombresRol.Administrador, new List<ElementoMenu>
         {
             new("Solicitudes de alta", "/admin/solicitudes"),
             new("Usuarios", "/admin/usuarios"),
             new("Permisos", "/admin/permisos"),
             new("Eventos", "/admin/eventos"),
-            new("Auditoria", "/admin/auditoria"),
+            new("Auditoría", "/admin/auditoria"),
             new("Tareas programadas", "/admin/tareas")
         }.AsReadOnly())
     }.AsReadOnly();
@@ -44,7 +44,7 @@ public static class MenuNavegacion
         var a = actual.ToString().ToLowerInvariant();
         var r = ruta.ToLowerInvariant();
         if (r == "/") return a == "/";
-        if (!a.StartsWith(r)) return false;
+        if (!a.StartsWith(r, StringComparison.Ordinal)) return false;
         if (a.Length == r.Length) return true;
         return a[r.Length] == '/';
     }

@@ -3,7 +3,9 @@ namespace Nilogistic.Aplicacion.Tests.Diseno;
 /// <summary>
 /// E4 (HU-036): la navegación cambia según la sesión. Anónimo ve «Iniciar sesión» y «Solicitar alta»;
 /// autenticado ve «Mi cuenta» y «Cerrar sesión» (POST con antifalsificación); «Panel» solo Gerente y Administrador.
-/// Los roles se simulan con la cabecera X-Prueba-Rol (SUP-10).
+/// Los roles se simulan con la cabecera X-Prueba-Rol (SUP-10). «Solicitar alta» vive en la barra de navegación
+/// principal (modelo <c>referencia/navbar.html</c>), no en la franja superior. Criterio de etiquetado <c>[Hu]</c>:
+/// los casos borde sin escenario propio se etiquetan con el más cercano (§13.5).
 /// </summary>
 public class NavegacionSesionTests
 {
@@ -76,5 +78,24 @@ public class NavegacionSesionTests
         activo.GetAttribute("href").Should().Be("/");
 
         documento.QuerySelectorAll("a.nav-link[aria-current]").Should().HaveCount(1);
+    }
+
+    [Fact]
+    [Hu("HU-036", "E4")]
+    public async Task Solicitar_alta_esta_en_la_navegacion_principal_y_no_en_la_barra_superior()
+    {
+        using var fabrica = AyudasDiseno.Fabrica();
+        using var cliente = fabrica.ClienteHttps();
+
+        var anonimo = await AyudasDiseno.DocumentoOkAsync(cliente, "/");
+        anonimo.QuerySelector("nav.nl-navbar a[href='/solicitar-alta']")
+            .Should().NotBeNull("«Solicitar alta» vive en la barra de navegación principal (referencia/navbar.html)");
+        anonimo.QuerySelector(".nl-topbar a[href='/solicitar-alta']")
+            .Should().BeNull("la franja superior solo muestra «Iniciar sesión» a los anónimos");
+
+        var autenticado = await AyudasDiseno.DocumentoOkAsync(cliente, "/", "Profesional");
+        autenticado.QuerySelector("a[href='/solicitar-alta']")
+            .Should().BeNull("los autenticados no ven «Solicitar alta»");
+        autenticado.QuerySelector(".nl-topbar a[href='/cuenta']").Should().NotBeNull();
     }
 }
