@@ -141,8 +141,47 @@ navy desproporcionado. El ajuste vive en `css/sitio.css` (no se edita `nilogisti
 }
 ```
 
-Desde 992 px el comportamiento no cambia. El Pase B (Playwright) comprueba que la altura del sidebar no
-excede en más de 96 px la suma de la altura de sus hijos con el menú abierto.
+Desde 992 px el comportamiento no cambia. El Pase B (Playwright) comprueba que la altura del sidebar con el
+menú abierto no supera la de su contenido (la suma de las alturas de sus hijos más sus márgenes y el relleno
+del propio sidebar); así se detecta cualquier estiramiento. Ese cálculo sustituye al «≤ hijos + 96 px» previsto
+en la ficha, que no contaba con los márgenes de los enlaces (ver §13 del Pase B).
+
+## Pruebas de navegador (HU-037 Pase B)
+
+Las pruebas de navegador viven en `tests/Nilogistic.Accesibilidad.Tests` (Playwright + axe, xUnit) y usan el
+atributo `[HechoConNavegador]`: **se omiten** si no existe la variable `NILOGISTIC_URL_BASE`, de modo que
+`dotnet test Nilogistic.slnx` en local no falla (SUP-2). No corren en el job `build-y-pruebas`; las ejecuta el
+job `accesibilidad`, que **informa pero no bloquea** (es independiente y **no es un check requerido** de la
+protección de rama; sí se pone rojo si hay defectos, y no usa `continue-on-error` porque la invariante HU-006 E3
+lo prohíbe en `ci.yml`). Nunca apuntan a Staging ni a Producción.
+
+Para ejecutarlas en local (Windows/PowerShell):
+
+1. Compila la aplicación y el proyecto de pruebas en Release:
+   `dotnet build src/Nilogistic.Aplicacion -c Release` y
+   `dotnet build tests/Nilogistic.Accesibilidad.Tests -c Release`.
+2. Instala Chromium (una vez): `pwsh tests/Nilogistic.Accesibilidad.Tests/bin/Release/net10.0/playwright.ps1 install chromium`
+   (en CI se usa `--with-deps`). Se guarda en `~/.cache/ms-playwright`.
+3. Levanta la aplicación **desde su propia carpeta** para que encuentre `wwwroot` (si se lanza el `.dll` con el
+   directorio de trabajo en la raíz del repositorio, todos los estáticos responden 404 y las pruebas de foco y
+   menú fallan por falta de CSS/JS). Usa las mismas variables que el job de CI (SUP-4) y auditada por HTTP:
+   `ASPNETCORE_ENVIRONMENT=Staging`, `ASPNETCORE_URLS=http://127.0.0.1:5080`,
+   `ASPNETCORE_FORWARDEDHEADERS_ENABLED=true`, `ConnectionStrings__Nilogistic` a un puerto cerrado,
+   `Supabase__ReferenciaProyecto=refpruebas`, `TareasSegundoPlano__Habilitado=false`, `Correo__ForzarBuzon=true`.
+   `dotnet run --no-build -c Release --project src/Nilogistic.Aplicacion` deja el directorio de contenido correcto.
+4. Espera a `/api/v1/estado` **enviando `X-Forwarded-Proto: https`** (sin esa cabecera la app responde **308**
+   por `UseHttpsRedirection`, no por un error). Las páginas de Playwright ya envían esa cabecera.
+5. Ejecuta `NILOGISTIC_URL_BASE=http://127.0.0.1:5080 dotnet test tests/Nilogistic.Accesibilidad.Tests --no-build -c Release`.
+   El informe de axe queda en `TestResults/axe/` (`*.json` por página y `resumen.md`).
+
+### HTTPS, HSTS y CSP en local (SUP-4)
+
+`NilogisticWebExtensions.cs` llama `UseForwardedHeaders()` (que confía en el proxy de bucle local por defecto)
+y `UseHttpsRedirection()` (puerto 443 fuera de Development). Por eso se audita por HTTP enviando
+`X-Forwarded-Proto: https` (Playwright `ExtraHTTPHeaders`) y con `ASPNETCORE_FORWARDEDHEADERS_ENABLED=true`.
+La cabecera `Strict-Transport-Security` (HSTS) se emite, pero Chromium **solo** la honra sobre HTTPS real, así
+que en local se ignora. La CSP va en modo `Aplicar` en local (en Staging, `Reporte`).
+
 
 ## Validación visual (la hace Jorge en Staging, sección 12 de la ficha)
 

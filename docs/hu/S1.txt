@@ -52,4 +52,7 @@ HU-036 E5
 # HU-036 E1-E5 (Pases A y B): estructurales en Aplicacion (host + AngleSharp) sobre los tres layouts (publico, Cuenta y Panel); E1, E2 y el cierre (SUP-18) dependen de la validacion visual de Jorge en Staging (/diseno/publico, /diseno/cuenta y /diseno/panel). Evidencia en docs/tareas/HU-036.md, seccion 14.
 HU-037 E3
 HU-037 E4
-# HU-037 Pase A: E3 (FormulariosAccesiblesTests, AngleSharp sobre /diseno/componentes) y E4 (ContrasteTokensTests, pares de tokens.css). E1, E2 y E5 son del Pase B (navegador, axe y CI); la galeria y el arreglo del menu del panel en movil entran en el Pase A. Evidencia en docs/tareas/HU-037.md, seccion 14.
+HU-037 E1
+HU-037 E2
+HU-037 E5
+# HU-037 Pase A: E3 (FormulariosAccesiblesTests, AngleSharp sobre /diseno/componentes) y E4 (ContrasteTokensTests, pares de tokens.css); la galeria y el arreglo del menu del panel en movil. Pase B: E1 (SaltarContenidoTests, SinDesbordeHorizontalTests), E2 (FocoVisibleTests, MenuMovilTecladoTests) y E5 (AxeTests, MovimientoReducidoTests) con Playwright + axe; job accesibilidad informativo en CI (SUP-3). Evidencia en docs/tareas/HU-037.md, seccion 14.
