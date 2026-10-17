@@ -52,6 +52,31 @@ public class CspLayoutsTests
 
     [Fact]
     [Hu("HU-036", "E3")]
+    public async Task El_heroe_de_la_galeria_lleva_un_solo_h1_y_subencabezados_con_color()
+    {
+        using var fabrica = AyudasDiseno.Fabrica();
+        using var cliente = fabrica.ClienteHttps();
+
+        var documento = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/publico");
+
+        var heroe = documento.QuerySelector("section.nl-hero");
+        heroe.Should().NotBeNull("la galería pública incluye el héroe");
+        heroe!.QuerySelectorAll("h1").Should().HaveCount(1, "el héroe lleva el único h1 de la página");
+
+        // .nl-hero pinta solo el h1 de blanco; como los estilos en línea están prohibidos (CSP),
+        // cualquier h2–h6 dentro del héroe debe declarar su color con una clase (p. ej. text-white).
+        heroe.QuerySelectorAll("h2, h3, h4, h5, h6")
+            .Where(subencabezado => !TieneClaseDeColor(subencabezado.GetAttribute("class")))
+            .Should().BeEmpty("todo h2–h6 dentro del héroe necesita su propia clase de color");
+    }
+
+    private static bool TieneClaseDeColor(string? clases) =>
+        !string.IsNullOrWhiteSpace(clases) &&
+        clases.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Any(clase => clase.StartsWith("text-", StringComparison.Ordinal));
+
+    [Fact]
+    [Hu("HU-036", "E3")]
     public async Task Los_recursos_locales_del_layout_responden_200()
     {
         using var fabrica = AyudasDiseno.Fabrica();
