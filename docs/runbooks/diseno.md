@@ -15,12 +15,13 @@ los recursos estáticos que sirve la aplicación, cómo se actualizan, qué vers
 | `css/tokens.css` | Tokens del diseño (única fuente de color) | `docs fase/Design System/tokens.css` (D-125) |
 | `css/bootstrap-theme.css` | Mapeo de tokens a Bootstrap | `docs fase/Design System/bootstrap-theme.css` |
 | `css/nilogistic.css` | Componentes `nl-*` | `docs fase/Design System/nilogistic.css` (derivado de `bundle.css`) |
+| `css/sitio.css` | Ajustes propios del sitio (SUP-14) | lo escribe el ejecutor; el Design System no lo contiene |
 | `css/fuentes.css` | Las 8 caras `@font-face` (Poppins e Inter) | lo escribe el ejecutor (SUP-3); el Design System no declara fuentes |
 | `fonts/{Poppins,Inter}-{400,500,600,700}.woff2` | Fuentes autoalojadas (OFL) | `docs fase/Design System/fonts/` |
 | `img/nilogistic-logo.png`, `img/nilogistic-logo-blanco.png`, `img/cln-logo.png` | Logotipos del sitio (versión web) | `docs fase/Design System/logos/web/` |
 
 No se copian `_variables.scss` (no se compila Sass) ni los logotipos originales de `logos/` (160 a 410 KB;
-el sitio usa las copias de `logos/web/`). `fuentes.css` y `menu.js` son código propio del sitio.
+el sitio usa las copias de `logos/web/`). `fuentes.css`, `sitio.css` y `menu.js` son código propio del sitio.
 
 ## Regla: no se editan las copias
 
@@ -77,8 +78,11 @@ Observaciones al Design System). Para cambiar un token:
    sincroniza a mano) y vuelve a copiarlo.
 4. No edites `tokens.css`, `bootstrap-theme.css` ni `nilogistic.css` dentro de `wwwroot`.
 
-`nilogistic.css` usa solo variables `--nl-*` definidas en `tokens.css`
-(`Los_estilos_propios_solo_usan_variables_definidas` lo verifica en CI).
+`nilogistic.css` y `sitio.css` usan solo variables `--nl-*` definidas en `tokens.css`
+(`Los_estilos_propios_solo_usan_variables_definidas` lo verifica en CI). Un ajuste puntual del sitio que no
+pertenece al Design System (como la tipografía del botón «Cerrar sesión» de la topbar, SUP-14) se escribe en
+`css/sitio.css`, nunca editando las copias ni con estilos en línea. Se carga en `_EstilosBase` justo después de
+`nilogistic.css` (mismo orden en los tres layouts, verificado por `FuenteDeTokensTests`).
 
 ## Caché de estáticos (SUP-12)
 
