@@ -1,0 +1,19 @@
+@{
+    Layout = "_LayoutCuenta";
+    ViewData["Title"] = "Galería de diseño · Cuenta";
+}
+<h1 class="h3 mb-1">Iniciar sesión</h1>
+<p class="text-secondary mb-4">Accede a tu cuenta de Nilogistic. Demostración del layout de Cuenta (RN-056).</p>
+<div class="alert alert-danger" role="alert"><strong>Error.</strong> Correo o contraseña incorrectos, o la cuenta no está disponible. (Datos de ejemplo)</div>
+<fieldset disabled>
+    <div class="mb-3">
+        <label for="cuenta-correo" class="form-label">Correo electrónico</label>
+        <input id="cuenta-correo" class="form-control" type="email" autocomplete="username">
+    </div>
+    <div class="mb-4">
+        <label for="cuenta-clave" class="form-label">Contraseña</label>
+        <input id="cuenta-clave" class="form-control" type="password" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary w-100 mb-3" type="submit">Iniciar sesión</button>
+    <p class="text-center mb-0"><a href="/cuenta/iniciar-sesion">¿Olvidaste tu contraseña?</a></p>
+</fieldset>

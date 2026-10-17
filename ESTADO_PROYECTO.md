@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-036 — Layout base y sistema de diseño (Pase A desplegado en Staging 2026-10-16; E1 y E2 cerradas con la validación visual de Jorge, SUP-13). Siguiente: Pase B |
-| Criterio de aceptación actual | HU-036 Pase A: E1–E5 ✅ (E1 y E2 cerradas con la validación visual de Jorge, SUP-13, 2026-10-16). Pase B (Cuenta/Panel) pendiente. HU-011 ✅ y HU-062a ✅ cerradas; el diseño N0 (D-02) ya está entregado |
-| Paso actual del ciclo | Sprint 1: orden D-113 cumplido (D-18, HU-008, HU-009, HU-062a y HU-011 cerradas); quedan HU-036 (Pase B) y HU-037 con el diseño N0 ya disponible |
-| Rama de trabajo | `fix/HU-036-heroe` (Pase A ya en `develop` y desplegado en Staging; corrección del héroe de la galería) |
+| HU actual | HU-036 — Layout base y sistema de diseño (Pases A y B entregados; Pase A desplegado en Staging 2026-10-16 con E1/E2 cerradas por la validación visual de Jorge, SUP-13). Pase B revisado por Claude (corrección F1 aplicada) y pendiente de la validación visual de Jorge (SUP-18) |
+| Criterio de aceptación actual | HU-036: E1–E5 estructurales ✅ en los tres layouts (Pases A y B); el menú del panel solo lo ven Gerente y Administrador (F1, tras la revisión de Claude). E1/E2 cerradas con la validación visual de Jorge (SUP-13, 2026-10-16); pendiente la validación visual de `/diseno/cuenta` y `/diseno/panel` (SUP-18). HU-011 ✅ y HU-062a ✅ cerradas; el diseño N0 (D-02) ya está entregado |
+| Paso actual del ciclo | Sprint 1: orden D-113 cumplido (D-18, HU-008, HU-009, HU-062a y HU-011 cerradas); HU-036 en Pase B (revisado por Claude con F1 aplicada; pendiente de validación visual de Jorge) y HU-037 con el diseño N0 ya disponible |
+| Rama de trabajo | `feature/HU-036-pase-b` (Pase A ya en `develop` y desplegado; Pase B: layouts Cuenta y Panel, galería y pruebas) |
 | Última actualización | 2026-10-16 |
 
 ## 2. Fases del ciclo de vida
@@ -55,7 +55,7 @@
 | HTTPS/HSTS/CSP, CSRF, rate limiting, Turnstile | ⬜ |
 | Resend: dominio con SPF/DKIM/DMARC | ✅ (HU-011, 15/10/2026) |
 | Datos semilla de planes (provisionales) | ⬜ |
-| Layout base Razor + Bootstrap (Pase A: layout público, tokens, Bootstrap y fuentes; Pase B pendiente) | 🔄 |
+| Layout base Razor + Bootstrap (Pases A y B: público, Cuenta y Panel; tokens, Bootstrap y fuentes) | 🔄 |
 
 ## 5. HU del sprint actual — Sprint 1 (Plataforma operativa; iniciado 2026-10-09, adelantado desde el 23/11/2026)
 
@@ -69,12 +69,14 @@
 | HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ✅ | 5/5 (E1–E5; estructurales y reales en Staging, SUP-9 cumplido) | ✅ | — | ✅ |
 | HU-062a | Configuración: almacén de parámetros (FT-099, EP-13; adelantada de S2) | 3 | ✅ | 11/11 (E1, E2, E3, E4, E6–E11, E14) | ✅ | ✅ (asiento explícito `configuracion_actualizada`) | ✅ |
 | HU-011 | Dominio de envío: SPF, DKIM y DMARC (FT-006; adelantada de S2, D-113) | 3 | ✅ | 4/4 (E1–E4; operativos: DNS, Resend y cabeceras) | ✅ (lógica del verificador) | — | ✅ |
-| HU-036 | Layout base y sistema de diseño (FT-009; ficha v1.0, dos pases) | 3 | 🔄 | Pase A: E1–E5 ✅ (E1 y E2 cerradas con la validación visual de Jorge, SUP-13, 2026-10-16); Pase B pendiente | ✅ (Pase A) | — | ✅ |
+| HU-036 | Layout base y sistema de diseño (FT-009; ficha v1.1, dos pases) | 3 | 🔄 | Pases A y B: E1–E5 estructurales ✅ en los tres layouts (E1/E2 cerradas por la validación visual de Jorge, SUP-13); pendiente la validación visual de Cuenta y Panel (SUP-18) | ✅ | — | ✅ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
 Total S1: 37 SP (32 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a y HU-011). HU-036 y HU-037 siguen abiertas; el diseño visual N0 (D-02) se entregó el 11/10/2026. HU-008, HU-009, HU-062a y HU-011 se adelantaron de S2 a S1 (37 SP sobre el plan de 26; recalibrar en D-06).
 
 Cierre de HU-036 (Pase A, 2026-10-16): layout público y sistema de diseño. Insumos: Bootstrap 5.3.3 autoalojado en `wwwroot/lib/bootstrap` (SHA-384 oficial verificado), copias idénticas de `tokens.css`/`bootstrap-theme.css`/`nilogistic.css`, las 8 fuentes woff2 y 3 logotipos web (SHA-256 de la sección 14 de la ficha). Código: `fuentes.css`, `menu.js`, `NombresRol`, modelo de `Navegacion`, `_LayoutPublico` y parciales, `Inicio/Index` provisional, galería `DisenoController`/`Publico.cshtml` (404 en Producción) y caché de estáticos (SUP-12). Pruebas E1–E5 (29) con `IStartupFilter` de roles; **419 en verde** (BLL 169, Arquitectura 19, Aplicación 137, DAL 94). E1 y E2 quedaron cerradas con la validación visual de Jorge en `/diseno/publico` (SUP-13, 2026-10-16); tras ella se corrigió el héroe de la galería (h1 legible; rama `fix/HU-036-heroe`). Sin deuda nueva. Detalle en `docs/tareas/HU-036.md` §13/§14 y runbook `docs/runbooks/diseno.md`.
+
+Entrega de HU-036 (Pase B, 2026-10-16): layouts Cuenta y Panel y cierre del sistema de diseño. Código: `_LayoutCuenta`, `_LayoutPanel`, `_MenuPanel` (grupos filtrados por rol, SUP-11) y `_MigasDePan`; parcial `_CerrarSesion` única para la topbar pública y el panel (SUP-15), con «Cerrar sesión» del mismo tipo que «Mi cuenta»/«Panel» (SUP-14, en `wwwroot/css/sitio.css`); galería `/diseno/cuenta` y `/diseno/panel` en `DisenoController` (404 en Producción); `sitio.css` cargado en `_EstilosBase`. Pruebas E1/E2/E3/E4/E5 repetidas sobre Cuenta y Panel y prueba del parcial compartido (SUP-15). Revisado por Claude: **F1** corregida (el menú del panel solo lo ven Gerente y Administrador, con `MenuNavegacion.PuedeVer` y pruebas E4). **454 en verde** (BLL 169, Arquitectura 19, Aplicación 172, DAL 94). Deuda nueva: D-128 (bloque `<head>` repetido en los tres layouts). HU-036 no pasa a ✅ hasta la validación visual de `/diseno/cuenta` y `/diseno/panel` (SUP-18). Detalle en `docs/tareas/HU-036.md` §13/§14/§16.
 
 Cierre de HU-011 (2026-10-15): HU operativa (un pase, dos paradas). Verificador de solo lectura `scripts/ops/dns_correo.py` (subcomandos `snapshot`/`verificar`, comprobaciones C1–C6 por DNS sobre HTTPS de Cloudflare) con pruebas en CI, runbook `docs/runbooks/dominio-correo.md` y fotos `docs/runbooks/dns-correo/antes.json`/`despues.json`. En Staging/DNS: `news.nilogistic.com` verificado en Resend (E1); correo real de la cola de Staging `Enviado` (`resend_id 01a141cc-84f6-7e63-85a2-2c451cc45e50`) con `spf=pass`, `dkim=pass` `d=nilogistic.com` y `dmarc=pass` (E2); SPF (C1) y MX de la raíz (C2) intactos (E3/E4) y correo corporativo OK. El DMARC de la raíz se editó conservando el `rua` de Brevo y añadiendo `analista@nilogistic.com` (D-121). Deuda nueva: D-120. Detalle en `docs/tareas/HU-011.md` §13 y §14.
 
@@ -153,6 +155,7 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-121 | Proceso | DMARC de la raíz: se conserva el registro existente (`rua` de Brevo) y se añade `analista@nilogistic.com` como segundo `rua`; antes de `p=quarantine` se inventarían los emisores (SiteGround, Brevo, Resend). Ver `docs/Nilogistic_Registro_Decisiones_D121.md` | HU-011 | ✅ (15/10/2026) |
 | D-122..D-126 | Diseño | Decisiones del Design System N0, renumeradas por colisión con D-114 a D-118: D-122 paleta híbrida; D-123 Poppins + Inter autoalojadas; D-124 objetivos ≥44 px, foco 3 px, sin modo oscuro en R1; D-125 `tokens.css` fuente única; D-126 imágenes y video provisionales (RN-056). Ver `docs/Nilogistic_Registro_Decisiones_D122_D126.md` | HU-036, HU-037 | ✅ aprobadas (16/10/2026) |
 | D-127 | Proceso | Accesibilidad automática en CI (HU-037 E5): axe-core con Playwright en un job aparte; falla con violaciones graves o críticas; contraste calculado desde `tokens.css` | HU-037 | ✅ (16/10/2026) |
+| D-128 | Técnica | Los tres layouts (`_LayoutPublico`, `_LayoutCuenta`, `_LayoutPanel`) repiten el bloque `<head>` (título y descripción); extraer una parcial compartida cuando haya más layouts (observación no bloqueante de la revisión del Pase B de HU-036) | Próximo layout nuevo | ⬜ |
 | D-25 | Insumo | Marca y medios pendientes: logotipos SVG oficiales (claro y oscuro), icono solo para favicon, imagen Open Graph 1200×630, fotos y video reales de logística, cifras reales de la banda de estadísticas y versión blanca definitiva del logotipo (hoy derivada). Todo contenido provisional va marcado (RN-056) | Antes de HU-068, HU-040 y del corte DNS (HU-031) | ⬜ |
 
 ## 7. Versiones
@@ -160,6 +163,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.33 — 2026-10-16 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.35 — 2026-10-16 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |

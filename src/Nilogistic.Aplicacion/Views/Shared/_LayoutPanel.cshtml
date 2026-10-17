@@ -1,0 +1,49 @@
+@{
+    var nombre = User.Identity?.Name ?? "Persona de ejemplo";
+    var rol = User.IsInRole(Nilogistic.Utility.Seguridad.NombresRol.Administrador)
+        ? Nilogistic.Utility.Seguridad.NombresRol.Administrador
+        : User.IsInRole(Nilogistic.Utility.Seguridad.NombresRol.Gerente)
+            ? Nilogistic.Utility.Seguridad.NombresRol.Gerente
+            : "Invitado";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (!string.IsNullOrEmpty(ViewData["Title"] as string))
+    {
+        <title>@ViewData["Title"] · Nilogistic</title>
+    }
+    else
+    {
+        <title>Nilogistic</title>
+    }
+    @if (!string.IsNullOrEmpty(ViewData["Descripcion"] as string))
+    {
+        <meta name="description" content="@(ViewData["Descripcion"])" />
+    }
+    <partial name="_EstilosBase" />
+    @RenderSection("Estilos", required: false)
+</head>
+<body>
+    <partial name="_SaltarContenido" />
+    <div class="nl-panel">
+        <header class="nl-panel__top">
+            <a href="/"><img src="~/img/nilogistic-logo.png" alt="Nilogistic, panel" width="480" height="243"></a>
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                <button class="btn btn-outline-primary d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#menu-panel" aria-controls="menu-panel" aria-expanded="false">Menú</button>
+                <span>@rol · @nombre</span>
+                <partial name="_CerrarSesion" model="@("btn btn-outline-primary btn-sm")" />
+            </div>
+        </header>
+        <partial name="_MenuPanel" />
+        <main id="main" tabindex="-1" class="nl-panel__main">
+            <partial name="_MigasDePan" />
+            @RenderBody()
+        </main>
+    </div>
+    <partial name="_ScriptsBase" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

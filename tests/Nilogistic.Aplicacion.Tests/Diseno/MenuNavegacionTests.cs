@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Nilogistic.Aplicacion.Navegacion;
+using Nilogistic.Utility.Seguridad;
 
 namespace Nilogistic.Aplicacion.Tests.Diseno;
 
@@ -46,5 +48,35 @@ public class MenuNavegacionTests
         MenuNavegacion.Panel.Select(grupo => grupo.Titulo).Should().Contain("Administración");
         MenuNavegacion.Panel.SelectMany(grupo => grupo.Elementos).Select(elemento => elemento.Texto)
             .Should().Contain(new[] { "Categorías y etiquetas", "Auditoría" });
+    }
+
+    private static ClaimsPrincipal ConRol(string? rol) =>
+        rol is null
+            ? new ClaimsPrincipal(new ClaimsIdentity())
+            : new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Role, rol) }, "Prueba"));
+
+    private static GrupoMenu Grupo(string titulo) => MenuNavegacion.Panel.Single(g => g.Titulo == titulo);
+
+    [Theory]
+    [InlineData(NombresRol.Administrador, "Contenido", true)]
+    [InlineData(NombresRol.Administrador, "Administración", true)]
+    [InlineData(NombresRol.Gerente, "Contenido", true)]
+    [InlineData(NombresRol.Gerente, "Administración", false)]
+    [InlineData(NombresRol.Profesional, "Contenido", false)]
+    [InlineData(NombresRol.Profesional, "Administración", false)]
+    [InlineData(NombresRol.Empresa, "Contenido", false)]
+    [InlineData(NombresRol.Empresa, "Administración", false)]
+    [Hu("HU-036", "E4")]
+    public void PuedeVer_filtra_los_grupos_del_panel_por_rol(string rol, string titulo, bool esperado)
+    {
+        MenuNavegacion.PuedeVer(ConRol(rol), Grupo(titulo)).Should().Be(esperado);
+    }
+
+    [Fact]
+    [Hu("HU-036", "E4")]
+    public void PuedeVer_oculta_todos_los_grupos_al_anonimo()
+    {
+        var anonimo = ConRol(null);
+        MenuNavegacion.Panel.Should().OnlyContain(grupo => !MenuNavegacion.PuedeVer(anonimo, grupo));
     }
 }

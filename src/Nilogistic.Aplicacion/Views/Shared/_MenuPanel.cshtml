@@ -1,0 +1,21 @@
+@functions {
+    private Microsoft.AspNetCore.Http.PathString RutaActiva() =>
+        ViewData["RutaActiva"] is string ruta
+            ? new Microsoft.AspNetCore.Http.PathString(ruta)
+            : Context.Request.Path;
+}
+<nav class="nl-panel__side collapse d-lg-block" id="menu-panel" aria-label="Panel">
+    @foreach (var grupo in MenuNavegacion.Panel)
+    {
+        if (!MenuNavegacion.PuedeVer(User, grupo))
+        {
+            continue;
+        }
+        <h2>@grupo.Titulo</h2>
+        foreach (var elemento in grupo.Elementos)
+        {
+            var activo = MenuNavegacion.EsActivo(RutaActiva(), elemento.Ruta);
+            <a href="@elemento.Ruta" aria-current="@(activo ? "page" : null)">@elemento.Texto</a>
+        }
+    }
+</nav>

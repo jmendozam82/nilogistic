@@ -1,4 +1,4 @@
-# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt), HU-008 y HU-009 (adelantadas de S2), HU-010, HU-034, HU-062a (adelantada de S2), HU-011 (adelantada de S2; verificacion operativa, sin escenarios E#) y HU-036 (Pase A; E1/E2 cierran con validacion visual de Jorge, SUP-13). La CI evalúa todos los sprints (--sprint todos, D-15).
+# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt), HU-008 y HU-009 (adelantadas de S2), HU-010, HU-034, HU-062a (adelantada de S2), HU-011 (adelantada de S2; verificacion operativa, sin escenarios E#) y HU-036 (Pases A y B; E1/E2 cierran con validacion visual de Jorge, SUP-13; el Pase B repite E3/E4/E5 sobre Cuenta y Panel y cierra con la validacion visual de Jorge, SUP-18). La CI evalúa todos los sprints (--sprint todos, D-15).
 HU-006 E1
 HU-006 E2
 HU-006 E3
@@ -49,4 +49,4 @@ HU-036 E2
 HU-036 E3
 HU-036 E4
 HU-036 E5
-# HU-036 E1-E5 (Pase A, layout publico): estructurales en Aplicacion (host + AngleSharp); E1 y E2 cierran con la validacion visual de Jorge en Staging (/diseno/publico, SUP-13). Pase B repite E3/E4/E5 sobre Cuenta y Panel. Evidencia en docs/tareas/HU-036.md, seccion 14.
+# HU-036 E1-E5 (Pases A y B): estructurales en Aplicacion (host + AngleSharp) sobre los tres layouts (publico, Cuenta y Panel); E1, E2 y el cierre (SUP-18) dependen de la validacion visual de Jorge en Staging (/diseno/publico, /diseno/cuenta y /diseno/panel). Evidencia en docs/tareas/HU-036.md, seccion 14.

@@ -1,0 +1,22 @@
+@{
+    var migas = ViewData["Migas"] as IReadOnlyList<MigaDePan>;
+}
+@if (migas is { Count: > 0 })
+{
+    <nav aria-label="Migas de pan">
+        <ol class="breadcrumb">
+            @for (var i = 0; i < migas.Count; i++)
+            {
+                var miga = migas[i];
+                if (i == migas.Count - 1 || miga.Ruta is null)
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@miga.Texto</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item"><a href="@miga.Ruta">@miga.Texto</a></li>
+                }
+            }
+        </ol>
+    </nav>
+}

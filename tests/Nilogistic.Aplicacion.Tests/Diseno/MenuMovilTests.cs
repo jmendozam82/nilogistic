@@ -3,8 +3,9 @@ using Nilogistic.Aplicacion.Tests.Infraestructura;
 namespace Nilogistic.Aplicacion.Tests.Diseno;
 
 /// <summary>
-/// E2 (HU-036): el menú móvil declara la semántica ARIA correcta, apunta a un destino real y carga
-/// sus scripts del propio origen. El comportamiento (abrir, Tab, Escape y foco) lo valida Jorge (sección 12).
+/// E2 (HU-036): los menús móviles (público y panel) declaran la semántica ARIA correcta, apuntan a un
+/// destino real y cargan sus scripts del propio origen. El comportamiento (abrir, Tab, Escape y foco)
+/// lo valida Jorge (sección 12).
 /// </summary>
 public class MenuMovilTests
 {
@@ -32,6 +33,27 @@ public class MenuMovilTests
         panel.Should().NotBeNull("el data-bs-target debe existir en el DOM");
         panel!.ClassList.Should().Contain("collapse");
         panel.Id.Should().Be("menu-principal");
+    }
+
+    [Fact]
+    [Hu("HU-036", "E2")]
+    public async Task El_menu_del_panel_se_pliega_con_un_boton_enlazado()
+    {
+        using var fabrica = AyudasDiseno.Fabrica();
+        using var cliente = fabrica.ClienteHttps();
+
+        var documento = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/panel");
+
+        var boton = documento.QuerySelector("button[data-bs-target='#menu-panel']");
+        boton.Should().NotBeNull("el panel ofrece un botón «Menú» en la barra superior (SUP-11)");
+        boton!.GetAttribute("data-bs-toggle").Should().Be("collapse");
+        boton.GetAttribute("aria-controls").Should().Be("menu-panel");
+        boton.GetAttribute("aria-expanded").Should().Be("false");
+        boton.ClassList.Should().Contain("d-lg-none");
+
+        var panel = documento.QuerySelector("#menu-panel");
+        panel.Should().NotBeNull();
+        panel!.ClassList.Should().Contain("collapse").And.Contain("d-lg-block");
     }
 
     [Fact]
