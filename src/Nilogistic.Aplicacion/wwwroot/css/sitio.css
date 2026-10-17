@@ -23,3 +23,15 @@
   align-items: center;
   min-height: var(--nl-target-min);
 }
+
+/* Menú del panel en móvil (HU-037): a menos de 992 px el menú lateral es la
+   fila 1fr de una rejilla de una sola columna con min-height: 100vh; al abrirse
+   se estiraba hasta llenar el viewport y dejaba un bloque navy enorme frente a
+   sus enlaces. Sin forzar la altura del panel, la fila pasa a medir su contenido.
+   El diseño de escritorio (≥992 px) no cambia. */
+@media (max-width: 991.98px) {
+  .nl-panel {
+    min-height: auto;
+    grid-template-rows: auto;
+  }
+}
