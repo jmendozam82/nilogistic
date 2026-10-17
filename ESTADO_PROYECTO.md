@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-036 — Layout base y sistema de diseño (Pases A y B entregados; Pase A desplegado en Staging 2026-10-16 con E1/E2 cerradas por la validación visual de Jorge, SUP-13). Pase B revisado por Claude (corrección F1 aplicada) y pendiente de la validación visual de Jorge (SUP-18) |
-| Criterio de aceptación actual | HU-036: E1–E5 estructurales ✅ en los tres layouts (Pases A y B); el menú del panel solo lo ven Gerente y Administrador (F1, tras la revisión de Claude). E1/E2 cerradas con la validación visual de Jorge (SUP-13, 2026-10-16); pendiente la validación visual de `/diseno/cuenta` y `/diseno/panel` (SUP-18). HU-011 ✅ y HU-062a ✅ cerradas; el diseño N0 (D-02) ya está entregado |
-| Paso actual del ciclo | Sprint 1: orden D-113 cumplido (D-18, HU-008, HU-009, HU-062a y HU-011 cerradas); HU-036 en Pase B (revisado por Claude con F1 aplicada; pendiente de validación visual de Jorge) y HU-037 con el diseño N0 ya disponible |
-| Rama de trabajo | `feature/HU-036-pase-b` (Pase A ya en `develop` y desplegado; Pase B: layouts Cuenta y Panel, galería y pruebas) |
+| HU actual | HU-037 — Accesibilidad WCAG 2.2 AA (axe + Playwright en CI, D-127); ficha por escribir. HU-036 ✅ cerrada 2026-10-17 |
+| Criterio de aceptación actual | HU-036 ✅: E1–E5 en los tres layouts; validación visual de Jorge (SUP-13 y SUP-18) hecha el 2026-10-16 y 2026-10-17 sobre Staging (commit d5d977d). Pendiente HU-037 |
+| Paso actual del ciclo | Sprint 1: orden D-113 cumplido y HU-036 ✅; queda HU-037 (ficha pendiente), luego HU-030 y HU-041 |
+| Rama de trabajo | `docs/HU-036-cierre` (cierre documental de HU-036; sin push) |
 | Última actualización | 2026-10-16 |
 
 ## 2. Fases del ciclo de vida
@@ -69,10 +69,10 @@
 | HU-006 | Despliegue en Render con migraciones desde CI (FT-003) | 5 | ✅ | 5/5 (E1–E5; estructurales y reales en Staging, SUP-9 cumplido) | ✅ | — | ✅ |
 | HU-062a | Configuración: almacén de parámetros (FT-099, EP-13; adelantada de S2) | 3 | ✅ | 11/11 (E1, E2, E3, E4, E6–E11, E14) | ✅ | ✅ (asiento explícito `configuracion_actualizada`) | ✅ |
 | HU-011 | Dominio de envío: SPF, DKIM y DMARC (FT-006; adelantada de S2, D-113) | 3 | ✅ | 4/4 (E1–E4; operativos: DNS, Resend y cabeceras) | ✅ (lógica del verificador) | — | ✅ |
-| HU-036 | Layout base y sistema de diseño (FT-009; ficha v1.1, dos pases) | 3 | 🔄 | Pases A y B: E1–E5 estructurales ✅ en los tres layouts (E1/E2 cerradas por la validación visual de Jorge, SUP-13); pendiente la validación visual de Cuenta y Panel (SUP-18) | ✅ | — | ✅ |
+| HU-036 | Layout base y sistema de diseño (FT-009; ficha v1.1, dos pases) | 3 | ✅ | Pases A y B: E1–E5 estructurales ✅ en los tres layouts (E1/E2 cerradas por la validación visual de Jorge, SUP-13); validación visual de Cuenta y Panel hecha por Jorge (SUP-18, 2026-10-17) | ✅ | — | ✅ |
 | HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009) | 2 | ⬜ | – | ⬜ | – | ⬜ |
 
-Total S1: 37 SP (32 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a y HU-011). HU-036 y HU-037 siguen abiertas; el diseño visual N0 (D-02) se entregó el 11/10/2026. HU-008, HU-009, HU-062a y HU-011 se adelantaron de S2 a S1 (37 SP sobre el plan de 26; recalibrar en D-06).
+Total S1: 37 SP (35 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a, HU-011 y HU-036). HU-037 sigue abierta; el diseño visual N0 (D-02) se entregó el 11/10/2026. HU-008, HU-009, HU-062a y HU-011 se adelantaron de S2 a S1 (37 SP sobre el plan de 26; recalibrar en D-06).
 
 Cierre de HU-036 (Pase A, 2026-10-16): layout público y sistema de diseño. Insumos: Bootstrap 5.3.3 autoalojado en `wwwroot/lib/bootstrap` (SHA-384 oficial verificado), copias idénticas de `tokens.css`/`bootstrap-theme.css`/`nilogistic.css`, las 8 fuentes woff2 y 3 logotipos web (SHA-256 de la sección 14 de la ficha). Código: `fuentes.css`, `menu.js`, `NombresRol`, modelo de `Navegacion`, `_LayoutPublico` y parciales, `Inicio/Index` provisional, galería `DisenoController`/`Publico.cshtml` (404 en Producción) y caché de estáticos (SUP-12). Pruebas E1–E5 (29) con `IStartupFilter` de roles; **419 en verde** (BLL 169, Arquitectura 19, Aplicación 137, DAL 94). E1 y E2 quedaron cerradas con la validación visual de Jorge en `/diseno/publico` (SUP-13, 2026-10-16); tras ella se corrigió el héroe de la galería (h1 legible; rama `fix/HU-036-heroe`). Sin deuda nueva. Detalle en `docs/tareas/HU-036.md` §13/§14 y runbook `docs/runbooks/diseno.md`.
 
@@ -163,6 +163,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.35 — 2026-10-16 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.36 — 2026-10-17 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |
