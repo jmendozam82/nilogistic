@@ -59,4 +59,14 @@ public class DisenoCasosBordeTests
         inicio.QuerySelector("a[href='/cuenta/iniciar-sesion']").Should().NotBeNull();
         inicio.QuerySelector("a[href='/cuenta']").Should().BeNull("la identidad de demostración no persiste");
     }
+
+    [Fact]
+    [Hu("HU-037", "E1")]
+    public async Task La_galeria_de_componentes_devuelve_404_en_Produccion()
+    {
+        using var fabrica = AyudasDiseno.Fabrica("Production");
+        using var cliente = fabrica.ClienteHttps();
+
+        (await cliente.GetAsync("/diseno/componentes")).StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
 }
