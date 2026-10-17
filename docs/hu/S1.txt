@@ -1,4 +1,4 @@
-# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt), HU-008 y HU-009 (adelantadas de S2), HU-010, HU-034, HU-062a (adelantada de S2) y HU-011 (adelantada de S2; verificacion operativa, sin escenarios E#). La CI evalúa todos los sprints (--sprint todos, D-15).
+# Escenarios de S1 con prueba esperada. HU-006, HU-007 (E4 ya consta en S0.txt), HU-008 y HU-009 (adelantadas de S2), HU-010, HU-034, HU-062a (adelantada de S2), HU-011 (adelantada de S2; verificacion operativa, sin escenarios E#) y HU-036 (Pase A; E1/E2 cierran con validacion visual de Jorge, SUP-13). La CI evalúa todos los sprints (--sprint todos, D-15).
 HU-006 E1
 HU-006 E2
 HU-006 E3
@@ -44,3 +44,9 @@ HU-062 E11
 HU-062 E14
 # E5, E12 y E13 pertenecen a HU-062b (S7); HU-062a es el almacen y la validacion en la BLL; E1 se verifica a nivel de servicio.
 # HU-011 E1-E4: verificacion operativa (DNS, Resend y cabeceras); evidencia en docs/tareas/HU-011.md, seccion 14 (SUP-5).
+HU-036 E1
+HU-036 E2
+HU-036 E3
+HU-036 E4
+HU-036 E5
+# HU-036 E1-E5 (Pase A, layout publico): estructurales en Aplicacion (host + AngleSharp); E1 y E2 cierran con la validacion visual de Jorge en Staging (/diseno/publico, SUP-13). Pase B repite E3/E4/E5 sobre Cuenta y Panel. Evidencia en docs/tareas/HU-036.md, seccion 14.

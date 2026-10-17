@@ -95,7 +95,21 @@ public static class NilogisticWebExtensions
         app.UseHttpsRedirection();
         app.UseStatusCodePages();
         app.UsarNilogisticApi();
-        app.UseStaticFiles();
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            OnPrepareResponse = contexto =>
+            {
+                var solicitud = contexto.Context.Request;
+                if (solicitud.Query.ContainsKey("v"))
+                {
+                    contexto.Context.Response.Headers.CacheControl = "public, max-age=31536000, immutable";
+                }
+                else if (solicitud.Path.StartsWithSegments("/fonts"))
+                {
+                    contexto.Context.Response.Headers.CacheControl = "public, max-age=2592000";
+                }
+            }
+        });
         app.UseRouting();
 
         app.MapearSaludNilogistic();

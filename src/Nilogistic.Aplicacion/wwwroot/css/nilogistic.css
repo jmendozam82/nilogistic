@@ -1,0 +1,157 @@
+/* ==========================================================================
+   NILOGISTIC — nilogistic.css (v1.0): componentes propios sobre Bootstrap 5.3.
+   Solo usa tokens --nl-*. Sin estilos en línea (CSP, HU-012).
+   ========================================================================== */
+/* Derivado de bundle.css del Design System (entrega N0, 2026-10-11). Se quitaron el bloque :root que
+   redefinia --nl-font-* con --font-* (inexistentes en el sitio) y las utilidades .nl-doc de documentacion.
+   Orden de carga: bootstrap.min.css > tokens.css > bootstrap-theme.css > nilogistic.css */
+
+@media (prefers-reduced-motion: reduce) { * { transition-duration: 0ms !important; animation-duration: 0ms !important; } }
+@media (min-width: 1280px) { .container { max-width: 1240px; } }
+body { font-family: var(--nl-font-body); }
+a { text-underline-offset: 0.2em; }
+.container-narrow { max-width: 720px; margin-inline: auto; padding-inline: 1rem; }
+
+/* ---------- Bandas (contenedores a ancho completo) ---------- */
+.nl-band { padding-block: var(--nl-section-y); }
+@media (min-width: 992px) { .nl-band { padding-block: var(--nl-section-y-lg); } }
+.nl-band--tint { background: var(--nl-color-bg-tint); }
+.nl-band--subtle { background: var(--nl-color-bg-subtle); }
+.nl-band--inverse { background: var(--nl-color-bg-inverse); color: var(--nl-color-text-inverse); }
+.nl-band--inverse h1, .nl-band--inverse h2, .nl-band--inverse h3 { color: var(--nl-white); }
+.nl-band--inverse a:not(.btn) { color: var(--nl-white); }
+.nl-eyebrow {
+  font-family: var(--nl-font-heading); font-size: var(--nl-fs-xs); font-weight: 600;
+  letter-spacing: var(--nl-ls-eyebrow); text-transform: uppercase; color: var(--nl-navy-700); margin: 0 0 var(--nl-space-3);
+}
+.nl-band--inverse .nl-eyebrow, .nl-hero .nl-eyebrow { color: var(--nl-gold-500); }
+.nl-lead { font-size: var(--nl-fs-lg); line-height: 1.6; color: var(--nl-gray-700); max-width: 62ch; }
+.nl-band--inverse .nl-lead { color: var(--nl-navy-100); }
+
+/* ---------- Foto logística (marcador provisional, RN-056) ---------- */
+.nl-photo {
+  position: relative; width: 100%; background: var(--nl-navy-100);
+  border: 1px dashed var(--nl-navy-500); border-radius: var(--nl-radius-md);
+  display: flex; align-items: flex-end; overflow: hidden; color: var(--nl-navy-800);
+}
+.nl-photo::before { content: ""; display: block; padding-top: 56.25%; }
+.nl-photo--wide::before { padding-top: 42.85%; }
+.nl-photo--square::before { padding-top: 100%; }
+.nl-photo--portrait::before { padding-top: 125%; }
+.nl-photo > span {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: max-content; max-width: 86%;
+  padding: var(--nl-space-2) var(--nl-space-4); text-align: center; border-radius: var(--nl-radius-sm);
+  font-size: var(--nl-fs-xs); font-weight: 500; background: rgba(255,255,255,.94); color: var(--nl-navy-800);
+}
+.nl-photo img, .nl-photo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.nl-card .nl-photo, .nl-post-card .nl-photo { border: 0; border-radius: 0; border-bottom: 1px dashed var(--nl-navy-500); }
+
+/* ---------- Héroe con video ---------- */
+.nl-hero { position: relative; isolation: isolate; color: var(--nl-white); background: var(--nl-navy-950); overflow: hidden; }
+.nl-hero__media { position: absolute; inset: 0; z-index: -2; }
+.nl-hero__media video, .nl-hero__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.nl-hero__media .nl-photo { height: 100%; border: 0; border-radius: 0; background: var(--nl-navy-800); color: var(--nl-navy-100); }
+.nl-hero__media .nl-photo::before { padding-top: 0; }
+.nl-hero__media .nl-photo > span { left: auto; right: var(--nl-space-4); top: var(--nl-space-4); transform: none; background: rgba(255,255,255,.94); color: var(--nl-navy-800); }
+.nl-hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(10,18,51,.88) 0%, rgba(10,18,51,.72) 55%, rgba(10,18,51,.45) 100%); }
+.nl-hero__inner { padding-block: 5rem; min-height: 520px; display: flex; flex-direction: column; justify-content: center; }
+.nl-hero--page .nl-hero__inner { min-height: 340px; padding-block: 4rem; }
+.nl-hero h1 { color: var(--nl-white); font-size: var(--nl-fs-3xl); max-width: 20ch; margin-bottom: var(--nl-space-4); }
+@media (min-width: 992px) { .nl-hero h1 { font-size: var(--nl-fs-5xl); } .nl-hero__inner { min-height: 640px; } }
+.nl-hero .nl-lead { color: var(--nl-navy-100); }
+.nl-hero__pause { position: absolute; right: var(--nl-space-4); bottom: var(--nl-space-4); }
+
+/* ---------- Tarjeta de post / evento (imagen + texto) ---------- */
+.nl-post-card { background: var(--nl-color-surface); border: 1px solid var(--nl-color-border); border-radius: var(--nl-radius-lg); box-shadow: var(--nl-shadow-sm); overflow: hidden; height: 100%; display: flex; flex-direction: column; transition: box-shadow var(--nl-duration-base) var(--nl-ease); }
+.nl-post-card:hover, .nl-post-card:focus-within { box-shadow: var(--nl-shadow-md); }
+.nl-post-card__body { padding: var(--nl-space-5); display: flex; flex-direction: column; gap: var(--nl-space-3); flex: 1; }
+.nl-post-card__meta { font-size: var(--nl-fs-xs); font-weight: 500; color: var(--nl-color-text-muted); display: flex; gap: var(--nl-space-3); flex-wrap: wrap; }
+.nl-post-card__title { font-size: var(--nl-fs-xl); line-height: 1.35; margin: 0; }
+.nl-post-card__title a { color: var(--nl-navy-900); text-decoration: none; }
+.nl-post-card__title a:hover { text-decoration: underline; }
+.nl-post-card__title a::after { content: ""; position: absolute; inset: 0; }
+.nl-post-card { position: relative; }
+.nl-post-card__excerpt { color: var(--nl-gray-700); font-size: var(--nl-fs-sm); margin: 0; }
+.nl-post-card__more { margin-top: auto; font-weight: 600; font-size: var(--nl-fs-sm); color: var(--nl-navy-700); }
+.nl-post-card--wide { flex-direction: row; }
+.nl-post-card--wide .nl-photo { flex: 0 0 42%; border-bottom: 0; border-right: 1px dashed var(--nl-navy-500); }
+.nl-post-card--wide .nl-photo::before { padding-top: 0; }
+@media (max-width: 767.98px) { .nl-post-card--wide { flex-direction: column; } .nl-post-card--wide .nl-photo { flex-basis: auto; border-right: 0; border-bottom: 1px dashed var(--nl-navy-500); } .nl-post-card--wide .nl-photo::before { padding-top: 56.25%; } }
+.nl-card-tag { display: inline-block; font-family: var(--nl-font-heading); font-size: var(--nl-fs-xs); font-weight: 600; color: var(--nl-navy-700); background: var(--nl-navy-100); border-radius: var(--nl-radius-sm); padding: 2px var(--nl-space-2); width: fit-content; }
+
+/* ---------- Franja de cifras ---------- */
+.nl-stat { text-align: left; border-top: 3px solid var(--nl-amber-500); padding-top: var(--nl-space-4); }
+.nl-stat__n { font-family: var(--nl-font-heading); font-size: var(--nl-fs-4xl); font-weight: 600; line-height: 1; color: var(--nl-white); }
+.nl-stat__l { font-size: var(--nl-fs-sm); color: var(--nl-navy-100); margin-top: var(--nl-space-2); }
+
+/* ---------- Etiquetas de estado (texto siempre presente) ---------- */
+.nl-status { display: inline-flex; align-items: center; gap: var(--nl-space-2); font-size: var(--nl-fs-xs); font-weight: 600; padding: 2px var(--nl-space-3); border-radius: var(--nl-radius-pill); border: 1px solid currentColor; }
+.nl-status::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; }
+.nl-status--pendiente { color: var(--nl-amber-800); background: var(--nl-amber-100); }
+.nl-status--revision { color: var(--nl-blue-700); background: var(--nl-blue-100); }
+.nl-status--aprobada, .nl-status--publicado { color: var(--nl-green-700); background: var(--nl-green-100); }
+.nl-status--rechazada { color: var(--nl-red-700); background: var(--nl-red-100); }
+.nl-status--borrador, .nl-status--inactivo { color: var(--nl-gray-700); background: var(--nl-gray-100); }
+.nl-status--programado { color: var(--nl-navy-800); background: var(--nl-navy-100); }
+
+/* ---------- Navbar pública ---------- */
+.nl-navbar { background: var(--nl-white); border-bottom: 1px solid var(--nl-color-border); }
+.nl-navbar .navbar-brand img { height: 44px; width: auto; display: block; }
+.nl-navbar .nav-link { font-family: var(--nl-font-heading); font-weight: 500; font-size: var(--nl-fs-sm); color: var(--nl-gray-900); padding: var(--nl-space-3) var(--nl-space-3); min-height: var(--nl-target-min); display: flex; align-items: center; }
+.nl-navbar .nav-link:hover { color: var(--nl-navy-700); }
+.nl-navbar .nav-link.active { color: var(--nl-navy-700); box-shadow: inset 0 -3px 0 var(--nl-amber-500); }
+.nl-navbar .navbar-toggler { border-color: var(--nl-color-border-strong); min-height: var(--nl-target-min); min-width: var(--nl-target-min); }
+.nl-topbar { background: var(--nl-navy-900); color: var(--nl-navy-100); font-size: var(--nl-fs-xs); padding-block: var(--nl-space-2); }
+.nl-topbar a { color: var(--nl-white); }
+
+/* ---------- Pie ---------- */
+.nl-footer { background: var(--nl-navy-900); color: var(--nl-navy-100); padding-top: var(--nl-space-8); }
+.nl-footer h2, .nl-footer h3 { color: var(--nl-white); font-size: var(--nl-fs-md); }
+.nl-footer a:not(.btn) { color: var(--nl-white); }
+.nl-footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--nl-space-2); }
+.nl-footer__logo { background: var(--nl-white); border-radius: var(--nl-radius-md); padding: var(--nl-space-3) var(--nl-space-4); display: inline-block; }
+.nl-footer__logo img { height: 40px; width: auto; display: block; }
+.nl-footer__logo--cln img { height: 72px; }
+.nl-footer__legal { border-top: 1px solid var(--nl-navy-700); margin-top: var(--nl-space-7); padding-block: var(--nl-space-5); font-size: var(--nl-fs-xs); }
+.nl-footer .form-control { border-color: var(--nl-navy-300); }
+
+/* ---------- Layout Cuenta ---------- */
+.nl-auth { min-height: 100vh; background: var(--nl-color-bg-subtle); display: flex; flex-direction: column; }
+.nl-auth__header { background: var(--nl-white); border-bottom: 1px solid var(--nl-color-border); padding-block: var(--nl-space-4); }
+.nl-auth__header img { height: 40px; width: auto; display: block; }
+.nl-auth__main { flex: 1; display: grid; place-items: start center; padding: var(--nl-space-7) var(--nl-space-4); }
+.nl-auth__card { width: 100%; max-width: 440px; background: var(--nl-white); border: 1px solid var(--nl-color-border); border-radius: var(--nl-radius-lg); box-shadow: var(--nl-shadow-md); padding: var(--nl-space-6); }
+
+/* ---------- Layout Panel ---------- */
+.nl-panel { display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; min-height: 100vh; background: var(--nl-color-bg-subtle); font-size: var(--nl-fs-sm); }
+@media (min-width: 992px) { .nl-panel { grid-template-columns: 264px 1fr; } .nl-panel__top { grid-column: 1 / -1; } }
+.nl-panel__top { background: var(--nl-white); border-bottom: 1px solid var(--nl-color-border); padding: var(--nl-space-3) var(--nl-space-5); display: flex; align-items: center; justify-content: space-between; gap: var(--nl-space-4); }
+.nl-panel__top img { height: 36px; width: auto; display: block; }
+.nl-panel__side { background: var(--nl-navy-900); color: var(--nl-navy-100); padding: var(--nl-space-5) var(--nl-space-3); }
+.nl-panel__side h2 { font-size: var(--nl-fs-xs); text-transform: uppercase; letter-spacing: var(--nl-ls-eyebrow); color: var(--nl-gold-500); padding-inline: var(--nl-space-3); margin: var(--nl-space-5) 0 var(--nl-space-2); }
+.nl-panel__side a { display: flex; align-items: center; min-height: var(--nl-target-min); padding-inline: var(--nl-space-3); color: var(--nl-white); text-decoration: none; border-radius: var(--nl-radius-md); font-weight: 500; }
+.nl-panel__side a:hover { background: var(--nl-navy-800); }
+.nl-panel__side a[aria-current="page"] { background: var(--nl-navy-700); box-shadow: inset 4px 0 0 var(--nl-amber-500); }
+.nl-panel__main { padding: var(--nl-space-5); min-width: 0; }
+@media (min-width: 992px) { .nl-panel__main { padding: var(--nl-space-6); } }
+.nl-panel__main h1 { font-size: var(--nl-fs-2xl); }
+.nl-panel .breadcrumb { font-size: var(--nl-fs-sm); }
+.nl-panel .card { background: var(--nl-white); }
+
+/* ---------- Banner de cookies ---------- */
+.nl-cookie { background: var(--nl-white); border: 1px solid var(--nl-color-border); border-radius: var(--nl-radius-xl); box-shadow: var(--nl-shadow-lg); padding: var(--nl-space-5); max-width: 720px; }
+.nl-cookie .btn { flex: 1 1 0; }
+
+/* ---------- Formularios: resumen de errores y 2FA ---------- */
+.nl-error-summary { border: 2px solid var(--nl-red-700); background: var(--nl-red-100); color: var(--nl-red-700); border-radius: var(--nl-radius-md); padding: var(--nl-space-4) var(--nl-space-5); }
+.nl-error-summary h2 { font-size: var(--nl-fs-md); color: var(--nl-red-700); margin: 0 0 var(--nl-space-2); }
+.nl-error-summary a { color: var(--nl-red-700); font-weight: 600; }
+.nl-otp { font-family: var(--nl-font-mono); font-size: var(--nl-fs-xl); letter-spacing: .4em; text-align: center; }
+.nl-draft-saved { font-size: var(--nl-fs-xs); color: var(--nl-color-text-muted); }
+.form-control.is-invalid, .form-select.is-invalid { border-width: 2px; }
+.form-control.is-valid, .form-select.is-valid { border-width: 2px; }
+
+/* ---------- Sobretitulo del flujo (pasos del registro) ---------- */
+.nl-steps { display: flex; gap: var(--nl-space-3); list-style: none; padding: 0; margin: 0 0 var(--nl-space-6); flex-wrap: wrap; }
+.nl-steps li { font-family: var(--nl-font-heading); font-weight: 500; font-size: var(--nl-fs-sm); color: var(--nl-gray-700); padding-bottom: var(--nl-space-2); border-bottom: 3px solid var(--nl-gray-200); flex: 1 1 8rem; }
+.nl-steps li[aria-current="step"] { color: var(--nl-navy-900); border-bottom-color: var(--nl-amber-500); }
