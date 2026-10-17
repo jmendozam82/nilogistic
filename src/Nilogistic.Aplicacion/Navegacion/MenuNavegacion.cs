@@ -39,6 +39,22 @@ public static class MenuNavegacion
         }.AsReadOnly())
     }.AsReadOnly();
 
+    /// <summary>
+    /// Autorización de presentación del menú del panel: un grupo sin rol requerido (Contenido) es solo
+    /// para Gerente y Administrador; un grupo con rol requerido, solo para ese rol. La autorización de
+    /// negocio real vive en la BLL; esto solo decide qué enlaces se pintan.
+    /// </summary>
+    public static bool PuedeVer(System.Security.Claims.ClaimsPrincipal usuario, GrupoMenu grupo)
+    {
+        if (grupo.RolRequerido is not null)
+        {
+            return usuario.IsInRole(grupo.RolRequerido);
+        }
+
+        return usuario.IsInRole(Nilogistic.Utility.Seguridad.NombresRol.Gerente)
+            || usuario.IsInRole(Nilogistic.Utility.Seguridad.NombresRol.Administrador);
+    }
+
     public static bool EsActivo(Microsoft.AspNetCore.Http.PathString actual, string ruta)
     {
         var a = actual.ToString().ToLowerInvariant();

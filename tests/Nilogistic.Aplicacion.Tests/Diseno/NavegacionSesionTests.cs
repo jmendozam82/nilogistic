@@ -100,24 +100,50 @@ public class NavegacionSesionTests
         autenticado.QuerySelector(".nl-topbar a[href='/cuenta']").Should().NotBeNull();
     }
 
-    [Fact]
+    public static TheoryData<string, int> GruposPanel => new()
+    {
+        { "anonimo", 0 },
+        { "profesional", 0 },
+        { "empresa", 0 },
+        { "gerente", 1 },
+        { "administrador", 2 }
+    };
+
+    [Theory]
+    [MemberData(nameof(GruposPanel))]
     [Hu("HU-036", "E4")]
-    public async Task El_panel_oculta_administracion_al_gerente_y_la_muestra_al_administrador()
+    public async Task El_panel_muestra_solo_los_grupos_del_rol(string sesion, int grupos)
     {
         using var fabrica = AyudasDiseno.Fabrica();
         using var cliente = fabrica.ClienteHttps();
 
-        var administrador = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/panel?sesion=administrador");
-        administrador.QuerySelector("nav#menu-panel a[href='/admin/usuarios']")
-            .Should().NotBeNull("el Administrador ve el grupo Administración");
-        administrador.QuerySelector("nav#menu-panel a[href='/contenido/posts']")
-            .Should().NotBeNull("el Administrador también ve Contenido");
+        var documento = await AyudasDiseno.DocumentoOkAsync(cliente, $"/diseno/panel?sesion={sesion}");
 
-        var gerente = await AyudasDiseno.DocumentoOkAsync(cliente, "/diseno/panel?sesion=gerente");
-        gerente.QuerySelector("nav#menu-panel a[href='/admin/usuarios']")
-            .Should().BeNull("el Gerente no ve el grupo Administración");
-        gerente.QuerySelector("nav#menu-panel a[href='/contenido/posts']")
-            .Should().NotBeNull("el Gerente ve Contenido");
+        documento.QuerySelectorAll("nav#menu-panel h2").Should().HaveCount(grupos);
+        if (grupos == 0)
+        {
+            documento.QuerySelectorAll("nav#menu-panel a")
+                .Should().BeEmpty("el menú del panel no filtra rutas de gestión a quien no es gestor");
+        }
+        else
+        {
+            documento.QuerySelectorAll("nav#menu-panel a").Should().NotBeEmpty();
+        }
+
+        if (sesion == "gerente")
+        {
+            documento.QuerySelectorAll("nav#menu-panel h2").Select(h => h.TextContent.Trim())
+                .Should().Equal("Contenido");
+            documento.QuerySelector("nav#menu-panel a[href^='/admin/']").Should().BeNull();
+        }
+
+        if (sesion == "administrador")
+        {
+            documento.QuerySelector("nav#menu-panel a[href='/contenido/posts']").Should().NotBeNull();
+            documento.QuerySelector("nav#menu-panel a[href='/admin/usuarios']").Should().NotBeNull();
+            documento.QuerySelectorAll("nav#menu-panel h2").Select(h => h.TextContent.Trim())
+                .Should().Contain(new[] { "Contenido", "Administración" });
+        }
     }
 
     [Fact]

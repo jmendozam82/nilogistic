@@ -7,7 +7,7 @@
 <nav class="nl-panel__side collapse d-lg-block" id="menu-panel" aria-label="Panel">
     @foreach (var grupo in MenuNavegacion.Panel)
     {
-        if (grupo.RolRequerido is not null && !User.IsInRole(grupo.RolRequerido))
+        if (!MenuNavegacion.PuedeVer(User, grupo))
         {
             continue;
         }
