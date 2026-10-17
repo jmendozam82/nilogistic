@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-037 — Accesibilidad WCAG 2.2 AA (axe + Playwright en CI, D-127); ficha por escribir. HU-036 ✅ cerrada 2026-10-17 |
+| HU actual | HU-037 — Accesibilidad WCAG 2.2 AA (axe + Playwright en CI, D-127): ficha v0.9 escrita 2026-10-17 (dos pases), pendiente de aprobación de Jorge. HU-036 ✅ cerrada |
 | Criterio de aceptación actual | HU-036 ✅: E1–E5 en los tres layouts; validación visual de Jorge (SUP-13 y SUP-18) hecha el 2026-10-16 y 2026-10-17 sobre Staging (commit d5d977d). Pendiente HU-037 |
 | Paso actual del ciclo | Sprint 1: orden D-113 cumplido y HU-036 ✅; queda HU-037 (ficha pendiente), luego HU-030 y HU-041 |
-| Rama de trabajo | `docs/HU-036-cierre` (cierre documental de HU-036; sin push) |
+| Rama de trabajo | `docs/HU-037-ficha` (ficha v0.9; sin push) |
 | Última actualización | 2026-10-16 |
 
 ## 2. Fases del ciclo de vida
@@ -163,6 +163,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.36 — 2026-10-17 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.37 — 2026-10-17 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |
