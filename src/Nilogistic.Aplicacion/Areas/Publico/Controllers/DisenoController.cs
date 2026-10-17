@@ -16,17 +16,23 @@ public sealed class DisenoController : Controller
     }
 
     [HttpGet("/diseno/publico")]
-    public IActionResult Publico(string? sesion = "anonimo") => VistaDemo(sesion);
+    public IActionResult Publico(string? sesion = "anonimo") => VistaDemo(nameof(Publico), sesion, "anonimo");
 
-    private IActionResult VistaDemo(string? sesion)
+    [HttpGet("/diseno/cuenta")]
+    public IActionResult Cuenta(string? sesion = "anonimo") => VistaDemo(nameof(Cuenta), sesion, "anonimo");
+
+    [HttpGet("/diseno/panel")]
+    public IActionResult Panel(string? sesion = "administrador") => VistaDemo(nameof(Panel), sesion, "administrador");
+
+    private IActionResult VistaDemo(string vista, string? sesion, string porDefecto)
     {
         if (_entorno.IsProduction())
         {
             return NotFound();
         }
 
-        AsignarDemo((sesion ?? "anonimo").ToLowerInvariant());
-        return View(nameof(Publico));
+        AsignarDemo((sesion ?? porDefecto).ToLowerInvariant());
+        return View(vista);
     }
 
     private void AsignarDemo(string sesion)

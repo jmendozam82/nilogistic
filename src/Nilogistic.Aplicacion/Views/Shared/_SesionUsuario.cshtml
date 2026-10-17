@@ -6,9 +6,7 @@
         {
             <a href="/admin">Panel</a>
         }
-        <form method="post" action="/cuenta/cerrar-sesion" asp-antiforgery="true" class="d-inline">
-            <button type="submit" class="btn btn-link link-light p-0 align-baseline">Cerrar sesión</button>
-        </form>
+        <partial name="_CerrarSesion" model="@("nl-sesion-cerrar")" />
     </span>
 }
 else

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (!string.IsNullOrEmpty(ViewData["Title"] as string))
+    {
+        <title>@ViewData["Title"] · Nilogistic</title>
+    }
+    else
+    {
+        <title>Nilogistic</title>
+    }
+    @if (!string.IsNullOrEmpty(ViewData["Descripcion"] as string))
+    {
+        <meta name="description" content="@(ViewData["Descripcion"])" />
+    }
+    <partial name="_EstilosBase" />
+    @RenderSection("Estilos", required: false)
+</head>
+<body>
+    <partial name="_SaltarContenido" />
+    <div class="nl-auth">
+        <header class="nl-auth__header">
+            <div class="container">
+                <a href="/"><img src="~/img/nilogistic-logo.png" alt="Nilogistic, inicio" width="480" height="243"></a>
+            </div>
+        </header>
+        <main id="main" tabindex="-1" class="nl-auth__main">
+            <div class="nl-auth__card">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+    <partial name="_ScriptsBase" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

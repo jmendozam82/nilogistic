@@ -1,0 +1,25 @@
+/* ==========================================================================
+   NILOGISTIC — sitio.css (v1.0)
+   Ajustes propios del sitio sobre el Design System. Solo usa tokens --nl-* de
+   tokens.css; sin colores hexadecimales ni estilos en línea (CSP, HU-012).
+   Las copias del Design System (tokens.css, bootstrap-theme.css, nilogistic.css)
+   no se editan a mano (SUP-2): un ajuste de diseño del sitio vive aquí.
+   ========================================================================== */
+
+/* Cierre de sesión de la franja superior (SUP-14): mismo tamaño tipográfico,
+   peso e interlineado que «Mi cuenta» y «Panel» (font: inherit hereda de
+   .nl-topbar). El objetivo táctil se mantiene ≥44 px y el foco ámbar lo aporta
+   .on-dark (bootstrap-theme.css). */
+.nl-topbar .nl-sesion-cerrar {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--nl-white);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--nl-target-min);
+}
