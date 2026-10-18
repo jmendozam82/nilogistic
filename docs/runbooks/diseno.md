@@ -146,6 +146,22 @@ menú abierto no supera la de su contenido (la suma de las alturas de sus hijos 
 del propio sidebar); así se detecta cualquier estiramiento. Ese cálculo sustituye al «≤ hijos + 96 px» previsto
 en la ficha, que no contaba con los márgenes de los enlaces (ver §13 del Pase B).
 
+## Tablas anchas y regiones desplazables (HU-037, E5/D-132)
+
+Una tabla que desborda a anchos pequeños se envuelve en `.table-responsive` de Bootstrap, que la hace
+desplazable. Una **región desplazable que no recibe foco por teclado incumple WCAG 2.1.1** y axe la marca
+(`scrollable-region-focusable`, `serious`). Por eso **toda tabla ancha** usa este patrón:
+
+```html
+<div class="table-responsive" tabindex="0" role="region" aria-label="Descripción breve de la tabla">
+  <table class="table">…</table>
+</div>
+```
+
+El `tabindex="0"` la hace enfocable con Tab (y permite desplazarla con las flechas), `role="region"` la
+expone como región y `aria-label` le da nombre accesible (sin él, axe marcaría el `role="region"`). En la
+galería, `/diseno/panel` (Solicitudes recientes) y `/diseno/componentes` (Vacantes de ejemplo) ya lo aplican.
+
 ## Pruebas de navegador (HU-037 Pase B)
 
 Las pruebas de navegador viven en `tests/Nilogistic.Accesibilidad.Tests` (Playwright + axe, xUnit) y usan el
