@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | Sprint 1 completo: HU-037 ✅ cerrada 2026-10-17 (PR #53 y #54; job `accesibilidad` verde en su primera ejecución; foco validado en Staging). Siguiente: HU-041 y HU-030 (S2), y el cierre formal de S1 |
-| Criterio de aceptación actual | HU-037 ✅: E1–E5 con pruebas estructurales (.NET) y de navegador (Playwright + axe); axe sin violaciones graves/críticas; foco de botones corregido (D-130) y medido en Staging (commit `a621692`). D-129: el job sigue informativo |
-| Paso actual del ciclo | Sprint 1: 37 de 37 SP cerrados (D-113 cumplido, HU-036 y HU-037 ✅). Pendiente el cierre formal de S1 (G1/G2 y retrospectiva del 07/12) y la elección de la siguiente HU de S2 (HU-041 o HU-030) |
-| Rama de trabajo | `docs/HU-037-cierre` (cierre documental de HU-037; sin push) |
+| HU actual | **HU-041** (Página Quiénes Somos, 3 SP; adelantada de S2 a S1, D-133): ficha v0.9 redactada, pendiente de aprobación de Jorge y de entrega al ejecutor. Sprint 1: 37 de 37 SP cerrados; cierre formal en curso (`docs/Nilogistic_Cierre_S1.md`) |
+| Criterio de aceptación actual | HU-041: E1 (contenido completo), E2 (imágenes con texto alternativo), E3 (360 px sin desbordes), E4 (título, descripción y Open Graph propios). Texto provisional marcado (RN-056, D-126) |
+| Paso actual del ciclo | Sprint 1: 37 de 37 SP cerrados. Cierre formal de S1 preparado: pendiente la evidencia de G1 (cobertura de BLL ≥ 70 % con `workflow_dispatch` sobre `develop`) y la retrospectiva (D-06, 07/12/2026). Sin PR `develop→main` (D-134) |
+| Rama de trabajo | `docs/HU-041-ficha-cierre-s1` (ficha de HU-041, D-133/D-134 y cierre de S1; sin push) |
 | Última actualización | 2026-10-17 |
 
 ## 2. Fases del ciclo de vida
@@ -132,7 +132,7 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-03 | Negocio | Validar valores reales de planes antes del primer despliegue público | Pre-release R1 | ⬜ |
 | D-04 | Tarea | #8 Tarea de catálogos | Antes de 2026-12-21 (y antes del Sprint 3) | ⬜ |
 | D-05 | Tarea | #13 Segundo Administrador (mínimo 2 en producción) | Antes de HU-022 | ⬜ |
-| D-06 | Proceso | Recalibrar velocidad (26 SP) tras el Sprint 1 | Fin Sprint 1 | ⬜ |
+| D-06 | Proceso | Recalibrar velocidad (26 SP) tras el Sprint 1. Datos de S1: 37 SP cerrados (11 de ellos adelantados de S2) en 9 días calendario; propuesta en `docs/Nilogistic_Cierre_S1.md` §5; decisión en la retrospectiva del 07/12/2026 | Retrospectiva 07/12/2026 | 🔄 |
 | D-07 | Operación | Runbook de supresión de datos (T-SUPR) — lo ejecuta Jorge | — | ⬜ |
 | D-08 | Restricción | 2026-12-04 no disponible; sin corte de DNS en Semana Santa 2027 | — | ⬜ |
 | D-09 | Documental | Fechas de aprobación de Fases 4 y 5: Fase 4 = 05/10/2026, Fase 5 = 07/10/2026 (v1.0), proyectadas y ajustables (D-105) | Próxima sesión | ✅ (10/10/2026) |
@@ -164,6 +164,8 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-130 | Diseño | **Sin anillo de foco en botones** (hallazgo de HU-037 Pase B, E2): `bootstrap-theme.css` fija `--bs-btn-focus-box-shadow: none` y Bootstrap 5.3 define `.btn:focus-visible { outline: 0 }`, que gana en especificidad al `:focus-visible { outline: 3px … }` global; los `.btn` (y `.page-link`, etc.) no mostraban indicador de foco (incumplía WCAG 2.4.7 y D-124). **Resuelto** en `wwwroot/css/sitio.css` con la regla `.btn:focus-visible, .page-link:focus-visible { outline: … }` y color de foco para fondos navy (corrección F1 de HU-037). La mejora en el origen (`bootstrap-theme.css`, copia en `docs fase/Design System/`) viaja como observación #10 al Design System (SUP-17), sin ser deuda del sitio | Corregido en HU-037 | ✅ (17/10/2026) |
 | D-131 | Layout | **Desborde horizontal de 12 px en la portada a 360 px** (hallazgo de HU-037 Pase B, E1): el `.row.g-5` del pie quedaba a `left=-12`/`right=372` porque sus márgenes negativos (`3rem`) superaban el relleno del contenedor (`--nl-gutter`). **Resuelto** cambiando la fila del pie a `gx-4 gy-5` en `_PiePublico.cshtml` (corrección F2 de HU-037): `/` y el resto de páginas con el layout público ya no desbordan a 360 px | Corregido en HU-037 | ✅ (17/10/2026) |
 | D-132 | Accesibilidad | **`scrollable-region-focusable` (axe serious)** (hallazgo de HU-037 Pase B, E5) en los `.table-responsive` de `/diseno/panel` y `/diseno/componentes` a 360 px: eran regiones desplazables no enfocables por teclado (WCAG 2.1.1). **Resuelto** con `tabindex="0" role="region" aria-label="…"` en el contenedor desplazable (corrección F3 de HU-037); patrón documentado en el runbook `docs/runbooks/diseno.md` | Corregido en HU-037 | ✅ (17/10/2026) |
+| D-133 | Proceso | **HU-041 (Quiénes Somos, 3 SP) se adelanta de S2 a S1** con texto provisional (aprobado por Jorge el 17/10/2026). Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | HU-041 | ✅ (17/10/2026) |
+| D-134 | Proceso | **El cierre formal de S1 no incluye el PR `develop→main`** (aprobado el 17/10/2026): la puerta G1 se evalúa a demanda con `workflow_dispatch` sobre `develop`; el PR a `main` se hace en el release (implica despliegue a producción). Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | Cierre de S1 | ✅ (17/10/2026) |
 | D-25 | Insumo | Marca y medios pendientes: logotipos SVG oficiales (claro y oscuro), icono solo para favicon, imagen Open Graph 1200×630, fotos y video reales de logística, cifras reales de la banda de estadísticas y versión blanca definitiva del logotipo (hoy derivada). Todo contenido provisional va marcado (RN-056) | Antes de HU-068, HU-040 y del corte DNS (HU-031) | ⬜ |
 
 ## 7. Versiones
@@ -171,6 +173,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.41 — 2026-10-17 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.42 — 2026-10-17 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |
