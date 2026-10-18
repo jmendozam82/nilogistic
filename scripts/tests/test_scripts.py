@@ -14,6 +14,7 @@ import verificar_cobertura as vc  # noqa: E402
 import escenarios_sin_prueba as esp  # noqa: E402
 import validar_conventional_commits as cvc  # noqa: E402
 import verificar_migraciones as vm  # noqa: E402
+import verificar_codificacion as vcod  # noqa: E402
 
 
 def escribir(ruta, texto):
@@ -221,6 +222,76 @@ class MigracionesTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             escribir(os.path.join(d, "20261109000100_a.sql"), "")
             self.assertEqual(vm.main(["--directorio", d, "--base", "ref_que_no_existe"]), 2)
+
+
+class CodificacionTests(unittest.TestCase):
+    def test_limpio_con_acentos_y_simbolos_pasa(self):
+        texto = "ultima \u00f1and\u00fa \u2713 \u2b1c \u2192"
+        self.assertEqual(vcod.analyze("x.md", texto.encode("utf-8")), [])
+
+    def test_bom_utf8_falla(self):
+        hallazgos = vcod.analyze("x.md", b"\xef\xbb\xbf texto")
+        self.assertTrue(any(h.startswith("R1") for h in hallazgos))
+
+    def test_bom_utf16_falla(self):
+        hallazgos = vcod.analyze("x.md", b"\xff\xfe\x00")
+        self.assertTrue(any(h.startswith("R1") for h in hallazgos))
+
+    def test_bytes_no_utf8_falla(self):
+        hallazgos = vcod.analyze("x.md", b"\xff")
+        self.assertTrue(any(h.startswith("R2") for h in hallazgos))
+
+    def test_doble_codificacion_de_e_falla(self):
+        doble = "\u00e9".encode("utf-8").decode("cp1252")
+        contenido = f"linea 1\n{doble}\nlinea 3".encode("utf-8")
+        hallazgos = vcod.analyze("x.md", contenido)
+        self.assertTrue(any("linea 2" in h for h in hallazgos))
+
+    def test_doble_codificacion_de_check_falla(self):
+        doble = "\u2705".encode("utf-8").decode("latin-1")
+        contenido = f"ok\n{doble}\nfin".encode("utf-8")
+        hallazgos = vcod.analyze("x.md", contenido)
+        self.assertTrue(any("linea 2" in h for h in hallazgos))
+
+    def test_sentinel_omite_r3(self):
+        doble = "\u00e9".encode("utf-8").decode("cp1252")
+        contenido = f"nilogistic:codificacion-ok {doble}\n".encode("utf-8")
+        self.assertEqual(vcod.analyze("x.md", contenido), [])
+
+    def test_ignora_wwwroot_lib(self):
+        self.assertFalse(vcod.is_text("src/Nilogistic.Aplicacion/wwwroot/lib/bootstrap/css/bootstrap.css"))
+
+    def test_ignora_extension_no_listada(self):
+        self.assertFalse(vcod.is_text("binario.bin"))
+
+    def _inicializar_repo(self, d):
+        subprocess.run(["git", "init", "-q"], cwd=d, check=True)
+        subprocess.run(["git", "config", "user.email", "p@n.test"], cwd=d, check=True)
+        subprocess.run(["git", "config", "user.name", "P"], cwd=d, check=True)
+
+    def test_main_pasa_en_repo_limpio(self):
+        with tempfile.TemporaryDirectory() as d:
+            self._inicializar_repo(d)
+            escribir(os.path.join(d, "limpio.md"), "ultima \u00f1and\u00fa \u2705")
+            subprocess.run(["git", "add", "limpio.md"], cwd=d, check=True)
+            subprocess.run(["git", "commit", "-q", "-m", "inicial"], cwd=d, check=True)
+            self.assertEqual(vcod.main(["--raiz", d]), 0)
+
+    def test_main_falla_con_bom(self):
+        with tempfile.TemporaryDirectory() as d:
+            self._inicializar_repo(d)
+            with open(os.path.join(d, "bom.md"), "wb") as f:
+                f.write(b"\xef\xbb\xbf texto")
+            subprocess.run(["git", "add", "bom.md"], cwd=d, check=True)
+            subprocess.run(["git", "commit", "-q", "-m", "inicial"], cwd=d, check=True)
+            self.assertEqual(vcod.main(["--raiz", d]), 1)
+
+    def test_main_error_si_no_es_repo(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.assertEqual(vcod.main(["--raiz", d]), 2)
+
+    def test_main_error_si_directorio_inexistente(self):
+        self.assertEqual(vcod.main(["--raiz", "no/existe/jamas"]), 2)
 
 
 if __name__ == "__main__":

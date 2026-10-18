@@ -83,16 +83,41 @@ Ninguna pendiente: alcance, ejecutor y entrega dentro de la rama de HU-030 aprob
 Se comprueba en local con el resto de HU-030 y, tras el merge del PR único, en la CI. Opcional: guarda un archivo `.md` con BOM y comprueba que `python3 scripts/ci/verificar_codificacion.py` falla.
 
 ## 13. Dudas del ejecutor
-_(el ejecutor anota aquí cualquier duda o hallazgo; «Sin bloqueos» si no hay)_
+Sin bloqueos. El repositorio real pasó el verificador sin hallazgos; no fue necesario aplicar la excepción `nilogistic:codificacion-ok`.
 
 ## 14. Informe del ejecutor
-_(archivos creados/modificados, salidas de §9, horas reales)_
+
+**Archivos creados/modificados:**
+- `scripts/ci/verificar_codificacion.py` (nuevo)
+- `scripts/tests/test_scripts.py` (pruebas `CodificacionTests`)
+- `.github/workflows/ci.yml` (paso "Codificacion UTF-8 sin BOM (DT-2)")
+- `ESTADO_PROYECTO.md` (fila D-139 a 🔄 verificado por CI)
+
+**Commit realizado:**
+- `chore(ci): verificar codificacion utf-8 de los archivos (D-139)` (`465a37b`) en `feature/HU-030`
+- Sin push ni PR, según D-140.
+
+**Salidas de §9:**
+
+```
+> py scripts/ci/verificar_codificacion.py
+OK: 348 archivo(s) revisado(s)
+
+> py -m unittest discover -s scripts/tests -v
+Ran 65 tests in 3.246s
+OK
+
+> py scripts/ci/validar_conventional_commits.py --base develop
+Evaluando 2 commit(s) del rango develop..HEAD
+```
+
+**Horas reales:** ~0:35 h.
 
 **Datos para evaluar al ejecutor** (rellénalos con sinceridad, sin adornar):
-- Modelo y tiempo total:
-- ¿Hizo falta repetir algún paso o corregir algo que hizo mal?:
-- ¿Algún archivo quedó con BOM, CRLF inesperado o cambios que no pediste?:
-- Cosas que no entendió de la ficha:
+- Modelo y tiempo total: Kimi K2.7 Code, ~35 min.
+- ¿Hizo falta repetir algún paso o corregir algo que hizo mal?: Sí. La primera versión de `analyze` usó `splitlines()`, que partía el mojibake de `✅` (contiene U+0085) y la prueba `test_doble_codificacion_de_check_falla` falló. Se corrigió cambiando a `split("\n")` y las 65 pruebas quedaron en verde.
+- ¿Algún archivo quedó con BOM, CRLF inesperado o cambios que no pediste?: No. El script nuevo es ASCII puro y sin BOM; el resto de archivos editados pasan el verificador.
+- Cosas que no entendió de la ficha: Ninguna.
 
 ## 15. Revisión de Claude
 _(la completa Claude tras revisar el diff)_
