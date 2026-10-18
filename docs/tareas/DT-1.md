@@ -80,14 +80,34 @@ Ninguna pendiente: el alcance y las dos deudas fueron aprobados por Jorge el 202
 Tras el merge de cada PR: CI y `desplegar-staging` verdes; abre `/quienes-somos` y `/diseno/panel?sesion=administrador` y comprueba que se ven igual que antes.
 
 ## 13. Dudas del ejecutor
-_(el ejecutor completa esta sección; incluye la tabla de diferencias del `<head>` y cualquier archivo de migración que no cumpla el patrón)_
+Sin bloqueos ni supuestos nuevos.
+
+- **Parte A:** los 8 archivos actuales de `supabase/migrations` ya cumplen `^\d{14}_[a-z0-9_]+\.sql$` y tienen marcas únicas; no hubo que renombrar ninguno (son migraciones ya aplicadas), así que la Regla 1 se aplica a todo el directorio sin excepciones.
+- **Parte B:** diferencias del `<head>` antes de extraer. Solo se extrajo lo idéntico; lo que difiere se quedó en cada layout:
+
+| Elemento | `_LayoutPublico` | `_LayoutCuenta` | `_LayoutPanel` | Decisión |
+|---|---|---|---|---|
+| `<meta charset="utf-8">` | ✅ | ✅ | ✅ | a `_CabezaComun` |
+| `<meta name="viewport" …>` | ✅ | ✅ | ✅ | a `_CabezaComun` |
+| `<title>` (patrón «Título · Nilogistic»; «Nilogistic» si no hay título) | ✅ | ✅ | ✅ | a `_CabezaComun` |
+| `<meta name="description">` (si existe) | ✅ | ✅ | ✅ | a `_CabezaComun` |
+| `_MetadatosSeo` | ✅ | — | — | se queda solo en `_LayoutPublico` (después de `_CabezaComun`) |
+| `_EstilosBase` | ✅ | ✅ | ✅ | se queda en cada layout |
+| `@RenderSection("Estilos")` | ✅ | ✅ | ✅ | se queda en cada layout |
 
 ## 14. Informe del ejecutor
-- Archivos creados/modificados:
-- Resultado de pruebas y de la CI:
-- Captura antes/después del `<head>`:
-- Horas reales:
-- Deuda técnica detectada:
+
+### Parte A — D-21 (verificador de migraciones)
+- Archivos creados/modificados: `scripts/ci/verificar_migraciones.py` (nuevo), `scripts/tests/test_scripts.py` (+11 casos), `.github/workflows/ci.yml` (job `sql`: `fetch-depth: 0` y paso «Verificar nombre y orden de migraciones (D-21)» antes de aplicar), `docs/ENTORNOS.md` (regla 4 del flujo de migraciones) y `ESTADO_PROYECTO.md` (D-21).
+- Resultado de pruebas: `python -m unittest discover -s scripts/tests` → **OK (52 casos)**; esperado en los tres escenarios de la Regla 3 (anterior/igual fallan, posterior pasa), nombre mal formado, marcas duplicadas y error de uso (directorio inexistente y `--base` inválida → código 2). El verificador pasa sobre las 8 migraciones reales con y sin `--base`.
+- CI: pendiente del run del PR (job `sql`).
+
+### Parte B — D-128 (parcial `_CabezaComun`)
+- Archivos creados/modificados: `Views/Shared/_CabezaComun.cshtml` (nuevo); `_LayoutPublico.cshtml`, `_LayoutCuenta.cshtml`, `_LayoutPanel.cshtml` (invocan `<partial name="_CabezaComun" />`, sin cambiar el orden); `tests/Nilogistic.Aplicacion.Tests/Diseno/CabezaComunTests.cs` (nuevo) y `ESTADO_PROYECTO.md` (D-128).
+- Captura antes/después del `<head>` de `/diseno/publico`, `/diseno/cuenta`, `/diseno/panel?sesion=administrador` y `/quienes-somos`: **idénticos salvo espacios en blanco** (comparados normalizando el espacio entre etiquetas; la secuencia de elementos es byte a byte la misma). Capturas crudas en `%TEMP%\opencode\heads_before` y `heads_after` de la sesión de ejecución.
+- Pruebas: `CabezaComunTests` (**+6**: un título con patrón + charset + viewport, y orden preservado, por cada uno de los tres layouts). **213 en Aplicación** (eran 207). `CspLayoutsTests` y `LayoutResponsivoTests` siguen en verde.
+- Horas reales: por confirmar (Jorge).
+- Deuda técnica detectada: ninguna.
 
 ## 15. Revisión de Claude
 _(la completa Claude tras revisar el diff)_
