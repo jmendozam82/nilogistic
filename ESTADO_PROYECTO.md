@@ -10,10 +10,10 @@
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
 | Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | HU-037 — Accesibilidad WCAG 2.2 AA (FT-009; dos pases, D-127): **Pase A cerrado** (PR #53, `c36c58c`; validación visual de Jorge en Staging el 2026-10-17). **Pase B ejecutado** (rama `feature/HU-037-b`: proyecto Playwright + axe, job `accesibilidad` informativo en CI y **correcciones F1–F3**): 8 de 8 pruebas de navegador en verde en local; pendiente solo la revisión de Jorge (§12, Pase B). HU-036 ✅ cerrada |
-| Criterio de aceptación actual | HU-037 Pase B: E1 (saltar al contenido y sin desborde horizontal), E2 (foco visible y menú móvil por teclado) y E5 (axe sin violaciones graves/críticas y movimiento reducido) con Playwright + axe. En local: **8 de 8 pruebas en verde** tras corregir los tres defectos reales que destapó la primera pasada (foco de `.btn`/`.page-link`, desborde de la portada a 360 px y `scrollable-region-focusable` en tablas anchas). El informe de axe queda en `TestResults/axe` |
-| Paso actual del ciclo | Sprint 1: orden D-113 cumplido y HU-036 ✅; HU-037 Pase B ejecutado con correcciones F1–F3 (pendiente la revisión de Jorge, §12), luego HU-030 y HU-041 |
-| Rama de trabajo | `feature/HU-037-b` (Pase B; sin push) |
+| HU actual | Sprint 1 completo: HU-037 ✅ cerrada 2026-10-17 (PR #53 y #54; job `accesibilidad` verde en su primera ejecución; foco validado en Staging). Siguiente: HU-041 y HU-030 (S2), y el cierre formal de S1 |
+| Criterio de aceptación actual | HU-037 ✅: E1–E5 con pruebas estructurales (.NET) y de navegador (Playwright + axe); axe sin violaciones graves/críticas; foco de botones corregido (D-130) y medido en Staging (commit `a621692`). D-129: el job sigue informativo |
+| Paso actual del ciclo | Sprint 1: 37 de 37 SP cerrados (D-113 cumplido, HU-036 y HU-037 ✅). Pendiente el cierre formal de S1 (G1/G2 y retrospectiva del 07/12) y la elección de la siguiente HU de S2 (HU-041 o HU-030) |
+| Rama de trabajo | `docs/HU-037-cierre` (cierre documental de HU-037; sin push) |
 | Última actualización | 2026-10-17 |
 
 ## 2. Fases del ciclo de vida
@@ -70,9 +70,9 @@
 | HU-062a | Configuración: almacén de parámetros (FT-099, EP-13; adelantada de S2) | 3 | ✅ | 11/11 (E1, E2, E3, E4, E6–E11, E14) | ✅ | ✅ (asiento explícito `configuracion_actualizada`) | ✅ |
 | HU-011 | Dominio de envío: SPF, DKIM y DMARC (FT-006; adelantada de S2, D-113) | 3 | ✅ | 4/4 (E1–E4; operativos: DNS, Resend y cabeceras) | ✅ (lógica del verificador) | — | ✅ |
 | HU-036 | Layout base y sistema de diseño (FT-009; ficha v1.1, dos pases) | 3 | ✅ | Pases A y B: E1–E5 estructurales ✅ en los tres layouts (E1/E2 cerradas por la validación visual de Jorge, SUP-13); validación visual de Cuenta y Panel hecha por Jorge (SUP-18, 2026-10-17) | ✅ | — | ✅ |
-| HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009; Pase A cerrado y validado, Pase B ejecutado con correcciones F1–F3) | 2 | 🔄 | Pase A: E3/E4 ✅ (estructurales) y E1 estructural en la galería ✅, validado por Jorge (2026-10-17). Pase B: E1/E2/E5 ✅ implementados (Playwright + axe), **8 de 8 pruebas de navegador en verde** en local tras F1–F3; el job de CI informa (SUP-3) | ✅ | – | ✅ |
+| HU-037 | Accesibilidad base WCAG 2.2 AA (FT-009; Pase A cerrado y validado, Pase B ejecutado con correcciones F1–F3) | 2 | ✅ | Pase A: E3/E4 ✅ (estructurales) y E1 estructural en la galería ✅, validado por Jorge (2026-10-17). Pase B: E1/E2/E5 ✅ implementados y en verde en CI y Staging (Playwright + axe), **8 de 8 pruebas de navegador en verde** en local tras F1–F3; el job de CI informa (SUP-3) | ✅ | – | ✅ |
 
-Total S1: 37 SP (35 cerrados: HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a, HU-011 y HU-036). HU-037 sigue abierta (Pase B ejecutado, pendiente la revisión de Jorge); el diseño visual N0 (D-02) se entregó el 11/10/2026. HU-008, HU-009, HU-062a y HU-011 se adelantaron de S2 a S1 (37 SP sobre el plan de 26; recalibrar en D-06).
+Total S1: 37 SP, **37 cerrados** (HU-007, HU-008, HU-009, HU-034, HU-006, HU-010, HU-062a, HU-011, HU-036 y HU-037). El diseño visual N0 (D-02) se entregó el 11/10/2026. HU-008, HU-009, HU-062a y HU-011 se adelantaron de S2 a S1 (37 SP sobre el plan de 26; recalibrar en D-06). A S2 le quedan HU-030 (5 SP) y HU-041 (3 SP).
 
 Pase A de HU-037 (2026-10-17): galería `/diseno/componentes` (acción en `DisenoController`, 404 en Producción) con botones, enlaces, formulario accesible (resumen `nl-error-summary`, `aria-describedby`, campo 2FA), alertas, tabla, estados `nl-status`, paginación, modal de confirmación («Inactivar post», RN-001) y banner de cookies (marcado de `cookies.html`, sin script ni estilo en línea, SUP-5). Pruebas: `ContrasteTokensTests` (E4; resuelve `var(--nl-…)` de `tokens.css` y calcula el contraste WCAG con la luminancia relativa, 18 pares) y `FormulariosAccesiblesTests` (E3 + E1 estructural sobre `/diseno/componentes`); 404 de la galería añadido a `DisenoCasosBordeTests`. Arreglo del menú del panel en móvil en `wwwroot/css/sitio.css` (SUP-8; el bloque navy ya no se estira). **479 pruebas en verde** (BLL 169, Arquitectura 19, Aplicación 197, DAL 94; +25 sobre 454). Sin paquetes nuevos. Mergeado en `develop` (PR #53, `c36c58c`; run `39074870731` con `desplegar-staging` en verde) y **validado visualmente por Jorge en Staging el 2026-10-17** (sección 12, Pase A; sin defectos). Detalle en `docs/tareas/HU-037.md` §13/§14.
 
@@ -171,6 +171,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.40 — 2026-10-17 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.41 — 2026-10-17 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |
