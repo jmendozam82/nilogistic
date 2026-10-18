@@ -1,4 +1,4 @@
-# NILOGISTIC — Registro vivo: decisiones D-133 y D-134 (17/10/2026)
+# NILOGISTIC — Registro vivo: decisiones D-133 a D-136 (17/10/2026)
 
 Continúa `Nilogistic_Registro_Decisiones_D122_D126.md`. **Estado: aprobadas por Jorge el 17/10/2026.**
 
@@ -10,3 +10,14 @@ Continúa `Nilogistic_Registro_Decisiones_D122_D126.md`. **Estado: aprobadas por
 Notas de proceso:
 - La skill `nilogistic-web-craft` (criterio visual y de movimiento: Impeccable, Apache-2.0, y emilkowalski/skills, MIT) queda disponible en la cuenta de Jorge desde el 17/10/2026. Si su contenido se copia al repositorio, se añaden ambas licencias en un archivo `NOTICE`. No se usa la CLI `npx impeccable` (envía telemetría).
 - Propuesta no decidida: observación #11 al Design System (tokens de movimiento `--nl-ease-out`, `--nl-dur-*` hoy definidos en `sitio.css`) junto con #8, #9 y #10 (SUP-17).
+
+## D-135 y D-136 (17/10/2026) — corrección de la puerta G1
+
+**Estado: aprobadas por Jorge el 17/10/2026.** Origen: hallazgo en el run `39087254500`
+(`workflow_dispatch` sobre `develop`), donde la puerta G1 se puso en rojo con **49,1 %** mientras la
+BLL estaba en **95,4 %**.
+
+| ID | Decisión | Afecta |
+|---|---|---|
+| D-135 | **La puerta G1 mide solo la cobertura de la BLL.** `scripts/ci/verificar_cobertura.py` leía el `line-rate` de la **raíz** del `coverage.cobertura.xml`, que agrega DAL, Entity, Utility, DTO y Pruebas.Base (ensamblados que `Nilogistic.BLL.Tests` instrumenta de paso), no el que D-102 y D-106 decidieron exigir. Se corrige: el script lee el `<package name="Nilogistic.BLL">` y expone `--paquete` (por defecto `Nilogistic.BLL`); el mensaje indica el paquete medido (`Cobertura de líneas (Nilogistic.BLL): 95.4 % (mínimo 70.0 %)`). Si el paquete no aparece en el XML, termina con código 2: **sin vuelta atrás al agregado**, porque daría falsos verdes. `ci.yml` no se toca (invariante HU-006 E3). | CI, HU-038, cierre de Sprint |
+| D-136 | **Medir la cobertura de DAL, Utility y Entity es una decisión posterior, no una puerta.** Los porcentajes que aparecen en el informe de G1 para esas capas salen de ensamblados tocados de paso por `Nilogistic.BLL.Tests` y **no son su cobertura real**: las pruebas del DAL corren con Testcontainers en otro paso del CI, sin `--collect`, y lo mismo aplica a Utility y Entity. Si se quiere medir esas capas, se añade un informe propio (con su propio `--paquete` o paso) y se decide su umbral por separado. | CI, D-102, D-106 |

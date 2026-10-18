@@ -1,3 +1,5 @@
+import contextlib
+import io
 import os
 import subprocess
 import sys
@@ -20,18 +22,35 @@ def escribir(ruta, texto):
 
 
 class CoberturaTests(unittest.TestCase):
-    def _xml(self, d, tasa):
-        escribir(os.path.join(d, "g", "coverage.cobertura.xml"), f'<coverage line-rate="{tasa}"></coverage>')
+    def _xml(self, d, tasa_raiz, paquetes):
+        paqs = "".join(f'<package name="{n}" line-rate="{t}"/>' for n, t in paquetes)
+        escribir(
+            os.path.join(d, "g", "coverage.cobertura.xml"),
+            f'<coverage line-rate="{tasa_raiz}"><packages>{paqs}</packages></coverage>',
+        )
 
-    def test_pasa_si_alcanza_el_umbral(self):
+    def test_pasa_si_la_bll_alcanza_el_umbral_aunque_la_raiz_no(self):
         with tempfile.TemporaryDirectory() as d:
-            self._xml(d, 0.71)
+            self._xml(d, 0.49, [("Nilogistic.BLL", 0.95)])
             self.assertEqual(vc.main(["--minimo", "70", "--directorio", d]), 0)
 
-    def test_falla_si_esta_bajo_el_umbral(self):
+    def test_imprime_el_paquete_medido(self):
         with tempfile.TemporaryDirectory() as d:
-            self._xml(d, 0.69)
+            self._xml(d, 0.49, [("Nilogistic.BLL", 0.95)])
+            salida = io.StringIO()
+            with contextlib.redirect_stdout(salida):
+                vc.main(["--minimo", "70", "--directorio", d])
+            self.assertIn("(Nilogistic.BLL): 95.0 %", salida.getvalue())
+
+    def test_falla_si_la_bll_esta_bajo_el_umbral(self):
+        with tempfile.TemporaryDirectory() as d:
+            self._xml(d, 0.49, [("Nilogistic.BLL", 0.60)])
             self.assertEqual(vc.main(["--minimo", "70", "--directorio", d]), 1)
+
+    def test_error_si_el_paquete_no_aparece(self):
+        with tempfile.TemporaryDirectory() as d:
+            self._xml(d, 0.99, [("Nilogistic.DAL", 0.95)])
+            self.assertEqual(vc.main(["--minimo", "70", "--directorio", d]), 2)
 
     def test_error_si_no_hay_reporte(self):
         with tempfile.TemporaryDirectory() as d:
