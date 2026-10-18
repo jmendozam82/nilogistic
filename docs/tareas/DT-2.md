@@ -120,4 +120,17 @@ Evaluando 2 commit(s) del rango develop..HEAD
 - Cosas que no entendió de la ficha: Ninguna.
 
 ## 15. Revisión de Claude
-_(la completa Claude tras revisar el diff)_
+
+**Veredicto: aprobada (18/10/2026), primera prueba de Kimi K2.7 Code superada.**
+
+Comprobé el commit `fef5ea0` con ejecuciones propias, no solo con el informe:
+- El verificador pasa sobre el repositorio real (349 archivos) y las 65 pruebas de `scripts/tests` pasan.
+- Sobre un repositorio temporal con tres archivos malos detecta cada regla: BOM UTF-8 (R1), byte inválido con su desplazamiento (R2) y doble codificación de `é` con su número de línea (R3). Código de salida 1.
+- Higiene de archivos: los 5 archivos del commit están en UTF-8 sin BOM y con LF. Los cambios en `ESTADO_PROYECTO.md` (una celda) y en `ci.yml` (un paso de 3 líneas, sin `continue-on-error`, `always()` ni `failure()`) son puntuales. No hubo conflictos ni archivos ajenos en el commit.
+- La nota sobre `split("\n")` en vez de `splitlines()` (U+0085 dentro del mojibake de `✅`) es correcta y está bien razonada.
+
+**Observaciones no bloqueantes**
+- Nombres, docstrings y mensajes del código están en **inglés** (`analyze`, `tracked_files`), mientras la ficha pedía `analizar` y los demás scripts están en español. Se acepta tal cual (Jorge, 18/10: seamos resilientes por ahora); en DT-3 la ficha lo exige expresamente.
+- `EXCLUDED_PREFIX` compara con `startswith` sin separador final, de modo que `wwwroot/lib2/` también se excluiría. Es irrelevante hoy.
+
+**Evaluación del ejecutor:** siguió §6 sin desvíos, no tocó archivos ajenos, no se auto-expandió y anotó una decisión técnica. Apto para DT-3 y para HU-030.

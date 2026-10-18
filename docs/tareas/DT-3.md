@@ -55,6 +55,7 @@ Cambiar `pull_request` o la cobertura; `paths-ignore`; Producción (`desplegar-p
 - No tocar `AGENTS.md`, `CLAUDE.md`, `Dockerfile`, `Directory.*.props`; `.github/` solo para los pasos de §4.2.3.
 - **Higiene de archivos:** UTF-8 sin BOM y LF; ediciones puntuales (no reescribas `ci.yml` ni `ESTADO_PROYECTO.md` completos); no resuelvas conflictos de merge (detente y avisa); `git add` solo de los archivos de tu informe, nunca `-A` ni `.`; ejecuta `python3 scripts/ci/verificar_codificacion.py` antes de cada commit.
 - Commits Conventional Commits en ASCII, contexto en minúsculas, descripción ≤ 72 caracteres.
+- **Idioma:** nombres de funciones, docstrings, comentarios y mensajes de salida **en español**, como los demás scripts de `scripts/ci/` (`requiere_despliegue`, no `requires_deploy`).
 
 ## 7. Criterios de aceptación ↔ pruebas esperadas
 | Parte | Criterio | Prueba |
