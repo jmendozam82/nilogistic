@@ -110,4 +110,15 @@ Sin bloqueos ni supuestos nuevos.
 - Deuda técnica detectada: ninguna.
 
 ## 15. Revisión de Claude
-_(la completa Claude tras revisar el diff)_
+
+**Veredicto: aprobada A y B (18/10/2026), pendiente del run verde de cada PR.**
+
+**Parte A (665acdc).** Cumple las reglas 1 a 3, usa funciones puras con 11 casos y el paso va en el job `sql` sin `continue-on-error`, `always()` ni `failure()` (invariante de HU-006 E3). Comprobé el verificador sobre las 8 migraciones reales, con y sin `--base`: OK. La salida de error de uso (código 2) cubre directorio inexistente y `--base` inválida.
+
+Observaciones no bloqueantes:
+- La regla 3 usa `--diff-filter=A`: una migración **renombrada** (R) no se evalúa. No hay que arreglarlo ahora; renombrar una migración ya aplicada está prohibido por la propia ficha y lo atrapa la revisión.
+- `docs/ENTORNOS.md` regla 1 dice `AAAAMMDD*_`; la regla 4 y el verificador exigen 14 dígitos. Es compatible, y se unifica la redacción en la próxima edición del documento.
+
+**Parte B (6b8440e).** La parcial contiene solo lo idéntico (charset, viewport, título, descripción). `_MetadatosSeo` queda solo en Público, `_EstilosBase` y `Estilos` no se movieron y el orden del `<head>` es el mismo. La tabla de diferencias de §13 y la comparación antes/después de cuatro rutas respaldan el «sin cambio de salida». Las 6 pruebas son útiles porque fijan el orden, no solo la presencia.
+
+**Proceso.** Sin hallazgos: respetó «sin push», no renombró migraciones y no tocó otras deudas. Las horas reales (§14) quedan por confirmar por Jorge.
