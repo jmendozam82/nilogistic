@@ -86,10 +86,74 @@ Ninguna pendiente: alcance y entrega dentro de la rama de HU-030 aprobados por J
 Ejecuta `scripts/local/verificar.ps1` en tu equipo y confirma que es claro y rápido. Tras el merge del PR único de HU-030, el siguiente merge que solo toque documentos debe mostrar `desplegar-staging` en verde y sin desplegar.
 
 ## 13. Dudas del ejecutor
-_(el ejecutor anota aquí cualquier duda o hallazgo; «Sin bloqueos» si no hay)_
+
+Sin bloqueos. Observaciones registradas:
+
+1. **Forzar despliegue en Staging:** el runbook originalmente sugeria "forzar con
+   `workflow_dispatch`", pero el job `desplegar-staging` solo se dispara con
+   `push` a `develop`; no existe esa via. Se documento en el runbook que, para
+   forzar, hay que incluir un cambio minimo en un archivo activador.
+2. **Parametro `--raiz` en `cambios_despliegue.py`:** la ficha no lo pedia, pero
+   fue necesario para que las pruebas unitarias puedan ejecutar `main` contra
+   repositorios temporales sin depender del directorio de trabajo del proceso de
+   pruebas. El CLI de CI sigue funcionando sin el parametro.
+3. **Deteccion de Python en `verificar.ps1`:** se incluyo `py` como tercer
+   candidato (despues de `python3` y `python`) porque este entorno Windows lo
+   usa. La funcion verifica que `--version` funcione antes de elegirlo, para no
+   quedarse con el alias roto de la Microsoft Store.
 
 ## 14. Informe del ejecutor
-_(archivos creados/modificados, salidas de §9, horas reales)_
+
+**Archivos creados/modificados:**
+- `scripts/local/verificar.ps1` (nuevo)
+- `docs/runbooks/verificacion-local.md` (nuevo)
+- `scripts/ci/cambios_despliegue.py` (nuevo)
+- `scripts/tests/test_scripts.py` (pruebas `DespliegueTests`)
+- `.github/workflows/ci.yml` (paso condicional en `desplegar-staging`)
+- `docs/runbooks/despliegue-y-rollback.md` (parrafo de despliegue condicionado)
+
+**Commits realizados:**
+- `chore(local): script de verificacion previa al pr (D-141)` (`1586224`)
+- `ci(despliegue): omitir despliegue sin cambios de codigo (D-141)` (`ff3e1a2`)
+
+Sin push ni PR, segun D-140.
+
+**Salidas de §9:**
+
+```
+> powershell -File scripts/local/verificar.ps1 -OmitirDal
+== Resumen ==
+Conventional Commits                               OK
+Migraciones                                        OK
+Codificacion UTF-8                                 OK
+Pruebas de scripts                                 OK
+Build de la solucion                               OK
+Tests: tests/Nilogistic.Arquitectura.Tests         OK
+Tests: tests/Nilogistic.BLL.Tests                  OK
+Tests: tests/Nilogistic.Aplicacion.Tests           OK
+Todas las comprobaciones pasaron.
+
+> py -m unittest discover -s scripts/tests
+Ran 77 tests in 5.094s
+OK
+
+> py scripts/ci/verificar_codificacion.py
+OK: 357 archivo(s) revisado(s)
+
+> py scripts/ci/cambios_despliegue.py --antes fef5ea0 --despues 1586224
+desplegar=false
+```
+
+**Prueba de fallo con BOM (archivo temporal rastreado, no commiteado):**
+```
+== Codificacion UTF-8 ==
+KO temp_bom_test.md: R1: BOM UTF-8
+...
+1 comprobacion(es) fallaron.
+Codigo de salida: 1
+```
+
+**Horas reales:** ~1:10 h (Parte A 0:40, Parte B 0:30).
 
 ## 15. Revisión de Claude
 _(la completa Claude tras revisar el diff)_
