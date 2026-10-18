@@ -162,6 +162,56 @@ El `tabindex="0"` la hace enfocable con Tab (y permite desplazarla con las flech
 expone como región y `aria-label` le da nombre accesible (sin él, axe marcaría el `role="region"`). En la
 galería, `/diseno/panel` (Solicitudes recientes) y `/diseno/componentes` (Vacantes de ejemplo) ya lo aplican.
 
+## Página Quiénes Somos (HU-041)
+
+Ruta nueva `/quienes-somos` (`QuienesSomosController`, solo vista; el texto vive en la vista, D-023). Es la
+primera página real que usa el layout público, el héroe y las bandas del Design System.
+
+### Publicación controlada (SUP-2, D-126)
+
+Mientras el contenido sea provisional la página **no se publica en Producción**. La clave
+`Contenido:QuienesSomos:Publicado` (`false` por defecto en `appsettings.json`) decide:
+
+- **Production:** `/quienes-somos` responde **404** si la clave no es `true`.
+- **Staging y Development:** visible siempre.
+
+Para publicarla cuando Jorge entregue el texto e imágenes definitivos (tarea #5, D-25):
+
+1. Reemplaza el texto provisional en `Areas/Publico/Views/QuienesSomos/Index.cshtml` (no inventes datos).
+2. Quita `ViewData["Provisional"] = true;`: desaparecen el aviso provisional y el `noindex`
+   (`_AvisoProvisional` y `_MetadatosSeo`).
+3. Pon `Contenido:QuienesSomos:Publicado` en `true` en la configuración de Producción (variable de entorno
+   `Contenido__QuienesSomos__Publicado=true` en Render).
+4. La imagen Open Graph 1200×630 (D-25) se añadirá cuando HU-068 generalice `_MetadatosSeo`.
+
+### Patrón de movimiento: `nl-revelar` (HU-041)
+
+Un único **momento focal** (entrada del contenido del héroe) más un **revelado discreto** de las bandas al
+desplazarse. Todo en `css/sitio.css` y `wwwroot/js/revelar.js`.
+
+- **Momento focal:** `@keyframes nl-entrada`, acotado a `.nl-hero--page .nl-hero__inner > *`, con retrasos de
+  0/60/120 ms por hijo. Anima `opacity` y `transform`; está por encima del pliegue y termina al cargar.
+- **Revelado:** cada banda a revelar lleva la clase `nl-revelar`. `revelar.js` (JS vanilla, sin dependencias)
+  añade `nl-revelar--oculto` solo a lo que aún no está en pantalla y la retira al entrar en el viewport
+  (`IntersectionObserver`, `threshold: 0.15`). **El contenido es visible por defecto:** sin JavaScript la
+  página se ve completa y un `focusin` revela de inmediato lo que reciba foco por teclado. La transición y el
+  desplazamiento van al **contenido interno** (`.nl-revelar > .container` y `.nl-revelar--oculto > .container`),
+  no a la banda: así el fondo de ancho completo no se mueve (sin franjas vacías entre bandas ni solape con el
+  pie, F1). Tampoco se reduce la opacidad: axe mezcla el color del texto con `opacity` casi 0 y reporta
+  `color-contrast [serious]`, así que el estado oculto **solo usa `transform`** (desplaza 16 px).
+- **Movimiento reducido:** con `prefers-reduced-motion: reduce` el script no oculta nada y `sitio.css`
+  neutraliza la animación del héroe y la transición del revelado (`nilogistic.css` ya anula las duraciones con
+  una regla `* !important`).
+- **Tokens:** reutiliza los tokens existentes `--nl-ease` y `--nl-duration-base` de `tokens.css` (la fuente
+  única es la puerta HU-036 E5: no se declaran tokens nuevos en `sitio.css`). La duración de entrada (400 ms)
+  va como valor literal y se propone al Design System como observación #11.
+- **Rejillas y desborde:** la banda de pilares usa `row gx-4 gy-5` (no `g-5`): un `--bs-gutter-x` de `3rem`
+  deja márgenes negativos de 24 px que superan el relleno del contenedor y desbordan 12 px a 360 px (mismo
+  síntoma que D-131). Mantén el gutter horizontal en `1.5rem` dentro de un `.container`.
+
+Para reutilizar el patrón, añade `nl-revelar` a las bandas que deban aparecer al hacer scroll e importa
+`revelar.js` desde la sección `Scripts` del layout público.
+
 ## Pruebas de navegador (HU-037 Pase B)
 
 Las pruebas de navegador viven en `tests/Nilogistic.Accesibilidad.Tests` (Playwright + axe, xUnit) y usan el

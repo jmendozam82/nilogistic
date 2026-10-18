@@ -16,7 +16,8 @@ public class FocoVisibleTests(NavegadorFixture navegador)
         foreach (var (ruta, descripcion) in new[]
                  {
                      (RutasNilogistic.Componentes, "la galería de componentes"),
-                     (RutasNilogistic.Panel, "el panel")
+                     (RutasNilogistic.Panel, "el panel"),
+                     (RutasNilogistic.QuienesSomos, "Quiénes Somos")
                  })
         {
             await using var pagina = await navegador.NuevaPaginaAsync(1280, 800);

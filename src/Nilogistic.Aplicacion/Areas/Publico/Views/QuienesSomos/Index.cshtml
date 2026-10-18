@@ -1,0 +1,86 @@
+@{
+    ViewData["Title"] = "Quiénes Somos";
+    ViewData["Descripcion"] = "Conoce la misión de Nilogistic, la comunidad que conecta a profesionales con empresas logísticas de Nicaragua, sus pilares y las personas que la integran.";
+    ViewData["Provisional"] = true;
+}
+<partial name="_AvisoProvisional" />
+<section class="nl-hero nl-hero--page" aria-labelledby="heroe-titulo">
+    <div class="nl-hero__media">
+        <div class="nl-photo" role="img" aria-label="Imagen provisional de la cadena logística"><span>Imagen provisional</span></div>
+    </div>
+    <div class="container nl-hero__inner">
+        <h1 id="heroe-titulo">Quiénes somos</h1>
+        <p class="nl-lead">Una comunidad que conecta a profesionales y empresas de la cadena logística de Nicaragua.</p>
+    </div>
+</section>
+<section class="nl-band" aria-labelledby="mision-titulo">
+    <div class="container-narrow">
+        <h2 id="mision-titulo">Nuestra misión</h2>
+        <p class="nl-lead">Conectar a profesionales con empresas logísticas nicaragüenses para que el talento, el conocimiento y las oportunidades circulen por toda la cadena de suministro.</p>
+        <p>Nilogistic reúne en un solo lugar a quienes trabajan en transporte, almacenamiento, comercio exterior, aduanas, distribución y las demás áreas de la cadena, de extremo a extremo.</p>
+    </div>
+</section>
+<section class="nl-band nl-band--tint nl-revelar" aria-labelledby="pilares-titulo">
+    <div class="container">
+        <div class="row gx-4 gy-5">
+            <div class="col-lg-4">
+                <h2 id="pilares-titulo">Lo que nos mueve</h2>
+            </div>
+            <div class="col-lg-8">
+                <ol class="nl-pilares">
+                    <li>
+                        <h3>Conocimiento</h3>
+                        <p>Contenido, análisis y buenas prácticas del sector para tomar mejores decisiones.</p>
+                    </li>
+                    <li>
+                        <h3>Colaboración y networking</h3>
+                        <p>Un espacio para conocer a otros profesionales y empresas, y construir relaciones de confianza.</p>
+                    </li>
+                    <li>
+                        <h3>Formación y Talento</h3>
+                        <p>Cursos y una bolsa de empleo para desarrollar carreras y encontrar el talento que las empresas necesitan.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="nl-band nl-revelar" aria-labelledby="equipo-titulo">
+    <div class="container">
+        <h2 id="equipo-titulo">Quiénes la integran</h2>
+        <p class="nl-lead">Las personas y organizaciones que hacen posible la comunidad.</p>
+        <div class="row g-4 mt-1">
+            <div class="col-md-4">
+                <article class="nl-persona">
+                    <div class="nl-photo" role="img" aria-label="Foto provisional"><span>Foto provisional</span></div>
+                    <h3 class="nl-persona__nombre">Nombre por confirmar</h3>
+                    <p class="nl-persona__rol">Rol por confirmar</p>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="nl-persona">
+                    <div class="nl-photo" role="img" aria-label="Foto provisional"><span>Foto provisional</span></div>
+                    <h3 class="nl-persona__nombre">Nombre por confirmar</h3>
+                    <p class="nl-persona__rol">Rol por confirmar</p>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="nl-persona">
+                    <div class="nl-photo" role="img" aria-label="Foto provisional"><span>Foto provisional</span></div>
+                    <h3 class="nl-persona__nombre">Nombre por confirmar</h3>
+                    <p class="nl-persona__rol">Rol por confirmar</p>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="nl-band nl-band--inverse nl-revelar" aria-labelledby="cta-titulo">
+    <div class="container">
+        <h2 id="cta-titulo">Sé parte de la comunidad</h2>
+        <p class="nl-lead">Solicita tu alta como profesional o como empresa y recibe respuesta de nuestro equipo.</p>
+        <a class="btn btn-accent btn-lg mt-3" href="/solicitar-alta">Solicitar alta</a>
+    </div>
+</section>
+@section Scripts {
+    <script src="~/js/revelar.js" asp-append-version="true" defer></script>
+}
