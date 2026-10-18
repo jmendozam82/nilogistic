@@ -1,0 +1,48 @@
+[
+  {
+    "nombre": "activacion_cuenta",
+    "version": "1.0",
+    "tipo": "transaccional",
+    "asunto": "Activa tu cuenta de Nilogistic",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre", "tipo": "texto", "ejemplo": "Jorge" },
+      { "nombre": "enlace_activacion", "tipo": "url", "ejemplo": "https://staging.nilogistic.com/cuenta/activar?t=EJEMPLO" },
+      { "nombre": "horas_vigencia", "tipo": "entero", "ejemplo": "24" }
+    ],
+    "sha256Html": "addfb1f9fcb0963c4dc3c27eab631f82596ca7040d8a1a804d5877a6644e89b5",
+    "sha256Txt": "97535b551b85b36dd8ffba3c78b63c1440585e45ba5502b28d4c514a4b1ac8e4",
+    "historial": []
+  },
+  {
+    "nombre": "recuperacion_contrasena",
+    "version": "1.0",
+    "tipo": "transaccional",
+    "asunto": "Restablece tu contraseña de Nilogistic",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre", "tipo": "texto", "ejemplo": "Jorge" },
+      { "nombre": "enlace_recuperacion", "tipo": "url", "ejemplo": "https://staging.nilogistic.com/cuenta/recuperar?t=EJEMPLO" },
+      { "nombre": "minutos_vigencia", "tipo": "entero", "ejemplo": "30" }
+    ],
+    "sha256Html": "d69bb32b50aa2284cc928ecb63c21137520f0c1b74a0779c942c1ee2e522bb2d",
+    "sha256Txt": "a57a5d16203d961eab2c0d3207f775e610c5572c8572f6eb79dc964dbed4d92d",
+    "historial": []
+  },
+  {
+    "nombre": "nueva_solicitud",
+    "version": "1.0",
+    "tipo": "transaccional",
+    "asunto": "Nueva solicitud de alta pendiente de revisión",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre_solicitante", "tipo": "texto", "ejemplo": "Jorge Mendoza" },
+      { "nombre": "empresa", "tipo": "texto", "ejemplo": "Transportes del Pacífico" },
+      { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "18 de octubre de 2026, 14:30" },
+      { "nombre": "enlace_revision", "tipo": "url", "ejemplo": "https://staging.nilogistic.com/admin/solicitudes/EJEMPLO" }
+    ],
+    "sha256Html": "e12d0a3a788220233683811cc516c4f044846b2fed888608cc1fa9a70cf23a07",
+    "sha256Txt": "66375ab1fd3c8d77078c05ebd04f05667d67cec542115ca6f1c91d772283b52a",
+    "historial": []
+  }
+]

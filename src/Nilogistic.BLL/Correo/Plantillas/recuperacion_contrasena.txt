@@ -1,0 +1,19 @@
+Restablece tu contraseña de Nilogistic
+
+Hola {{nombre}},
+
+Recibimos una solicitud para restablecer la contraseña de tu cuenta. Usa el botón para elegir una nueva:
+
+{{enlace_recuperacion}}
+
+Este enlace vence en {{minutos_vigencia}} minutos y solo puede usarse una vez. Si vence, podrás pedir uno nuevo desde la pantalla de inicio de sesión.
+
+Si no pediste este cambio, ignora este correo: tu contraseña no cambiará.
+
+Equipo Nilogistic
+
+--
+Recibes este correo porque se realizó una gestión con esta dirección en nilogistic.com. Este mensaje se envió desde una cuenta que no recibe respuestas (no-reply@nilogistic.com); para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
+© 2026 Nilogistic · Managua, Nicaragua

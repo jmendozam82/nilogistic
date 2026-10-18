@@ -17,6 +17,9 @@ public sealed class OpcionesCorreo
     /// <summary>Apaga el envio real y usa el buzon (SUP-1); prohibido en Produccion.</summary>
     public bool ForzarBuzon { get; set; }
 
+    /// <summary>URL base publica del sitio para enlaces e imagenes de las plantillas (HU-030).</summary>
+    public string UrlBaseSitio { get; set; } = "https://localhost";
+
     public RemitentesCorreo Remitentes { get; set; } = new();
 
     /// <summary>Mensajes reservados por ciclo; se acota a 1..100.</summary>
