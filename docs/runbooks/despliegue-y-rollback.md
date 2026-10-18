@@ -141,6 +141,24 @@ Ensayo obligatorio antes de dar por buena la HU; se anota en la sección 14 de l
 
 **Lección de E3 (limpieza):** una migración que falla **no** queda registrada en `supabase_migrations.schema_migrations`, así que `supabase db push` la reintentaría en cada despliegue. Ante una migración de ensayo fallida, primero se corrige el estado en la base (DROP del marcador con el rol propietario) y **después** se revierte el commit de la migración; si se hace al revés, el siguiente despliegue vuelve a fallar.
 
+## Despliegue condicionado (D-141)
+
+El job `desplegar-staging` detecta automaticamente si el push contiene cambios que
+afecten la aplicacion o la infraestructura: archivos bajo `src/`, `supabase/`,
+`Dockerfile`, `.dockerignore`, `render.yaml`, `global.json`,
+`Directory.Build.props`, `Directory.Packages.props` o cualquier `.slnx`.
+
+Si el push solo toca documentacion (`docs/`), estado del proyecto, scripts de CI,
+pruebas o configuracion de GitHub Actions, el job termina en verde **sin aplicar
+migraciones ni disparar el despliegue en Render**. Esto reduce despliegues
+innecesarios y el uso de recursos.
+
+El job `desplegar-staging` solo se dispara con un push a `develop`; no hay una
+via `workflow_dispatch` para forzarlo. Si por algun motivo se necesita desplegar
+despues de un cambio que no activa el despliegue, se debe incluir al menos una
+modificacion minima en algun archivo que lo active (por ejemplo, un comentario
+en codigo fuente o una correccion de migracion).
+
 ## Límites conocidos
 
 - El primer despliegue con verificación de commit puede fallar el sondeo: mientras Render sirva la
