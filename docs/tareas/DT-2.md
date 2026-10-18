@@ -8,8 +8,8 @@
 |---|---|
 | Tarea | DT-2 (D-139) |
 | Sprint / Release | S1 (higiene antes de S2) / R1 |
-| Rama | `chore/DT-2-codificacion`, desde `develop` actualizado; **un solo PR** |
-| Dependencias | PR de `fix/estado-utf8` mergeado en `develop` (si no, el verificador fallará con razón sobre `ESTADO_PROYECTO.md`) |
+| Rama | `feature/HU-030` (D-140): DT-2 es el **primer commit de implementación** de esa rama, antes de HU-030. **No crees otra rama, no hagas push ni abras PR:** el push y el PR únicos se hacen al cerrar HU-030 |
+| Dependencias | ninguna (`fix/estado-utf8` ya está en `develop`) |
 | Tamaño | S |
 | Modelo asignado | Kimi K2.7 Code (prueba) |
 
@@ -74,13 +74,13 @@ python3 scripts/ci/validar_conventional_commits.py --base develop
 Todo en verde. Pega las salidas en §14.
 
 ## 10. Entrega
-Un commit y un PR: `chore(ci): verificar codificacion utf-8 de los archivos (D-139)`. Sin push; avisa a Jorge para la revisión de Claude. Registra las **horas reales** en §14.
+Un commit en la rama `feature/HU-030`: `chore(ci): verificar codificacion utf-8 de los archivos (D-139)`. **Sin push y sin PR** (D-140); avisa a Jorge para la revisión de Claude. Registra las **horas reales** en §14.
 
 ## 11. Aprobaciones
-Ninguna pendiente: alcance y ejecutor aprobados por Jorge el 2026-10-18.
+Ninguna pendiente: alcance, ejecutor y entrega dentro de la rama de HU-030 aprobados por Jorge el 2026-10-18 (D-140).
 
 ## 12. Verificación de Jorge
-Tras el merge: CI y `desplegar-staging` verdes. Opcional: guarda un archivo `.md` con BOM en una rama de prueba y comprueba que el PR se pone rojo.
+Se comprueba en local con el resto de HU-030 y, tras el merge del PR único, en la CI. Opcional: guarda un archivo `.md` con BOM y comprueba que `python3 scripts/ci/verificar_codificacion.py` falla.
 
 ## 13. Dudas del ejecutor
 _(el ejecutor anota aquí cualquier duda o hallazgo; «Sin bloqueos» si no hay)_
