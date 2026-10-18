@@ -36,11 +36,13 @@ public sealed class ServicioPlantillasCorreo(
     {
         if (!EsUrlBaseValida(urlBase))
         {
+            log.LogWarning("Plantilla {Plantilla} rechazada: url_base_invalida", plantilla);
             return Rechazada("url_base_invalida");
         }
 
         if (!catalogo.Plantillas.TryGetValue(plantilla, out var meta))
         {
+            log.LogWarning("Plantilla {Plantilla} rechazada: plantilla_desconocida", plantilla);
             return Rechazada("plantilla_desconocida");
         }
 
@@ -59,17 +61,6 @@ public sealed class ServicioPlantillasCorreo(
         var asunto = Sustituir(meta.Asunto, valores, codificar: false);
         var html = Sustituir(meta.Html, valores, codificar: true);
         var texto = Sustituir(meta.Texto, valores, codificar: false);
-
-        var restantes = Marcador.Matches(html)
-            .Concat(Marcador.Matches(texto))
-            .Concat(Marcador.Matches(asunto))
-            .Where(m => !string.Equals(m.Groups[1].Value, "url_base", StringComparison.Ordinal))
-            .ToList();
-        if (restantes.Count > 0)
-        {
-            throw new InvalidOperationException(
-                $"La plantilla '{plantilla}' dejo marcadores sin sustituir tras la validacion.");
-        }
 
         return new ResultadoPlantilla(
             EstadoPlantilla.Generada,

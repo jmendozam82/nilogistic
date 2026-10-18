@@ -45,6 +45,21 @@ public class CatalogoPlantillasTests
 
     [Fact]
     [Hu("HU-030", "E5")]
+    public void Hash_normaliza_crlf_a_lf_antes_de_validar()
+    {
+        var contenidoLf = "linea1\nlinea2\n";
+        var contenidoCrlf = "linea1\r\nlinea2\r\n";
+        var hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(contenidoLf))).ToLowerInvariant();
+
+        var accionLf = () => CatalogoPlantillas.ValidarHash("prueba.txt", contenidoLf, hash);
+        var accionCrlf = () => CatalogoPlantillas.ValidarHash("prueba.txt", contenidoCrlf, hash);
+
+        accionLf.Should().NotThrow();
+        accionCrlf.Should().NotThrow();
+    }
+
+    [Fact]
+    [Hu("HU-030", "E5")]
     public void Hash_incorrecto_lanza_al_arrancar()
     {
         var contenido = "contenido de prueba";
@@ -54,5 +69,44 @@ public class CatalogoPlantillasTests
 
         accion.Should().Throw<InvalidOperationException>()
             .WithMessage("*hash SHA-256*no coincide*");
+    }
+
+    [Fact]
+    [Hu("HU-030", "E5")]
+    public void Version_inicial_distinta_de_1_0_lanza_sin_historial()
+    {
+        var accion = () => CatalogoPlantillas.ValidarVersionYHistorial("1.1", []);
+
+        accion.Should().Throw<InvalidOperationException>()
+            .WithMessage("*Sin historial*version inicial*1.0*");
+    }
+
+    [Fact]
+    [Hu("HU-030", "E5")]
+    public void Version_con_historial_debe_ser_mayor_que_la_ultima()
+    {
+        var accion = () => CatalogoPlantillas.ValidarVersionYHistorial("1.1", ["1.0"]);
+
+        accion.Should().NotThrow();
+    }
+
+    [Fact]
+    [Hu("HU-030", "E5")]
+    public void Version_igual_a_la_ultima_del_historial_lanza()
+    {
+        var accion = () => CatalogoPlantillas.ValidarVersionYHistorial("1.0", ["1.0"]);
+
+        accion.Should().Throw<InvalidOperationException>()
+            .WithMessage("*debe ser mayor que la ultima del historial*");
+    }
+
+    [Fact]
+    [Hu("HU-030", "E5")]
+    public void Version_menor_que_la_ultima_del_historial_lanza()
+    {
+        var accion = () => CatalogoPlantillas.ValidarVersionYHistorial("0.9", ["1.0"]);
+
+        accion.Should().Throw<InvalidOperationException>()
+            .WithMessage("*debe ser mayor que la ultima del historial*");
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -20,7 +21,8 @@ public class ServicioPlantillasCorreoTests
     private static ServicioPlantillasCorreo Crear(
         IServicioCorreo? correo = null,
         string urlBase = UrlBase,
-        bool desarrollo = false)
+        bool desarrollo = false,
+        ILogger<ServicioPlantillasCorreo>? logger = null)
     {
         var catalogo = new CatalogoPlantillas();
         var entorno = new Mock<IHostEnvironment>();
@@ -31,7 +33,7 @@ public class ServicioPlantillasCorreoTests
             correo ?? Mock.Of<IServicioCorreo>(),
             opciones,
             entorno.Object,
-            NullLogger<ServicioPlantillasCorreo>.Instance);
+            logger ?? NullLogger<ServicioPlantillasCorreo>.Instance);
     }
 
     [Fact]
@@ -309,5 +311,85 @@ public class ServicioPlantillasCorreoTests
         resultado.Estado.Should().Be(EstadoPlantilla.Generada);
         resultado.Contenido!.CuerpoHtml.Should().Contain("Jorge Mendoza");
         resultado.Contenido.CuerpoTexto.Should().Contain("Transportes del Pacífico");
+    }
+
+    [Fact]
+    [Hu("HU-030", "E2")]
+    public void Valor_que_contiene_marcador_se_trata_como_texto_literal_sin_excepcion()
+    {
+        var servicio = Crear();
+        var variables = new Dictionary<string, string>
+        {
+            ["nombre"] = "{{abc}}",
+            ["enlace_activacion"] = "https://staging.nilogistic.com/activar?t=abc",
+            ["horas_vigencia"] = "24"
+        };
+
+        var resultado = servicio.Renderizar("activacion_cuenta", variables, UrlBase);
+
+        resultado.Estado.Should().Be(EstadoPlantilla.Generada);
+        resultado.Contenido!.CuerpoHtml.Should().Contain("Hola {{abc}},");
+    }
+
+    [Fact]
+    [Hu("HU-030", "E2")]
+    public void Plantilla_desconocida_registra_warning()
+    {
+        var fakeLogger = new FakeLogger();
+        var servicio = Crear(logger: fakeLogger);
+        var variables = new Dictionary<string, string> { ["nombre"] = "Jorge" };
+
+        var resultado = servicio.Renderizar("no_existe", variables, UrlBase);
+
+        resultado.Estado.Should().Be(EstadoPlantilla.Rechazada);
+        resultado.Motivo.Should().Be("plantilla_desconocida");
+        fakeLogger.Logs.Should().ContainSingle(x =>
+            x.Level == LogLevel.Warning && x.Message.Contains("plantilla_desconocida"));
+    }
+
+    [Fact]
+    [Hu("HU-030", "E2")]
+    public void Url_base_invalida_registra_warning()
+    {
+        var fakeLogger = new FakeLogger();
+        var servicio = Crear(logger: fakeLogger);
+        var variables = new Dictionary<string, string>
+        {
+            ["nombre"] = "Jorge",
+            ["enlace_activacion"] = "https://staging.nilogistic.com/activar?t=abc",
+            ["horas_vigencia"] = "24"
+        };
+
+        var resultado = servicio.Renderizar("activacion_cuenta", variables, "no-es-una-url");
+
+        resultado.Estado.Should().Be(EstadoPlantilla.Rechazada);
+        resultado.Motivo.Should().Be("url_base_invalida");
+        fakeLogger.Logs.Should().ContainSingle(x =>
+            x.Level == LogLevel.Warning && x.Message.Contains("url_base_invalida"));
+    }
+
+    private sealed class FakeLogger : ILogger<ServicioPlantillasCorreo>
+    {
+        public List<(LogLevel Level, string Message)> Logs { get; } = [];
+
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => NullScope.Instance;
+
+        public bool IsEnabled(LogLevel logLevel) => true;
+
+        public void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception? exception,
+            Func<TState, Exception?, string> formatter)
+        {
+            Logs.Add((logLevel, formatter(state, exception)));
+        }
+
+        private sealed class NullScope : IDisposable
+        {
+            public static readonly NullScope Instance = new();
+            public void Dispose() { }
+        }
     }
 }
