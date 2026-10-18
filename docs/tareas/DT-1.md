@@ -80,14 +80,45 @@ Ninguna pendiente: el alcance y las dos deudas fueron aprobados por Jorge el 202
 Tras el merge de cada PR: CI y `desplegar-staging` verdes; abre `/quienes-somos` y `/diseno/panel?sesion=administrador` y comprueba que se ven igual que antes.
 
 ## 13. Dudas del ejecutor
-_(el ejecutor completa esta sección; incluye la tabla de diferencias del `<head>` y cualquier archivo de migración que no cumpla el patrón)_
+Sin bloqueos ni supuestos nuevos.
+
+- **Parte A:** los 8 archivos actuales de `supabase/migrations` ya cumplen `^\d{14}_[a-z0-9_]+\.sql$` y tienen marcas únicas; no hubo que renombrar ninguno (son migraciones ya aplicadas), así que la Regla 1 se aplica a todo el directorio sin excepciones.
+- **Parte B:** diferencias del `<head>` antes de extraer. Solo se extrajo lo idéntico; lo que difiere se quedó en cada layout:
+
+| Elemento | `_LayoutPublico` | `_LayoutCuenta` | `_LayoutPanel` | Decisión |
+|---|---|---|---|---|
+| `<meta charset="utf-8">` | ✅ | ✅ | ✅ | a `_CabezaComun` |
+| `<meta name="viewport" …>` | ✅ | ✅ | ✅ | a `_CabezaComun` |
+| `<title>` (patrón «Título · Nilogistic»; «Nilogistic» si no hay título) | ✅ | ✅ | ✅ | a `_CabezaComun` |
+| `<meta name="description">` (si existe) | ✅ | ✅ | ✅ | a `_CabezaComun` |
+| `_MetadatosSeo` | ✅ | — | — | se queda solo en `_LayoutPublico` (después de `_CabezaComun`) |
+| `_EstilosBase` | ✅ | ✅ | ✅ | se queda en cada layout |
+| `@RenderSection("Estilos")` | ✅ | ✅ | ✅ | se queda en cada layout |
 
 ## 14. Informe del ejecutor
-- Archivos creados/modificados:
-- Resultado de pruebas y de la CI:
-- Captura antes/después del `<head>`:
-- Horas reales:
-- Deuda técnica detectada:
+
+### Parte A — D-21 (verificador de migraciones)
+- Archivos creados/modificados: `scripts/ci/verificar_migraciones.py` (nuevo), `scripts/tests/test_scripts.py` (+11 casos), `.github/workflows/ci.yml` (job `sql`: `fetch-depth: 0` y paso «Verificar nombre y orden de migraciones (D-21)» antes de aplicar), `docs/ENTORNOS.md` (regla 4 del flujo de migraciones) y `ESTADO_PROYECTO.md` (D-21).
+- Resultado de pruebas: `python -m unittest discover -s scripts/tests` → **OK (52 casos)**; esperado en los tres escenarios de la Regla 3 (anterior/igual fallan, posterior pasa), nombre mal formado, marcas duplicadas y error de uso (directorio inexistente y `--base` inválida → código 2). El verificador pasa sobre las 8 migraciones reales con y sin `--base`.
+- CI: pendiente del run del PR (job `sql`).
+
+### Parte B — D-128 (parcial `_CabezaComun`)
+- Archivos creados/modificados: `Views/Shared/_CabezaComun.cshtml` (nuevo); `_LayoutPublico.cshtml`, `_LayoutCuenta.cshtml`, `_LayoutPanel.cshtml` (invocan `<partial name="_CabezaComun" />`, sin cambiar el orden); `tests/Nilogistic.Aplicacion.Tests/Diseno/CabezaComunTests.cs` (nuevo) y `ESTADO_PROYECTO.md` (D-128).
+- Captura antes/después del `<head>` de `/diseno/publico`, `/diseno/cuenta`, `/diseno/panel?sesion=administrador` y `/quienes-somos`: **idénticos salvo espacios en blanco** (comparados normalizando el espacio entre etiquetas; la secuencia de elementos es byte a byte la misma). Capturas crudas en `%TEMP%\opencode\heads_before` y `heads_after` de la sesión de ejecución.
+- Pruebas: `CabezaComunTests` (**+6**: un título con patrón + charset + viewport, y orden preservado, por cada uno de los tres layouts). **213 en Aplicación** (eran 207). `CspLayoutsTests` y `LayoutResponsivoTests` siguen en verde.
+- Horas reales: por confirmar (Jorge).
+- Deuda técnica detectada: ninguna.
 
 ## 15. Revisión de Claude
-_(la completa Claude tras revisar el diff)_
+
+**Veredicto: aprobada A y B (18/10/2026), pendiente del run verde de cada PR.**
+
+**Parte A (665acdc).** Cumple las reglas 1 a 3, usa funciones puras con 11 casos y el paso va en el job `sql` sin `continue-on-error`, `always()` ni `failure()` (invariante de HU-006 E3). Comprobé el verificador sobre las 8 migraciones reales, con y sin `--base`: OK. La salida de error de uso (código 2) cubre directorio inexistente y `--base` inválida.
+
+Observaciones no bloqueantes:
+- La regla 3 usa `--diff-filter=A`: una migración **renombrada** (R) no se evalúa. No hay que arreglarlo ahora; renombrar una migración ya aplicada está prohibido por la propia ficha y lo atrapa la revisión.
+- `docs/ENTORNOS.md` regla 1 dice `AAAAMMDD*_`; la regla 4 y el verificador exigen 14 dígitos. Es compatible, y se unifica la redacción en la próxima edición del documento.
+
+**Parte B (6b8440e).** La parcial contiene solo lo idéntico (charset, viewport, título, descripción). `_MetadatosSeo` queda solo en Público, `_EstilosBase` y `Estilos` no se movieron y el orden del `<head>` es el mismo. La tabla de diferencias de §13 y la comparación antes/después de cuatro rutas respaldan el «sin cambio de salida». Las 6 pruebas son útiles porque fijan el orden, no solo la presencia.
+
+**Proceso.** Sin hallazgos: respetó «sin push», no renombró migraciones y no tocó otras deudas. Las horas reales (§14) quedan por confirmar por Jorge.
