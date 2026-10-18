@@ -156,4 +156,9 @@ Codigo de salida: 1
 **Horas reales:** ~1:10 h (Parte A 0:40, Parte B 0:30).
 
 ## 15. Revisión de Claude
-_(la completa Claude tras revisar el diff)_
+**2026-10-18 · Aprobada.** Commits 1586224, ff3e1a2 y 2c9e555 (Kimi K2.7 Code).
+- `cambios_despliegue.py`: función pura `requiere_despliegue` separada de git; SHA nulo o fallo de git -> despliega (valor seguro); nombres en español. Correcto.
+- `ci.yml`: `id: cambios` y `if: steps.cambios.outputs.desplegar == 'true'` en cada paso de Staging; paso final de resumen cuando es `false`; el job termina en verde sin desplegar. Sin `paths-ignore`, `continue-on-error`, `always()` ni `failure()` (invariante HU-006 E3 intacto).
+- `verificar.ps1`: réplica de la CI (commits, migraciones, codificación, scripts, build Release con `-warnaserror`, pruebas por proyecto, resumen y código de salida). Correcto.
+- Observaciones menores, sin acción: regla de despliegue por prefijos `src/` y `supabase/` (un proyecto nuevo fuera de `src/` exigiría ajustarla); `Ejecutar` devuelve un valor a la tubería, inocuo.
+- Pendiente de la ejecución real: Jorge corre `verificar.ps1` en local y confirma las horas de DT-3 contra git al cierre de HU-030.
