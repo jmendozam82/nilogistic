@@ -8,7 +8,8 @@ internal static class RutasNilogistic
     public const string Cuenta = "/diseno/cuenta";
     public const string Panel = "/diseno/panel?sesion=administrador";
     public const string Componentes = "/diseno/componentes";
+    public const string QuienesSomos = "/quienes-somos";
 
-    /// <summary>Las cinco páginas del apartado 4.2.3 de la ficha.</summary>
-    public static readonly IReadOnlyList<string> Todas = [Inicio, Publico, Cuenta, Panel, Componentes];
+    /// <summary>Las cinco páginas del apartado 4.2.3 de la ficha más Quiénes Somos (HU-041).</summary>
+    public static readonly IReadOnlyList<string> Todas = [Inicio, Publico, Cuenta, Panel, Componentes, QuienesSomos];
 }

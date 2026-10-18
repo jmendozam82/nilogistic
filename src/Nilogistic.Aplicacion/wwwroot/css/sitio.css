@@ -54,3 +54,106 @@
 .nl-panel__side :focus-visible {
   outline-color: var(--nl-focus-ring-on-dark);
 }
+
+/* ---------- Movimiento (HU-041) ----------
+   Reutiliza los tokens de movimiento de tokens.css (--nl-ease, --nl-duration-base) para respetar la
+   fuente única (HU-036 E5). La duración de entrada del héroe (400 ms) aún no tiene token propio: viaja
+   como valor literal y se propone al Design System como observación #11. El contenido es visible por
+   defecto: solo revelar.js añade .nl-revelar--oculto, de modo que la página funciona sin JavaScript.
+   Con movimiento reducido, nilogistic.css ya anula transition-duration y animation-duration (regla
+   * !important), y el script no oculta nada. */
+
+/* Momento focal: entrada del contenido del héroe de una página interna. */
+@keyframes nl-entrada {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.nl-hero--page .nl-hero__inner > * {
+  animation: nl-entrada 400ms var(--nl-ease) both;
+}
+
+.nl-hero--page .nl-hero__inner > :nth-child(2) { animation-delay: 60ms; }
+.nl-hero--page .nl-hero__inner > :nth-child(3) { animation-delay: 120ms; }
+
+/* Revelado al desplazarse de las bandas (2 en adelante). Solo se anima el desplazamiento, nunca la
+   opacidad: ocultar texto con opacity 0 lo deja en el árbol de accesibilidad con contraste nulo y axe
+   lo marca como color-contrast serio (hallazgo de la validación de navegador, HU-041 §13). */
+.nl-revelar {
+  transition: transform var(--nl-duration-base) var(--nl-ease);
+}
+
+.nl-revelar--oculto {
+  transform: translateY(16px);
+}
+
+/* Con movimiento reducido, el héroe y el revelado no se mueven. nilogistic.css ya anula
+   transition-duration y animation-duration con una regla * !important; esto lo deja explícito y
+   co-locado con los componentes nuevos (el script no añade .nl-revelar--oculto en ese caso). */
+@media (prefers-reduced-motion: reduce) {
+  .nl-hero--page .nl-hero__inner > * {
+    animation: none;
+  }
+
+  .nl-revelar {
+    transition: none;
+  }
+
+  .nl-revelar--oculto {
+    transform: none;
+  }
+}
+
+/* ---------- Lista editorial de pilares (HU-041) ---------- */
+.nl-pilares {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nl-pilares > li {
+  padding-block: var(--nl-space-5);
+  border-top: 1px solid var(--nl-color-border);
+}
+
+.nl-pilares > li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.nl-pilares h3 {
+  margin: 0 0 var(--nl-space-2);
+}
+
+.nl-pilares p {
+  margin: 0;
+  color: var(--nl-color-text-muted);
+}
+
+/* ---------- Tarjeta de persona (HU-041) ---------- */
+.nl-persona {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nl-space-3);
+  height: 100%;
+}
+
+.nl-persona .nl-photo {
+  aspect-ratio: 1 / 1;
+}
+
+.nl-persona .nl-photo::before {
+  content: none;
+}
+
+.nl-persona__nombre {
+  font-family: var(--nl-font-heading);
+  font-size: var(--nl-fs-xl);
+  line-height: var(--nl-lh-snug);
+  margin: 0;
+}
+
+.nl-persona__rol {
+  margin: 0;
+  color: var(--nl-color-text-muted);
+}

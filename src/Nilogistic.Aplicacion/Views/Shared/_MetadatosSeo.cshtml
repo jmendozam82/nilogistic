@@ -1,0 +1,26 @@
+@{
+    // Metadatos SEO y Open Graph mínimos (HU-041 E4, SUP-3). Se invoca desde _LayoutPublico
+    // después del <title> y de <meta name="description">. Sin og:image: la imagen 1200×630 es la
+    // deuda D-25 y HU-068 completará el bloque. La URL absoluta usa esquema y host de la petición
+    // (cabeceras reenviadas ya configuradas); nunca incluye la cadena de consulta.
+    var peticion = Context.Request;
+    var urlAbsoluta = $"{peticion.Scheme}://{peticion.Host}{peticion.PathBase}{peticion.Path}";
+    var titulo = ViewData["Title"] as string;
+    var tituloCompleto = string.IsNullOrEmpty(titulo) ? "Nilogistic" : $"{titulo} · Nilogistic";
+    var descripcion = ViewData["Descripcion"] as string;
+    var provisional = ViewData["Provisional"] is bool esProvisional && esProvisional;
+}
+<link rel="canonical" href="@urlAbsoluta">
+<meta property="og:url" content="@urlAbsoluta">
+<meta property="og:title" content="@tituloCompleto">
+@if (!string.IsNullOrEmpty(descripcion))
+{
+    <meta property="og:description" content="@descripcion">
+}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Nilogistic">
+<meta property="og:locale" content="es_LA">
+@if (provisional)
+{
+    <meta name="robots" content="noindex, nofollow">
+}

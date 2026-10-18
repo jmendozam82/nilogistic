@@ -56,3 +56,8 @@ HU-037 E1
 HU-037 E2
 HU-037 E5
 # HU-037 Pase A: E3 (FormulariosAccesiblesTests, AngleSharp sobre /diseno/componentes) y E4 (ContrasteTokensTests, pares de tokens.css); la galeria y el arreglo del menu del panel en movil. Pase B: E1 (SaltarContenidoTests, SinDesbordeHorizontalTests), E2 (FocoVisibleTests, MenuMovilTecladoTests) y E5 (AxeTests, MovimientoReducidoTests) con Playwright + axe; job accesibilidad informativo en CI (SUP-3). Evidencia en docs/tareas/HU-037.md, seccion 14.
+HU-041 E1
+HU-041 E2
+HU-041 E3
+HU-041 E4
+# HU-041 E1-E4: estructurales en Aplicacion (Publico/QuienesSomosTests, host + AngleSharp sobre /quienes-somos). E3 se cierra ademas en navegador (SinDesbordeHorizontalTests, 360/768/1280) y E2/E4 de accesibilidad con AxeTests; el movimiento reducido se comprueba en MovimientoReducidoTests. Adelantada de S2 a S1 (D-133). Evidencia en docs/tareas/HU-041.md, seccion 14.
