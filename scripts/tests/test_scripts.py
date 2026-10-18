@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.join(RAIZ, "trazabilidad"))
 import verificar_cobertura as vc  # noqa: E402
 import escenarios_sin_prueba as esp  # noqa: E402
 import validar_conventional_commits as cvc  # noqa: E402
+import verificar_migraciones as vm  # noqa: E402
 
 
 def escribir(ruta, texto):
@@ -165,6 +166,61 @@ class ConventionalCommitsTests(unittest.TestCase):
 
         self.assertIn("fix: trabajo en la rama", mensajes)
         self.assertNotIn("Merge branch 'rama'", mensajes)
+
+
+class MigracionesTests(unittest.TestCase):
+    def test_acepta_un_nombre_bien_formado(self):
+        self.assertEqual(vm.validar_nombres(["20261109000100_extensiones_y_esquemas.sql"]), [])
+
+    def test_rechaza_nombres_mal_formados(self):
+        errores = vm.validar_nombres(["20261109000100_uno.sql", "sin_formato.sql", "2026_corta.sql"])
+        self.assertEqual(len(errores), 2)
+        self.assertTrue(all("regla 1" in e for e in errores))
+
+    def test_rechaza_marcas_de_tiempo_duplicadas(self):
+        errores = vm.validar_nombres(
+            ["20261109000100_uno.sql", "20261109000100_dos.sql", "20261109000200_tres.sql"]
+        )
+        self.assertEqual(len(errores), 1)
+        self.assertIn("regla 2", errores[0])
+
+    def test_orden_rechaza_migracion_anterior(self):
+        errores = vm.validar_orden(["20261109000900_ultima.sql"], ["20261109000100_vieja.sql"])
+        self.assertEqual(len(errores), 1)
+        self.assertIn("regla 3", errores[0])
+
+    def test_orden_rechaza_migracion_igual(self):
+        errores = vm.validar_orden(["20261109000900_ultima.sql"], ["20261109000900_otra.sql"])
+        self.assertEqual(len(errores), 1)
+        self.assertIn("regla 3", errores[0])
+
+    def test_orden_acepta_migracion_posterior(self):
+        self.assertEqual(
+            vm.validar_orden(["20261109000900_ultima.sql"], ["20261109001000_nueva.sql"]), []
+        )
+
+    def test_orden_sin_existentes_no_restringe(self):
+        self.assertEqual(vm.validar_orden([], ["20261109000100_primera.sql"]), [])
+
+    def test_main_pasa_con_migraciones_correctas(self):
+        with tempfile.TemporaryDirectory() as d:
+            escribir(os.path.join(d, "20261109000100_a.sql"), "")
+            escribir(os.path.join(d, "20261109000200_b.sql"), "")
+            self.assertEqual(vm.main(["--directorio", d]), 0)
+
+    def test_main_falla_con_nombre_mal_formado(self):
+        with tempfile.TemporaryDirectory() as d:
+            escribir(os.path.join(d, "20261109000100_a.sql"), "")
+            escribir(os.path.join(d, "malo.sql"), "")
+            self.assertEqual(vm.main(["--directorio", d]), 1)
+
+    def test_main_error_si_no_existe_el_directorio(self):
+        self.assertEqual(vm.main(["--directorio", "no/existe/jamas"]), 2)
+
+    def test_main_error_si_la_base_no_existe(self):
+        with tempfile.TemporaryDirectory() as d:
+            escribir(os.path.join(d, "20261109000100_a.sql"), "")
+            self.assertEqual(vm.main(["--directorio", d, "--base", "ref_que_no_existe"]), 2)
 
 
 if __name__ == "__main__":

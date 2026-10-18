@@ -166,6 +166,16 @@ jobs:
           --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verificar nombre y orden de migraciones (D-21)
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python3 scripts/ci/verificar_migraciones.py --directorio supabase/migrations --base "origin/${{ github.base_ref }}"
+          else
+            python3 scripts/ci/verificar_migraciones.py --directorio supabase/migrations
+          fi
       - name: Aplicar migraciones dos veces (idempotencia, psql -1 transaccional)
         env:
           PGPASSWORD: ci
