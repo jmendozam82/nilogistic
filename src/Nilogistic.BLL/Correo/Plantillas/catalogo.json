@@ -44,5 +44,116 @@
     "sha256Html": "e12d0a3a788220233683811cc516c4f044846b2fed888608cc1fa9a70cf23a07",
     "sha256Txt": "66375ab1fd3c8d77078c05ebd04f05667d67cec542115ca6f1c91d772283b52a",
     "historial": []
+  },
+  {
+    "nombre": "solicitud_recibida",
+    "version": "1.0",
+    "tipo": "aviso",
+    "asunto": "Recibimos tu solicitud de alta",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre", "tipo": "texto", "ejemplo": "Jorge" }
+    ],
+    "sha256Html": "7613d7d4ee8b7d40956d98df312230fd27e55b4a2cc8374192b990db98ac9178",
+    "sha256Txt": "08466b46c01be71e33066bc0813a32c6e80610ba84473c09056768d853833137",
+    "historial": []
+  },
+  {
+    "nombre": "solicitud_rechazada",
+    "version": "1.0",
+    "tipo": "aviso",
+    "asunto": "Sobre tu solicitud de alta en Nilogistic",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre", "tipo": "texto", "ejemplo": "Jorge" },
+      { "nombre": "motivo", "tipo": "texto", "ejemplo": "Falta documentación requerida" }
+    ],
+    "sha256Html": "c798872bdde88348625d583934e5bca18575b080e19a88a215338099dde250d8",
+    "sha256Txt": "4bc6f43be884eb997ccc8ebb06c439d10b721852a8968f1af4a82cdeca3574bb",
+    "historial": []
+  },
+  {
+    "nombre": "contrasena_cambiada",
+    "version": "1.0",
+    "tipo": "aviso",
+    "asunto": "Cambiaste tu contraseña de Nilogistic",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre", "tipo": "texto", "ejemplo": "Jorge" },
+      { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "18 de octubre de 2026, 14:30" },
+      { "nombre": "dispositivo", "tipo": "texto", "ejemplo": "Chrome en Windows" },
+      { "nombre": "ubicacion_aproximada", "tipo": "texto", "ejemplo": "Managua, Nicaragua" },
+      { "nombre": "enlace_recuperacion", "tipo": "url", "ejemplo": "https://staging.nilogistic.com/cuenta/recuperar?t=EJEMPLO" }
+    ],
+    "sha256Html": "526d2bc23343730c00fe4a6c2f8bcf4de5d8ad7a6f9e617f375e523a04057eaf",
+    "sha256Txt": "940fae34f0977802cc1b7988e9d00bf7e0c7bb77035da3632158faf7fc974df2",
+    "historial": []
+  },
+  {
+    "nombre": "cuenta_bloqueada",
+    "version": "1.0",
+    "tipo": "aviso",
+    "asunto": "Bloqueamos tu cuenta de Nilogistic temporalmente",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre", "tipo": "texto", "ejemplo": "Jorge" },
+      { "nombre": "minutos_bloqueo", "tipo": "entero", "ejemplo": "30" },
+      { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "18 de octubre de 2026, 14:30" },
+      { "nombre": "dispositivo", "tipo": "texto", "ejemplo": "Chrome en Windows" },
+      { "nombre": "ubicacion_aproximada", "tipo": "texto", "ejemplo": "Managua, Nicaragua" },
+      { "nombre": "enlace_recuperacion", "tipo": "url", "ejemplo": "https://staging.nilogistic.com/cuenta/recuperar?t=EJEMPLO" }
+    ],
+    "sha256Html": "a7bc92f2eabe6428af04544b098b56b48c985d7d2eaae309b41d1bd58ce66c11",
+    "sha256Txt": "e1c4b3025b4a74cfee775a0823798246f1f3d2e911e2279260cc6ab41ed287e6",
+    "historial": []
+  },
+  {
+    "nombre": "2fa_activado",
+    "version": "1.0",
+    "tipo": "aviso",
+    "asunto": "Activaste la verificación en dos pasos",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre", "tipo": "texto", "ejemplo": "Jorge" },
+      { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "18 de octubre de 2026, 14:30" },
+      { "nombre": "dispositivo", "tipo": "texto", "ejemplo": "Chrome en Windows" },
+      { "nombre": "ubicacion_aproximada", "tipo": "texto", "ejemplo": "Managua, Nicaragua" },
+      { "nombre": "enlace_recuperacion", "tipo": "url", "ejemplo": "https://staging.nilogistic.com/cuenta/recuperar?t=EJEMPLO" }
+    ],
+    "sha256Html": "6f32da0199a9db4ef9c01c94712ccf174a6fa2a7423c64d625fc52ed0a48d0b4",
+    "sha256Txt": "b498679c0128d612573580eaf870853996d9c539f40b1a206b157696e7a9c55f",
+    "historial": []
+  },
+  {
+    "nombre": "2fa_reiniciado",
+    "version": "1.0",
+    "tipo": "aviso",
+    "asunto": "Reiniciamos tu verificación en dos pasos",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre", "tipo": "texto", "ejemplo": "Jorge" },
+      { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "18 de octubre de 2026, 14:30" },
+      { "nombre": "enlace_recuperacion", "tipo": "url", "ejemplo": "https://staging.nilogistic.com/cuenta/recuperar?t=EJEMPLO" }
+    ],
+    "sha256Html": "5548402900625d3c5f15c011133ee79f2a498960b21e2bebc1fe67beb719cd3a",
+    "sha256Txt": "33e3ac4f2c50b7951706409da613c1653dd9c0320339464b38d2cc3109a574b8",
+    "historial": []
+  },
+  {
+    "nombre": "2fa_reiniciado_emergencia",
+    "version": "1.0",
+    "tipo": "aviso",
+    "asunto": "Se usó el reinicio de emergencia de tu verificación",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "nombre", "tipo": "texto", "ejemplo": "Jorge" },
+      { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "18 de octubre de 2026, 14:30" },
+      { "nombre": "dispositivo", "tipo": "texto", "ejemplo": "Chrome en Windows" },
+      { "nombre": "ubicacion_aproximada", "tipo": "texto", "ejemplo": "Managua, Nicaragua" },
+      { "nombre": "enlace_recuperacion", "tipo": "url", "ejemplo": "https://staging.nilogistic.com/cuenta/recuperar?t=EJEMPLO" }
+    ],
+    "sha256Html": "438da2e71ce5f6fe267766949e369bc59bc836f390cba9e50aa177a37b7bab8b",
+    "sha256Txt": "a210b29f7770229ee93d6f5684f482ff69f942c3f44c9ec00af99e177f35de90",
+    "historial": []
   }
 ]

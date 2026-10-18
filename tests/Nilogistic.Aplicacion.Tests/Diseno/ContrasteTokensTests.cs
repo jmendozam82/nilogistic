@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using Match = System.Text.RegularExpressions.Match;
+using Nilogistic.Pruebas.Base;
 
 namespace Nilogistic.Aplicacion.Tests.Diseno;
 
@@ -42,88 +43,15 @@ public class ContrasteTokensTests
     public void El_par_de_tokens_alcanza_el_contraste_minimo(
         string nombre, string variableTexto, string variableFondo, double minimo)
     {
-        var declaraciones = LeerDeclaraciones();
-        var texto = Resolver(variableTexto, declaraciones);
-        var fondo = Resolver(variableFondo, declaraciones);
+        var declaraciones = Contrastes.LeerDeclaracionesTokens(RutaTokens);
+        var texto = Contrastes.ResolverToken(variableTexto, declaraciones);
+        var fondo = Contrastes.ResolverToken(variableFondo, declaraciones);
 
-        var razon = RazorDeContraste(texto, fondo);
+        var razon = Contrastes.RazorDeContraste(texto, fondo);
 
         razon.Should().BeGreaterThanOrEqualTo(
             minimo,
             "el par «{0}» ({1} sobre {2}) debe alcanzar {3:F1}:1 y mide {4:F2}:1",
             nombre, texto, fondo, minimo, razon);
-    }
-
-    private static Dictionary<string, string> LeerDeclaraciones()
-    {
-        var contenido = File.ReadAllText(RutaTokens);
-        var declaraciones = new Dictionary<string, string>(StringComparer.Ordinal);
-        foreach (Match coincidencia in Regex.Matches(contenido, @"(--nl-[a-z0-9-]+)\s*:\s*([^;]+);"))
-        {
-            declaraciones[coincidencia.Groups[1].Value] = coincidencia.Groups[2].Value.Trim();
-        }
-
-        return declaraciones;
-    }
-
-    private static string Resolver(string variable, IReadOnlyDictionary<string, string> declaraciones)
-    {
-        var visitadas = new HashSet<string>(StringComparer.Ordinal);
-        var actual = variable;
-        while (true)
-        {
-            if (!visitadas.Add(actual))
-            {
-                throw new InvalidOperationException($"Referencia circular al resolver {variable} en tokens.css");
-            }
-
-            declaraciones.Should().ContainKey(actual, "tokens.css debe declarar {0}", actual);
-            var valor = declaraciones[actual];
-            var referencia = Regex.Match(valor, @"^var\(\s*(--nl-[a-z0-9-]+)\s*\)$");
-            if (!referencia.Success)
-            {
-                return valor;
-            }
-
-            actual = referencia.Groups[1].Value;
-        }
-    }
-
-    private static double RazorDeContraste(string hexTexto, string hexFondo)
-    {
-        var (baseClara, baseOscura) = (Luminancia(hexTexto), Luminancia(hexFondo));
-        if (baseClara < baseOscura)
-        {
-            (baseClara, baseOscura) = (baseOscura, baseClara);
-        }
-
-        return (baseClara + 0.05) / (baseOscura + 0.05);
-    }
-
-    private static double Luminancia(string hexadecimal)
-    {
-        var (r, g, b) = LeerRgb(hexadecimal);
-        return (0.2126 * Canal(r)) + (0.7152 * Canal(g)) + (0.0722 * Canal(b));
-    }
-
-    private static (int R, int G, int B) LeerRgb(string hexadecimal)
-    {
-        var valor = hexadecimal.TrimStart('#');
-        if (valor.Length == 3)
-        {
-            valor = string.Concat(valor.Select(c => new string(c, 2)));
-        }
-
-        valor.Length.Should().Be(6, "«{0}» debe ser un color hexadecimal de 6 dígitos", hexadecimal);
-        return (
-            Convert.ToInt32(valor[..2], 16),
-            Convert.ToInt32(valor.Substring(2, 2), 16),
-            Convert.ToInt32(valor.Substring(4, 2), 16));
-    }
-
-    private static double Canal(int componente)
-    {
-        var c = componente / 255.0;
-        return c <= 0.03928 ? c / 12.92 : Math.Pow((c + 0.055) / 1.055, 2.4);
     }
 }

@@ -22,13 +22,18 @@ y hashes.
 
 ## Recalcular SHA-256 con PowerShell
 
-Desde la raiz del repositorio:
+El catalogo valida el hash del contenido **normalizado a LF** (`\r\n` se
+convierte a `\n` antes de calcular el SHA-256). Desde la raiz del repositorio:
 
 ```powershell
 $archivo = "src/Nilogistic.BLL/Correo/Plantillas/activacion_cuenta.html"
-$bytes = [System.IO.File]::ReadAllBytes($archivo)
-$hash = [BitConverter]::ToString([System.Security.Cryptography.SHA256]::HashData($bytes)).Replace("-", "").ToLower()
-Write-Host $hash
+$contenido = [System.IO.File]::ReadAllText($archivo).Replace("`r`n", "`n")
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($contenido)
+$sha = [System.Security.Cryptography.SHA256]::Create()
+try {
+    $hashBytes = $sha.ComputeHash($bytes)
+    [BitConverter]::ToString($hashBytes).Replace("-", "").ToLower()
+} finally { $sha.Dispose() }
 ```
 
 Asegurate de que el archivo este guardado en UTF-8 sin BOM y con saltos LF

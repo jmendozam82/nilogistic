@@ -18,7 +18,7 @@ public class ServicioPlantillasCorreoTests
 {
     private const string UrlBase = "https://staging.nilogistic.com";
 
-    private static ServicioPlantillasCorreo Crear(
+    internal static ServicioPlantillasCorreo Crear(
         IServicioCorreo? correo = null,
         string urlBase = UrlBase,
         bool desarrollo = false,

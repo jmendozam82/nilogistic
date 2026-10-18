@@ -1,0 +1,20 @@
+Reiniciamos tu verificación en dos pasos
+
+Hola {{nombre}},
+
+Administración reinició la verificación en dos pasos de tu cuenta. Tendrás que configurarla de nuevo la próxima vez que inicies sesión.
+
+  Fecha y hora: {{fecha_hora}}
+  Realizado por: Administración de Nilogistic
+
+¿NO LO ESPERABAS?
+Si no pediste este cambio, restablece tu contraseña ahora para proteger tu cuenta:
+{{enlace_recuperacion}}
+
+Equipo Nilogistic
+
+--
+Recibes este correo porque se realizó una gestión con esta dirección en nilogistic.com. Este mensaje se envió desde una cuenta que no recibe respuestas (no-reply@nilogistic.com); para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
+© 2026 Nilogistic · Managua, Nicaragua

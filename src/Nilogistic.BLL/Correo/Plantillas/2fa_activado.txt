@@ -1,0 +1,23 @@
+Activaste la verificación en dos pasos
+
+Hola {{nombre}},
+
+Te confirmamos que la verificación en dos pasos quedó activa en tu cuenta. Estos son los datos del cambio:
+
+  Fecha y hora: {{fecha_hora}}
+  Dispositivo: {{dispositivo}}
+  Ubicación aproximada: {{ubicacion_aproximada}}
+
+Guarda bien tus códigos de respaldo en un lugar seguro.
+
+¿NO FUISTE TÚ?
+Alguien más pudo haber entrado a tu cuenta. Restablece tu contraseña ahora para cerrar el acceso:
+{{enlace_recuperacion}}
+
+Equipo Nilogistic
+
+--
+Recibes este correo porque se realizó una gestión con esta dirección en nilogistic.com. Este mensaje se envió desde una cuenta que no recibe respuestas (no-reply@nilogistic.com); para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
+© 2026 Nilogistic · Managua, Nicaragua
