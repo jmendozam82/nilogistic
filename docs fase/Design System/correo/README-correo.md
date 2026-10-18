@@ -102,4 +102,4 @@ También: `lang="es"`, un solo `h1`, tablas de maquetación con `role="presentat
 
 ## 8. Licencias
 
-Criterio visual adaptado de Impeccable (Apache-2.0) y de emilkowalski/skills (MIT) a través de la skill `nilogistic-web-craft`; ver `NOTICE` del proyecto.
+Criterio visual adaptado de Impeccable (Apache-2.0) y de emilkowalski/skills (MIT) a través de la skill `nilogistic-web-craft`. No se copió código ni texto de esos proyectos a estas plantillas, por lo que no se requiere `NOTICE`.
