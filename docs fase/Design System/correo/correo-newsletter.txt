@@ -1,0 +1,34 @@
+NILOGISTIC · Edición {{numero_edicion}} · {{fecha_edicion}}
+
+{{titulo_edicion}}
+
+{{introduccion}}
+
+{{titulo_principal}}
+{{resumen_principal}}
+Leer el artículo completo: {{enlace_principal}}
+
+TAMBIÉN EN ESTA EDICIÓN
+
+- {{titulo_1}}
+  {{resumen_1}}
+  {{enlace_1}}
+
+- {{titulo_2}}
+  {{resumen_2}}
+  {{enlace_2}}
+
+- {{titulo_3}}
+  {{resumen_3}}
+  {{enlace_3}}
+
+{{cierre_titulo}}
+{{cierre_texto}}
+{{cierre_cta}}: {{cierre_enlace}}
+
+--
+Recibes este boletín porque te suscribiste con {{correo_destinatario}} el {{fecha_consentimiento}}.
+Cancelar suscripción (un clic, sin iniciar sesión): {{enlace_baja}}
+Preferencias: {{enlace_preferencias}}
+Política de privacidad: {{url_base}}/legal/privacidad
+© 2026 Nilogistic · Managua, Nicaragua
