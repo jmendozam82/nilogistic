@@ -40,6 +40,10 @@ public class QuienesSomosTests
 
         var cta = documento.QuerySelector("a.btn-accent[href='/solicitar-alta']");
         cta.Should().NotBeNull("la llamada a la acción apunta a /solicitar-alta");
+        var ctaSection = documento.QuerySelector("section[aria-labelledby='cta-titulo']");
+        ctaSection.Should().NotBeNull();
+        ctaSection.ClassList.Should().Contain("nl-band--tint", "el CTA pasa a banda clara");
+        ctaSection.ClassList.Should().NotContain("nl-band--inverse", "la banda inversa queda solo para casos con fondo oscuro");
         pilares.Should().NotBeEmpty();
     }
 

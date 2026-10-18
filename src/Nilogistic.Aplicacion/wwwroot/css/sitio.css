@@ -105,6 +105,17 @@
   }
 }
 
+/* ---------- Misión (HU-041, validación visual) ----------
+   El .nl-lead de la misión debe tener el mismo color que el cuerpo, para que sea más fuerte que
+   el párrafo, no atenuado. Alinear el ancho de lectura al resto del contenido. */
+.nl-mision {
+  padding-inline: var(--nl-gutter);
+}
+
+.nl-mision .nl-lead {
+  color: var(--nl-color-text);
+}
+
 /* ---------- Lista editorial de pilares (HU-041) ---------- */
 .nl-pilares {
   list-style: none;
