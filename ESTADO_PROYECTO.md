@@ -171,6 +171,8 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-134 | Proceso | **El cierre formal de S1 no incluye el PR `develop→main`** (aprobado el 17/10/2026): la puerta G1 se evalúa a demanda con `workflow_dispatch` sobre `develop`; el PR a `main` se hace en el release (implica despliegue a producción). Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | Cierre de S1 | ✅ (17/10/2026) |
 | D-135 | CI | **La puerta G1 medía el agregado, no la BLL** (hallazgo en el run `39087254500`, 17/10/2026): `verificar_cobertura.py` leía el `line-rate` de la raíz del `coverage.cobertura.xml`, que agrega DAL, Entity, Utility, DTO y Pruebas.Base que `Nilogistic.BLL.Tests` instrumenta de paso, y daba **49,1 %** con la BLL en **95,4 %** (falsos rojos ante D-102/D-106). **Resuelto**: el script lee solo `<package name="Nilogistic.BLL">`, expone `--paquete` (por defecto `Nilogistic.BLL`) e imprime el paquete medido; si no aparece, sale con código 2 (sin vuelta al agregado). `ci.yml` intacto (HU-006 E3). Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | CI, cierre de Sprint | ✅ (17/10/2026) |
 | D-136 | Proceso | **Medir DAL, Utility y Entity es una decisión posterior, no puerta** (registrada el 17/10/2026): los porcentajes que G1 muestra para esas capas salen de ensamblados tocados de paso por `Nilogistic.BLL.Tests` y **no son su cobertura real**; las pruebas del DAL van con Testcontainers en otro paso, sin `--collect`. Si se quieren medir, se añade un informe propio con su umbral aparte. Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | CI, D-102, D-106 | ✅ (17/10/2026) |
+| D-137 | Design System | **Observación #11**: mover a `tokens.css` un token de duración de entrada y un *easing* propio (la duración de 400 ms para la entrada del héroe va como valor literal en `sitio.css`). (HU-041) | Siguiente actualización del Design System | ⬜ |
+| D-138 | Design System | **Observación #12**: `.nl-lead` en la misión pasa a `color: var(--nl-color-text)` para reforzar la jerarquía frente al párrafo de apoyo, y `container-narrow` necesita `padding-inline: var(--nl-gutter)` cuando no va junto a `.container`. (HU-041, ajustes de validación visual) | Siguiente actualización del Design System | ⬜ |
 | D-25 | Insumo | Marca y medios pendientes: logotipos SVG oficiales (claro y oscuro), icono solo para favicon, imagen Open Graph 1200×630, fotos y video reales de logística, cifras reales de la banda de estadísticas y versión blanca definitiva del logotipo (hoy derivada). Todo contenido provisional va marcado (RN-056) | Antes de HU-068, HU-040 y del corte DNS (HU-031) | ⬜ |
 
 ## 7. Versiones
@@ -178,6 +180,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.44 — 2026-10-17 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.45 — 2026-10-17 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |

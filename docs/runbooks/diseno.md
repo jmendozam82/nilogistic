@@ -265,6 +265,12 @@ que en local se ignora. La CSP va en modo `Aplicar` en local (en Staging, `Repor
    - [ ] **Rendimiento:** la página carga sin saltos visibles de diseño (las fuentes con `swap` pueden cambiar de aspecto un instante).
 
    En Staging la CSP corre en modo `Reporte`: los avisos se revisan también en `/api/v1/csp-reportes`.
+## Ajustes de la validación visual (HU-041)
+
+- **CTA en banda clara:** `nl-band--tint` (antes `nl-band--inverse`).
+- **Jerarquía de la misión:** `.nl-mision .nl-lead` con `color: var(--nl-color-text)`; alineación con `padding-inline: var(--nl-gutter)`.
+- **Revelado:** desplaza `.nl-revelar > .container`, no la banda.
+
 4. Anota los resultados y cualquier defecto; Claude los resume en la sección 15 de la ficha.
 
 ## Recursos y CSP (HU-012)
