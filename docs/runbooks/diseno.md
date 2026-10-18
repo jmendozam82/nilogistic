@@ -194,10 +194,11 @@ desplazarse. Todo en `css/sitio.css` y `wwwroot/js/revelar.js`.
 - **Revelado:** cada banda a revelar lleva la clase `nl-revelar`. `revelar.js` (JS vanilla, sin dependencias)
   añade `nl-revelar--oculto` solo a lo que aún no está en pantalla y la retira al entrar en el viewport
   (`IntersectionObserver`, `threshold: 0.15`). **El contenido es visible por defecto:** sin JavaScript la
-  página se ve completa y un `focusin` revela de inmediato lo que reciba foco por teclado. El estado oculto
-  **solo desplaza la banda 16 px** (`transform`); **no** reduce la opacidad: axe calcula el contraste con el
-  color del texto a `opacity: 0` y lo marca como `color-contrast` (serious) — un falso positivo que se
-  documentó y corrigió en el Pase B de HU-041.
+  página se ve completa y un `focusin` revela de inmediato lo que reciba foco por teclado. La transición y el
+  desplazamiento van al **contenido interno** (`.nl-revelar > .container` y `.nl-revelar--oculto > .container`),
+  no a la banda: así el fondo de ancho completo no se mueve (sin franjas vacías entre bandas ni solape con el
+  pie, F1). Tampoco se reduce la opacidad: axe mezcla el color del texto con `opacity` casi 0 y reporta
+  `color-contrast [serious]`, así que el estado oculto **solo usa `transform`** (desplaza 16 px).
 - **Movimiento reducido:** con `prefers-reduced-motion: reduce` el script no oculta nada y `sitio.css`
   neutraliza la animación del héroe y la transición del revelado (`nilogistic.css` ya anula las duraciones con
   una regla `* !important`).

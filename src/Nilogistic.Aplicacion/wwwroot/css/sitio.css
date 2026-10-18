@@ -76,14 +76,15 @@
 .nl-hero--page .nl-hero__inner > :nth-child(2) { animation-delay: 60ms; }
 .nl-hero--page .nl-hero__inner > :nth-child(3) { animation-delay: 120ms; }
 
-/* Revelado al desplazarse de las bandas (2 en adelante). Solo se anima el desplazamiento, nunca la
-   opacidad: ocultar texto con opacity 0 lo deja en el árbol de accesibilidad con contraste nulo y axe
-   lo marca como color-contrast serio (hallazgo de la validación de navegador, HU-041 §13). */
-.nl-revelar {
+/* Revelado al desplazarse (2 en adelante). El desplazamiento va al contenido interno (.container) y no
+   a la banda, que conserva su fondo de ancho completo (sin franjas vacías entre bandas ni solape con el
+   pie; F1). Solo se anima el desplazamiento, nunca la opacidad: ocultar texto con opacity 0 lo deja en
+   el árbol de accesibilidad con contraste nulo y axe lo marca como color-contrast serio (HU-041 §13). */
+.nl-revelar > .container {
   transition: transform var(--nl-duration-base) var(--nl-ease);
 }
 
-.nl-revelar--oculto {
+.nl-revelar--oculto > .container {
   transform: translateY(16px);
 }
 
@@ -95,11 +96,11 @@
     animation: none;
   }
 
-  .nl-revelar {
+  .nl-revelar > .container {
     transition: none;
   }
 
-  .nl-revelar--oculto {
+  .nl-revelar--oculto > .container {
     transform: none;
   }
 }
