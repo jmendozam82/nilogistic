@@ -1,18 +1,18 @@
-# NILOGISTIC — Cierre formal del Sprint 1 (borrador, 17/10/2026)
+# NILOGISTIC — Cierre formal del Sprint 1 (17/10/2026)
 
-> Estado: **preparado por Claude; pendiente la evidencia de G1 y la aprobación de Jorge.** Sprint 1 — Plataforma operativa; iniciado el 09/10/2026 (adelantado respecto del plan 23/11 a 04/12/2026). Retrospectiva formal y recalibración de D-06 planificadas para el 07/12/2026.
+> Estado: **cerrado con G1 en verde el 17/10/2026** (cierre registrado en `ESTADO_PROYECTO.md` v0.43 por instrucción de Jorge). Sprint 1 — Plataforma operativa; iniciado el 09/10/2026 (adelantado respecto del plan 23/11 a 04/12/2026). Retrospectiva formal y recalibración de D-06 planificadas para el 07/12/2026.
 
 ## 1. Resultado
 - **37 de 37 SP cerrados** (plan original: 26 SP; 11 SP adelantados de S2: HU-008, HU-009, HU-062a y HU-011).
 - HU cerradas: HU-007 (5), HU-008 (5), HU-009 (3), HU-034 (3), HU-010 (5), HU-006 (5), HU-062a (3), HU-011 (3), HU-036 (3), HU-037 (2).
 - Entregable demostrable cumplido: plataforma operativa en Staging (auditoría inmutable, correo transaccional con cola, parámetros, DNS de correo, ejecutor de tareas, layout base con Design System y accesibilidad automática en CI).
 - Pruebas: 479 en verde en la solución, más 8 pruebas de navegador (Playwright + axe) que corren en el job `accesibilidad`.
-- PR relevantes de cierre: HU-036 (#47, #48, #50, #51), HU-037 (#53, #54), cierre documental (#55, `add37d8`).
+- PR relevantes de cierre: HU-036 (#47, #48, #50, #51), HU-037 (#53, #54), cierre documental (#55, `add37d8`; #56, `cf2af4d`: ficha de HU-041, D-133/D-134 y este documento), puerta G1 (#57, `51c8970`).
 
 ## 2. Puertas de cierre
 | Puerta | Criterio | Estado | Evidencia / acción |
 |---|---|---|---|
-| **G1** | Cobertura de BLL ≥ 70 % (HU-038 E2; D-102, D-106) | ⏳ **Pendiente de evidencia** | Jorge: GitHub → Actions → «CI» → *Run workflow* sobre `develop` (el paso «Puerta G1 - cobertura de BLL >= 70 %» corre con `workflow_dispatch`, D-134). Reportar el porcentaje y el enlace del run. Si < 70 %, se abre una HU o tarea de pruebas de BLL antes de cerrar |
+| **G1** | Cobertura de BLL ≥ 70 % (HU-038 E2; D-102, D-106) | ✅ | Run **`39088974795`** (`workflow_dispatch` sobre `develop` en `51c8970`, 17/10/2026): `Cobertura de líneas (Nilogistic.BLL): 95.4 % (mínimo 70.0 %)` → paso «Puerta G1 - cobertura de BLL >= 70 %» en verde, job `build-y-pruebas` y run completados en `success`. Corrige el hallazgo del run `39087254500` (49,1 %), que medía la raíz del XML en vez de la BLL: **D-135** |
 | **G2** | Validación visual de las pantallas del sprint (responsive, WCAG 2.2 AA, Core Web Vitals) | ✅ | HU-036: galerías `/diseno/{publico,cuenta,panel}` validadas por Jorge en Staging (SUP-13, SUP-18). HU-037: galería de componentes, axe sin violaciones graves y foco medido en Staging. Core Web Vitals de `/diseno/publico`: LCP 0,35 s, CLS 0,01, INP 40 ms. Las demás HU de S1 no tienen pantallas |
 | Pruebas unitarias | Verdes en CI | ✅ | Run 39083597497 en `develop`: todos los jobs en verde, `desplegar-staging` = success |
 | Trazabilidad | `docs/hu/S1.txt` coherente con las pruebas | ✅ | Verificada por la CI (D-15) |
@@ -23,6 +23,7 @@
 | D-129 | ¿Hacer obligatorio el job `accesibilidad`? | **No todavía.** Solo tiene una ejecución verde en `develop` y depende de un navegador descargado en cada run. Reevaluar al cierre de S2 con criterio: ≥ 10 ejecuciones verdes consecutivas, sin fallos intermitentes y duración ≤ 10 min. Mientras tanto sigue informando (se pone rojo ante defectos, sin bloquear) | Jorge ya decidió seguir informativo; se registra el criterio |
 | D-06 | Velocidad | Ver §5 | Se decide el 07/12/2026 |
 | D-134 | Sin PR `develop→main` al cerrar | Aprobado | ✅ |
+| D-135 | Corregir la puerta G1 (medía la raíz del XML, no la BLL) | El verificador lee solo el paquete `Nilogistic.BLL` y sale con código 2 si falta; `ci.yml` intacto | ✅ (PR #57) |
 
 ## 4. Retrospectiva (borrador para el 07/12)
 **Qué funcionó**
@@ -54,9 +55,10 @@
 - #11 (nueva): mover a `tokens.css` los tokens de movimiento (`--nl-ease-out`, `--nl-dur-press/fast/base/enter`).
 
 ## 7. Deuda abierta al cerrar S1
-D-03 (valores de planes), D-04 (catálogos), D-05 (segundo administrador), D-16, D-19 (Blueprint de Render), D-20/D-115 (rotación de contraseñas antes de Producción), D-21, D-23, D-25 (marca y medios), D-120 (evaluar DMARC p=quarantine desde el 14/11/2026), D-121 (¿Brevo sigue en uso?), D-128 (`<head>` repetido en layouts), D-129 (job obligatorio).
+D-03 (valores de planes), D-04 (catálogos), D-05 (segundo administrador), D-16, D-19 (Blueprint de Render), D-20/D-115 (rotación de contraseñas antes de Producción), D-21, D-23, D-25 (marca y medios), D-120 (evaluar DMARC p=quarantine desde el 14/11/2026), D-121 (¿Brevo sigue en uso?), D-128 (`<head>` repetido en layouts), D-129 (job obligatorio → reevaluación movida al cierre de S2).
 
 ## 8. Siguiente
 - HU-041 en curso (D-133): `docs/tareas/HU-041.md`.
 - HU-030 (5 SP, catálogo de plantillas de correo) queda en S2; requiere antes el diseño de las plantillas de correo.
-- Con G1 en verde y tu aprobación, el cierre formal de S1 queda registrado en `ESTADO_PROYECTO.md` (v0.43).
+- G1 en verde (run `39088974795`) → **cierre formal de S1 registrado en `ESTADO_PROYECTO.md` v0.43.**
+- Queda pendiente la retrospectiva y la recalibración de D-06 (07/12/2026) y, en el release, el PR `develop→main` (D-134).

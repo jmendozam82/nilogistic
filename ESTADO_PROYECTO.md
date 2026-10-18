@@ -9,11 +9,11 @@
 |---|---|
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
-| Sprint actual | Sprint 1 — Plataforma operativa (adelantado; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | **HU-041** (Página Quiénes Somos, 3 SP; adelantada de S2 a S1, D-133): ficha v0.9 redactada, pendiente de aprobación de Jorge y de entrega al ejecutor. Sprint 1: 37 de 37 SP cerrados; cierre formal en curso (`docs/Nilogistic_Cierre_S1.md`) |
+| Sprint actual | Sprint 1 — Plataforma operativa: **cerrado formalmente** el 2026-10-17 (37 de 37 SP; puertas G1 y G2 en verde; fechas del plan 23/11 – 04/12/2026) |
+| HU actual | **HU-041** (Página Quiénes Somos, 3 SP; adelantada de S2 a S1, D-133): ficha v0.9 redactada, pendiente de aprobación de Jorge y de entrega al ejecutor. Cierre de S1 en `docs/Nilogistic_Cierre_S1.md` |
 | Criterio de aceptación actual | HU-041: E1 (contenido completo), E2 (imágenes con texto alternativo), E3 (360 px sin desbordes), E4 (título, descripción y Open Graph propios). Texto provisional marcado (RN-056, D-126) |
-| Paso actual del ciclo | Sprint 1: 37 de 37 SP cerrados. Cierre formal de S1 preparado: pendiente la evidencia de G1 (cobertura de BLL ≥ 70 % con `workflow_dispatch` sobre `develop`) y la retrospectiva (D-06, 07/12/2026). Sin PR `develop→main` (D-134) |
-| Rama de trabajo | `docs/HU-041-ficha-cierre-s1` (ficha de HU-041, D-133/D-134 y cierre de S1; sin push) |
+| Paso actual del ciclo | Sprint 1 **cerrado formalmente** el 2026-10-17: 37/37 SP, **G1 en verde** (cobertura de BLL 95,4 % ≥ 70 %, run `39088974795` con `workflow_dispatch` sobre `develop`) y G2 (validación visual) ✅. Retrospectiva y recalibración de D-06: 07/12/2026. Sin PR `develop→main` (D-134). En curso: HU-041 |
+| Rama de trabajo | `develop` (últimos merges: PR #56 cierre de S1, PR #57 puerta G1); ficha en `docs/tareas/HU-041.md` |
 | Última actualización | 2026-10-17 |
 
 ## 2. Fases del ciclo de vida
@@ -26,7 +26,7 @@
 | 4 | Historias de Usuario (R1: Lotes 1 y 2) | ✅ | verificar versión |
 | 5 | Diseño: arquitectura y modelo de datos (ADR-01..17) | ✅ | Nilogistic_Fase5_A_Arquitectura.md |
 | 6 | Planificación de Sprints | ✅ | Fase 6 v0.5 (aprobada 2026-10-07) |
-| 7 | Implementación por Sprint | 🔄 | Sprint 1 (S0 cerrado) |
+| 7 | Implementación por Sprint | 🔄 | Sprint 1 cerrado (S0 y S1) |
 | 8 | Pruebas unitarias + validación visual (por Sprint) | ⬜ | — |
 | 9 | Despliegue, release y retrospectiva | ⬜ | — |
 
@@ -55,7 +55,7 @@
 | HTTPS/HSTS/CSP, CSRF, rate limiting, Turnstile | ⬜ |
 | Resend: dominio con SPF/DKIM/DMARC | ✅ (HU-011, 15/10/2026) |
 | Datos semilla de planes (provisionales) | ⬜ |
-| Layout base Razor + Bootstrap (Pases A y B: público, Cuenta y Panel; tokens, Bootstrap y fuentes) | 🔄 |
+| Layout base Razor + Bootstrap (Pases A y B: público, Cuenta y Panel; tokens, Bootstrap y fuentes) | ✅ (HU-036; validación visual de Jorge 16 y 17/10/2026) |
 
 ## 5. HU del sprint actual — Sprint 1 (Plataforma operativa; iniciado 2026-10-09, adelantado desde el 23/11/2026)
 
@@ -160,14 +160,14 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | D-122..D-126 | Diseño | Decisiones del Design System N0, renumeradas por colisión con D-114 a D-118: D-122 paleta híbrida; D-123 Poppins + Inter autoalojadas; D-124 objetivos ≥44 px, foco 3 px, sin modo oscuro en R1; D-125 `tokens.css` fuente única; D-126 imágenes y video provisionales (RN-056). Ver `docs/Nilogistic_Registro_Decisiones_D122_D126.md` | HU-036, HU-037 | ✅ aprobadas (16/10/2026) |
 | D-127 | Proceso | Accesibilidad automática en CI (HU-037 E5): axe-core con Playwright en un job aparte; falla con violaciones graves o críticas; contraste calculado desde `tokens.css` | HU-037 | ✅ (16/10/2026) |
 | D-128 | Técnica | Los tres layouts (`_LayoutPublico`, `_LayoutCuenta`, `_LayoutPanel`) repiten el bloque `<head>` (título y descripción); extraer una parcial compartida cuando haya más layouts (observación no bloqueante de la revisión del Pase B de HU-036) | Próximo layout nuevo | ⬜ |
-| D-129 | CI | Pasar el job `accesibilidad` de **no requerido** (informa; el job se pone rojo pero no bloquea, sin `continue-on-error` por HU-006 E3) a **check requerido/bloqueante** de la protección de rama cuando acumule ejecuciones verdes estables (HU-037 Pase B, SUP-3); decide Jorge | Cierre de S1 | ⬜ |
+| D-129 | CI | Pasar el job `accesibilidad` de **no requerido** (informa; el job se pone rojo pero no bloquea, sin `continue-on-error` por HU-006 E3) a **check requerido/bloqueante** de la protección de rama cuando acumule ejecuciones verdes estables (HU-037 Pase B, SUP-3); decide Jorge. Criterio fijado en el cierre de S1: reevaluar al cierre de S2 con ≥ 10 ejecuciones verdes consecutivas, sin fallos intermitentes y duración ≤ 10 min | Cierre de S2 | ⬜ |
 | D-130 | Diseño | **Sin anillo de foco en botones** (hallazgo de HU-037 Pase B, E2): `bootstrap-theme.css` fija `--bs-btn-focus-box-shadow: none` y Bootstrap 5.3 define `.btn:focus-visible { outline: 0 }`, que gana en especificidad al `:focus-visible { outline: 3px … }` global; los `.btn` (y `.page-link`, etc.) no mostraban indicador de foco (incumplía WCAG 2.4.7 y D-124). **Resuelto** en `wwwroot/css/sitio.css` con la regla `.btn:focus-visible, .page-link:focus-visible { outline: … }` y color de foco para fondos navy (corrección F1 de HU-037). La mejora en el origen (`bootstrap-theme.css`, copia en `docs fase/Design System/`) viaja como observación #10 al Design System (SUP-17), sin ser deuda del sitio | Corregido en HU-037 | ✅ (17/10/2026) |
 | D-131 | Layout | **Desborde horizontal de 12 px en la portada a 360 px** (hallazgo de HU-037 Pase B, E1): el `.row.g-5` del pie quedaba a `left=-12`/`right=372` porque sus márgenes negativos (`3rem`) superaban el relleno del contenedor (`--nl-gutter`). **Resuelto** cambiando la fila del pie a `gx-4 gy-5` en `_PiePublico.cshtml` (corrección F2 de HU-037): `/` y el resto de páginas con el layout público ya no desbordan a 360 px | Corregido en HU-037 | ✅ (17/10/2026) |
 | D-132 | Accesibilidad | **`scrollable-region-focusable` (axe serious)** (hallazgo de HU-037 Pase B, E5) en los `.table-responsive` de `/diseno/panel` y `/diseno/componentes` a 360 px: eran regiones desplazables no enfocables por teclado (WCAG 2.1.1). **Resuelto** con `tabindex="0" role="region" aria-label="…"` en el contenedor desplazable (corrección F3 de HU-037); patrón documentado en el runbook `docs/runbooks/diseno.md` | Corregido en HU-037 | ✅ (17/10/2026) |
 | D-133 | Proceso | **HU-041 (Quiénes Somos, 3 SP) se adelanta de S2 a S1** con texto provisional (aprobado por Jorge el 17/10/2026). Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | HU-041 | ✅ (17/10/2026) |
 | D-134 | Proceso | **El cierre formal de S1 no incluye el PR `develop→main`** (aprobado el 17/10/2026): la puerta G1 se evalúa a demanda con `workflow_dispatch` sobre `develop`; el PR a `main` se hace en el release (implica despliegue a producción). Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | Cierre de S1 | ✅ (17/10/2026) |
 | D-135 | CI | **La puerta G1 medía el agregado, no la BLL** (hallazgo en el run `39087254500`, 17/10/2026): `verificar_cobertura.py` leía el `line-rate` de la raíz del `coverage.cobertura.xml`, que agrega DAL, Entity, Utility, DTO y Pruebas.Base que `Nilogistic.BLL.Tests` instrumenta de paso, y daba **49,1 %** con la BLL en **95,4 %** (falsos rojos ante D-102/D-106). **Resuelto**: el script lee solo `<package name="Nilogistic.BLL">`, expone `--paquete` (por defecto `Nilogistic.BLL`) e imprime el paquete medido; si no aparece, sale con código 2 (sin vuelta al agregado). `ci.yml` intacto (HU-006 E3). Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | CI, cierre de Sprint | ✅ (17/10/2026) |
-| D-136 | Proceso | **Medir DAL, Utility y Entity es una decisión posterior, no puerta** (registrada el 17/10/2026): los porcentajes que G1 muestra para esas capas salen de ensamblados tocados de paso por `Nilogistic.BLL.Tests` y **no son su cobertura real**; las pruebas del DAL van con Testcontainers en otro paso, sin `--collect`. Si se quieren medir, se añade un informe propio con su umbral aparte. Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | CI, D-102, D-106 | ⬜ |
+| D-136 | Proceso | **Medir DAL, Utility y Entity es una decisión posterior, no puerta** (registrada el 17/10/2026): los porcentajes que G1 muestra para esas capas salen de ensamblados tocados de paso por `Nilogistic.BLL.Tests` y **no son su cobertura real**; las pruebas del DAL van con Testcontainers en otro paso, sin `--collect`. Si se quieren medir, se añade un informe propio con su umbral aparte. Ver `docs/Nilogistic_Registro_Decisiones_D133.md` | CI, D-102, D-106 | ✅ (17/10/2026) |
 | D-25 | Insumo | Marca y medios pendientes: logotipos SVG oficiales (claro y oscuro), icono solo para favicon, imagen Open Graph 1200×630, fotos y video reales de logística, cifras reales de la banda de estadísticas y versión blanca definitiva del logotipo (hoy derivada). Todo contenido provisional va marcado (RN-056) | Antes de HU-068, HU-040 y del corte DNS (HU-031) | ⬜ |
 
 ## 7. Versiones
@@ -175,6 +175,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.42 — 2026-10-17 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.43 — 2026-10-17 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |
