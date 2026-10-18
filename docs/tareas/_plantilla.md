@@ -67,7 +67,7 @@ Ambos deben terminar en verde. Pega en el PR la salida resumida (total de prueba
 ## 10. Entrega
 1. Commits con Conventional Commits (`feat(HU-XXX): …`, `test(HU-XXX): …`) **dentro de la rama de la HU** (D-140). **Sin push y sin PR:** el push y el PR únicos los hace Jorge al cerrar la HU, con la revisión de Claude y su validación visual local ya hechas. El asunto va en **ASCII sin acentos** y la descripción mide 72 caracteres o menos; comprueba con `python3 scripts/ci/validar_conventional_commits.py --base develop` antes de entregar.
 2. Actualiza `ESTADO_PROYECTO.md` según el paso 8 del ciclo (AGENTS.md §12).
-3. Completa la sección 11 y avisa a Jorge para pedir revisión a Claude.
+3. Completa la sección 11, con las **horas reales** y la hora de inicio y de fin (la de fin sale de `git log --format=%ci`), y avisa a Jorge para pedir revisión a Claude.
 
 ## 11. Informe del ejecutor (lo llena OpenCode)
 - Archivos creados/modificados:

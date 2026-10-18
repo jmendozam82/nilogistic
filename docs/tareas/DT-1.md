@@ -106,7 +106,7 @@ Sin bloqueos ni supuestos nuevos.
 - Archivos creados/modificados: `Views/Shared/_CabezaComun.cshtml` (nuevo); `_LayoutPublico.cshtml`, `_LayoutCuenta.cshtml`, `_LayoutPanel.cshtml` (invocan `<partial name="_CabezaComun" />`, sin cambiar el orden); `tests/Nilogistic.Aplicacion.Tests/Diseno/CabezaComunTests.cs` (nuevo) y `ESTADO_PROYECTO.md` (D-128).
 - Captura antes/después del `<head>` de `/diseno/publico`, `/diseno/cuenta`, `/diseno/panel?sesion=administrador` y `/quienes-somos`: **idénticos salvo espacios en blanco** (comparados normalizando el espacio entre etiquetas; la secuencia de elementos es byte a byte la misma). Capturas crudas en `%TEMP%\opencode\heads_before` y `heads_after` de la sesión de ejecución.
 - Pruebas: `CabezaComunTests` (**+6**: un título con patrón + charset + viewport, y orden preservado, por cada uno de los tres layouts). **213 en Aplicación** (eran 207). `CspLayoutsTests` y `LayoutResponsivoTests` siguen en verde.
-- Horas reales: por confirmar (Jorge).
+- Horas reales: **no medidas por el ejecutor** (decisión de Jorge, 18/10/2026). Estimación de Claude con las marcas de tiempo de git, como **cota superior** (incluye esperas): parte A ≤ 0:34 h (ficha mergeada 10:45 → commit 665acdc 11:19) y parte B ≤ 1:02 h (665acdc 11:19 → commit 6b8440e 12:21); total ≤ 1:36 h.
 - Deuda técnica detectada: ninguna.
 
 ## 15. Revisión de Claude
@@ -121,4 +121,4 @@ Observaciones no bloqueantes:
 
 **Parte B (6b8440e).** La parcial contiene solo lo idéntico (charset, viewport, título, descripción). `_MetadatosSeo` queda solo en Público, `_EstilosBase` y `Estilos` no se movieron y el orden del `<head>` es el mismo. La tabla de diferencias de §13 y la comparación antes/después de cuatro rutas respaldan el «sin cambio de salida». Las 6 pruebas son útiles porque fijan el orden, no solo la presencia.
 
-**Proceso.** Sin hallazgos: respetó «sin push», no renombró migraciones y no tocó otras deudas. Las horas reales (§14) quedan por confirmar por Jorge.
+**Proceso.** Sin hallazgos: respetó «sin push», no renombró migraciones y no tocó otras deudas. Las horas reales (§14) quedan como estimación por git (cota superior), por decisión de Jorge.

@@ -77,7 +77,7 @@ python3 scripts/ci/verificar_codificacion.py
 Pega las salidas en §14.
 
 ## 10. Entrega
-Un commit por parte en la rama `feature/HU-030`: `chore(local): script de verificacion previa al pr (D-141)` y `ci(despliegue): omitir despliegue sin cambios de codigo (D-141)`. **Sin push y sin PR** (D-140); avisa a Jorge para la revisión de Claude. Registra las **horas reales** en §14.
+Un commit por parte en la rama `feature/HU-030`: `chore(local): script de verificacion previa al pr (D-141)` y `ci(despliegue): omitir despliegue sin cambios de codigo (D-141)`. **Sin push y sin PR** (D-140); avisa a Jorge para la revisión de Claude. Registra en §14 las **horas reales** y la hora de inicio y de fin de cada parte (saca la hora de fin de `git log --format=%ci`); Claude la contrasta con las marcas de tiempo de git.
 
 ## 11. Aprobaciones
 Ninguna pendiente: alcance y entrega dentro de la rama de HU-030 aprobados por Jorge el 2026-10-18 (D-140).

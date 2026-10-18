@@ -111,7 +111,7 @@ OK
 Evaluando 2 commit(s) del rango develop..HEAD
 ```
 
-**Horas reales:** ~0:35 h.
+**Horas reales:** ~0:35 h (informe del ejecutor). Contraste de Claude con git: ficha 13:25 → commit 13:57 (hora local) = 0:32 h como cota superior, coherente.
 
 **Datos para evaluar al ejecutor** (rellénalos con sinceridad, sin adornar):
 - Modelo y tiempo total: Kimi K2.7 Code, ~35 min.
