@@ -1,0 +1,25 @@
+# Normalizacion de saltos de linea: LF en el repositorio sea cual sea el SO del autor
+# (Windows con core.autocrlf=true + CI/Render en Linux). text=auto solo convierte los
+# archivos que Git detecta como texto; los binarios no se tocan.
+* text=auto eol=lf
+
+# Binarios explicitos: imagenes, fuentes y comprimidos.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.mp4 binary
+*.webm binary
+
+# Shell siempre con LF (la CI la ejecuta en Linux).
+*.sh text eol=lf
