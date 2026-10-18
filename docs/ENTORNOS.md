@@ -43,6 +43,7 @@ esté activo, que solo se permite fuera de Producción (la guardia de arranque l
 1. Cada migración es un archivo `supabase/migrations/AAAAMMDD*_descripcion.sql`, transaccional (Supabase CLI y CI la aplican con transacción).
 2. En local: `supabase start` → `supabase db reset` (o `db push`).
 3. CI valida idempotencia (aplica dos veces seguidas) y atomicidad ante fallo a mitad (E3) en PostgreSQL 17 limpio.
+4. CI valida el nombre y el orden temporal con `scripts/ci/verificar_migraciones.py` (D-21): nombre `<14 digitos>_descripcion.sql`, marcas únicas y, en cada PR, marca de toda migración añadida **estrictamente posterior** a la última registrada en la rama base.
 
 ### Desde CI (HU-006)
 
