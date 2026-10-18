@@ -1,0 +1,98 @@
+# Ficha de tarea — DT-2 · Verificador de codificación UTF-8 en CI (D-139)
+
+> **v1.0 (2026-10-18).** Deuda técnica, fuera de velocidad (D-06). Escrita por Claude para un ejecutor de OpenCode. **No improvises:** si algo es ambiguo, detente, anótalo en §13 y no inventes APIs, paquetes ni nombres.
+> **Es además la prueba de un ejecutor nuevo** (Kimi K2.7 Code). Por eso §6 trae reglas extra de higiene de archivos y §14 pide datos para evaluarlo.
+
+## 1. Cabecera
+| Campo | Valor |
+|---|---|
+| Tarea | DT-2 (D-139) |
+| Sprint / Release | S1 (higiene antes de S2) / R1 |
+| Rama | `chore/DT-2-codificacion`, desde `develop` actualizado; **un solo PR** |
+| Dependencias | PR de `fix/estado-utf8` mergeado en `develop` (si no, el verificador fallará con razón sobre `ESTADO_PROYECTO.md`) |
+| Tamaño | S |
+| Modelo asignado | Kimi K2.7 Code (prueba) |
+
+## 2. Objetivo
+Que la CI rechace cualquier archivo de texto rastreado por git que tenga BOM, bytes que no sean UTF-8 válido, UTF-16, o texto con **doble codificación** (mojibake). Motivo: el commit `6d90999` guardó `ESTADO_PROYECTO.md` con BOM y doble codificación en 406 lugares y nadie lo detectó hasta que lo vio Jorge.
+
+## 3. Lee solo esto
+- `ESTADO_PROYECTO.md` (fila D-139), `CLAUDE.md`, `AGENTS.md` §7 y §8
+- `scripts/ci/verificar_migraciones.py` y `scripts/ci/verificar_cobertura.py` (estilo, funciones puras, códigos de salida)
+- `scripts/tests/test_scripts.py` (estilo de pruebas)
+- `.github/workflows/ci.yml` (job `build-y-pruebas`, pasos «Trazabilidad…» y «Pruebas de los scripts»)
+- `.gitattributes`
+
+## 4. Alcance
+1. Crea `scripts/ci/verificar_codificacion.py` (Python 3 estándar, sin dependencias, mismo estilo que `verificar_migraciones.py`). Debe llevar solo caracteres ASCII en el código: escribe los caracteres no ASCII con escapes `\uXXXX`.
+2. **Qué archivos revisa:** los que devuelve `git ls-files -z`, filtrados por extensión de texto: `.md .txt .cs .cshtml .csproj .slnx .props .css .js .json .yml .yaml .sql .py .sh .html .xml .svg .config .editorconfig .gitattributes .gitignore`. **Excluye** `src/Nilogistic.Aplicacion/wwwroot/lib/` (código de terceros) y todo lo que no esté en esa lista (imágenes, fuentes, binarios).
+3. **Reglas por archivo** (función pura `analizar(ruta, contenido_bytes) -> list[str]`, sin tocar disco ni git):
+   - **R1 BOM:** el contenido empieza por `EF BB BF`, `FF FE` o `FE FF`.
+   - **R2 UTF-8 inválido:** `contenido.decode("utf-8")` lanza `UnicodeDecodeError`. Si falla, no sigas con R3 para ese archivo.
+   - **R3 doble codificación:** por cada línea que contenga algún carácter no ASCII, intenta `linea.encode("cp1252").decode("utf-8")` y, si `encode` falla, `linea.encode("latin-1").decode("utf-8")`. Si alguna de las dos **tiene éxito y el resultado es distinto de la línea**, la línea está doblemente codificada. Texto legítimo como acentos, eñes, «·», «→» o emojis **no** debe disparar la regla (los acentos no forman UTF-8 válido al reinterpretarlos; los emojis no caben en cp1252/latin-1). Comprueba con pruebas que `✅`, `⬜`, `→`, `última` y `Ñandú` pasan.
+   - **Excepción explícita:** una línea que contenga el texto `nilogistic:codificacion-ok` se omite en R3 (para documentar ejemplos de mojibake sin romper la CI). Úsala **solo** si hace falta.
+   - Cada hallazgo se informa como `KO <archivo>:<línea>: <regla y motivo>` (R1 y R2 sin número de línea si no aplica; en R2 indica el desplazamiento del byte inválido). Máximo 5 líneas de R3 por archivo y luego `... y N más`, para no inundar el log.
+4. **Entrada y salida:** `python3 scripts/ci/verificar_codificacion.py [--raiz .]`. Código 0 si todo bien (imprime `OK: N archivo(s) revisado(s)`), 1 si hay hallazgos, 2 si falla el uso (`--raiz` inexistente o `git` no disponible o no es un repositorio).
+5. **Pruebas** en `scripts/tests/test_scripts.py`, solo sobre `analizar` y `main` con carpetas temporales (no sobre el repositorio real). **No escribas texto con mojibake literal en ningún archivo del repositorio:** constrúyelo en la prueba, por ejemplo `"é".encode("utf-8").decode("cp1252")`. Casos mínimos: contenido limpio con acentos, ñ, `✅`, `⬜`, `→`; BOM UTF-8; BOM UTF-16; bytes `b"\xff\xfe\x00"` sin ser UTF-8; línea con doble codificación de `é`; línea con doble codificación de `✅`; la excepción `nilogistic:codificacion-ok`; archivo de `wwwroot/lib/` ignorado; extensión no listada ignorada; `main` con código 0, 1 y 2.
+6. **CI:** en el job `build-y-pruebas` de `ci.yml`, añade **justo antes** del paso «Pruebas de los scripts» un paso «Codificación UTF-8 sin BOM (DT-2)» que ejecute `python3 scripts/ci/verificar_codificacion.py`. **Invariante HU-006 E3:** prohibidos `continue-on-error`, `always()` y `failure()` en este archivo; el paso falla de verdad. No toques otros jobs ni pasos.
+7. `ESTADO_PROYECTO.md`: la fila D-139 pasa a «🔄 verificado por CI (DT-2)» con la fecha. **Edita solo esa celda**, con una sustitución puntual (ver §6).
+
+## 5. Fuera de alcance
+Corregir archivos existentes (si el verificador encuentra algo en el repositorio real, **detente y repórtalo en §13**, no lo arregles); normalizar CRLF/LF (lo hace `.gitattributes`); cambiar `.gitattributes`; pre-commit hooks; otros jobs; paquetes nuevos; las demás deudas.
+
+## 6. Prohibiciones
+- No llamar al DAL desde Controllers; no usar la BLL desde Vistas; no usar DELETE; nombres siempre `Nilogistic`.
+- No leer ni imprimir `scripts/db/.secrets.local` ni valores de variables de entorno (D-115).
+- No tocar `AGENTS.md`, `CLAUDE.md`, `Dockerfile`, `Directory.*.props`; `.github/` solo para el paso de §4.6.
+- **Higiene de archivos (obligatoria en esta tarea):**
+  1. Todo archivo se guarda en **UTF-8 sin BOM**. No uses herramientas que reescriban un archivo completo si basta una edición puntual.
+  2. Para tocar `ESTADO_PROYECTO.md` usa **una sustitución exacta de la celda**, no reescribas el archivo ni lo pases por un script que lo decodifique y recodifique.
+  3. **No resuelvas conflictos de merge.** Si aparece uno, detente y avisa a Jorge en §13.
+  4. Haz `git add` solo de los archivos que listas en §14, nunca `git add -A` ni `git add .`.
+  5. Antes de cada commit ejecuta `python3 scripts/ci/verificar_codificacion.py` y pega su salida en §14.
+- Commits Conventional Commits en ASCII, contexto en minúsculas, descripción ≤ 72 caracteres; valida con `python3 scripts/ci/validar_conventional_commits.py --base develop`.
+
+## 7. Criterios de aceptación ↔ pruebas esperadas
+| Criterio | Prueba |
+|---|---|
+| BOM (UTF-8 o UTF-16) hace fallar el verificador | `test_scripts.py` |
+| Bytes que no son UTF-8 válido hacen fallar el verificador | `test_scripts.py` |
+| Línea con doble codificación (`é`, `✅`) hace fallar; acentos, `ñ`, `✅`, `⬜`, `→` limpios pasan | `test_scripts.py` |
+| La excepción `nilogistic:codificacion-ok`, `wwwroot/lib/` y extensiones no listadas se ignoran | `test_scripts.py` |
+| Códigos de salida 0, 1 y 2 | `test_scripts.py` |
+| El repositorio real pasa en CI | Run del PR (paso nuevo) |
+
+## 8. Seguridad, permisos, auditoría
+Sin cambios de permisos, auditoría ni notificaciones. El verificador solo lee archivos rastreados y no imprime su contenido más allá del número de línea y la regla.
+
+## 9. Verificación antes de entregar
+```
+python3 scripts/ci/verificar_codificacion.py
+python3 -m unittest discover -s scripts/tests
+python3 scripts/ci/validar_conventional_commits.py --base develop
+```
+Todo en verde. Pega las salidas en §14.
+
+## 10. Entrega
+Un commit y un PR: `chore(ci): verificar codificacion utf-8 de los archivos (D-139)`. Sin push; avisa a Jorge para la revisión de Claude. Registra las **horas reales** en §14.
+
+## 11. Aprobaciones
+Ninguna pendiente: alcance y ejecutor aprobados por Jorge el 2026-10-18.
+
+## 12. Verificación de Jorge
+Tras el merge: CI y `desplegar-staging` verdes. Opcional: guarda un archivo `.md` con BOM en una rama de prueba y comprueba que el PR se pone rojo.
+
+## 13. Dudas del ejecutor
+_(el ejecutor anota aquí cualquier duda o hallazgo; «Sin bloqueos» si no hay)_
+
+## 14. Informe del ejecutor
+_(archivos creados/modificados, salidas de §9, horas reales)_
+
+**Datos para evaluar al ejecutor** (rellénalos con sinceridad, sin adornar):
+- Modelo y tiempo total:
+- ¿Hizo falta repetir algún paso o corregir algo que hizo mal?:
+- ¿Algún archivo quedó con BOM, CRLF inesperado o cambios que no pediste?:
+- Cosas que no entendió de la ficha:
+
+## 15. Revisión de Claude
+_(la completa Claude tras revisar el diff)_
