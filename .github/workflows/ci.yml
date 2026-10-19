@@ -309,7 +309,8 @@ jobs:
           echo "ERROR: Staging sirve ${desplegado:-sin commit}, se esperaba $GITHUB_SHA"; exit 1
       - name: Sin cambios de codigo
         if: steps.cambios.outputs.desplegar == 'false'
-        run: echo "Sin cambios de codigo: no se despliega Staging" >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo "Sin cambios de codigo: no se despliega Staging" >> "$GITHUB_STEP_SUMMARY"
 
   desplegar-produccion:
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
