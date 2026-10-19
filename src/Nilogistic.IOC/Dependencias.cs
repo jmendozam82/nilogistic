@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Nilogistic.BLL.Correo;
 using Nilogistic.BLL.Interfaces;
 using Nilogistic.BLL.Parametros;
 using Nilogistic.BLL.Servicios;
@@ -53,6 +54,10 @@ public static class Dependencias
         servicios.Configure<OpcionesCorreo>(configuracion.GetSection("Correo"));
         servicios.AddScoped<IServicioCorreo, ServicioCorreo>();
         servicios.AddScoped<ITareaProgramada, TareaProcesarColaCorreo>();
+
+        // Catalogo y renderizado de plantillas de correo (HU-030). El catalogo se carga una sola vez.
+        servicios.AddSingleton<CatalogoPlantillas>();
+        servicios.AddScoped<IServicioPlantillasCorreo, ServicioPlantillasCorreo>();
 
         // Bitacora de auditoria (HU-009): correccion como asiento nuevo; sin superficie HTTP (E3).
         // IRepositorioAuditoria vive en PersistenciaExtensions desde HU-062a (D-24, SUP-10).

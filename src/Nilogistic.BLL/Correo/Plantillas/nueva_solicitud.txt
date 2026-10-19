@@ -1,0 +1,15 @@
+Nueva solicitud de alta pendiente de revisión
+
+Hola,
+
+{{nombre_solicitante}} ({{empresa}}) envió una solicitud de alta el {{fecha_hora}}.
+
+Revisar solicitud: {{enlace_revision}}
+
+Equipo Nilogistic
+
+--
+Recibes este correo porque se realizó una gestión con esta dirección en nilogistic.com. Este mensaje se envió desde una cuenta que no recibe respuestas (no-reply@nilogistic.com); para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
+© 2026 Nilogistic · Managua, Nicaragua

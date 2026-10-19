@@ -60,6 +60,9 @@ jobs:
       - name: Trazabilidad escenarios Gherkin sin prueba
         run: python3 scripts/trazabilidad/escenarios_sin_prueba.py --hu-dir docs/hu --pruebas tests --sprint todos
 
+      - name: Codificacion UTF-8 sin BOM (DT-2)
+        run: python3 scripts/ci/verificar_codificacion.py
+
       - name: Pruebas de los scripts
         run: python3 -m unittest discover -s scripts/tests -v
 
@@ -238,10 +241,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Detectar cambios que requieren despliegue (D-141)
+        id: cambios
+        run: python3 scripts/ci/cambios_despliegue.py --antes ${{ github.event.before }} --despues ${{ github.sha }}
       - uses: supabase/setup-cli@v1
+        if: steps.cambios.outputs.desplegar == 'true'
         with:
           version: 2.116.0
       - name: Comprobar configuracion del entorno
+        if: steps.cambios.outputs.desplegar == 'true'
         env:
           DB_URL: ${{ secrets.DB_URL }}
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
@@ -256,6 +264,7 @@ jobs:
             echo "ERROR: faltan en el entorno staging:$faltan (ver docs/runbooks/despliegue-y-rollback.md)"; exit 1
           fi
       - name: Aplicar migraciones en Staging
+        if: steps.cambios.outputs.desplegar == 'true'
         env:
           DB_URL: ${{ secrets.DB_URL }}
         run: |
@@ -263,6 +272,7 @@ jobs:
           echo "::add-mask::$DB_URL"
           supabase db push --db-url "$DB_URL"
       - name: Disparar el despliegue en Render
+        if: steps.cambios.outputs.desplegar == 'true'
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
@@ -270,6 +280,7 @@ jobs:
           echo "::add-mask::$RENDER_DEPLOY_HOOK"
           curl -fsS --retry 3 --retry-delay 5 --retry-all-errors -X POST "$RENDER_DEPLOY_HOOK" >/dev/null
       - name: Verificar salud tras el despliegue
+        if: steps.cambios.outputs.desplegar == 'true'
         env:
           URL_BASE: ${{ vars.URL_BASE }}
         run: |
@@ -296,6 +307,10 @@ jobs:
             sleep 15
           done
           echo "ERROR: Staging sirve ${desplegado:-sin commit}, se esperaba $GITHUB_SHA"; exit 1
+      - name: Sin cambios de codigo
+        if: steps.cambios.outputs.desplegar == 'false'
+        run: |
+          echo "Sin cambios de codigo: no se despliega Staging" >> "$GITHUB_STEP_SUMMARY"
 
   desplegar-produccion:
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}

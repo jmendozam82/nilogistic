@@ -1,0 +1,17 @@
+Sobre tu solicitud de alta en Nilogistic
+
+Hola {{nombre}},
+
+Revisamos tu solicitud de alta y, por ahora, no podemos aprobarla.
+
+Motivo: {{motivo}}
+
+Si crees que hay un error o quieres aportar más información, escríbenos desde la página de Contacto: {{url_base}}/contacto
+
+Equipo Nilogistic
+
+--
+Recibes este correo porque se realizó una gestión con esta dirección en nilogistic.com. Este mensaje se envió desde una cuenta que no recibe respuestas (no-reply@nilogistic.com); para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
+© 2026 Nilogistic · Managua, Nicaragua

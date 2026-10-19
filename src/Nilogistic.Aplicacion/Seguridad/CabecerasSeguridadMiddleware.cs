@@ -71,6 +71,13 @@ public sealed class CabecerasSeguridadMiddleware(
                    "img-src 'self' data:; frame-ancestors 'none'";
         }
 
+        // Vista previa de plantillas de correo: HTML con estilos en línea, solo fuera de Producción
+        if (!string.Equals(entorno.EnvironmentName, Entornos.Produccion, StringComparison.OrdinalIgnoreCase) &&
+            contexto.Request.Path.StartsWithSegments("/diseno/correo"))
+        {
+            return "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; frame-ancestors 'none'";
+        }
+
         var imagenes = string.Join(' ', _opciones.Csp.ImgOrigenes.Prepend("data:").Prepend("'self'"));
         var csp =
             "default-src 'self'; " +

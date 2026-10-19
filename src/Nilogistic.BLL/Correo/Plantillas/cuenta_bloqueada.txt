@@ -1,0 +1,23 @@
+Bloqueamos tu cuenta de Nilogistic temporalmente
+
+Hola {{nombre}},
+
+Por seguridad, bloqueamos el acceso a tu cuenta durante {{minutos_bloqueo}} minutos tras varios intentos fallidos de inicio de sesión.
+
+  Fecha y hora: {{fecha_hora}}
+  Dispositivo: {{dispositivo}}
+  Ubicación aproximada: {{ubicacion_aproximada}}
+
+Puedes volver a intentarlo cuando termine el bloqueo.
+
+¿NO FUISTE TÚ?
+Alguien más podría estar intentando acceder a tu cuenta. Restablece tu contraseña ahora para protegerla:
+{{enlace_recuperacion}}
+
+Equipo Nilogistic
+
+--
+Recibes este correo porque se realizó una gestión con esta dirección en nilogistic.com. Este mensaje se envió desde una cuenta que no recibe respuestas (no-reply@nilogistic.com); para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
+© 2026 Nilogistic · Managua, Nicaragua

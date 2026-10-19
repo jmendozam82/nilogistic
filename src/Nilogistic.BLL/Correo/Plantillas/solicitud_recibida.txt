@@ -1,0 +1,19 @@
+Recibimos tu solicitud de alta
+
+Hola {{nombre}},
+
+Gracias por registrarte en Nilogistic. Recibimos tu solicitud de alta y estos son los siguientes pasos:
+
+1. Revisión: el equipo de Administración revisará la información que enviaste.
+2. Respuesta: te avisaremos por correo cuando tu solicitud sea aprobada o si necesitamos más datos.
+3. Activación: una vez aprobada, podrás definir tu contraseña y empezar a usar la plataforma.
+
+Mientras tanto, puedes visitar {{url_base}} para conocer más sobre la comunidad logística.
+
+Equipo Nilogistic
+
+--
+Recibes este correo porque se realizó una gestión con esta dirección en nilogistic.com. Este mensaje se envió desde una cuenta que no recibe respuestas (no-reply@nilogistic.com); para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
+© 2026 Nilogistic · Managua, Nicaragua

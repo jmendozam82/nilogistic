@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Nilogistic.BLL.Interfaces;
 using Nilogistic.Utility.Seguridad;
 using System.Security.Claims;
 
@@ -9,10 +10,12 @@ namespace Nilogistic.Aplicacion.Areas.Publico.Controllers;
 public sealed class DisenoController : Controller
 {
     private readonly IWebHostEnvironment _entorno;
+    private readonly IServicioPlantillasCorreo _plantillas;
 
-    public DisenoController(IWebHostEnvironment entorno)
+    public DisenoController(IWebHostEnvironment entorno, IServicioPlantillasCorreo plantillas)
     {
         _entorno = entorno;
+        _plantillas = plantillas;
     }
 
     [HttpGet("/diseno/publico")]
@@ -26,6 +29,49 @@ public sealed class DisenoController : Controller
 
     [HttpGet("/diseno/componentes")]
     public IActionResult Componentes() => VistaDemo(nameof(Componentes), "anonimo", "anonimo");
+
+    [HttpGet("/diseno/correo")]
+    public IActionResult Correo()
+    {
+        if (_entorno.IsProduction())
+        {
+            return NotFound();
+        }
+
+        return View(nameof(Correo));
+    }
+
+    [HttpGet("/diseno/correo/{plantilla}")]
+    public IActionResult Correo(string plantilla, string formato = "html")
+    {
+        if (_entorno.IsProduction())
+        {
+            return NotFound();
+        }
+
+        if (string.IsNullOrEmpty(plantilla) || !string.Equals(formato, "html", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(formato, "txt", StringComparison.OrdinalIgnoreCase))
+        {
+            return NotFound();
+        }
+
+        var urlBase = Request.Scheme + "://" + Request.Host.Value;
+        var resultado = _plantillas.VistaPrevia(plantilla, urlBase);
+        if (resultado.Estado == DTO.Correos.EstadoPlantilla.Rechazada)
+        {
+            return NotFound();
+        }
+
+        var contenido = resultado.Contenido!;
+        var cuerpo = string.Equals(formato, "txt", StringComparison.OrdinalIgnoreCase)
+            ? contenido.CuerpoTexto
+            : contenido.CuerpoHtml;
+        var tipoContenido = string.Equals(formato, "txt", StringComparison.OrdinalIgnoreCase)
+            ? "text/plain; charset=utf-8"
+            : "text/html; charset=utf-8";
+
+        return Content(cuerpo, tipoContenido);
+    }
 
     private IActionResult VistaDemo(string vista, string? sesion, string porDefecto)
     {

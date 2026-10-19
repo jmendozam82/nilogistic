@@ -1,0 +1,9 @@
+# Escenarios de S2 con prueba esperada. HU-030: Pase A (E1, E2, E5) en BLL.Tests; Pase B (E3, E4) en BLL.Tests y Aplicacion.Tests.
+HU-030 E1
+HU-030 E2
+HU-030 E5
+# HU-030 E1-E2: renderizado y rechazo de plantillas transaccionales (activacion_cuenta, recuperacion_contrasena, nueva_solicitud) con variables tipadas.
+# HU-030 E5: catalogo versionado con sha256 y historial.
+HU-030 E3
+HU-030 E4
+# HU-030 E3-E4: estructura accesible de las 10 plantillas y ausencia de terminos promocionales (Pase B).
