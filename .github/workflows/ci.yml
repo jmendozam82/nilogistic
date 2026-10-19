@@ -69,12 +69,12 @@ jobs:
       - name: Pruebas de los scripts
         run: python3 -m unittest discover -s scripts/tests -v
 
-  # HU-037 Pase B (SUP-3): informa porque NO es un check requerido de la proteccion de rama (no bloquea el
-  # merge); el job si se pone rojo si hay defectos, para no ocultar fallos (invariante HU-006 E3, que prohibe
-  # los modificadores de exito condicional en este archivo; ver docs/tareas/HU-037.md seccion 13, punto 7).
+  # HU-037 Pase B (SUP-3), actualizado por D-129 (2026-10-19): desde entonces el job es check requerido
+  # (bloquea el merge en develop y main via proteccion de rama). El job se pone rojo si hay defectos, para
+  # no ocultar fallos (invariante HU-006 E3, que prohibe los modificadores de exito condicional en este
+  # archivo; ver docs/tareas/HU-037.md seccion 13, punto 7).
   # La aplicacion se levanta en Staging sin base de datos real (SUP-4) y se audita por HTTP local enviando
   # X-Forwarded-Proto (la app confia en el proxy de bucle). El informe de axe queda como artefacto.
-  # Pasara a check requerido con D-129 (Jorge).
   accesibilidad:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
