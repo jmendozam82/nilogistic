@@ -150,4 +150,9 @@ Tras borrar el temporal: `verificar_workflows.py` → `OK: 1 workflow(s) revisad
 - Hora de fin (git): la de este mismo commit; no puede constar en su propio contenido sin estimar (§10 prohíbe estimar), se contrasta en §15 con `git log -1 --format='%h %ci'`.
 
 ## 15. Revisión de Claude
-_(la completa Claude tras revisar el diff, **incluida la validación del YAML de `ci.yml` con la herramienta, no a ojo**)_
+**2026-10-18 · Aprobada.** Commit `2f999e5` (Kimi K2.7 Code). Revisión con ejecución real en la VM:
+- `scripts/ci/verificar_workflows.py`: las 6 reglas de §4.1; cargador propio sin claves duplicadas; acepta `on` como `True`; códigos 0/1/2 con el mensaje exigido; nombres y mensajes en español.
+- Comprobado por mí: `python3 scripts/ci/verificar_workflows.py` → `OK: 1 workflow(s) revisado(s)`; `scripts/tests` → 93 pruebas OK; el caso original (`echo "Sin cambios: no se despliega"` sin comillas) falla con «mapping values are not allowed here (linea 7, columna 31)»; una clave duplicada (`runs-on`) se detecta con línea y columna; `ci.yml` sin `continue-on-error`, `always()` ni `failure()` (0 coincidencias).
+- `ci.yml`: edición puntual, un paso antes del de codificación; `verificar.ps1`: comprobación añadida en el mismo orden.
+- Horas (git): inicio `a86e5bf` 19:40:05, fin `2f999e5` 19:56:41 (hora de Managua) → **≈ 0:16 h**; coincide con lo declarado.
+- Riesgo residual aceptado: PyYAML en `ubuntu-latest` se afirma preinstalado (§13); si el primer run lo desmiente, el paso falla en rojo y se añade `pip install pyyaml` en un commit de la misma rama.
