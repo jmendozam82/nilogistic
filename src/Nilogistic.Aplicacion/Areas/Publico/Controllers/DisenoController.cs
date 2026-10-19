@@ -9,8 +9,6 @@ namespace Nilogistic.Aplicacion.Areas.Publico.Controllers;
 [Area("Publico")]
 public sealed class DisenoController : Controller
 {
-    private const string CspCorreo = "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'";
-
     private readonly IWebHostEnvironment _entorno;
     private readonly IServicioPlantillasCorreo _plantillas;
 
@@ -72,7 +70,6 @@ public sealed class DisenoController : Controller
             ? "text/plain; charset=utf-8"
             : "text/html; charset=utf-8";
 
-        Response.Headers.ContentSecurityPolicy = CspCorreo;
         return Content(cuerpo, tipoContenido);
     }
 

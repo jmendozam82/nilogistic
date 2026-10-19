@@ -97,21 +97,60 @@ public class PlantillasCorreoTests
         documento.QuerySelector("h1")?.TextContent.Should().Contain("Galería de correo");
     }
 
-    [Theory]
-    [MemberData(nameof(NombresPlantillas))]
+    [Fact]
     [Hu("HU-030", "E3")]
-    public async Task Diseno_correo_plantilla_devuelve_html_200_en_staging(string nombre)
+    public async Task Diseno_correo_plantilla_usa_csp_acotada_en_desarrollo()
     {
-        using var fabrica = AyudasDiseno.Fabrica();
+        using var fabrica = AyudasDiseno.Fabrica("Development");
         using var cliente = fabrica.CreateClient();
 
-        var (respuesta, documento) = await AyudasDiseno.ObtenerAsync(cliente, $"/diseno/correo/{nombre}");
+        var (respuesta, documento) = await AyudasDiseno.ObtenerAsync(cliente, "/diseno/correo/activacion_cuenta");
 
         respuesta.StatusCode.Should().Be(HttpStatusCode.OK);
         documento.DocumentElement.GetAttribute("lang").Should().Be("es");
-        respuesta.Headers.Should().ContainKey("Content-Security-Policy");
-        var csp = string.Join("", respuesta.Headers.GetValues("Content-Security-Policy"));
-        csp.Should().NotContain("unsafe-inline", "la CSP global no debe relajarse para las plantillas de correo");
+        var csp = respuesta.Headers.GetValues("Content-Security-Policy").Single();
+        csp.Should().Be("default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; frame-ancestors 'none'");
+    }
+
+    [Fact]
+    [Hu("HU-030", "E3")]
+    public async Task Diseno_publico_conserva_la_csp_global_sin_unsafe_inline()
+    {
+        using var fabrica = AyudasDiseno.Fabrica("Development");
+        using var cliente = fabrica.CreateClient();
+
+        var respuesta = await cliente.GetAsync("/diseno/publico");
+
+        respuesta.StatusCode.Should().Be(HttpStatusCode.OK);
+        var csp = respuesta.Headers.GetValues("Content-Security-Policy").Single();
+        csp.Should().NotContain("unsafe-inline");
+        csp.Should().Contain("script-src 'self' 'nonce-");
+    }
+
+    [Fact]
+    [Hu("HU-030", "E3")]
+    public async Task Diseno_correo_plantilla_es_404_en_produccion()
+    {
+        using var fabrica = AyudasDiseno.Fabrica("Production");
+        using var cliente = fabrica.CreateClient();
+
+        var respuesta = await cliente.GetAsync("/diseno/correo/activacion_cuenta");
+
+        respuesta.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    [Hu("HU-030", "E3")]
+    public async Task Produccion_no_relaja_la_csp_para_diseno_correo()
+    {
+        using var fabrica = AyudasDiseno.Fabrica("Production");
+        using var cliente = fabrica.CreateClient();
+
+        var respuesta = await cliente.GetAsync("/diseno/correo/activacion_cuenta");
+        var csp = respuesta.Headers.GetValues("Content-Security-Policy").Single();
+
+        csp.Should().NotContain("unsafe-inline");
+        csp.Should().Contain("script-src 'self' 'nonce-");
     }
 
     [Theory]
@@ -150,18 +189,6 @@ public class PlantillasCorreoTests
         using var cliente = fabrica.CreateClient();
 
         var respuesta = await cliente.GetAsync("/diseno/correo");
-
-        respuesta.StatusCode.Should().Be(HttpStatusCode.NotFound);
-    }
-
-    [Fact]
-    [Hu("HU-030", "E3")]
-    public async Task Diseno_correo_plantilla_es_404_en_produccion()
-    {
-        using var fabrica = AyudasDiseno.Fabrica("Production");
-        using var cliente = fabrica.CreateClient();
-
-        var respuesta = await cliente.GetAsync("/diseno/correo/activacion_cuenta");
 
         respuesta.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
