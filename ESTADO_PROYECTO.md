@@ -9,12 +9,12 @@
 |---|---|
 | Fase del ciclo de vida | 7 — Implementación |
 | Release | R1 — Sitio público y comunidad de contenido |
-| Sprint actual | Sprint 1 — Plataforma operativa: **cerrado formalmente** el 2026-10-17 (37 de 37 SP; puertas G1 y G2 en verde; fechas del plan 23/11 – 04/12/2026) |
-| HU actual | Sprint 1 completo y **HU-041 ✅ cerrada** (2026-10-17; PR #60 y #61; validada en Staging por Jorge). **HU-030 ✅ cerrada** (2026-10-18; PR #67, `a9c05c0`; CI y `desplegar-staging` en verde; validada visualmente por Jorge en local y en Staging). **Sprint 2 completo por adelanto** (22/22 SP). Siguiente: cierre formal de S2 y arranque de S3 |
+| Sprint actual | **Sprint 3 — Cumplimiento y base de arranque** (21 SP; iniciado por adelanto el 2026-10-18; plan 21/12/2026 – 01/01/2027). Sprint 1 **cerrado** el 2026-10-17 (37/37 SP; G1 y G2) y **Sprint 2 cerrado** el 2026-10-18 por adelanto (22/22 SP; G1 provisional hasta ejecutar `workflow_dispatch`; ver `docs/Nilogistic_Cierre_S2.md`) |
+| HU actual | Sprint 1 completo y **HU-041 ✅ cerrada** (2026-10-17; PR #60 y #61; validada en Staging por Jorge). **HU-030 ✅ cerrada** (2026-10-18; PR #67, `a9c05c0`; CI y `desplegar-staging` en verde; validada visualmente por Jorge en local y en Staging). **Sprint 2 completo por adelanto** (22/22 SP). S2 cerrado formalmente. Siguiente: **HU-032** (versionado de textos legales, 3 SP, con migración), primera de S3 |
 | Criterio de aceptación actual | HU-041 ✅: E1–E4 cumplidos (contenido, alt, 360 px sin desbordes, metadatos); texto e imágenes provisionales marcados (RN-056, D-126); la página responde 404 en Producción hasta `Contenido:QuienesSomos:Publicado=true`. HU-030 ✅: E1–E5 cumplidos (catálogo de 10 plantillas con variables tipadas, rechazo si falta una variable, accesibilidad y texto plano, sin promociones, versiones con historial). 624 pruebas en verde (Arquitectura 19, BLL 260, Aplicación 251, DAL 94) |
-| Paso actual del ciclo | Sprint 1 **cerrado formalmente** el 2026-10-17: 37/37 SP + HU-041 (3 SP adelantada de S2, D-133). G1 en verde (cobertura de BLL 95,4 % ≥ 70 %, run `39088974795`) y G2 ✅. Retrospectiva y recalibración de D-06: 07/12/2026. Sin PR `develop→main` (D-134). Siguiente: cierre formal de S2 (D-129) y Sprint 3 |
-| Rama de trabajo | `develop` (HU-041 integrada); `docs/HU-041-cierre` (cierre documental, sin push) |
-| Última actualización | 2026-10-17 |
+| Paso actual del ciclo | Sprint 1 **cerrado formalmente** el 2026-10-17: 37/37 SP + HU-041 (3 SP adelantada de S2, D-133). G1 en verde (cobertura de BLL 95,4 % ≥ 70 %, run `39088974795`) y G2 ✅. Retrospectiva y recalibración de D-06: 07/12/2026. Sin PR `develop→main` (D-134). Sprint 2 **cerrado** el 2026-10-18 (`docs/Nilogistic_Cierre_S2.md`). Sprint 3 iniciado; falta la ficha de HU-032. Decisiones: D-129 (Jorge cuenta ejecuciones verdes de `accesibilidad`) y D-06 (07/12/2026) |
+| Rama de trabajo | `develop`; `docs/HU-030-cierre` (cierre documental de HU-030 y S2, sin push) |
+| Última actualización | 2026-10-18 |
 
 ## 2. Fases del ciclo de vida
 
@@ -26,7 +26,7 @@
 | 4 | Historias de Usuario (R1: Lotes 1 y 2) | ✅ | verificar versión |
 | 5 | Diseño: arquitectura y modelo de datos (ADR-01..17) | ✅ | Nilogistic_Fase5_A_Arquitectura.md |
 | 6 | Planificación de Sprints | ✅ | Fase 6 v0.5 (aprobada 2026-10-07) |
-| 7 | Implementación por Sprint | 🔄 | Sprint 1 cerrado (S0 y S1) |
+| 7 | Implementación por Sprint | 🔄 | S0, S1 y S2 cerrados; S3 iniciado |
 | 8 | Pruebas unitarias + validación visual (por Sprint) | ⬜ | — |
 | 9 | Despliegue, release y retrospectiva | ⬜ | — |
 
@@ -188,6 +188,6 @@ Evidencia de HU-006 en Staging (2026-10-11): E1 run 38152145726; E3 run 38157698
 | Elemento | Versión |
 |---|---|
 | Producto Nilogistic | 0.0.0 (sin release) |
-| Este archivo (ESTADO_PROYECTO.md) | v0.51 — 2026-10-18 |
+| Este archivo (ESTADO_PROYECTO.md) | v0.52 — 2026-10-18 |
 | AGENTS.md / CLAUDE.md | v1.0 — 2026-10-07 |
 | Esquema de BD (última migración aplicada) | 8 aplicadas en Supabase Staging (gpribzfgwvlzxcpdzezs); la 8.ª (HU-062a, parámetros) verificada en el run 38287470325 |
