@@ -6,8 +6,8 @@
 
 .DESCRIPTION
     Replica las verificaciones de la CI antes de abrir un PR:
-    Conventional Commits, migraciones, codificacion UTF-8, pruebas de scripts,
-    build de la solucion y pruebas .NET.
+    Conventional Commits, migraciones, sintaxis de workflows, codificacion
+    UTF-8, pruebas de scripts, build de la solucion y pruebas .NET.
 
 .PARAMETER Base
     Rama base contra la que comparar (por defecto: develop).
@@ -83,6 +83,7 @@ function Ejecutar {
 
 Ejecutar "Conventional Commits" { & $python scripts/ci/validar_conventional_commits.py --base $Base }
 Ejecutar "Migraciones" { & $python scripts/ci/verificar_migraciones.py --directorio supabase/migrations --base $Base }
+Ejecutar "Sintaxis de los workflows" { & $python scripts/ci/verificar_workflows.py }
 Ejecutar "Codificacion UTF-8" { & $python scripts/ci/verificar_codificacion.py }
 Ejecutar "Pruebas de scripts" { & $python -m unittest discover -s scripts/tests }
 Ejecutar "Build de la solucion" { dotnet build Nilogistic.slnx -c Release -warnaserror }
