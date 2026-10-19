@@ -60,6 +60,9 @@ jobs:
       - name: Trazabilidad escenarios Gherkin sin prueba
         run: python3 scripts/trazabilidad/escenarios_sin_prueba.py --hu-dir docs/hu --pruebas tests --sprint todos
 
+      - name: Sintaxis de los workflows (DT-4)
+        run: python3 scripts/ci/verificar_workflows.py
+
       - name: Codificacion UTF-8 sin BOM (DT-2)
         run: python3 scripts/ci/verificar_codificacion.py
 

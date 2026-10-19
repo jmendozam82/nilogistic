@@ -35,10 +35,11 @@ pwsh -File scripts/local/verificar.ps1 -Base origin/develop
 
 1. Conventional Commits del rango `Base..HEAD`.
 2. Nombre y orden de las migraciones de Supabase.
-3. Codificacion UTF-8 sin BOM ni doble codificacion.
-4. Pruebas de los scripts de CI.
-5. Build de `Nilogistic.slnx` con advertencias como errores.
-6. Pruebas .NET:
+3. Sintaxis y estructura de los workflows de GitHub Actions (requiere PyYAML: `pip install pyyaml`).
+4. Codificacion UTF-8 sin BOM ni doble codificacion.
+5. Pruebas de los scripts de CI.
+6. Build de `Nilogistic.slnx` con advertencias como errores.
+7. Pruebas .NET:
    - Siempre: Arquitectura, BLL y Aplicacion.
    - Con `-OmitirDal`: omite DAL.
    - Con `-ConNavegador`: incluye Accesibilidad.
@@ -51,6 +52,7 @@ El script imprime una tabla `OK` / `KO` al final:
 == Resumen ==
 Conventional Commits                               OK
 Migraciones                                        OK
+Sintaxis de los workflows                          OK
 Codificacion UTF-8                                 OK
 Pruebas de scripts                                 OK
 Build de la solucion                               OK

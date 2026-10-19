@@ -80,10 +80,74 @@ Aprobado por Jorge el 2026-10-18 (D-144).
 `scripts/local/verificar.ps1` debe mostrar la comprobación nueva en `OK`. Tras el push, el job `build-y-pruebas` debe mostrar el paso «Sintaxis de los workflows (DT-4)» en verde.
 
 ## 13. Dudas del ejecutor
-_(el ejecutor anota aquí cualquier duda o hallazgo; «Sin bloqueos» si no hay)_
+Sin bloqueos. Anotaciones:
+- **PyYAML en CI:** el runner `ubuntu-latest` (ubuntu-24.04) trae PyYAML preinstalado con el `python3` del sistema (paquete documentado en el image del runner), por lo que §4.3 no exige paso `pip install` previo en `ci.yml`. Si un runner futuro no lo trajera, el paso falla en rojo (sin `continue-on-error`, por la invariante HU-006 E3) y la corrección es añadir `python3 -m pip install --quiet pyyaml` como paso previo.
+- **Claves duplicadas:** PyYAML no las detecta por defecto; se usa un `SafeLoader` propio con `add_constructor` (receta documentada). `add_constructor` invoca con `(loader, node)`, así que el parámetro de profundidad lleva valor por defecto.
+- **`on` sin comillas:** PyYAML (YAML 1.1) interpreta la clave `on` como el booleano `True`; el verificador acepta ambas formas para no rechazar workflows válidos reales.
+- El test «los workflows reales del repositorio pasan» también falla si hay un workflow inválido sin commitear en `.github/workflows` (comportamiento deseable en local; se comprobó en la prueba de fallo de §7).
 
 ## 14. Informe del ejecutor
-_(archivos, salidas de §9, hora de inicio y de fin desde git)_
+
+**Archivos tocados:**
+| Archivo | Cambio |
+|---|---|
+| `scripts/ci/verificar_workflows.py` | Nuevo verificador (PyYAML; español; 6 reglas de §4.1; exit 0/1/2) |
+| `scripts/tests/test_scripts.py` | `WorkflowsTests`: 16 pruebas (caso original del `echo`, duplicados, `needs`, `run`+`uses`, vacío, main 0/1/2, workflows reales) |
+| `.github/workflows/ci.yml` | Paso «Sintaxis de los workflows (DT-4)» antes de «Codificacion UTF-8 sin BOM (DT-2)» (edición puntual) |
+| `scripts/local/verificar.ps1` | Comprobación «Sintaxis de los workflows» antes de «Codificacion UTF-8» + síntesis del `.DESCRIPTION` (edición puntual) |
+| `docs/runbooks/verificacion-local.md` | Nueva línea 3 de «Que comprueba» (con instalación de PyYAML) y renumeración; línea en el ejemplo de resumen |
+| `docs/tareas/DT-4.md` | §13 y §14 (este informe) |
+
+**Salidas de §9** (runner local Windows; `py` = Python 3.13 con PyYAML 6.0.3):
+```
+> py scripts/ci/verificar_workflows.py
+OK: 1 workflow(s) revisado(s)
+
+> py -m unittest discover -s scripts/tests
+Ran 93 tests in 3.305s
+OK
+
+> py scripts/ci/verificar_codificacion.py
+OK: 396 archivo(s) revisado(s)
+
+> powershell -NoProfile -File scripts/local/verificar.ps1 -OmitirDal
+== Resumen ==
+Conventional Commits                               OK
+Migraciones                                        OK
+Sintaxis de los workflows                          OK
+Codificacion UTF-8                                 OK
+Pruebas de scripts                                 OK
+Build de la solucion                               OK
+Tests: tests/Nilogistic.Arquitectura.Tests         OK
+Tests: tests/Nilogistic.BLL.Tests                  OK
+Tests: tests/Nilogistic.Aplicacion.Tests           OK
+
+Todas las comprobaciones pasaron.
+```
+(93 pruebas de scripts = 77 previas + 16 nuevas. Verificación .NET: Arquitectura 19, BLL 260, Aplicación 251, todas correctas.)
+
+**Prueba de fallo (§7, criterio 4):** archivo temporal `.github/workflows/temp_invalido_dt4.yml` con el caso original (sin commitear, borrado tras la prueba):
+```
+> py scripts/ci/verificar_workflows.py
+temp_invalido_dt4.yml: YAML invalido: mapping values are not allowed here (linea 7, columna 31)
+exit=1
+
+> powershell -NoProfile -File scripts/local/verificar.ps1 -OmitirDal
+== Sintaxis de los workflows ==
+temp_invalido_dt4.yml: YAML invalido: mapping values are not allowed here (linea 7, columna 31)
+...
+== Resumen ==
+Sintaxis de los workflows                          KO
+Pruebas de scripts                                 KO   (el test de workflows reales también ve el temporal)
+...
+2 comprobacion(es) fallaron.
+exit=1
+```
+Tras borrar el temporal: `verificar_workflows.py` → `OK: 1 workflow(s) revisado(s)` y las 93 pruebas en verde.
+
+**Horas (solo git):**
+- Hora de inicio (git): `a86e5bf 2026-10-19 01:40:05 +0000` (último commit anterior a este trabajo; ficha DT-4).
+- Hora de fin (git): la de este mismo commit; no puede constar en su propio contenido sin estimar (§10 prohíbe estimar), se contrasta en §15 con `git log -1 --format='%h %ci'`.
 
 ## 15. Revisión de Claude
 _(la completa Claude tras revisar el diff, **incluida la validación del YAML de `ci.yml` con la herramienta, no a ojo**)_

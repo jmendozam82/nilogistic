@@ -16,6 +16,7 @@ import validar_conventional_commits as cvc  # noqa: E402
 import verificar_migraciones as vm  # noqa: E402
 import verificar_codificacion as vcod  # noqa: E402
 import cambios_despliegue as cdesp  # noqa: E402
+import verificar_workflows as vwf  # noqa: E402
 
 
 def escribir(ruta, texto):
@@ -379,6 +380,129 @@ class DespliegueTests(unittest.TestCase):
             ["git", "rev-parse", "HEAD"], cwd=d,
             capture_output=True, text=True, check=True,
         ).stdout.strip()
+
+
+WORKFLOW_VALIDO = """name: ci
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo hola
+"""
+
+
+class WorkflowsTests(unittest.TestCase):
+    def test_workflow_minimo_valido(self):
+        self.assertEqual(vwf.analizar_workflow(WORKFLOW_VALIDO, "ci.yml"), [])
+
+    def test_caso_original_dos_puntos_sin_comillas(self):
+        texto = (
+            "name: ci\n"
+            "on: push\n"
+            "jobs:\n"
+            "  a:\n"
+            "    runs-on: ubuntu-latest\n"
+            "    steps:\n"
+            '      - run: echo "Sin cambios de codigo: no se despliega Staging" >> "$GITHUB_STEP_SUMMARY"\n'
+        )
+        errores = vwf.analizar_workflow(texto, "ci.yml")
+        self.assertEqual(len(errores), 1)
+        self.assertIn("YAML invalido", errores[0])
+        self.assertIn("linea 7", errores[0])
+
+    def test_clave_duplicada(self):
+        texto = WORKFLOW_VALIDO + "name: otro\n"
+        errores = vwf.analizar_workflow(texto, "ci.yml")
+        self.assertTrue(any("clave duplicada" in e for e in errores), errores)
+
+    def test_falta_jobs(self):
+        texto = "name: ci\non:\n  push:\n"
+        errores = vwf.analizar_workflow(texto, "ci.yml")
+        self.assertTrue(any("'jobs'" in e for e in errores), errores)
+
+    def test_falta_on(self):
+        texto = "name: ci\njobs:\n  a:\n    runs-on: ubuntu-latest\n"
+        errores = vwf.analizar_workflow(texto, "ci.yml")
+        self.assertTrue(any("'on'" in e for e in errores), errores)
+
+    def test_falta_name(self):
+        texto = "on:\n  push:\njobs:\n  a:\n    runs-on: ubuntu-latest\n"
+        errores = vwf.analizar_workflow(texto, "ci.yml")
+        self.assertTrue(any("'name'" in e for e in errores), errores)
+
+    def test_job_sin_runs_on_ni_uses(self):
+        texto = "name: ci\non:\n  push:\njobs:\n  a:\n    steps:\n      - run: echo hola\n"
+        errores = vwf.analizar_workflow(texto, "ci.yml")
+        self.assertTrue(any("'runs-on' o 'uses'" in e for e in errores), errores)
+
+    def test_needs_a_job_inexistente(self):
+        texto = (
+            "name: ci\non:\n  push:\njobs:\n"
+            "  a:\n    runs-on: ubuntu-latest\n"
+            "    steps:\n      - run: echo hola\n"
+            "  b:\n    needs: fantasma\n    runs-on: ubuntu-latest\n"
+            "    steps:\n      - run: echo hola\n"
+        )
+        errores = vwf.analizar_workflow(texto, "ci.yml")
+        self.assertTrue(any("inexistente 'fantasma'" in e for e in errores), errores)
+
+    def test_paso_con_run_y_uses_a_la_vez(self):
+        texto = (
+            "name: ci\non:\n  push:\njobs:\n  a:\n    runs-on: ubuntu-latest\n"
+            "    steps:\n      - run: echo hola\n        uses: actions/checkout@v4\n"
+        )
+        errores = vwf.analizar_workflow(texto, "ci.yml")
+        self.assertTrue(any("'run' y 'uses' a la vez" in e for e in errores), errores)
+
+    def test_paso_sin_run_ni_uses(self):
+        texto = (
+            "name: ci\non:\n  push:\njobs:\n  a:\n    runs-on: ubuntu-latest\n"
+            "    steps:\n      - name: vacio\n"
+        )
+        errores = vwf.analizar_workflow(texto, "ci.yml")
+        self.assertTrue(any("debe tener 'run' o 'uses'" in e for e in errores), errores)
+
+    def test_archivo_vacio(self):
+        errores = vwf.analizar_workflow("# solo comentarios\n", "ci.yml")
+        self.assertTrue(any("vacio" in e for e in errores), errores)
+
+    def test_raiz_no_es_mapa(self):
+        errores = vwf.analizar_workflow("- name: ci\n- on: push\n", "ci.yml")
+        self.assertEqual(errores, ["la raiz debe ser un mapa"])
+
+    def test_main_workflow_valido_devuelve_cero(self):
+        with tempfile.TemporaryDirectory() as d:
+            escribir(os.path.join(d, "ci.yml"), WORKFLOW_VALIDO)
+            salida = io.StringIO()
+            with contextlib.redirect_stdout(salida):
+                codigo = vwf.main(["--directorio", d])
+            self.assertEqual(codigo, 0)
+            self.assertIn("OK: 1 workflow(s) revisado(s)", salida.getvalue())
+
+    def test_main_workflow_invalido_devuelve_uno(self):
+        with tempfile.TemporaryDirectory() as d:
+            escribir(os.path.join(d, "ci.yml"), "name: ci\non: push\njobs:\n")
+            salida = io.StringIO()
+            with contextlib.redirect_stdout(salida):
+                codigo = vwf.main(["--directorio", d])
+            self.assertEqual(codigo, 1)
+            self.assertIn("ci.yml:", salida.getvalue())
+
+    def test_main_directorio_inexistente_devuelve_dos(self):
+        with tempfile.TemporaryDirectory() as d:
+            with contextlib.redirect_stderr(io.StringIO()):
+                codigo = vwf.main(["--directorio", os.path.join(d, "no-existe")])
+            self.assertEqual(codigo, 2)
+
+    def test_main_los_workflows_reales_del_repositorio_pasan(self):
+        workflows = os.path.join(os.path.dirname(RAIZ), ".github", "workflows")
+        salida = io.StringIO()
+        with contextlib.redirect_stdout(salida):
+            codigo = vwf.main(["--directorio", workflows])
+        self.assertEqual(codigo, 0, salida.getvalue())
+        self.assertIn("OK:", salida.getvalue())
 
 
 if __name__ == "__main__":
