@@ -239,7 +239,7 @@ public sealed class ServicioDestinatariosAviso(
     {
         ListasAviso.NuevasSolicitudes => "Nuevas solicitudes de alta",
         ListasAviso.Contacto => "Contacto",
-        ListasAviso.AlertasTecnicas => "Alertas tecnicas",
+        ListasAviso.AlertasTecnicas => "Alertas técnicas",
         ListasAviso.Continuidad => "Continuidad",
         _ => lista
     };

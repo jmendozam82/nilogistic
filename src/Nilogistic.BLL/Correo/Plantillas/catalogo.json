@@ -166,8 +166,8 @@
       { "nombre": "lista", "tipo": "texto", "ejemplo": "Nuevas solicitudes de alta" },
       { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "20 de octubre de 2026, 15:00" }
     ],
-    "sha256Html": "8c4039a9b7d5c52a43042c7bfbbe330373fd0e946f24efebddc8686edeaa1d17",
-    "sha256Txt": "eadcfdea572d0e86d33022dc3bb860b93f86321d7b303703ee0b64da1b1f5d0b",
+    "sha256Html": "e9f111b034697c4c030ecbea305088ec743aa902cb62858d8148e01c22607f0b",
+    "sha256Txt": "632290d83cd9d50c4954d47cc1cb2982e2e0a34eb5dd43389cd3fd39adfc7249",
     "historial": []
   }
 ]

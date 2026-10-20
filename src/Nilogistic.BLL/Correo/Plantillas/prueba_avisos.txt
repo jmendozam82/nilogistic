@@ -4,12 +4,12 @@ Esta es una prueba de la lista {{lista}}.
 
 Fecha y hora: {{fecha_hora}}
 
-Si recibiste este correo, la configuracion de remitentes y destinatarios funciona correctamente.
+Si recibiste este correo, la configuración de remitentes y destinatarios funciona correctamente.
 
 Equipo Nilogistic
 
 --
-Recibes este correo porque se solicito una prueba desde nilogistic.com. Para consultas escribe desde la pagina de Contacto: {{url_base}}/contacto
-Politica de privacidad: {{url_base}}/legal/privacidad
-Terminos y condiciones: {{url_base}}/legal/terminos
+Recibes este correo porque se solicitó una prueba desde nilogistic.com. Para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
 © 2026 Nilogistic · Managua, Nicaragua
