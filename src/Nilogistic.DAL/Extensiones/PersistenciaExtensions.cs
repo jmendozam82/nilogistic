@@ -54,6 +54,8 @@ public static class PersistenciaExtensions
         servicios.AddScoped<IRepositorioAuditoria, RepositorioAuditoria>();
         servicios.AddScoped<IRepositorioParametros, RepositorioParametros>();
         servicios.AddScoped<IRepositorioDocumentosLegales, RepositorioDocumentosLegales>();
+        servicios.AddScoped<IRepositorioDestinatariosAviso, RepositorioDestinatariosAviso>();
+        servicios.AddScoped<IRepositorioRemitentesCorreo, RepositorioRemitentesCorreo>();
         return servicios;
     }
 
