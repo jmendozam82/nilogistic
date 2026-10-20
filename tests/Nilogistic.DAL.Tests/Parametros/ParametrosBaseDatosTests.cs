@@ -281,7 +281,8 @@ public class ParametrosBaseDatosTests(PostgresFixture bd)
 
         aplicado.Should().BeFalse("el valor esperado ya no esta: conflicto, no error");
 
-        var asientos = await bd.EscalarAsync<long>(cadena, "select count(*) from auditoria.registros");
+        var asientos = await bd.EscalarAsync<long>(cadena,
+            "select count(*) from auditoria.registros where accion = 'configuracion_actualizada'");
         asientos.Should().Be(0, "sin cambio no hay asiento");
 
         var valor = await bd.EscalarAsync<string?>(cadena,

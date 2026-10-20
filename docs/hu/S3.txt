@@ -4,3 +4,9 @@ HU-032 E2
 HU-032 E3
 HU-032 E4
 # HU-032 E1: publicar la version siguiente y auditar version_legal_publicada. E2: registro de la aceptacion con documento, version, fecha UTC, IP y hash del user agent. E3: dos publicaciones simultaneas no dejan dos vigentes. E4: formulario abierto durante un cambio de version devuelve VersionObsoleta sin escribir.
+HU-039a E1
+HU-039a E2
+HU-039a E3
+HU-039a E4
+HU-039a E5
+# HU-039a E1: la base recien migrada tiene 3 catalogos, 28 valores, 4 planes, 8 precios, 16 beneficios provisionales y el asiento del Sistema. E2: reaplicar la semilla no duplica, no audita de nuevo ni pisa un valor editado; el esquema tambien es idempotente. E3: todo registro sembrado queda marcado provisional leido por EF. E4: el script de G6 lista los planes provisionales con bloquea_g6 y sin ellos no bloquea. E5: reemplazar un valor real retira la marca y se audita la actualizacion con antes y despues.

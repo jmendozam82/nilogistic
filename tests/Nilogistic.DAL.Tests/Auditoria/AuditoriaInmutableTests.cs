@@ -233,7 +233,8 @@ public class AuditoriaInmutableTests(PostgresFixture bd)
         var filaOriginalDespues = await FilaComoTextoAsync(cadenaAdmin, idOriginal);
         filaOriginalDespues.Should().Be(filaOriginalAntes, "el original queda idéntico byte a byte (E4)");
 
-        var total = await bd.EscalarAsync<long>(cadenaAdmin, "select count(*) from auditoria.registros");
+        var total = await bd.EscalarAsync<long>(cadenaAdmin,
+            "select count(*) from auditoria.registros where accion <> 'semilla_catalogos_planes_cargada'");
         total.Should().Be(2, "el original y la corrección coexisten; ninguno se modificó");
     }
 
@@ -308,7 +309,8 @@ public class AuditoriaInmutableTests(PostgresFixture bd)
             detalle.RootElement.GetProperty("corrige_id").GetInt64().Should().Be(idCorreccion1, "corrige a la corrección, no al original");
         }
 
-        var total = await bd.EscalarAsync<long>(cadenaAdmin, "select count(*) from auditoria.registros");
+        var total = await bd.EscalarAsync<long>(cadenaAdmin,
+            "select count(*) from auditoria.registros where accion <> 'semilla_catalogos_planes_cargada'");
         total.Should().Be(3, "original, corrección y corrección de la corrección");
     }
 }

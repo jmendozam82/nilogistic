@@ -10,7 +10,7 @@ import os
 import re
 import sys
 
-PATRON_HU = re.compile(r'\[Hu\(\s*"(HU-\d{3})"\s*,\s*"(E\d+)"\s*\)\]')
+PATRON_HU = re.compile(r'\[Hu\(\s*"(HU-\d{3}[a-z]?)"\s*,\s*"(E\d+)"\s*\)\]')
 
 
 def escenarios_con_prueba(raiz_pruebas: str) -> set:
