@@ -1,6 +1,6 @@
 # NILOGISTIC — Cierre formal del Sprint 2 (18/10/2026)
 
-> Estado: **cerrado el 18/10/2026 por adelanto**, con la evidencia de la puerta G1 pendiente de una ejecución manual de la CI (sección 2). Sprint 2 — Auditoría y notificaciones; planificado del 07/12 al 18/12/2026 (22 SP) y entregado por completo dentro del Sprint 1 y de la jornada del 18/10. Retrospectiva formal y recalibración de D-06: 07/12/2026.
+> Estado: **cerrado el 18/10/2026 por adelanto**, con G1 en verde (run `39190767515`, sección 2). Sprint 2 — Auditoría y notificaciones; planificado del 07/12 al 18/12/2026 (22 SP) y entregado por completo dentro del Sprint 1 y de la jornada del 18/10. Retrospectiva formal y recalibración de D-06: 07/12/2026.
 
 ## 1. Resultado
 - **22 de 22 SP del plan de S2 entregados**, todos adelantados: HU-008 (5), HU-009 (3), HU-062a (3), HU-011 (3) y HU-041 (3) se cerraron durante S1 (D-133 y anteriores); **HU-030 (5)** se cerró el 18/10/2026 (PR #67, `a9c05c0`).
@@ -11,7 +11,7 @@
 ## 2. Puertas de cierre
 | Puerta | Criterio | Estado | Evidencia / acción |
 |---|---|---|---|
-| **G1** | Cobertura de BLL ≥ 70 % (HU-038 E2) | ✅ provisional | 95,0 % en `verificar.ps1` local y CI del PR #67 en verde. **Pendiente:** ejecución manual `workflow_dispatch` sobre `develop` para anotar aquí el id del run, igual que en S1 (`39088974795`) |
+| **G1** | Cobertura de BLL ≥ 70 % (HU-038 E2) | ✅ | Run **`39190767515`** (`workflow_dispatch` sobre `develop` en `0c3127d`, que incluye HU-030 y DT-4, 18/10/2026): todos los jobs en `success`; paso «Puerta G1 - cobertura de BLL >= 70 %» en verde con **94,7 %** (mínimo 70 %). Sustituye al run `39088974795`, que era de S1 y anterior a HU-030 |
 | **G2** | Validación visual de las pantallas del sprint | ✅ | HU-041: validada en Staging (17/10). HU-030: vista previa `/diseno/correo` validada por Jorge en local y en Staging (18/10) |
 | Pruebas unitarias | Verdes en CI | ✅ | PR #67: todos los jobs en verde; `desplegar-staging` en verde; `0b818cd` corrigió el YAML del paso «Sin cambios de codigo» |
 | Trazabilidad | `docs/hu/S1.txt` y `docs/hu/S2.txt` coherentes con las pruebas | ✅ | Verificada por la CI (D-15): 0 escenarios sin prueba |
@@ -19,7 +19,7 @@
 ## 3. Decisiones que se toman en el cierre
 | ID | Tema | Recomendación de Claude | Estado |
 |---|---|---|---|
-| D-129 | ¿Hacer obligatorio el job `accesibilidad`? | Criterio fijado en el cierre de S1: ≥ 10 ejecuciones verdes consecutivas, sin fallos intermitentes y duración ≤ 10 min. Claude no puede consultar las ejecuciones (el acceso a la API de Actions está cerrado en esta sesión): **Jorge cuenta las ejecuciones en la pestaña Actions**. Si cumple, hacerlo requerido en la protección de `develop`; si no, reevaluar al cierre de S3 | Decide Jorge con ese dato |
+| D-129 | ¿Hacer obligatorio el job `accesibilidad`? | Criterio de S1: ≥ 10 ejecuciones verdes consecutivas, sin fallos y ≤ 10 min. Dato: 35 de 35 ejecuciones verdes, máximo 1,7 min | ✅ aplicado (18/10/2026): `accesibilidad` es check requerido en `develop` y `main` |
 | D-06 | Velocidad | Ver §5 | Se decide el 07/12/2026 |
 
 ## 4. Retrospectiva (borrador para el 07/12)

@@ -4,6 +4,7 @@
 - **Plazo:** 15 días hábiles desde la solicitud, sujeto a validación legal antes del 18/12/2026 (D-077).
 - **Ensayo:** en Staging al inicio de S11 (2 SP, D-076).
 - **Alcance:** suscriptores de Newsletter y mensajes de contacto. La anonimización de usuarios es FT-101 (R2).
+- **Evidencia de consentimiento (HU-032):** `app.aceptaciones_legales` guarda la IP completa (RNF-PRI-02) y solo el SHA-256 del user agent; nunca se edita ni se borra. El texto legal aceptado vive en `app.documentos_legales` (inmutable; solo se cierra al publicar la versión siguiente). La supresión de datos deberá contemplar esta tabla: si una aceptación cae en el alcance de la solicitud, se evalúa su **anonimización** (nunca `DELETE`), preservando la evidencia sin el dato personal.
 
 ## Procedimiento (borrador; se completa en S11 tras HU-043, HU-053 y HU-044)
 1. Registrar la solicitud (fecha, canal, correo) y verificar identidad respondiendo al correo registrado.

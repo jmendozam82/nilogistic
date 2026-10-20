@@ -67,6 +67,9 @@ public static class Dependencias
         // superficie HTTP (SUP-3). El repositorio (scoped) se lo pasa el servicio a la cache.
         servicios.AddSingleton<CacheParametros>();
         servicios.AddScoped<IServicioParametros, ServicioParametros>();
+
+        // Textos legales (HU-032): versionado y aceptaciones; sin superficie HTTP (SUP-3).
+        servicios.AddScoped<IServicioDocumentosLegales, ServicioDocumentosLegales>();
         return servicios;
     }
 }

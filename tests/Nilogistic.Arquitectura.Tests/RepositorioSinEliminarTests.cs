@@ -57,6 +57,30 @@ public class RepositorioSinEliminarTests
     }
 
     [Fact]
+    public void IRepositorioDocumentosLegales_no_expone_eliminar_ni_actualizar_contenido()
+    {
+        var tipos = new[] { typeof(IRepositorioDocumentosLegales), typeof(RepositorioDocumentosLegales) };
+        var terminosDeModificacion = TerminosProhibidos
+            .Concat(["Actualizar", "Update", "Modificar", "Editar"])
+            .ToArray();
+
+        var infractores = tipos
+            .SelectMany(Metodos)
+            .Where(metodo => terminosDeModificacion
+                .Any(termino => metodo.Name.Contains(termino, StringComparison.OrdinalIgnoreCase)))
+            .Select(metodo => metodo.DeclaringType!.Name + "." + metodo.Name)
+            .ToList();
+
+        infractores.Should().BeEmpty(
+            "el versionado solo publica, cierra y registra aceptaciones: ni elimina ni actualiza contenido (HU-032 4.2)");
+
+        var nombres = tipos[0].GetMethods().Select(metodo => metodo.Name).ToList();
+        nombres.Should().BeEquivalentTo(
+            ["ObtenerVigenteAsync", "ListarHistorialAsync", "PublicarAsync", "RegistrarAceptacionAsync"],
+            "exactamente los cuatro métodos de la ficha (HU-032 4.2)");
+    }
+
+    [Fact]
     [Hu("HU-007", "DoD")]
     public void El_contrato_del_repositorio_no_expone_tipos_de_EF_Core()
     {

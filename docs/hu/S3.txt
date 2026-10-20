@@ -1,0 +1,6 @@
+# Escenarios de S3 con prueba esperada. HU-032 (Pase B): E1-E4 en BLL.Tests; los DoD DAL de la HU viven en DAL.Tests.
+HU-032 E1
+HU-032 E2
+HU-032 E3
+HU-032 E4
+# HU-032 E1: publicar la version siguiente y auditar version_legal_publicada. E2: registro de la aceptacion con documento, version, fecha UTC, IP y hash del user agent. E3: dos publicaciones simultaneas no dejan dos vigentes. E4: formulario abierto durante un cambio de version devuelve VersionObsoleta sin escribir.
