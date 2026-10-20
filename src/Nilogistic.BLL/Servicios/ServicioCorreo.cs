@@ -13,8 +13,10 @@ namespace Nilogistic.BLL.Servicios;
 /// <summary>
 /// Valida y encola correos y procesa la cola con reintentos (HU-010, seccion 4.4). Reintentos,
 /// clasificacion, plazos y validacion viven aqui; el DAL solo ejecuta SQL. El remitente se resuelve
-/// por <c>Tipo</c> al enviar (SUP-7) y el asunto se neutraliza antes de persistir (cabeceras).
-/// Los logs son estructurados y nunca llevan destinatario, asunto, cuerpo ni clave de API.
+/// por <c>Tipo</c> al enviar a traves de <see cref="IServicioRemitentes"/> (HU-063, D-146); si no hay
+/// remitente configurado se conserva el comportamiento anterior (<c>RemitenteNoConfigurado</c>).
+/// El asunto se neutraliza antes de persistir (cabeceras). Los logs son estructurados y nunca llevan
+/// destinatario, asunto, cuerpo ni clave de API.
 /// </summary>
 public sealed class ServicioCorreo(
     IRepositorioCorreo repositorio,
@@ -22,6 +24,7 @@ public sealed class ServicioCorreo(
     IRelojUtc reloj,
     IEspera espera,
     IOptions<OpcionesCorreo> opciones,
+    IServicioRemitentes remitentes,
     ILogger<ServicioCorreo> log) : IServicioCorreo
 {
     private const int MaxDestinatario = 254;
@@ -39,7 +42,7 @@ public sealed class ServicioCorreo(
 
     public async Task<ResultadoEncolado> EncolarAsync(SolicitudCorreo solicitud, CancellationToken cancelacion = default)
     {
-        var (motivo, asunto) = Validar(solicitud);
+        var (motivo, asunto) = await ValidarAsync(solicitud, cancelacion);
         if (motivo is not null)
         {
             return new ResultadoEncolado(EstadoEncolado.Rechazado, null, motivo);
@@ -78,11 +81,20 @@ public sealed class ServicioCorreo(
             return 0;
         }
 
+        var cacheRemitentes = new Dictionary<string, string?>();
         var procesados = 0;
         for (var i = 0; i < lote.Count; i++)
         {
             cancelacion.ThrowIfCancellationRequested();
-            await ProcesarMensajeAsync(lote[i], cancelacion);
+            var mensaje = lote[i];
+
+            if (!cacheRemitentes.TryGetValue(mensaje.Tipo, out var remitente))
+            {
+                remitente = await remitentes.ObtenerEfectivoAsync(mensaje.Tipo, cancelacion);
+                cacheRemitentes[mensaje.Tipo] = remitente;
+            }
+
+            await ProcesarMensajeAsync(mensaje, remitente, cancelacion);
             procesados++;
 
             if (i < lote.Count - 1)
@@ -94,9 +106,8 @@ public sealed class ServicioCorreo(
         return procesados;
     }
 
-    private async Task ProcesarMensajeAsync(CorreoReservado mensaje, CancellationToken cancelacion)
+    private async Task ProcesarMensajeAsync(CorreoReservado mensaje, string? remitente, CancellationToken cancelacion)
     {
-        var remitente = RemitentePara(mensaje.Tipo);
         if (remitente is null)
         {
             await RegistrarFalloAsync(
@@ -205,15 +216,7 @@ public sealed class ServicioCorreo(
         }
     }
 
-    private string? RemitentePara(string tipo) => tipo switch
-    {
-        "transaccional" => opciones.Value.Remitentes.Transaccional,
-        "contacto" => opciones.Value.Remitentes.Contacto,
-        "marketing" => opciones.Value.Remitentes.Marketing,
-        _ => null
-    };
-
-    private (string? Motivo, string Asunto) Validar(SolicitudCorreo s)
+    private async Task<(string? Motivo, string Asunto)> ValidarAsync(SolicitudCorreo s, CancellationToken cancelacion)
     {
         if (s.Tipo is not ("transaccional" or "marketing" or "contacto"))
         {
@@ -261,7 +264,7 @@ public sealed class ServicioCorreo(
             return ("AsuntoInvalido", string.Empty);
         }
 
-        var remitente = RemitentePara(s.Tipo);
+        var remitente = await remitentes.ObtenerEfectivoAsync(s.Tipo, cancelacion);
         if (remitente is null)
         {
             return ("RemitenteNoConfigurado", string.Empty);
