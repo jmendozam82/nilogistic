@@ -45,7 +45,7 @@ update app.catalogo_valores
                from app.catalogo_valores v
                join app.catalogos c on c.id = v.catalogo_id
               where c.clave = 'areas_logisticas'
-                and lower(v.nombre) = lower('Almacenamiento y distribucion'));
+                 and lower(v.nombre) = lower('Almacenamiento y distribución'));
 -- Verificar antes de confirmar.
 select nombre, provisional, activo from app.catalogo_valores
  where lower(nombre) like 'almacenamiento%';
@@ -74,6 +74,8 @@ rollback;  -- o commit si es correcto
   documentada. Cuando exista la pantalla (HU-061 y la HU de planes), la edición irá por la BLL y
   quedará auditada sola.
 - Si una migración de esquema vuelve a correr, **no** resiembra sobre lo editado ni revierte la marca.
+- La semilla reconoce los valores por nombre; si un valor fue renombrado y la semilla se reaplica a mano,
+  se reinserta el original. Las migraciones se aplican una sola vez por entorno.
 
 ## Cómo inactivar (soft delete)
 

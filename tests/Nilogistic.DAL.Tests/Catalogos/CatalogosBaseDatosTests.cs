@@ -101,7 +101,7 @@ public class CatalogosBaseDatosTests(PostgresFixture bd)
         var nombresPlanes = await bd.EscalarAsync<string?>(cadenaAdmin,
             "select string_agg(nombre || ':' || tipo_cliente, ',' order by orden) from app.planes");
         nombresPlanes.Should().Be(
-            "Profesional Basico:profesional,Profesional Premium:profesional,Empresa Basica:empresa,Empresa Plus:empresa");
+            "Profesional Básico:profesional,Profesional Premium:profesional,Empresa Básica:empresa,Empresa Plus:empresa");
 
         var asientos = await bd.EscalarAsync<long>(cadenaAdmin, """
             select count(*) from auditoria.registros
@@ -150,10 +150,10 @@ public class CatalogosBaseDatosTests(PostgresFixture bd)
 
         await bd.EjecutarComoAdminAsync("""
             update app.catalogo_valores
-               set nombre = 'Almacenamiento, distribucion y logistica', provisional = false
+               set nombre = 'Almacenamiento, distribución y logística', provisional = false
              where id = (select v.id from app.catalogo_valores v
                            join app.catalogos c on c.id = v.catalogo_id
-                          where c.clave = 'areas_logisticas' and lower(v.nombre) = lower('Almacenamiento y distribucion'))
+                          where c.clave = 'areas_logisticas' and lower(v.nombre) = lower('Almacenamiento y distribución'))
             """, nombre);
 
         await AplicarSemillaAsync(bd, cadenaAdmin);
@@ -163,24 +163,24 @@ public class CatalogosBaseDatosTests(PostgresFixture bd)
             join app.catalogos c on c.id = v.catalogo_id
             where c.clave = 'areas_logisticas' and lower(v.nombre) like 'almacenamiento%'
             """);
-        nombreEditado.Should().Be("Almacenamiento, distribucion y logistica");
+        nombreEditado.Should().Be("Almacenamiento, distribución y logística");
 
         var marca = await bd.EscalarAsync<bool>(cadenaAdmin, """
             select v.provisional from app.catalogo_valores v
             join app.catalogos c on c.id = v.catalogo_id
-            where c.clave = 'areas_logisticas' and lower(v.nombre) like 'almacenamiento, distribucion%'
+            where c.clave = 'areas_logisticas' and lower(v.nombre) like 'almacenamiento, distribución%'
             """);
         marca.Should().BeFalse("la semilla no resiembra ni revierte la marca de un valor editado");
 
         var editados = await bd.EscalarAsync<long>(cadenaAdmin, """
             select count(*) from app.catalogo_valores
-            where lower(nombre) = lower('Almacenamiento, distribucion y logistica')
+            where lower(nombre) = lower('Almacenamiento, distribución y logística')
             """);
         editados.Should().Be(1, "el valor editado no se duplica");
 
         var original = await bd.EscalarAsync<long>(cadenaAdmin, """
             select count(*) from app.catalogo_valores
-            where lower(nombre) = lower('Almacenamiento y distribucion')
+            where lower(nombre) = lower('Almacenamiento y distribución')
             """);
         original.Should().Be(1, "la semilla repone el valor original porque no puede reconocer el renombrado");
     }

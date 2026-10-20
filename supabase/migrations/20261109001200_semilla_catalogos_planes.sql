@@ -3,7 +3,6 @@
 -- Debe ser idempotente: el CI aplica las migraciones dos veces sobre la misma base. Cada insercion
 -- usa not exists para no duplicar y no pisar lo que Administracion ya haya editado.
 -- Todo registro sembrado lleva provisional = true; los valores reales son las tareas #8 y #10.
--- Los textos de la semilla van sin tildes para evitar depender de la codificacion del archivo.
 
 do $$
 declare
@@ -18,7 +17,7 @@ begin
   insert into app.catalogos (clave, nombre, provisional)
   select valor.clave, valor.nombre, true
   from (values
-    ('areas_logisticas', 'Areas logisticas'),
+    ('areas_logisticas', 'Áreas logísticas'),
     ('ubicaciones', 'Ubicaciones'),
     ('tipos_contrato', 'Tipos de contrato')
   ) as valor(clave, nombre)
@@ -30,10 +29,10 @@ begin
   select catalogo.id, valor.nombre, valor.orden, true
   from (values
     ('Transporte', 1),
-    ('Almacenamiento y distribucion', 2),
+    ('Almacenamiento y distribución', 2),
     ('Aduanas y comercio exterior', 3),
     ('Compras y abastecimiento', 4),
-    ('Planificacion y cadena de suministro', 5),
+    ('Planificación y cadena de suministro', 5),
     ('Servicios generales', 6)
   ) as valor(nombre, orden)
   cross join app.catalogos catalogo
@@ -52,19 +51,19 @@ begin
     ('Carazo', 2),
     ('Chinandega', 3),
     ('Chontales', 4),
-    ('Esteli', 5),
+    ('Estelí', 5),
     ('Granada', 6),
     ('Jinotega', 7),
-    ('Leon', 8),
+    ('León', 8),
     ('Madriz', 9),
     ('Managua', 10),
     ('Masaya', 11),
     ('Matagalpa', 12),
     ('Nueva Segovia', 13),
-    ('Rio San Juan', 14),
+    ('Río San Juan', 14),
     ('Rivas', 15),
-    ('Region Autonoma de la Costa Caribe Norte', 16),
-    ('Region Autonoma de la Costa Caribe Sur', 17)
+    ('Región Autónoma de la Costa Caribe Norte', 16),
+    ('Región Autónoma de la Costa Caribe Sur', 17)
   ) as valor(nombre, orden)
   cross join app.catalogos catalogo
   where catalogo.clave = 'ubicaciones'
@@ -82,7 +81,7 @@ begin
     ('Tiempo parcial', 2),
     ('Por obra o proyecto', 3),
     ('Temporal', 4),
-    ('Pasantia', 5)
+    ('Pasantía', 5)
   ) as valor(nombre, orden)
   cross join app.catalogos catalogo
   where catalogo.clave = 'tipos_contrato'
@@ -96,9 +95,9 @@ begin
   insert into app.planes (tipo_cliente, nombre, orden, provisional)
   select valor.tipo_cliente, valor.nombre, valor.orden, true
   from (values
-    ('profesional', 'Profesional Basico', 1),
+    ('profesional', 'Profesional Básico', 1),
     ('profesional', 'Profesional Premium', 2),
-    ('empresa', 'Empresa Basica', 3),
+    ('empresa', 'Empresa Básica', 3),
     ('empresa', 'Empresa Plus', 4)
   ) as valor(tipo_cliente, nombre, orden)
   where not exists (

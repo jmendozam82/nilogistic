@@ -1,6 +1,6 @@
 -- HU-039a / FT-011: puerta G6. Lista los registros provisionales activos de catalogos y planes.
 -- Uso: supabase db query --linked -f scripts/db/listar_provisionales.sql
--- Read only. Pilas:
+-- Read only. Nota:
 --   bloquea_g6 = true  -> planes, plan_precios y plan_beneficios: publicar valores provisionales
 --                         bloquea el primer despliegue publico (RN-056).
 --   bloquea_g6 = false -> catalogos y catalogo_valores: solo se reportan, no bloquean.
