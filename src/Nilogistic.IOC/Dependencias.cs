@@ -70,6 +70,10 @@ public static class Dependencias
 
         // Textos legales (HU-032): versionado y aceptaciones; sin superficie HTTP (SUP-3).
         servicios.AddScoped<IServicioDocumentosLegales, ServicioDocumentosLegales>();
+
+        // Remitentes y destinatarios de avisos (HU-063): configuracion de correo; sin superficie HTTP (SUP-5).
+        servicios.AddScoped<IServicioRemitentes, ServicioRemitentes>();
+        servicios.AddScoped<IServicioDestinatariosAviso, ServicioDestinatariosAviso>();
         return servicios;
     }
 }

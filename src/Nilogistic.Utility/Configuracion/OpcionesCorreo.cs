@@ -22,6 +22,9 @@ public sealed class OpcionesCorreo
 
     public RemitentesCorreo Remitentes { get; set; } = new();
 
+    /// <summary>Dominios verificados en Resend (HU-011, HU-063). Subdominios no se aceptan por tener el padre verificado.</summary>
+    public List<string> DominiosVerificados { get; set; } = ["nilogistic.com"];
+
     /// <summary>Mensajes reservados por ciclo; se acota a 1..100.</summary>
     public int LoteMaximo
     {
