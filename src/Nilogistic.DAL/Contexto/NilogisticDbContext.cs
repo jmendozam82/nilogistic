@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Nilogistic.DAL.Mapeos;
+using Nilogistic.Entity.Catalogos;
+using Nilogistic.Entity.Planes;
 
 namespace Nilogistic.DAL.Contexto;
 
@@ -9,6 +11,16 @@ namespace Nilogistic.DAL.Contexto;
 /// </summary>
 public class NilogisticDbContext(DbContextOptions<NilogisticDbContext> opciones) : DbContext(opciones)
 {
+    public DbSet<Catalogo> Catalogos => Set<Catalogo>();
+
+    public DbSet<CatalogoValor> CatalogoValores => Set<CatalogoValor>();
+
+    public DbSet<Plan> Planes => Set<Plan>();
+
+    public DbSet<PlanPrecio> PlanPrecios => Set<PlanPrecio>();
+
+    public DbSet<PlanBeneficio> PlanBeneficios => Set<PlanBeneficio>();
+
     protected override void OnModelCreating(ModelBuilder constructor)
     {
         base.OnModelCreating(constructor);

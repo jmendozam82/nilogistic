@@ -54,7 +54,8 @@ public class InterceptorAuditoriaTests(PostgresFixture bd)
     }
 
     private async Task<long> ContarAuditoriaAsync(string cadena) =>
-        await bd.EscalarAsync<long>(cadena, "select count(*) from auditoria.registros");
+        await bd.EscalarAsync<long>(cadena,
+            "select count(*) from auditoria.registros where accion <> 'semilla_catalogos_planes_cargada'");
 
     private async Task<string?> ObtenerJsonAuditoriaAsync(string cadena, string campo) =>
         await bd.EscalarAsync<string?>(cadena, $"select {campo}::text from auditoria.registros order by id desc limit 1");
@@ -66,7 +67,8 @@ public class InterceptorAuditoriaTests(PostgresFixture bd)
         await bd.EscalarAsync<string?>(cadena, "select rol from auditoria.registros order by id desc limit 1");
 
     private async Task<long> ContarEnParticionAsync(string cadenaAdmin, string particion) =>
-        await bd.EscalarAsync<long>(cadenaAdmin, $"select count(*) from auditoria.{particion}");
+        await bd.EscalarAsync<long>(cadenaAdmin,
+            $"select count(*) from auditoria.{particion} where accion <> 'semilla_catalogos_planes_cargada'");
 
     private sealed class ContextoConUsuario : IContextoAuditoria
     {
