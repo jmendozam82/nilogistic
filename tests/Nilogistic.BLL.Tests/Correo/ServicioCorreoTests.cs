@@ -1,9 +1,12 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Nilogistic.BLL.Interfaces;
 using Nilogistic.BLL.Servicios;
 using Nilogistic.DAL.Interfaces;
+using Nilogistic.DTO.Avisos;
 using Nilogistic.DTO.Correos;
+using Nilogistic.Utility.Avisos;
 using Nilogistic.Utility.Configuracion;
 using Nilogistic.Utility.Contratos;
 using Nilogistic.Utility.Correo;
@@ -25,19 +28,21 @@ public class ServicioCorreoTests
         RepositorioCorreoFalso repositorio,
         IProveedorCorreo proveedor,
         EsperaFalsa? espera = null,
-        ILogger<ServicioCorreo>? log = null) =>
+        ILogger<ServicioCorreo>? log = null,
+        IServicioRemitentes? remitentes = null) =>
         new(
             repositorio,
             proveedor,
             new RelojFalso(Ahora),
             espera ?? new EsperaFalsa(),
             Options.Create(new OpcionesCorreo()),
+            remitentes ?? new RemitentesFalso(),
             log ?? NullLogger<ServicioCorreo>.Instance);
 
-    private static ServicioCorreo Crear(EsperaFalsa? espera = null, ILogger<ServicioCorreo>? log = null)
+    private static ServicioCorreo Crear(EsperaFalsa? espera = null, ILogger<ServicioCorreo>? log = null, IServicioRemitentes? remitentes = null)
     {
         var repositorio = new RepositorioCorreoFalso();
-        return Crear(repositorio, new ProveedorFalso(), espera, log);
+        return Crear(repositorio, new ProveedorFalso(), espera, log, remitentes);
     }
 
     [Fact]
@@ -472,6 +477,22 @@ public class ServicioCorreoTests
             Mensajes.Add(mensaje);
             return Task.FromResult(new ResultadoEnvio(Respuesta, IdProveedor, Codigo));
         }
+    }
+
+    private sealed class RemitentesFalso : IServicioRemitentes
+    {
+        public string? Remitente { get; set; } = ServicioCorreoTests.Remitente;
+
+        public Task<string?> ObtenerEfectivoAsync(string flujo, CancellationToken cancelacion = default) =>
+            Task.FromResult(flujo == FlujosCorreo.Marketing ? null : Remitente);
+
+        public Task<IReadOnlyList<RemitenteResponse>> ListarAsync(CancellationToken cancelacion = default) =>
+            Task.FromResult<IReadOnlyList<RemitenteResponse>>([]);
+
+        public Task<ResultadoRemitenteResponse> ActualizarAsync(
+            ActualizarRemitenteRequest solicitud,
+            CancellationToken cancelacion = default) =>
+            throw new NotImplementedException();
     }
 
     private sealed class LoggerFalso : ILogger<ServicioCorreo>
