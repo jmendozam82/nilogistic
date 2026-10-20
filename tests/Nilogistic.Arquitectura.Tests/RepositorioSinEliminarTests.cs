@@ -4,6 +4,7 @@ using Nilogistic.DAL.Repositorios;
 
 namespace Nilogistic.Arquitectura.Tests;
 
+
 /// <summary>
 /// DoD de HU-007: el repositorio genérico no expone eliminación (RN-001) y no filtra tipos de EF Core,
 /// para que la BLL dependa solo del contrato. DoD de HU-062a: el repositorio de parámetros tampoco
@@ -100,6 +101,54 @@ public class RepositorioSinEliminarTests
         || (tipo.Namespace ?? string.Empty).StartsWith("Npgsql", StringComparison.Ordinal)
         || tipo.Name.StartsWith("IQueryable", StringComparison.Ordinal)
         || tipo.Name.StartsWith("DbSet", StringComparison.Ordinal);
+
+    [Fact]
+    public void IRepositorioDestinatariosAviso_no_expone_eliminar_ni_actualizar()
+    {
+        var tipos = new[] { typeof(IRepositorioDestinatariosAviso), typeof(RepositorioDestinatariosAviso) };
+        var terminosDeModificacion = TerminosProhibidos
+            .Concat(["Actualizar", "Update", "Modificar", "Editar"])
+            .ToArray();
+
+        var infractores = tipos
+            .SelectMany(Metodos)
+            .Where(metodo => terminosDeModificacion
+                .Any(termino => metodo.Name.Contains(termino, StringComparison.OrdinalIgnoreCase)))
+            .Select(metodo => metodo.DeclaringType!.Name + "." + metodo.Name)
+            .ToList();
+
+        infractores.Should().BeEmpty(
+            "las listas se reemplazan completas; no se actualiza ni elimina individualmente (HU-063 4.2)");
+
+        var nombres = tipos[0].GetMethods().Select(metodo => metodo.Name).ToList();
+        nombres.Should().BeEquivalentTo(
+            ["ListarActivosAsync", "ReemplazarListaAsync"],
+            "exactamente los dos metodos de la ficha (HU-063 4.2)");
+    }
+
+    [Fact]
+    public void IRepositorioRemitentesCorreo_no_expone_eliminar_ni_actualizar()
+    {
+        var tipos = new[] { typeof(IRepositorioRemitentesCorreo), typeof(RepositorioRemitentesCorreo) };
+        var terminosDeModificacion = TerminosProhibidos
+            .Concat(["Actualizar", "Update", "Modificar", "Editar"])
+            .ToArray();
+
+        var infractores = tipos
+            .SelectMany(Metodos)
+            .Where(metodo => terminosDeModificacion
+                .Any(termino => metodo.Name.Contains(termino, StringComparison.OrdinalIgnoreCase)))
+            .Select(metodo => metodo.DeclaringType!.Name + "." + metodo.Name)
+            .ToList();
+
+        infractores.Should().BeEmpty(
+            "los remitentes se guardan por flujo; no se actualiza ni elimina individualmente (HU-063 4.2)");
+
+        var nombres = tipos[0].GetMethods().Select(metodo => metodo.Name).ToList();
+        nombres.Should().BeEquivalentTo(
+            ["ObtenerAsync", "ListarActivosAsync", "GuardarAsync"],
+            "exactamente los tres metodos de la ficha (HU-063 4.2)");
+    }
 
     private static IEnumerable<Type> TiposInvolucrados(Type tipo)
     {

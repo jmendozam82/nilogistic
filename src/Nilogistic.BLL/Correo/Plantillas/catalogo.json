@@ -155,5 +155,19 @@
     "sha256Html": "438da2e71ce5f6fe267766949e369bc59bc836f390cba9e50aa177a37b7bab8b",
     "sha256Txt": "a210b29f7770229ee93d6f5684f482ff69f942c3f44c9ec00af99e177f35de90",
     "historial": []
+  },
+  {
+    "nombre": "prueba_avisos",
+    "version": "1.0",
+    "tipo": "transaccional",
+    "asunto": "Correo de prueba de Nilogistic",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "lista", "tipo": "texto", "ejemplo": "Nuevas solicitudes de alta" },
+      { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "20 de octubre de 2026, 15:00" }
+    ],
+    "sha256Html": "e9f111b034697c4c030ecbea305088ec743aa902cb62858d8148e01c22607f0b",
+    "sha256Txt": "632290d83cd9d50c4954d47cc1cb2982e2e0a34eb5dd43389cd3fd39adfc7249",
+    "historial": []
   }
 ]

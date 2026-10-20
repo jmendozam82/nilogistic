@@ -10,3 +10,10 @@ HU-039a E3
 HU-039a E4
 HU-039a E5
 # HU-039a E1: la base recien migrada tiene 3 catalogos, 28 valores, 4 planes, 8 precios, 16 beneficios provisionales y el asiento del Sistema. E2: reaplicar la semilla no duplica, no audita de nuevo ni pisa un valor editado; el esquema tambien es idempotente. E3: todo registro sembrado queda marcado provisional leido por EF. E4: el script de G6 lista los planes provisionales con bloquea_g6 y sin ellos no bloquea. E5: reemplazar un valor real retira la marca y se audita la actualizacion con antes y despues.
+HU-063 E1
+HU-063 E2
+HU-063 E3
+HU-063 E4
+HU-063 E5
+HU-063 E6
+# HU-063 E1: reemplazar una lista de destinatarios valida minimos, aplica la diferencia y audita destinatarios_actualizados. E2: rechazar un remitente con dominio no verificado o subdominio, y guardar uno valido con auditoria. E3: bloquear una lista vacia. E4: encolar prueba_avisos con idempotencia por direccion y hora, y auditar. E5: minimo 2 destinatarios en contacto. E6: al menos un buzon compartido en contacto.
