@@ -58,7 +58,7 @@ public sealed class RepositorioDestinatariosAviso(NilogisticDbContext contexto) 
                 return ResultadoActualizacionLista.Conflicto;
             }
 
-            var ahora = DateTime.UtcNow;
+            var ahora = asiento.OcurrioUtc;
             var deseadosPorCorreo = deseados
                 .ToDictionary(
                     destinatario => destinatario.Correo.ToLowerInvariant(),

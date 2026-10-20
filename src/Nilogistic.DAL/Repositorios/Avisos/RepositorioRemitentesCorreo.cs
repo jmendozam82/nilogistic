@@ -43,7 +43,7 @@ public sealed class RepositorioRemitentesCorreo(NilogisticDbContext contexto) : 
             var actual = await contexto.Set<RemitenteCorreo>()
                 .SingleOrDefaultAsync(remitente => remitente.Flujo == nuevo.Flujo, cancelacion);
 
-            var ahora = DateTime.UtcNow;
+            var ahora = asiento.OcurrioUtc;
 
             if (actual is null)
             {

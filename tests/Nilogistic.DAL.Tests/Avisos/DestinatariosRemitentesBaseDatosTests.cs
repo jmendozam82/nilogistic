@@ -128,11 +128,16 @@ public class DestinatariosRemitentesBaseDatosTests(PostgresFixture bd)
 
             var b = activos.Single(d => d.Correo == "b@example.com");
             b.EsBuzonCompartido.Should().BeTrue("el inactivo se reactivo y actualizo la marca");
+            b.ActualizadoUtc.Should().Be(Ahora, "la fecha de actualizacion viene del asiento");
+
+            var d = activos.Single(d => d.Correo == "d@example.com");
+            d.ActualizadoUtc.Should().Be(Ahora, "el nuevo destinatario usa la fecha del asiento");
 
             var c = await contexto.Set<DestinatarioAviso>()
                 .AsNoTracking()
                 .SingleAsync(d => d.Correo == "c@example.com");
             c.Activo.Should().BeFalse("el activo que no esta en deseados se inactivo");
+            c.ActualizadoUtc.Should().Be(Ahora, "la baja soft tambien actualiza la marca de tiempo");
         }
 
         var asientos = await bd.EscalarAsync<long>(cadena,
@@ -326,6 +331,7 @@ public class DestinatariosRemitentesBaseDatosTests(PostgresFixture bd)
             actual.Should().NotBeNull();
             actual!.Nombre.Should().Be("Nilogistic");
             actual.Correo.Should().Be("no-reply@nilogistic.com");
+            actual.ActualizadoUtc.Should().Be(Ahora);
         }
 
         using (var contexto = CrearContexto(cadena))
@@ -344,6 +350,7 @@ public class DestinatariosRemitentesBaseDatosTests(PostgresFixture bd)
             var repositorio = new RepositorioRemitentesCorreo(contexto);
             var actual = await repositorio.ObtenerAsync("transaccional");
             actual!.Correo.Should().Be("noreply@nilogistic.com");
+            actual.ActualizadoUtc.Should().Be(Ahora);
         }
 
         var asientos = await bd.EscalarAsync<long>(cadena,
