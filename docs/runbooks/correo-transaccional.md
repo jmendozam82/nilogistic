@@ -33,11 +33,14 @@ base por defecto es `https://api.resend.com`; el adaptador normaliza la barra fi
 | `Correo__ConservarDias` | `30` | metadatos conservados tras un fallo definitivo (antes de la purga, D-16) |
 | `Correo__VaciarCuerposAlEnviar` | `true` | el HTML/plano se vacía al marcar `Enviado` (SUP-6) |
 
-Los remitentes son `Correo__Remitentes__Transaccional` y `Correo__Remitentes__Contacto`
-(por defecto `Nilogistic <no-reply@nilogistic.com>`). El dominio de envío y su autenticación
-(SPF, DKIM y DMARC) se documentan en `docs/runbooks/dominio-correo.md` (HU-011): el transaccional
-se queda en la raíz, Resend publica en `send.nilogistic.com` y el DMARC de la raíz conserva el `rua`
-de Brevo y añade `analista@nilogistic.com` (D-121).
+Los remitentes se resuelven por flujo siguiendo la precedencia definida en
+`docs/runbooks/destinatarios-y-remitentes.md` (HU-063): primero la tabla
+`app.remitentes_correo`, luego `Correo__Remitentes__Transaccional` y
+`Correo__Remitentes__Contacto` (por defecto `Nilogistic <no-reply@nilogistic.com>`).
+El dominio de envío y su autenticación (SPF, DKIM y DMARC) se documentan en
+`docs/runbooks/dominio-correo.md` (HU-011): el transaccional se queda en la raíz, Resend publica
+en `send.nilogistic.com` y el DMARC de la raíz conserva el `rua` de Brevo y añade
+`analista@nilogistic.com` (D-121).
 
 ## Ciclo de vida de un mensaje
 
