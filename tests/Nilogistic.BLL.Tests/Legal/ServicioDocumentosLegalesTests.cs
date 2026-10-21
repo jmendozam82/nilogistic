@@ -21,7 +21,8 @@ namespace Nilogistic.BLL.Tests.Legal;
 public class ServicioDocumentosLegalesTests
 {
     private const string Tipo = TiposDocumentoLegal.Privacidad;
-    private const string ContenidoValido = "<h2>Politica de privacidad</h2><p>Texto de prueba.</p>";
+    private const string ContenidoValido = "<h2>Politica de privacidad</h2><p>Texto de prueba. El plazo de supresion es de quince (15) días hábiles.</p>";
+    private const string ContenidoSinDiasHabiles = "<h2>Politica de privacidad</h2><p>Texto de prueba sin plazo de supresion.</p>";
     private static readonly DateTime Ahora = new(2026, 10, 20, 8, 0, 0, DateTimeKind.Utc);
     private static readonly Guid Usuario = Guid.Parse("33333333-3333-3333-3333-333333333333");
 
@@ -119,6 +120,7 @@ public class ServicioDocumentosLegalesTests
         VigenteDesdeUtc = Ahora.AddDays(-version),
         VigenteHastaUtc = hasta,
         PublicadoPor = Usuario,
+        Provisional = false,
         CreadoUtc = Ahora.AddDays(-version)
     };
 
@@ -156,6 +158,7 @@ public class ServicioDocumentosLegalesTests
         resultado.Documento.ContenidoHtml.Should().Be(ContenidoValido, "el contenido se recorta");
         resultado.Documento.VigenteDesdeUtc.Should().Be(Ahora);
         resultado.Documento.VigenteHastaUtc.Should().BeNull();
+        resultado.Documento.Provisional.Should().BeFalse();
 
         var nueva = repositorio.UltimaPublicacion!;
         nueva.Id.Should().Be(resultado.Documento.Id);
@@ -182,6 +185,7 @@ public class ServicioDocumentosLegalesTests
         despues.RootElement.GetProperty("tipo").GetString().Should().Be(Tipo);
         despues.RootElement.GetProperty("version").GetInt32().Should().Be(3);
         despues.RootElement.GetProperty("vigente_desde_utc").GetDateTime().Should().Be(Ahora);
+        despues.RootElement.GetProperty("provisional").GetBoolean().Should().BeFalse();
 
         using var detalle = JsonDocument.Parse(asiento.Detalle!);
         detalle.RootElement.GetProperty("tipo").GetString().Should().Be(Tipo);
@@ -551,5 +555,80 @@ public class ServicioDocumentosLegalesTests
 
         await obtener.Should().ThrowAsync<ArgumentException>();
         await listar.Should().ThrowAsync<ArgumentException>();
+    }
+
+    [Fact]
+    [Hu("HU-044", "E1")]
+    public async Task El_asiento_de_publicacion_incluye_provisional_y_nunca_el_contenido_html()
+    {
+        var repositorio = new RepositorioLegalFalso();
+        var servicio = Crear(repositorio);
+
+        var resultado = await servicio.PublicarAsync(
+            new PublicarDocumentoLegalRequest(Tipo, ContenidoValido, Provisional: true));
+
+        resultado.Estado.Should().Be(EstadoPublicacionLegal.Publicado);
+
+        var asiento = repositorio.Asientos.Should().ContainSingle().Subject;
+        using var despues = JsonDocument.Parse(asiento.Despues!);
+        despues.RootElement.GetProperty("provisional").GetBoolean().Should().BeTrue();
+
+        asiento.Antes.Should().NotContain(ContenidoValido);
+        asiento.Despues.Should().NotContain(ContenidoValido);
+        asiento.Detalle.Should().NotContain(ContenidoValido);
+    }
+
+    [Fact]
+    [Hu("HU-044", "E1")]
+    public async Task Publicar_marca_como_provisional_cuando_la_solicitud_lo_indica()
+    {
+        var repositorio = new RepositorioLegalFalso();
+        var servicio = Crear(repositorio);
+
+        var resultado = await servicio.PublicarAsync(
+            new PublicarDocumentoLegalRequest(Tipo, ContenidoValido, Provisional: true));
+
+        resultado.Estado.Should().Be(EstadoPublicacionLegal.Publicado);
+        resultado.Documento.Should().NotBeNull();
+        resultado.Documento!.Provisional.Should().BeTrue();
+        repositorio.UltimaPublicacion!.Provisional.Should().BeTrue();
+
+        var asiento = repositorio.Asientos.Should().ContainSingle().Subject;
+        using var despues = JsonDocument.Parse(asiento.Despues!);
+        despues.RootElement.GetProperty("provisional").GetBoolean().Should().BeTrue();
+    }
+
+    [Fact]
+    [Hu("HU-044", "E7")]
+    public async Task Publicar_una_politica_de_privacidad_sin_dias_habiles_se_rechaza_como_Invalido_y_no_escribe()
+    {
+        var repositorio = new RepositorioLegalFalso();
+        var servicio = Crear(repositorio);
+
+        var resultado = await servicio.PublicarAsync(
+            new PublicarDocumentoLegalRequest(Tipo, ContenidoSinDiasHabiles));
+
+        resultado.Estado.Should().Be(EstadoPublicacionLegal.Invalido);
+        resultado.Mensaje.Should().Be("La politica de privacidad debe declarar el plazo de supresion en dias habiles.");
+        resultado.Documento.Should().BeNull();
+        repositorio.Documentos.Should().BeEmpty();
+        repositorio.Asientos.Should().BeEmpty();
+        repositorio.Mock.Verify(
+            r => r.ListarHistorialAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
+            Times.Never);
+    }
+
+    [Fact]
+    [Hu("HU-044", "E7")]
+    public async Task Publicar_terminos_sin_dias_habiles_se_permite()
+    {
+        var repositorio = new RepositorioLegalFalso();
+        var servicio = Crear(repositorio);
+
+        var resultado = await servicio.PublicarAsync(
+            new PublicarDocumentoLegalRequest(TiposDocumentoLegal.Terminos, "<h2>Terminos</h2><p>Sin plazo.</p>"));
+
+        resultado.Estado.Should().Be(EstadoPublicacionLegal.Publicado);
+        resultado.Documento.Should().NotBeNull();
     }
 }

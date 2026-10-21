@@ -27,7 +27,7 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
     private const string MensajeUpdateAceptacion = "La aceptacion legal es inmutable: UPDATE no esta permitido";
     private const string MensajeDeleteAceptacion = "La aceptacion legal es inmutable: DELETE no esta permitido";
 
-    private static readonly DateTime Ahora = new(2026, 10, 20, 12, 0, 0, DateTimeKind.Utc);
+    private static readonly DateTime Ahora = new DateTime((DateTime.UtcNow.AddMinutes(10).Ticks / 10) * 10, DateTimeKind.Utc);
     private static readonly Guid Administrador = Guid.Parse("22222222-2222-2222-2222-222222222222");
     private const string HashUserAgent = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
 
@@ -126,8 +126,8 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
 
-        var primera = Documento("privacidad", 1, Ahora.AddDays(-30));
-        var segunda = Documento("privacidad", 2, Ahora);
+        var primera = Documento("privacidad", 2, Ahora.AddMinutes(-5));
+        var segunda = Documento("privacidad", 3, Ahora);
 
         (await PublicarAsync(cadena, primera)).Should().Be(ResultadoPublicacion.Publicada);
         (await PublicarAsync(cadena, segunda)).Should().Be(ResultadoPublicacion.Publicada);
@@ -138,18 +138,18 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
             var vigente = await repositorio.ObtenerVigenteAsync("privacidad", CancellationToken.None);
             vigente.Should().NotBeNull();
             vigente!.Id.Should().Be(segunda.Id);
-            vigente.Version.Should().Be(2);
+            vigente.Version.Should().Be(3);
             vigente.VigenteHastaUtc.Should().BeNull();
 
             var historial = await repositorio.ListarHistorialAsync("privacidad", CancellationToken.None);
-            historial.Select(documento => documento.Version).Should().Equal([2, 1], "el historial va de la mas reciente a la mas antigua");
+            historial.Select(documento => documento.Version).Should().Equal([3, 2, 1], "el historial va de la mas reciente a la mas antigua");
             historial[1].Id.Should().Be(primera.Id);
             historial[1].VigenteHastaUtc.Should().Be(segunda.VigenteDesdeUtc,
                 "la anterior se cierra en el mismo instante en que abre la nueva");
         }
 
         var asientos = await bd.EscalarAsync<long>(cadena,
-            "select count(*) from auditoria.registros where accion = 'version_legal_publicada'");
+            "select count(*) from auditoria.registros where accion = 'version_legal_publicada' and rol <> 'Sistema'");
         asientos.Should().Be(2, "cada publicacion escribe su asiento en la misma transaccion");
     }
 
@@ -159,11 +159,11 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
 
-        var primera = Documento("terminos", 1, Ahora.AddDays(-30));
+        var primera = Documento("terminos", 2, Ahora.AddMinutes(-5));
         (await PublicarAsync(cadena, primera)).Should().Be(ResultadoPublicacion.Publicada);
 
-        var segunda = Documento("terminos", 2, Ahora);
-        var asientoInvalido = AsientoPublicacion(segunda, 1);
+        var segunda = Documento("terminos", 3, Ahora);
+        var asientoInvalido = AsientoPublicacion(segunda, 2);
         asientoInvalido.Tipo = "otro"; // viola el check de auditoria.registros
 
         var publicar = async () =>
@@ -184,7 +184,7 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
             vigente.VigenteHastaUtc.Should().BeNull();
 
             var historial = await repositorio.ListarHistorialAsync("terminos", CancellationToken.None);
-            historial.Should().HaveCount(1, "la version nueva no se guardo");
+            historial.Should().HaveCount(2, "la version sembrada y la primera publicacion quedan; la nueva no se guardo");
         }
     }
 
@@ -195,7 +195,7 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
 
-        var documento = Documento("terminos", 1, Ahora.AddDays(-1));
+        var documento = Documento("terminos", 2, Ahora.AddMinutes(-1));
         (await PublicarAsync(cadena, documento)).Should().Be(ResultadoPublicacion.Publicada);
 
         var aceptacion = Aceptacion(documento.Id, Ahora);
@@ -233,7 +233,7 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
 
-        var documento = Documento("terminos", 1, Ahora.AddDays(-1));
+        var documento = Documento("terminos", 2, Ahora.AddMinutes(-1));
         (await PublicarAsync(cadena, documento)).Should().Be(ResultadoPublicacion.Publicada);
 
         var aceptacion = Aceptacion(documento.Id, Ahora);
@@ -284,12 +284,12 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
 
-        var documento = Documento("privacidad", 1, Ahora.AddDays(-1));
+        var documento = Documento("privacidad", 2, Ahora.AddMinutes(-1));
         (await PublicarAsync(cadena, documento)).Should().Be(ResultadoPublicacion.Publicada);
 
         var insertarOtraVigente = () => EjecutarAsync(cadena, """
             insert into app.documentos_legales (id, tipo, version, contenido_html, vigente_desde_utc, creado_utc)
-            values (gen_random_uuid(), 'privacidad', 2, '<p>Otra</p>', now(), now())
+            values (gen_random_uuid(), 'privacidad', 3, '<p>Otra</p>', now(), now())
             """);
 
         var excepcion = await insertarOtraVigente.Should().ThrowAsync<PostgresException>();
@@ -304,17 +304,17 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
 
-        (await PublicarAsync(cadena, Documento("cookies", 1, Ahora.AddDays(-1)))).Should()
+        (await PublicarAsync(cadena, Documento("cookies", 2, Ahora.AddMinutes(-1)))).Should()
             .Be(ResultadoPublicacion.Publicada);
 
-        var primera = Documento("cookies", 2, Ahora, "<p>Version A</p>");
-        var segunda = Documento("cookies", 2, Ahora, "<p>Version B</p>");
+        var primera = Documento("cookies", 3, Ahora, "<p>Version A</p>");
+        var segunda = Documento("cookies", 3, Ahora, "<p>Version B</p>");
 
         async Task<ResultadoPublicacion> PublicarConContextoAsync(DocumentoLegal documento)
         {
             using var contexto = CrearContexto(cadena);
             var repositorio = new RepositorioDocumentosLegales(contexto);
-            return await repositorio.PublicarAsync(documento, AsientoPublicacion(documento, 1), CancellationToken.None);
+            return await repositorio.PublicarAsync(documento, AsientoPublicacion(documento, 2), CancellationToken.None);
         }
 
         var resultados = await Task.WhenAll(PublicarConContextoAsync(primera), PublicarConContextoAsync(segunda));
@@ -329,7 +329,7 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
 
         var version = await bd.EscalarAsync<int>(cadena,
             "select version from app.documentos_legales where tipo = 'cookies' and vigente_hasta_utc is null");
-        version.Should().Be(2);
+        version.Should().Be(3);
     }
 
     [Fact]
@@ -338,7 +338,7 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
 
-        var documento = Documento("privacidad", 1, Ahora.AddDays(-1));
+        var documento = Documento("privacidad", 2, Ahora.AddMinutes(-1));
         (await PublicarAsync(cadena, documento)).Should().Be(ResultadoPublicacion.Publicada);
 
         var cambiarContenido = () => EjecutarAsync(cadena,
@@ -368,7 +368,7 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var cadenaApp = bd.CadenaApp(nombre);
         var cadenaAdmin = bd.CadenaAdmin(nombre);
 
-        var documento = Documento("terminos", 1, Ahora.AddDays(-1));
+        var documento = Documento("terminos", 2, Ahora.AddMinutes(-1));
         (await PublicarAsync(cadenaApp, documento)).Should().Be(ResultadoPublicacion.Publicada);
 
         var actualizar = () => EjecutarAsync(cadenaAdmin,
@@ -387,8 +387,8 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var cadena = bd.CadenaApp(nombre);
         var cadenaAdmin = bd.CadenaAdmin(nombre);
 
-        var primera = Documento("privacidad", 1, Ahora.AddDays(-2));
-        var segunda = Documento("privacidad", 2, Ahora.AddDays(-1));
+        var primera = Documento("privacidad", 2, Ahora.AddMinutes(-10));
+        var segunda = Documento("privacidad", 3, Ahora.AddMinutes(-1));
         (await PublicarAsync(cadena, primera)).Should().Be(ResultadoPublicacion.Publicada);
         (await PublicarAsync(cadena, segunda)).Should().Be(ResultadoPublicacion.Publicada);
 
@@ -408,7 +408,7 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var cadenaApp = bd.CadenaApp(nombre);
         var cadenaAdmin = bd.CadenaAdmin(nombre);
 
-        var documento = Documento("cookies", 1, Ahora.AddDays(-1));
+        var documento = Documento("cookies", 2, Ahora.AddMinutes(-1));
         (await PublicarAsync(cadenaApp, documento)).Should().Be(ResultadoPublicacion.Publicada);
 
         var borrar = () => EjecutarAsync(cadenaAdmin,
@@ -426,7 +426,7 @@ public class DocumentosLegalesBaseDatosTests(PostgresFixture bd)
         var cadenaApp = bd.CadenaApp(nombre);
         var cadenaAdmin = bd.CadenaAdmin(nombre);
 
-        var documento = Documento("terminos", 1, Ahora.AddDays(-1));
+        var documento = Documento("terminos", 2, Ahora.AddMinutes(-1));
         (await PublicarAsync(cadenaApp, documento)).Should().Be(ResultadoPublicacion.Publicada);
 
         var aceptacion = Aceptacion(documento.Id, Ahora);

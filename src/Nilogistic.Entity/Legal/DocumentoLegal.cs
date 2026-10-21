@@ -29,5 +29,8 @@ public sealed class DocumentoLegal
     /// <summary>Usuario que publicó la versión; <c>null</c> si no se pudo determinar.</summary>
     public Guid? PublicadoPor { get; set; }
 
+    /// <summary>Marca RN-056: el texto aún no lo valida el asesor legal (tarea #6); bloquea G6.</summary>
+    public bool Provisional { get; set; }
+
     public DateTime CreadoUtc { get; set; }
 }

@@ -1,0 +1,62 @@
+@model PaginaLegalViewModel
+@{
+    var cultura = CultureInfo.GetCultureInfo("es-NI");
+    string Formatear(DateTime fecha) => fecha.ToString("dd 'de' MMMM 'de' yyyy", cultura);
+}
+<partial name="_AvisoProvisional" />
+<section class="nl-band" aria-labelledby="titulo-legal">
+    <div class="container-narrow">
+        <h1 id="titulo-legal">@Model.Titulo</h1>
+
+        @if (!Model.EsVigente)
+        {
+            <div class="alert alert-warning" role="note">
+                Esta versión ya no está vigente. <a href="/legal/@Model.Tipo">Ver la versión vigente</a>.
+            </div>
+        }
+
+        <p class="text-muted">
+            @if (Model.EsVigente || !Model.VigenteHastaUtc.HasValue)
+            {
+                <span>Versión @Model.Version · Vigente desde @Formatear(Model.VigenteDesdeUtc)</span>
+            }
+            else
+            {
+                <span>Versión @Model.Version · Vigente del @Formatear(Model.VigenteDesdeUtc) al @Formatear(Model.VigenteHastaUtc.Value)</span>
+            }
+        </p>
+
+        <div class="nl-legal">
+            @Html.Raw(Model.ContenidoSaneado)
+        </div>
+
+        @{
+            var versionesRelacionadas = Model.Historial
+                .Where(h => h.Version != Model.Version)
+                .OrderByDescending(h => h.Version)
+                .ToList();
+        }
+        @if (versionesRelacionadas.Any())
+        {
+            <aside aria-labelledby="historial-legal">
+                <h2 id="historial-legal" class="h4 mt-5">Versiones</h2>
+                <ol>
+                    @foreach (var version in versionesRelacionadas)
+                    {
+                        <li>
+                            <a href="/legal/@Model.Tipo/version/@version.Version">Versión @version.Version</a>
+                            @if (version.VigenteHastaUtc.HasValue)
+                            {
+                                <span class="text-muted">(vigente del @Formatear(version.VigenteDesdeUtc) al @Formatear(version.VigenteHastaUtc.Value))</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">(vigente desde @Formatear(version.VigenteDesdeUtc))</span>
+                            }
+                        </li>
+                    }
+                </ol>
+            </aside>
+        }
+    </div>
+</section>

@@ -9,9 +9,14 @@
     var tituloCompleto = string.IsNullOrEmpty(titulo) ? "Nilogistic" : $"{titulo} · Nilogistic";
     var descripcion = ViewData["Descripcion"] as string;
     var provisional = ViewData["Provisional"] is bool esProvisional && esProvisional;
+    var noIndexar = ViewData["NoIndexar"] is bool esNoIndexar && esNoIndexar;
+    var urlCanonica = ViewData["UrlCanonica"] as string;
+    var urlCanonicoAbsoluta = string.IsNullOrEmpty(urlCanonica)
+        ? urlAbsoluta
+        : $"{peticion.Scheme}://{peticion.Host}{peticion.PathBase}{urlCanonica}";
 }
-<link rel="canonical" href="@urlAbsoluta">
-<meta property="og:url" content="@urlAbsoluta">
+<link rel="canonical" href="@urlCanonicoAbsoluta">
+<meta property="og:url" content="@urlCanonicoAbsoluta">
 <meta property="og:title" content="@tituloCompleto">
 @if (!string.IsNullOrEmpty(descripcion))
 {
@@ -20,7 +25,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nilogistic">
 <meta property="og:locale" content="es_LA">
-@if (provisional)
+@if (provisional || noIndexar)
 {
     <meta name="robots" content="noindex, nofollow">
 }

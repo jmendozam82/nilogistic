@@ -294,14 +294,14 @@ public class CatalogosBaseDatosTests(PostgresFixture bd)
             await using var lector = await comando.ExecuteReaderAsync();
             while (await lector.ReadAsync())
             {
-                if (lector.GetBoolean(3))
+                if (lector.GetString(0) != "documentos_legales" && lector.GetBoolean(3))
                 {
                     bloqueantes++;
                 }
             }
         }
 
-        bloqueantes.Should().Be(0, "sin planes provisionales ninguna fila bloquea la puerta G6");
+        bloqueantes.Should().Be(0, "sin planes provisionales ninguna fila de catalogos o planes bloquea la puerta G6");
     }
 
     [Fact]

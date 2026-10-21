@@ -10,4 +10,5 @@ public sealed record DocumentoLegalResponse(
     int Version,
     string ContenidoHtml,
     DateTime VigenteDesdeUtc,
-    DateTime? VigenteHastaUtc);
+    DateTime? VigenteHastaUtc,
+    bool Provisional);

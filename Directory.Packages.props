@@ -39,5 +39,7 @@
          instalado debe corresponder a esta version (ver runbook docs/runbooks/diseno.md). -->
     <PackageVersion Include="Microsoft.Playwright" Version="1.63.0" />
     <PackageVersion Include="Deque.AxeCore.Playwright" Version="4.14.0" />
+    <!-- Saneamiento de HTML legal (HU-044 Pase B; SUP-3). Fijado en 9.2.1039 (CVE-2026-25543). -->
+    <PackageVersion Include="HtmlSanitizer" Version="9.2.1039" />
   </ItemGroup>
 </Project>
