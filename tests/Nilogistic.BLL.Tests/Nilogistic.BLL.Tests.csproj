@@ -16,7 +16,6 @@
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Moq" />
-    <PackageReference Include="AngleSharp" />
     <PackageReference Include="coverlet.collector" />
   </ItemGroup>
   <ItemGroup>

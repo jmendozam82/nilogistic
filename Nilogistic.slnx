@@ -16,5 +16,6 @@
     <Project Path="tests/Nilogistic.Aplicacion.Tests/Nilogistic.Aplicacion.Tests.csproj" />
     <Project Path="tests/Nilogistic.Arquitectura.Tests/Nilogistic.Arquitectura.Tests.csproj" />
     <Project Path="tests/Nilogistic.Accesibilidad.Tests/Nilogistic.Accesibilidad.Tests.csproj" />
+    <Project Path="tests/Nilogistic.Utility.Tests/Nilogistic.Utility.Tests.csproj" />
   </Folder>
 </Solution>

@@ -16,7 +16,6 @@
     <PackageReference Include="Moq" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
-    <PackageReference Include="AngleSharp" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />
