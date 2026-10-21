@@ -199,4 +199,69 @@ public class TextosLegalesProvisionalesTests(PostgresFixture bd)
         excepcion.Which.MessageText.Should().Be(
             "El documento legal es inmutable: solo se permite cerrar la version vigente");
     }
+
+    [Fact]
+    public async Task Reaplicar_la_migracion_no_duplica_versiones_ni_asientos()
+    {
+        var nombre = await bd.CrearBaseAsync();
+        var cadenaAdmin = bd.CadenaAdmin(nombre);
+        var cadena = bd.CadenaApp(nombre);
+
+        var versionesAntes = await bd.EscalarAsync<long>(cadena, "select count(*) from app.documentos_legales");
+        var asientosAntes = await bd.EscalarAsync<long>(cadena,
+            "select count(*) from auditoria.registros where accion = 'version_legal_publicada' and rol = 'Sistema'");
+
+        var archivo = PostgresFixture.ArchivosDeMigracion()
+            .Single(ruta => ruta.EndsWith("_textos_legales_provisionales.sql", StringComparison.Ordinal));
+        var sql = await File.ReadAllTextAsync(archivo);
+
+        var reaplicar = () => PostgresFixture.AplicarSqlAsync(cadenaAdmin, sql);
+        await reaplicar.Should().NotThrowAsync("la migracion es idempotente");
+
+        var versionesDespues = await bd.EscalarAsync<long>(cadena, "select count(*) from app.documentos_legales");
+        var asientosDespues = await bd.EscalarAsync<long>(cadena,
+            "select count(*) from auditoria.registros where accion = 'version_legal_publicada' and rol = 'Sistema'");
+
+        versionesDespues.Should().Be(versionesAntes, "reaplicar no duplica versiones");
+        asientosDespues.Should().Be(asientosAntes, "reaplicar no duplica asientos del Sistema");
+    }
+
+    [Fact]
+    public async Task La_semilla_no_pisa_una_version_publicada_por_Administracion()
+    {
+        var nombre = await bd.CrearBaseAsync();
+        var cadena = bd.CadenaApp(nombre);
+        var cadenaAdmin = bd.CadenaAdmin(nombre);
+
+        await EjecutarAsync(cadena,
+            "update app.documentos_legales set vigente_hasta_utc = vigente_desde_utc + interval '1 second' where tipo = 'terminos' and vigente_hasta_utc is null");
+
+        await EjecutarAsync(cadena,
+            """
+            insert into app.documentos_legales (tipo, version, contenido_html, vigente_desde_utc, publicado_por, provisional)
+            values ('terminos', 2, '<h2>Terminos reales</h2><p>Texto aprobado por Administracion.</p>', now(), gen_random_uuid(), false)
+            """);
+
+        var vigenteAntes = await ConsultarAsync(cadena,
+            "select version, provisional from app.documentos_legales where tipo = 'terminos' and vigente_hasta_utc is null");
+        vigenteAntes.Should().ContainSingle();
+        vigenteAntes.Single()["version"].Should().Be(2);
+        vigenteAntes.Single()["provisional"].Should().Be(false);
+
+        var archivo = PostgresFixture.ArchivosDeMigracion()
+            .Single(ruta => ruta.EndsWith("_textos_legales_provisionales.sql", StringComparison.Ordinal));
+        var sql = await File.ReadAllTextAsync(archivo);
+        await PostgresFixture.AplicarSqlAsync(cadenaAdmin, sql);
+
+        var terminos = await ConsultarAsync(cadena,
+            "select version, provisional, vigente_hasta_utc from app.documentos_legales where tipo = 'terminos' order by version");
+        terminos.Should().HaveCount(2, "la semilla no inserto una nueva version de terminos");
+        terminos.Last()["version"].Should().Be(2);
+        terminos.Last()["provisional"].Should().Be(false);
+        terminos.Last()["vigente_hasta_utc"].Should().BeNull("la version vigente sigue siendo la publicada por Administracion");
+
+        var asientos = await bd.EscalarAsync<long>(cadena,
+            "select count(*) from auditoria.registros where accion = 'version_legal_publicada' and rol = 'Sistema'");
+        asientos.Should().Be(3, "solo los tres textos originales generaron asiento del Sistema");
+    }
 }

@@ -559,6 +559,27 @@ public class ServicioDocumentosLegalesTests
 
     [Fact]
     [Hu("HU-044", "E1")]
+    public async Task El_asiento_de_publicacion_incluye_provisional_y_nunca_el_contenido_html()
+    {
+        var repositorio = new RepositorioLegalFalso();
+        var servicio = Crear(repositorio);
+
+        var resultado = await servicio.PublicarAsync(
+            new PublicarDocumentoLegalRequest(Tipo, ContenidoValido, Provisional: true));
+
+        resultado.Estado.Should().Be(EstadoPublicacionLegal.Publicado);
+
+        var asiento = repositorio.Asientos.Should().ContainSingle().Subject;
+        using var despues = JsonDocument.Parse(asiento.Despues!);
+        despues.RootElement.GetProperty("provisional").GetBoolean().Should().BeTrue();
+
+        asiento.Antes.Should().NotContain(ContenidoValido);
+        asiento.Despues.Should().NotContain(ContenidoValido);
+        asiento.Detalle.Should().NotContain(ContenidoValido);
+    }
+
+    [Fact]
+    [Hu("HU-044", "E1")]
     public async Task Publicar_marca_como_provisional_cuando_la_solicitud_lo_indica()
     {
         var repositorio = new RepositorioLegalFalso();
