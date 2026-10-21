@@ -1,0 +1,28 @@
+@{
+    var peticion = Context.Request;
+    var rutaActual = $"{peticion.Path}{peticion.QueryString}";
+    var rutaPersonalizar = $"/preferencias-cookies?returnUrl={Uri.EscapeDataString(rutaActual)}";
+}
+<div class="nl-cookie-zona">
+    <div class="container">
+        <div class="nl-cookie" role="region" aria-labelledby="banner-cookies-titulo">
+            <p id="banner-cookies-titulo" class="h5 mb-3">Usamos cookies</p>
+            <p class="mb-3">
+                Las necesarias siempre están activas. Las de analítica solo se activan si las aceptas.
+                Puedes cambiarlo cuando quieras desde el pie de página.
+                <a href="/legal/cookies">Política de cookies</a>.
+            </p>
+            <div class="d-flex flex-wrap gap-3">
+                <form method="post" action="/preferencias-cookies">
+                    <input type="hidden" name="returnUrl" value="@rutaActual" />
+                    <button type="submit" name="accion" value="aceptar_todo" class="btn btn-primary">Aceptar todo</button>
+                </form>
+                <form method="post" action="/preferencias-cookies">
+                    <input type="hidden" name="returnUrl" value="@rutaActual" />
+                    <button type="submit" name="accion" value="rechazar_todo" class="btn btn-primary">Rechazar todo</button>
+                </form>
+                <a href="@rutaPersonalizar" class="btn btn-primary">Personalizar</a>
+            </div>
+        </div>
+    </div>
+</div>

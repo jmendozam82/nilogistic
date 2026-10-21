@@ -1,0 +1,58 @@
+@model PaginaPreferenciasCookiesViewModel
+<section class="nl-band" aria-labelledby="titulo-preferencias">
+    <div class="container-narrow">
+        <h1 id="titulo-preferencias">Preferencias de cookies</h1>
+
+        @if (Model.Guardado)
+        {
+            <p role="status">Tus preferencias se guardaron</p>
+        }
+
+        <p>@Model.ResumenEstado</p>
+
+        <p>
+            Nilogistic usa dos categorías de cookies. Las <strong>necesarias</strong> están siempre
+            activas: hacen que el sitio funcione y recuerdan tu decisión. Las de
+            <strong>analítica</strong> son opcionales y solo se cargan si las aceptas.
+        </p>
+
+        <form method="post" action="/preferencias-cookies">
+            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="cookies-necesarias" checked disabled aria-describedby="cookies-necesarias-ayuda" />
+                <label class="form-check-label" for="cookies-necesarias">Necesarias (siempre activas)</label>
+                <p class="form-text" id="cookies-necesarias-ayuda">
+                    No se pueden desactivar: sin ellas el sitio no funciona ni recuerda tu decisión.
+                </p>
+            </div>
+
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="cookies-analitica" name="analitica" value="true" checked="@(Model.AnaliticaPermitida ? "checked" : null)" aria-describedby="cookies-analitica-ayuda" />
+                <label class="form-check-label" for="cookies-analitica">Analítica (opcional)</label>
+                <p class="form-text" id="cookies-analitica-ayuda">
+                    Nos permiten medir el uso del sitio. Solo se cargan si aceptas esta categoría.
+                </p>
+            </div>
+
+            <div class="d-flex flex-wrap gap-3">
+                <button type="submit" name="accion" value="aceptar_todo" class="btn btn-primary">Aceptar todo</button>
+                <button type="submit" name="accion" value="rechazar_todo" class="btn btn-primary">Rechazar todo</button>
+                <button type="submit" name="accion" value="guardar" class="btn btn-primary">Guardar preferencias</button>
+            </div>
+        </form>
+
+        <p class="mt-4">
+            Si retiras el consentimiento, las cookies de analítica dejarán de cargarse en las páginas
+            siguientes. Puedes cambiar tu decisión cuando quieras desde «Preferencias de cookies», en el
+            pie de página.
+        </p>
+
+        <p><a href="/legal/cookies">Política de cookies</a></p>
+
+        @if (Model.TieneReturnUrl)
+        {
+            <p><a href="@Model.ReturnUrl">Volver</a></p>
+        }
+    </div>
+</section>

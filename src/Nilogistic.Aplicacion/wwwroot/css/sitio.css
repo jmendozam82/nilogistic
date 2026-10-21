@@ -204,3 +204,30 @@
   border: 1px solid var(--nl-color-border);
   text-align: start;
 }
+
+/* ---------- Aviso de cookies (HU-045) ----------
+   Bloque en flujo normal al principio de la página: no es fijo ni superpuesto, para no
+   ocultar el foco (WCAG 2.2, SUP-3). Los tres controles —Aceptar todo, Rechazar todo y
+   Personalizar— tienen la misma prominencia (SUP-4) y reparten el ancho de la fila; con
+   poco espacio se apilan en varias filas en lugar de desbordar. */
+.nl-cookie-zona {
+  background: var(--nl-gray-100);
+  padding-block: var(--nl-space-4);
+}
+
+.nl-cookie {
+  margin: 0 auto;
+}
+
+.nl-cookie .d-flex > form,
+.nl-cookie .d-flex > a.btn {
+  flex: 1 1 12rem;
+}
+
+.nl-cookie form {
+  margin: 0;
+}
+
+.nl-cookie form .btn {
+  width: 100%;
+}

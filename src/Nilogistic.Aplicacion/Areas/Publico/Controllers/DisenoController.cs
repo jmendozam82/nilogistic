@@ -38,6 +38,7 @@ public sealed class DisenoController : Controller
             return NotFound();
         }
 
+        ViewData["SinBannerCookies"] = true;
         return View(nameof(Correo));
     }
 
@@ -81,6 +82,8 @@ public sealed class DisenoController : Controller
         }
 
         AsignarDemo((sesion ?? porDefecto).ToLowerInvariant());
+        // Las galerías son referencia del Design System: no muestran el aviso real (HU-045 §4.5).
+        ViewData["SinBannerCookies"] = true;
         return View(vista);
     }
 
