@@ -22,6 +22,10 @@ public sealed class ConfiguracionDocumentoLegal : IEntityTypeConfiguration<Docum
         entidad.Property(documento => documento.VigenteDesdeUtc).HasColumnName("vigente_desde_utc").HasColumnType("timestamptz").IsRequired();
         entidad.Property(documento => documento.VigenteHastaUtc).HasColumnName("vigente_hasta_utc").HasColumnType("timestamptz");
         entidad.Property(documento => documento.PublicadoPor).HasColumnName("publicado_por").HasColumnType("uuid");
+        entidad.Property(documento => documento.Provisional)
+            .HasColumnName("provisional")
+            .HasDefaultValue(false)
+            .IsRequired();
         entidad.Property(documento => documento.CreadoUtc)
             .HasColumnName("creado_utc")
             .HasColumnType("timestamptz")

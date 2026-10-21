@@ -32,6 +32,7 @@ public sealed class ServicioDocumentosLegales(
     private const string MensajeSinVigente = "No hay una version vigente del documento legal.";
     private const string MensajeObsoleta = "La version mostrada ya no es la vigente.";
     private const string MensajeConflicto = "El historial cambio entre la lectura y la escritura.";
+    private const string MensajePrivacidadSinDiasHabiles = "La politica de privacidad debe declarar el plazo de supresion en dias habiles.";
 
     public async Task<DocumentoLegalResponse?> ObtenerVigenteAsync(
         string tipo,
@@ -66,6 +67,12 @@ public sealed class ServicioDocumentosLegales(
             return InvalidaPublicacion(validacion.Mensaje!);
         }
 
+        if (solicitud.Tipo == TiposDocumentoLegal.Privacidad
+            && !validacion.Contenido!.Contains("días hábiles", StringComparison.OrdinalIgnoreCase))
+        {
+            return InvalidaPublicacion(MensajePrivacidadSinDiasHabiles);
+        }
+
         var historial = await repositorio.ListarHistorialAsync(solicitud.Tipo, cancelacion);
         var versionAnterior = historial.Count == 0 ? (int?)null : historial.Max(documento => documento.Version);
         var ahora = reloj.AhoraUtc;
@@ -79,6 +86,7 @@ public sealed class ServicioDocumentosLegales(
             VigenteDesdeUtc = ahora,
             VigenteHastaUtc = null,
             PublicadoPor = contexto.UsuarioId,
+            Provisional = solicitud.Provisional,
             CreadoUtc = ahora
         };
 
@@ -173,7 +181,8 @@ public sealed class ServicioDocumentosLegales(
         documento.Version,
         documento.ContenidoHtml,
         documento.VigenteDesdeUtc,
-        documento.VigenteHastaUtc);
+        documento.VigenteHastaUtc,
+        documento.Provisional);
 
     private static void ExigirTipo(string? tipo)
     {
@@ -209,7 +218,8 @@ public sealed class ServicioDocumentosLegales(
         {
             ["tipo"] = documento.Tipo,
             ["version"] = documento.Version,
-            ["vigente_desde_utc"] = documento.VigenteDesdeUtc
+            ["vigente_desde_utc"] = documento.VigenteDesdeUtc,
+            ["provisional"] = documento.Provisional
         }),
         Ip = contexto.Ip,
         UserAgent = contexto.UserAgent,
