@@ -4,6 +4,14 @@ HU-032 E2
 HU-032 E3
 HU-032 E4
 # HU-032 E1: publicar la version siguiente y auditar version_legal_publicada. E2: registro de la aceptacion con documento, version, fecha UTC, IP y hash del user agent. E3: dos publicaciones simultaneas no dejan dos vigentes. E4: formulario abierto durante un cambio de version devuelve VersionObsoleta sin escribir.
+HU-044 E1
+HU-044 E2
+HU-044 E3
+HU-044 E4
+HU-044 E5
+HU-044 E6
+HU-044 E7
+# HU-044 E1: paginas legales vigentes muestran titulo, version, fecha y aviso provisional; contenido saneado. E2: versiones anteriores publicas con aviso de no vigente, noindex y canonical a la vigente; redireccion 301 si se pide la vigente por numero. E3: tipo sin version vigente responde 404. E4: parcial de enlaces de consentimiento a privacidad/terminos en pestana nueva y enlaces del pie. E5: politica de privacidad sembrada menciona Cloudflare Turnstile. E6: politica declara supresion, plazo en dias habiles, 24 meses y Ley 787. E7: BLL rechaza publicar privacidad sin dias habiles; G6 lo detecta.
 HU-039a E1
 HU-039a E2
 HU-039a E3

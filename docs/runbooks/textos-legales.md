@@ -30,6 +30,47 @@ La publicación se hace **por la BLL** (`IServicioDocumentosLegales.PublicarAsyn
 Ante una publicación simultánea o una versión ya tomada, la BLL devuelve `Conflicto` y **no queda nada
 escrito**: ni la anterior cerrada ni la nueva abierta. El contenido legal **no** se copia a la auditoría.
 
+## Publicación en el sitio (HU-044)
+
+La migración `20261109001400_textos_legales_provisionales.sql` siembra una versión 1 provisional de
+cada tipo copiando literalmente los archivos de `docs/legal/provisionales/` (`privacidad.html`,
+`terminos.html`, `cookies.html`). La semilla no duplica versiones ni pisa un texto que Administración
+ya haya publicado.
+
+Los visitantes pueden leer la versión vigente en las rutas públicas de solo lectura:
+
+- `/legal/privacidad`
+- `/legal/terminos`
+- `/legal/cookies`
+
+Cada página muestra el título, el número de versión y la fecha de vigencia en hora de Nicaragua
+(UTC−6), y permite consultar versiones anteriores en `/legal/{tipo}/version/{n}`. Las versiones
+anteriores llevan un aviso de «ya no está vigente», `noindex` y canonical a la versión vigente.
+
+### HTML mostrado
+
+El controlador pasa el contenido por `SaneadorHtmlLegal.Sanear` antes de renderizarlo. La lista
+blanca cerrada permite: `h2`, `h3`, `h4`, `p`, `ul`, `ol`, `li`, `a`, `strong`, `em`, `br`,
+`blockquote`, `table`, `thead`, `tbody`, `tr`, `th`, `td`; atributos `href`, `id` (solo en
+encabezados) y `scope` (solo en `th`); esquemas `https`, `mailto` y rutas relativas que empiecen
+por `/`. Se eliminan `script`, `template`, `iframe`, `img`, `style`, `class`, atributos `on*` y
+esquemas `javascript:`/`data:`. Los enlaces se renderizan con `rel="noopener noreferrer"`.
+
+### Publicar un texto definitivo (provisional = false)
+
+Hasta R2 no hay pantalla de administración. Para reemplazar un texto provisional por uno validado:
+
+1. Preparar el HTML final siguiendo la lista blanca del saneador.
+2. Verificar que la política de privacidad contiene la expresión «días hábiles»; si no, la BLL la
+   rechazará como `Invalido` (E7).
+3. Con el **rol propietario**, cerrar la vigente actual (`vigente_hasta_utc = now()`).
+4. Insertar la nueva versión con `provisional = false`.
+5. Opcionalmente, ejecutar `scripts/db/listar_provisionales.sql` para confirmar que la fila legal
+   ya no bloquea G6.
+
+La columna `provisional` es inmutable para versiones existentes: no se puede editar; hay que
+publicar una versión nueva.
+
 ## Aceptaciones
 
 Una aceptación guarda la **versión exacta** aceptada (`documento_legal_id`), el `contexto`
@@ -53,6 +94,18 @@ que se puede hacer con SQL directo es **cerrar** la versión vigente (cambiar `v
 **insertar** una versión nueva; no se puede editar el contenido, reabrir una cerrada ni borrar nada.
 
 > Antes de publicar el texto provisional definitivo, HU-044 usa este mismo camino (por la BLL).
+
+## Consulta G6
+
+El script `scripts/db/listar_provisionales.sql` detecta tres situaciones que bloquean el despliegue
+a Producción (`bloquea_g6 = true`):
+
+1. Un tipo (`privacidad`, `terminos`, `cookies`) sin versión vigente.
+2. Una versión vigente todavía marcada como `provisional`.
+3. La política de privacidad vigente sin la expresión «días hábiles».
+
+Cuando los tres textos estén publicados con `provisional = false` y la política declare el plazo de
+supresión, la consulta no devolverá filas legales.
 
 ## Supresión de datos
 
