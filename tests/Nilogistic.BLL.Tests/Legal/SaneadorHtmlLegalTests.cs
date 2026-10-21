@@ -1,6 +1,6 @@
 using Nilogistic.Utility.Legal;
 
-namespace Nilogistic.Utility.Tests.Legal;
+namespace Nilogistic.BLL.Tests.Legal;
 
 public class SaneadorHtmlLegalTests
 {
@@ -102,6 +102,37 @@ public class SaneadorHtmlLegalTests
         limpio.Should().Contain("id=\"dos\"");
         limpio.Should().Contain("scope=\"col\"");
         limpio.Should().NotContain("id=\"tres\"");
+    }
+
+    [Fact]
+    [Hu("HU-044", "DoD")]
+    public void Rechaza_href_relativos_peligrosos_y_conserva_los_validos()
+    {
+        var html = @"
+            <a href=""//evil.example"">protocolo relativo</a>
+            <a href="" /\evil"">barra invertida</a>
+            <a href=""/ruta/valida"">valido</a>";
+
+        var limpio = SaneadorHtmlLegal.Sanear(html);
+
+        limpio.Should().NotContain("//evil.example");
+        limpio.Should().NotContain("/\\evil");
+        limpio.Should().Contain("/ruta/valida");
+    }
+
+    [Fact]
+    [Hu("HU-044", "DoD")]
+    public void Rechaza_esquemas_javascript_con_mayusculas_y_entidades()
+    {
+        var html = @"
+            <a href=""JaVaScRiPt:alert(1)"">mayusculas</a>
+            <a href=""&#106;avascript:alert(1)"">entidad</a>";
+
+        var limpio = SaneadorHtmlLegal.Sanear(html);
+
+        limpio.Should().NotContain("javascript:");
+        limpio.Should().NotContain("JaVaScRiPt:");
+        limpio.Should().NotContain("alert(1)");
     }
 
     [Fact]

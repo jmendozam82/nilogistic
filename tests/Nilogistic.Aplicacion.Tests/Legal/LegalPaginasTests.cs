@@ -126,7 +126,7 @@ public class LegalPaginasTests
         using var cliente = fabrica.ClienteHttps();
         var respuesta = await cliente.GetAsync("/legal/privacidad/version/2");
 
-        respuesta.StatusCode.Should().Be(HttpStatusCode.MovedPermanently);
+        respuesta.StatusCode.Should().Be(HttpStatusCode.Redirect);
         respuesta.Headers.Location!.ToString().Should().Be("/legal/privacidad");
     }
 

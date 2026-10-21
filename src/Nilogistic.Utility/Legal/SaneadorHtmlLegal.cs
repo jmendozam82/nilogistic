@@ -69,23 +69,52 @@ public static class SaneadorHtmlLegal
                 e.Cancel = true;
             }
 
-            if (nombre.Equals("href", StringComparison.OrdinalIgnoreCase) &&
-                e.Attribute.Value.StartsWith("/", StringComparison.Ordinal))
-            {
-                e.Cancel = true;
-            }
         };
 
         sanitizador.PostProcessNode += (sender, e) =>
         {
-            if (e.Node is IElement enlace &&
-                enlace.LocalName.Equals("a", StringComparison.OrdinalIgnoreCase) &&
-                !string.IsNullOrEmpty(enlace.GetAttribute("href")))
+            if (e.Node is not IElement enlace ||
+                !enlace.LocalName.Equals("a", StringComparison.OrdinalIgnoreCase))
             {
-                enlace.SetAttribute("rel", "noopener noreferrer");
+                return;
             }
+
+            var href = enlace.GetAttribute("href");
+            if (string.IsNullOrEmpty(href))
+            {
+                return;
+            }
+
+            if (!EsHrefPermitido(href))
+            {
+                enlace.RemoveAttribute("href");
+                return;
+            }
+
+            enlace.SetAttribute("rel", "noopener noreferrer");
         };
 
         return sanitizador.Sanitize(html);
+    }
+
+    private static bool EsHrefPermitido(string href)
+    {
+        if (href.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+            href.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (!href.StartsWith("/", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (href.Length >= 2 && (href[1] == '/' || href[1] == '\\'))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -42,7 +42,7 @@ public sealed class LegalController : Controller
 
         if (vigente is not null && vigente.Version == numero)
         {
-            return RedirectPermanent($"/legal/{tipo}");
+            return Redirect($"/legal/{tipo}");
         }
 
         var doc = historial.FirstOrDefault(d => d.Version == numero);
@@ -51,12 +51,16 @@ public sealed class LegalController : Controller
             return NotFound();
         }
 
-        return await MostrarAsync(tipo, doc, esVigente: false);
+        return await MostrarAsync(tipo, doc, esVigente: false, historial);
     }
 
-    private async Task<IActionResult> MostrarAsync(string tipo, DocumentoLegalResponse doc, bool esVigente)
+    private async Task<IActionResult> MostrarAsync(
+        string tipo,
+        DocumentoLegalResponse doc,
+        bool esVigente,
+        IReadOnlyList<DocumentoLegalResponse>? historial = null)
     {
-        var historial = await _servicio.ListarHistorialAsync(tipo);
+        historial ??= await _servicio.ListarHistorialAsync(tipo);
 
         var modelo = new PaginaLegalViewModel
         {
