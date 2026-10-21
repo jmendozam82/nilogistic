@@ -169,3 +169,38 @@
   margin: 0;
   color: var(--nl-color-text-muted);
 }
+
+/* ---------- Textos legales (HU-044) ----------
+   Ancho de lectura cómodo, espaciado vertical consistente con el Design System y
+   tablas legibles sin estilos en línea (CSP). */
+.nl-legal {
+  max-width: 70ch;
+}
+
+.nl-legal > * + * {
+  margin-top: var(--nl-space-4);
+}
+
+.nl-legal h2,
+.nl-legal h3,
+.nl-legal h4 {
+  margin-top: var(--nl-space-6);
+  margin-bottom: var(--nl-space-2);
+}
+
+.nl-legal ul,
+.nl-legal ol {
+  padding-left: var(--nl-space-6);
+}
+
+.nl-legal table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nl-legal th,
+.nl-legal td {
+  padding: var(--nl-space-2);
+  border: 1px solid var(--nl-color-border);
+  text-align: start;
+}
