@@ -44,6 +44,7 @@ idénticos a `render.yaml`** (la especificación de referencia; si uno cambia, c
 ## Flujo de despliegue
 
 1. **Merge a `develop`.** El CI corre `build-y-pruebas`, `secretos`, `sql` y `conventional-commits`.
+   Las excepciones aprobadas por SHA se listan, con su motivo, en `scripts/ci/commits_excluidos.txt` (DT-5).
 2. **Job `desplegar-staging`** (solo `push` a `develop`, entorno `staging`): tras el CI en verde,
    aplica las migraciones con la CLI de Supabase **2.116.0**:
    `supabase db push --db-url "$DB_URL"`. La conexión usa el **Session pooler** (puerto 5432) y el
