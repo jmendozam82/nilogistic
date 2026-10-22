@@ -160,6 +160,12 @@ despues de un cambio que no activa el despliegue, se debe incluir al menos una
 modificacion minima en algun archivo que lo active (por ejemplo, un comentario
 en codigo fuente o una correccion de migracion).
 
+La decision compara solo el ultimo push, no el ultimo commit desplegado: si el CI
+fallo en el push que traia codigo, el siguiente push que solo toque docs/scripts
+no despliega y hay que forzarlo con un cambio minimo en `src/` o `supabase/`
+(caso 22/10/2026, HU-035). La correccion de fondo (comparar contra el ultimo
+commit desplegado) requiere tocar `.github/` y queda propuesta como DT-6.
+
 ## Límites conocidos
 
 - El primer despliegue con verificación de commit puede fallar el sondeo: mientras Render sirva la

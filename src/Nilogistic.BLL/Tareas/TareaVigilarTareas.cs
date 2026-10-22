@@ -4,7 +4,8 @@ namespace Nilogistic.BLL.Tareas;
 
 /// <summary>
 /// Tarea que revisa el retraso de las demas tareas y emite las alertas (HU-035). Su nombre coincide
-/// con la semilla de la migracion.
+/// con la semilla de la migracion. Es idempotente: el reclamo atomico de la alerta evita avisos
+/// duplicados aunque haya varias instancias.
 /// </summary>
 public sealed class TareaVigilarTareas(IServicioAlertasTareas alertas) : ITareaProgramada
 {
