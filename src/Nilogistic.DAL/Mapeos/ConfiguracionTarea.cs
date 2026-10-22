@@ -21,5 +21,8 @@ public sealed class ConfiguracionTarea : IEntityTypeConfiguration<Tarea>
         entidad.Property(tarea => tarea.MaxReintentos).HasColumnName("max_reintentos").IsRequired();
         entidad.Property(tarea => tarea.UltimaEjecucionUtc).HasColumnName("ultima_ejecucion_utc").HasColumnType("timestamptz");
         entidad.Property(tarea => tarea.ProximaEjecucionUtc).HasColumnName("proxima_ejecucion_utc").HasColumnType("timestamptz");
+        entidad.Property(tarea => tarea.FallosConsecutivos).HasColumnName("fallos_consecutivos").IsRequired();
+        entidad.Property(tarea => tarea.AlertaFallosUtc).HasColumnName("alerta_fallos_utc").HasColumnType("timestamptz");
+        entidad.Property(tarea => tarea.AlertaRetrasoUtc).HasColumnName("alerta_retraso_utc").HasColumnType("timestamptz");
     }
 }
