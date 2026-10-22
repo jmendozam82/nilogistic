@@ -169,5 +169,21 @@
     "sha256Html": "e9f111b034697c4c030ecbea305088ec743aa902cb62858d8148e01c22607f0b",
     "sha256Txt": "632290d83cd9d50c4954d47cc1cb2982e2e0a34eb5dd43389cd3fd39adfc7249",
     "historial": []
+  },
+  {
+    "nombre": "alerta_tarea_fallida",
+    "version": "1.0",
+    "tipo": "transaccional",
+    "asunto": "Alerta técnica: una tarea programada necesita atención",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "tarea", "tipo": "texto", "ejemplo": "procesar_cola_correo" },
+      { "nombre": "motivo", "tipo": "texto", "ejemplo": "3 fallos consecutivos" },
+      { "nombre": "detalle", "tipo": "texto", "ejemplo": "InvalidOperationException" },
+      { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "22 de octubre de 2026, 10:30" }
+    ],
+    "sha256Html": "ad1e3c000634fb2f1a67a0d1340bd93d9c0273ac6d05c391b428575404e508a4",
+    "sha256Txt": "48b3dbe1936c91905f3f18be208e263e0f0a3d2c99480bbf807faa23f836af92",
+    "historial": []
   }
 ]

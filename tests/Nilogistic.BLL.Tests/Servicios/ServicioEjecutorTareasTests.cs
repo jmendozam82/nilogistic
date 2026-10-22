@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Nilogistic.BLL.Interfaces;
 using Nilogistic.BLL.Servicios;
 using Nilogistic.BLL.Tareas;
 using Nilogistic.DAL.Interfaces;
@@ -17,14 +18,30 @@ public class ServicioEjecutorTareasTests
         RepositorioTareasFalso repositorio,
         IEnumerable<ITareaProgramada> manejadores,
         IEspera? espera = null,
-        int esperaBase = 5) =>
+        int esperaBase = 5,
+        AlertasTareasFalso? alertas = null) =>
         new(
             repositorio,
             manejadores,
             new RelojFalso(Ahora),
             espera ?? new EsperaFalsa(),
             Options.Create(new OpcionesEjecutorTareas { EsperaBaseReintentoSegundos = esperaBase, MargenReservaSegundos = 60 }),
+            alertas ?? new AlertasTareasFalso(),
             NullLogger<ServicioEjecutorTareas>.Instance);
+
+    private sealed class AlertasTareasFalso : IServicioAlertasTareas
+    {
+        public List<(string Tarea, bool Exitoso, string? Error)> Desenlaces { get; } = [];
+
+        public Task RegistrarDesenlaceAsync(string tarea, bool exitoso, string? error, CancellationToken cancelacion = default)
+        {
+            Desenlaces.Add((tarea, exitoso, error));
+            return Task.CompletedTask;
+        }
+
+        public Task<int> EvaluarRetrasosAsync(CancellationToken cancelacion = default) =>
+            Task.FromResult(0);
+    }
 
     [Fact]
     [Hu("HU-034", "E1")]
@@ -272,6 +289,98 @@ public class ServicioEjecutorTareasTests
         repositorio.Finalizadas.Should().ContainSingle().Which.Error.Should().Be("InvalidOperationException");
     }
 
+    [Fact]
+    [Hu("HU-035", "E2")]
+    public async Task Un_ciclo_con_reintentos_agotados_registra_un_solo_desenlace_fallido()
+    {
+        var repositorio = new RepositorioTareasFalso { Reserva = new TareaReservada("correo", "intervalo:60", 30, 2) };
+        var manejador = new ManejadorFalso("correo", _ => Task.FromException(new InvalidOperationException("detalle")));
+        var alertas = new AlertasTareasFalso();
+        var servicio = Crear(repositorio, [manejador], alertas: alertas);
+
+        await servicio.EjecutarSiguienteAsync(CancellationToken.None);
+
+        alertas.Desenlaces.Should().ContainSingle()
+            .Which.Should().Be(("correo", false, "InvalidOperationException"));
+    }
+
+    [Fact]
+    [Hu("HU-035", "E2")]
+    public async Task Los_intentos_intermedios_no_suman_fallos()
+    {
+        var repositorio = new RepositorioTareasFalso { Reserva = new TareaReservada("correo", "intervalo:60", 30, 1) };
+        var intentos = 0;
+        var manejador = new ManejadorFalso("correo", _ =>
+        {
+            intentos++;
+            return intentos == 1
+                ? Task.FromException(new InvalidOperationException("transitorio"))
+                : Task.CompletedTask;
+        });
+        var alertas = new AlertasTareasFalso();
+        var servicio = Crear(repositorio, [manejador], alertas: alertas);
+
+        await servicio.EjecutarSiguienteAsync(CancellationToken.None);
+
+        alertas.Desenlaces.Should().ContainSingle().Which.Should().Be(("correo", true, (string?)null));
+    }
+
+    [Fact]
+    [Hu("HU-035", "E2")]
+    public async Task El_timeout_cuenta_como_fallo_del_ciclo()
+    {
+        var repositorio = new RepositorioTareasFalso { Reserva = new TareaReservada("correo", "intervalo:60", 1, 3) };
+        var manejador = new ManejadorFalso("correo", cancelacion => Task.Delay(Timeout.Infinite, cancelacion));
+        var alertas = new AlertasTareasFalso();
+        var servicio = Crear(repositorio, [manejador], alertas: alertas);
+
+        await servicio.EjecutarSiguienteAsync(CancellationToken.None);
+
+        alertas.Desenlaces.Should().ContainSingle()
+            .Which.Should().Be(("correo", false, "TiempoMaximoExcedido:1s"));
+    }
+
+    [Fact]
+    [Hu("HU-035", "E2")]
+    public async Task SinManejador_y_ProgramacionInvalida_cuentan_como_fallo()
+    {
+        var sinManejador = new RepositorioTareasFalso { Reserva = new TareaReservada("orfa", "intervalo:60", 30, 0) };
+        var alertasSinManejador = new AlertasTareasFalso();
+        await Crear(sinManejador, [], alertas: alertasSinManejador)
+            .EjecutarSiguienteAsync(CancellationToken.None);
+
+        var invalida = new RepositorioTareasFalso { Reserva = new TareaReservada("correo", "cron:0 0 * * *", 30, 0) };
+        var alertasInvalida = new AlertasTareasFalso();
+        await Crear(invalida, [new ManejadorFalso("correo")], alertas: alertasInvalida)
+            .EjecutarSiguienteAsync(CancellationToken.None);
+
+        alertasSinManejador.Desenlaces.Should().ContainSingle()
+            .Which.Should().Be(("orfa", false, "SinManejador"));
+        alertasInvalida.Desenlaces.Should().ContainSingle()
+            .Which.Should().Be(("correo", false, "ProgramacionInvalida"));
+    }
+
+    [Fact]
+    [Hu("HU-035", "E2")]
+    public async Task El_apagado_del_host_no_registra_desenlace()
+    {
+        var repositorio = new RepositorioTareasFalso { Reserva = new TareaReservada("correo", "intervalo:60", 30, 3) };
+        using var apagado = new CancellationTokenSource();
+        var manejador = new ManejadorFalso("correo", cancelacion =>
+        {
+            apagado.Cancel();
+            return Task.FromException(new OperationCanceledException(cancelacion));
+        });
+        var alertas = new AlertasTareasFalso();
+        var servicio = Crear(repositorio, [manejador], alertas: alertas);
+
+        var accion = () => servicio.EjecutarSiguienteAsync(apagado.Token);
+
+        await accion.Should().ThrowAsync<OperationCanceledException>();
+        alertas.Desenlaces.Should().BeEmpty();
+        repositorio.Programaciones.Should().BeEmpty();
+    }
+
     private sealed class RelojFalso(DateTime ahora) : IRelojUtc
     {
         public DateTime AhoraUtc { get; } = ahora;
@@ -343,5 +452,20 @@ public class ServicioEjecutorTareasTests
             Programaciones.Add((tareaNombre, ultimaEjecucionUtc, proximaEjecucionUtc));
             return Task.CompletedTask;
         }
+
+        public Task<DesenlaceTarea> RegistrarDesenlaceAsync(string tareaNombre, bool exitoso, CancellationToken cancelacion = default) =>
+            Task.FromResult(new DesenlaceTarea(0, null));
+
+        public Task<bool> ReclamarAlertaFallosAsync(string tareaNombre, int umbral, DateTime ahoraUtc, CancellationToken cancelacion = default) =>
+            Task.FromResult(false);
+
+        public Task<bool> ReclamarAlertaRetrasoAsync(string tareaNombre, DateTime ahoraUtc, CancellationToken cancelacion = default) =>
+            Task.FromResult(false);
+
+        public Task<IReadOnlyList<EstadoTareaFila>> ListarEstadoAsync(CancellationToken cancelacion = default) =>
+            Task.FromResult<IReadOnlyList<EstadoTareaFila>>([]);
+
+        public Task<IReadOnlyList<TareaEjecucion>> ListarEjecucionesAsync(string tareaNombre, int saltar, int tomar, CancellationToken cancelacion = default) =>
+            Task.FromResult<IReadOnlyList<TareaEjecucion>>([]);
     }
 }

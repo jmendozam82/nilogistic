@@ -22,4 +22,13 @@ public sealed class Tarea
 
     /// <summary>Proxima hora de disparo; mientras la tarea corre guarda la reserva (lease).</summary>
     public DateTime? ProximaEjecucionUtc { get; set; }
+
+    /// <summary>Fallos seguidos; un ciclo completo (con sus reintentos) cuenta como uno (HU-035).</summary>
+    public int FallosConsecutivos { get; set; }
+
+    /// <summary>Momento de la ultima alerta por racha de fallos; nulo si la racha no ha alertado.</summary>
+    public DateTime? AlertaFallosUtc { get; set; }
+
+    /// <summary>Momento de la ultima alerta por retraso; se rearma con cualquier ejecucion.</summary>
+    public DateTime? AlertaRetrasoUtc { get; set; }
 }

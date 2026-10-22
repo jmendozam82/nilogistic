@@ -5,6 +5,10 @@ Las plantillas viven como recursos embebidos en `Nilogistic.BLL`, bajo
 y otro `.txt`, y el manifiesto `catalogo.json` describe sus variables, versiones
 y hashes.
 
+El catalogo tiene **12 plantillas**. La 12.ª es `alerta_tarea_fallida` (HU-035):
+aviso tecnico de fallos consecutivos o retrasos de tareas programadas, enviado a la
+lista `alertas_tecnicas` con la vista previa en `/diseno/correo/alerta_tarea_fallida`.
+
 ## Agregar o cambiar una plantilla
 
 1. Edita los archivos `.html` y `.txt` de la plantilla. Manten la estructura
