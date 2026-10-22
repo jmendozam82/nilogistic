@@ -38,7 +38,24 @@ public sealed class ServicioAlertasTareas(
         string? error,
         CancellationToken cancelacion = default)
     {
-        var desenlace = await repositorio.RegistrarDesenlaceAsync(tarea, exitoso, cancelacion);
+        DesenlaceTarea desenlace;
+        try
+        {
+            desenlace = await repositorio.RegistrarDesenlaceAsync(tarea, exitoso, cancelacion);
+        }
+        catch (OperationCanceledException) when (cancelacion.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch (Exception excepcion)
+        {
+            registro.LogError(
+                excepcion,
+                "No se pudo registrar el desenlace de la tarea {Tarea}.",
+                tarea);
+            return;
+        }
+
         if (exitoso || desenlace.FallosConsecutivos < PoliticaAlertasTareas.UmbralFallosConsecutivos)
         {
             return;
@@ -178,10 +195,9 @@ public sealed class ServicioAlertasTareas(
                 if (resultado.Estado == EstadoEncolado.Rechazado)
                 {
                     registro.LogError(
-                        "La alerta de la tarea {Tarea} ({Tipo}) no se encolo para {Correo}: {Motivo}",
+                        "La alerta de la tarea {Tarea} ({Tipo}) no se encolo: {Motivo}",
                         tarea,
                         tipo,
-                        destinatario.Correo,
                         resultado.Motivo);
                 }
             }

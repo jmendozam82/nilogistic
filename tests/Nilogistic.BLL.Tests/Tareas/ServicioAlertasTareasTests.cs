@@ -40,8 +40,15 @@ public class ServicioAlertasTareasTests
 
         public int LlamadasReclamoRetraso { get; private set; }
 
+        public Exception? ErrorDesenlace { get; set; }
+
         public Task<DesenlaceTarea> RegistrarDesenlaceAsync(string tareaNombre, bool exitoso, CancellationToken cancelacion = default)
         {
+            if (ErrorDesenlace is not null)
+            {
+                return Task.FromException<DesenlaceTarea>(ErrorDesenlace);
+            }
+
             DesenlacesRegistrados.Add($"{tareaNombre}:{exitoso}");
             return Task.FromResult(Desenlaces.Count > 0 ? Desenlaces.Dequeue() : new DesenlaceTarea(0, null));
         }
@@ -86,6 +93,8 @@ public class ServicioAlertasTareasTests
 
         public Exception? Error { get; set; }
 
+        public bool Rechazar { get; set; }
+
         public Task<ResultadoEncolado> EncolarAsync(SolicitudPlantilla solicitud, CancellationToken cancelacion = default)
         {
             if (Error is not null)
@@ -94,7 +103,9 @@ public class ServicioAlertasTareasTests
             }
 
             Solicitudes.Add(solicitud);
-            return Task.FromResult(new ResultadoEncolado(EstadoEncolado.Encolado, Guid.NewGuid(), null));
+            return Task.FromResult(Rechazar
+                ? new ResultadoEncolado(EstadoEncolado.Rechazado, Guid.NewGuid(), "Cuota agotada")
+                : new ResultadoEncolado(EstadoEncolado.Encolado, Guid.NewGuid(), null));
         }
 
         public ResultadoPlantilla Renderizar(string plantilla, IReadOnlyDictionary<string, string> variables, string urlBase) =>
@@ -286,6 +297,55 @@ public class ServicioAlertasTareasTests
         await accion.Should().NotThrowAsync();
         registro.Entradas.Should().Contain(e =>
             e.Nivel == LogLevel.Error && e.Excepcion is InvalidOperationException);
+    }
+
+    [Fact]
+    [Hu("HU-035", "E2")]
+    public async Task El_log_de_un_encolado_rechazado_no_contiene_el_correo_del_destinatario()
+    {
+        const string correo = "tecnico1@example.com";
+        var repositorio = new RepositorioFalso();
+        repositorio.Desenlaces.Enqueue(new DesenlaceTarea(3, null));
+        var plantillas = new PlantillasFalso { Rechazar = true };
+        var registro = new RegistroFalso();
+
+        await Crear(repositorio, plantillas, ConDestinatarios(correo), registro: registro)
+            .RegistrarDesenlaceAsync("correo", false, "InvalidOperationException");
+
+        plantillas.Solicitudes.Should().ContainSingle();
+        registro.Entradas.Should().Contain(e => e.Mensaje.Contains("no se encolo"));
+        registro.Entradas.Should().OnlyContain(e =>
+            !e.Mensaje.Contains(correo, StringComparison.OrdinalIgnoreCase));
+        foreach (var entrada in registro.Entradas)
+        {
+            entrada.Mensaje.Should().NotContain(correo);
+            entrada.Estado.Select(p => p.Value?.ToString()).Should()
+                .OnlyContain(valor => valor == null || !valor.ToLowerInvariant().Contains(correo));
+        }
+
+        registro.Entradas.SelectMany(e => e.Estado)
+            .Should().NotContain(p => p.Key == "Correo");
+    }
+
+    [Fact]
+    [Hu("HU-035", "E2")]
+    public async Task Si_registrar_el_desenlace_falla_no_se_propaga_la_excepcion_al_ejecutor()
+    {
+        var repositorio = new RepositorioFalso
+        {
+            ErrorDesenlace = new InvalidOperationException("base caida")
+        };
+        var plantillas = new PlantillasFalso();
+        var registro = new RegistroFalso();
+
+        var accion = () => Crear(repositorio, plantillas, registro: registro)
+            .RegistrarDesenlaceAsync("correo", false, "InvalidOperationException");
+
+        await accion.Should().NotThrowAsync();
+        registro.Entradas.Should().Contain(e =>
+            e.Nivel == LogLevel.Error && e.Excepcion is InvalidOperationException);
+        repositorio.LlamadasReclamoFallos.Should().Be(0);
+        plantillas.Solicitudes.Should().BeEmpty();
     }
 
     [Fact]
