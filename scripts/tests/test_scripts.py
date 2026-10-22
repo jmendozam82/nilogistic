@@ -101,6 +101,40 @@ class TrazabilidadTests(unittest.TestCase):
 
 
 class ConventionalCommitsTests(unittest.TestCase):
+    def _git(self, directorio, *argumentos):
+        subprocess.run(
+            ["git", *argumentos], cwd=directorio, check=True,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+
+    def _repo_con_commit(self, directorio, mensaje):
+        self._git(directorio, "init", "-q")
+        self._git(directorio, "config", "user.email", "prueba@nilogistic.test")
+        self._git(directorio, "config", "user.name", "Prueba")
+        escribir(os.path.join(directorio, "a.txt"), "a")
+        self._git(directorio, "add", "a.txt")
+        self._git(directorio, "commit", "-q", "-m", "feat: base del repositorio")
+        base = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=directorio,
+            capture_output=True, text=True, check=True,
+        ).stdout.strip()
+        escribir(os.path.join(directorio, "b.txt"), "b")
+        self._git(directorio, "add", "b.txt")
+        self._git(directorio, "commit", "-q", "-m", mensaje)
+        sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=directorio,
+            capture_output=True, text=True, check=True,
+        ).stdout.strip()
+        return base, sha
+
+    def _main_en(self, directorio, argumentos):
+        previo = os.getcwd()
+        os.chdir(directorio)
+        try:
+            return cvc.main(argumentos)
+        finally:
+            os.chdir(previo)
+
     def test_acepta_tipos_convencionales(self):
         ok = [
             "feat: nueva funcionalidad",
@@ -163,12 +197,73 @@ class ConventionalCommitsTests(unittest.TestCase):
             previo = os.getcwd()
             os.chdir(d)
             try:
-                mensajes = cvc.commits_del_rango(primero)
+                mensajes = [
+                    mensaje for _, mensaje in cvc.commits_del_rango(primero)
+                ]
             finally:
                 os.chdir(previo)
 
         self.assertIn("fix: trabajo en la rama", mensajes)
         self.assertNotIn("Merge branch 'rama'", mensajes)
+
+    def test_commit_excluido_no_falla_y_se_informa(self):
+        with tempfile.TemporaryDirectory() as d:
+            base, sha = self._repo_con_commit(
+                d, "HU-035: alertas y estado de tareas programadas (#78)"
+            )
+            ruta = os.path.join(d, "commits_excluidos.txt")
+            escribir(
+                ruta,
+                "# excepcion aprobada\n\n"
+                f"{sha} # titulo de squash no convencional (PR 78, HU-035)\n",
+            )
+            salida = io.StringIO()
+            with contextlib.redirect_stdout(salida):
+                codigo = self._main_en(d, ["--base", base, "--excepciones", ruta])
+
+        self.assertEqual(codigo, 0)
+        self.assertIn("Omitidos por excepcion aprobada: 1", salida.getvalue())
+
+    def test_commit_no_convencional_sin_excepcion_falla(self):
+        with tempfile.TemporaryDirectory() as d:
+            base, _ = self._repo_con_commit(
+                d, "HU-035: alertas y estado de tareas programadas (#78)"
+            )
+            ruta = os.path.join(d, "commits_excluidos.txt")
+            escribir(ruta, "# sin excepciones\n")
+
+            codigo = self._main_en(d, ["--base", base, "--excepciones", ruta])
+
+        self.assertEqual(codigo, 1)
+
+    def test_archivo_de_excepciones_ausente_no_omite_nada(self):
+        with tempfile.TemporaryDirectory() as d:
+            base, _ = self._repo_con_commit(d, "Actualizar archivos")
+            ruta = os.path.join(d, "no-existe.txt")
+
+            codigo = self._main_en(d, ["--base", base, "--excepciones", ruta])
+
+        self.assertEqual(codigo, 1)
+
+    def test_linea_de_excepcion_malformada_es_error(self):
+        with tempfile.TemporaryDirectory() as d:
+            ruta = os.path.join(d, "commits_excluidos.txt")
+            escribir(ruta, "no-es-un-sha # motivo\n")
+            salida = io.StringIO()
+            with contextlib.redirect_stdout(salida):
+                codigo = self._main_en(d, ["--base", "HEAD", "--excepciones", ruta])
+
+        self.assertEqual(codigo, 2)
+        self.assertIn("excepcion malformada", salida.getvalue())
+
+    def test_exclusiones_ignoran_comentarios_y_lineas_vacias(self):
+        with tempfile.TemporaryDirectory() as d:
+            ruta = os.path.join(d, "commits_excluidos.txt")
+            escribir(ruta, "# comentario\n\n   \n")
+
+            exclusiones = cvc.cargar_exclusiones(ruta)
+
+        self.assertEqual(exclusiones, set())
 
 
 class MigracionesTests(unittest.TestCase):

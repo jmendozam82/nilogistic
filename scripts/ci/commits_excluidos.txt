@@ -1,0 +1,2 @@
+# Solo se agregan excepciones con aprobacion de Jorge; cada linea es un SHA completo y su motivo.
+34b7ef700e6d521e10bc9774010cacee466200f6 # titulo de squash no convencional (PR 78, HU-035)
