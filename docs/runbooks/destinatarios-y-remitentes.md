@@ -17,6 +17,9 @@ esta en `Correo:Remitentes` de `appsettings.json` (transaccional y contacto usan
 | `nuevas_solicitudes` | HU-025 / bandeja de solicitudes de alta | Avisar a Administracion de una nueva solicitud pendiente |
 | `contacto` | HU-043 / formulario de contacto | Recibir mensajes del formulario publico (minimo 2 direcciones, una compartida) |
 | `alertas_tecnicas` | HU-035 / tareas programadas | Avisar de fallos tecnicos o anomalias del sistema |
+
+`alertas_tecnicas` ya la consume HU-035 (fallos consecutivos y retrasos de tareas programadas):
+**debe estar cargada antes de Staging y Produccion**, o las alertas solo quedaran en el log.
 | `continuidad` | HU-035 / tareas programadas | Avisos de continuidad operativa |
 
 Los consumidores deben tolerar una lista vacia: si no hay destinatarios, simplemente no
