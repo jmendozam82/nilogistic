@@ -1,3 +1,6 @@
+@{
+    var consentimiento = Context.ObtenerConsentimientoCookies();
+}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,6 +11,10 @@
 </head>
 <body>
     <partial name="_SaltarContenido" />
+    @if (consentimiento.Decision != EstadoDecision.Vigente && ViewData["SinBannerCookies"] is not true)
+    {
+        <partial name="_BannerCookies" />
+    }
     <div class="nl-topbar on-dark">
         <div class="container d-flex justify-content-between flex-wrap gap-2">
             <span>Conectando profesionales, potenciando la logística.</span>
