@@ -1,0 +1,17 @@
+Alerta técnica: una tarea programada necesita atención
+
+Hola,
+
+La tarea {{tarea}} requiere atención: {{motivo}}.
+Detalle: {{detalle}}
+Hora: {{fecha_hora}}
+
+Revisa los logs de la aplicación y el historial app.tareas_ejecuciones para identificar la causa.
+
+Equipo Nilogistic
+
+--
+Recibes este correo porque eres destinatario de las alertas técnicas de nilogistic.com. Este mensaje se envió desde una cuenta que no recibe respuestas (no-reply@nilogistic.com); para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
+© 2026 Nilogistic · Managua, Nicaragua
