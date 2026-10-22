@@ -19,6 +19,7 @@ public sealed class ServicioEjecutorTareas(
     IRelojUtc reloj,
     IEspera espera,
     IOptions<OpcionesEjecutorTareas> opciones,
+    IServicioAlertasTareas alertas,
     ILogger<ServicioEjecutorTareas> registro) : IServicioEjecutorTareas
 {
     /// <summary>Reprogramacion usada cuando la tarea no se puede ejecutar (SUP-5 y programacion invalida).</summary>
@@ -42,6 +43,7 @@ public sealed class ServicioEjecutorTareas(
         {
             registro.LogError("La tarea {Tarea} no tiene un manejador registrado (SinManejador).", reservada.Nombre);
             await RegistrarAsync(reservada.Nombre, inicio, ResultadoEjecucion.Fallida, "SinManejador", cancelacion);
+            await alertas.RegistrarDesenlaceAsync(reservada.Nombre, false, "SinManejador", cancelacion);
             await ProgramarAsync(reservada.Nombre, inicio, tieneIntervalo ? intervalo : ReprogramacionPorDefecto, cancelacion);
             return true;
         }
@@ -53,16 +55,18 @@ public sealed class ServicioEjecutorTareas(
                 reservada.Programacion,
                 reservada.Nombre);
             await RegistrarAsync(reservada.Nombre, inicio, ResultadoEjecucion.Fallida, "ProgramacionInvalida", cancelacion);
+            await alertas.RegistrarDesenlaceAsync(reservada.Nombre, false, "ProgramacionInvalida", cancelacion);
             await ProgramarAsync(reservada.Nombre, inicio, ReprogramacionPorDefecto, cancelacion);
             return true;
         }
 
-        await EjecutarConReintentosAsync(reservada, manejador, inicio, ajustes, cancelacion);
+        var desenlace = await EjecutarConReintentosAsync(reservada, manejador, inicio, ajustes, cancelacion);
+        await alertas.RegistrarDesenlaceAsync(reservada.Nombre, desenlace.Exitoso, desenlace.Error, cancelacion);
         await ProgramarAsync(reservada.Nombre, inicio, intervalo, cancelacion);
         return true;
     }
 
-    private async Task EjecutarConReintentosAsync(
+    private async Task<DesenlaceCiclo> EjecutarConReintentosAsync(
         TareaReservada reservada,
         ITareaProgramada manejador,
         DateTime inicio,
@@ -83,7 +87,7 @@ public sealed class ServicioEjecutorTareas(
             {
                 await manejador.EjecutarAsync(intentoCts.Token);
                 await repositorio.FinalizarEjecucionAsync(ejecucionId, reloj.AhoraUtc, ResultadoEjecucion.Exitosa, null, cancelacion);
-                return;
+                return new DesenlaceCiclo(true, null);
             }
             catch (OperationCanceledException) when (cancelacion.IsCancellationRequested)
             {
@@ -103,7 +107,7 @@ public sealed class ServicioEjecutorTareas(
                     "La tarea {Tarea} excedio su tiempo maximo de {Timeout}s; no se reintenta.",
                     reservada.Nombre,
                     reservada.TimeoutSeg);
-                return;
+                return new DesenlaceCiclo(false, $"TiempoMaximoExcedido:{reservada.TimeoutSeg}s");
             }
             catch (Exception excepcion)
             {
@@ -114,7 +118,7 @@ public sealed class ServicioEjecutorTareas(
                 {
                     await FinalizarAsync(ejecucionId, ResultadoEjecucion.Fallida, error, cancelacion);
                     registro.LogWarning("La tarea {Tarea} agoto sus reintentos.", reservada.Nombre);
-                    return;
+                    return new DesenlaceCiclo(false, error);
                 }
 
                 await FinalizarAsync(ejecucionId, ResultadoEjecucion.Fallida, error, cancelacion);
@@ -128,6 +132,8 @@ public sealed class ServicioEjecutorTareas(
                 await espera.EsperarAsync(duracionEspera, cancelacion);
             }
         }
+
+        throw new InvalidOperationException("El ciclo de reintentos termino sin desenlace.");
     }
 
     private async Task RegistrarAsync(
@@ -151,4 +157,6 @@ public sealed class ServicioEjecutorTareas(
         TimeSpan.FromSeconds(baseSegundos * Math.Pow(2, intento - 1));
 
     private static string Instancia { get; } = $"{Environment.MachineName}:{Environment.ProcessId}";
+
+    private sealed record DesenlaceCiclo(bool Exitoso, string? Error);
 }

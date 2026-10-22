@@ -49,11 +49,14 @@ public static class Dependencias
         servicios.AddSingleton<IEspera, EsperaSistema>();
         servicios.Configure<OpcionesEjecutorTareas>(configuracion.GetSection("TareasSegundoPlano"));
         servicios.AddScoped<IServicioEjecutorTareas, ServicioEjecutorTareas>();
+        servicios.AddScoped<IServicioAlertasTareas, ServicioAlertasTareas>();
+        servicios.AddScoped<IServicioEstadoTareas, ServicioEstadoTareas>();
 
         // Cola de correo (HU-010). El proveedor (Resend o buzon) lo registra el host en CorreoExtensions.
         servicios.Configure<OpcionesCorreo>(configuracion.GetSection("Correo"));
         servicios.AddScoped<IServicioCorreo, ServicioCorreo>();
         servicios.AddScoped<ITareaProgramada, TareaProcesarColaCorreo>();
+        servicios.AddScoped<ITareaProgramada, TareaVigilarTareas>();
 
         // Catalogo y renderizado de plantillas de correo (HU-030). El catalogo se carga una sola vez.
         servicios.AddSingleton<CatalogoPlantillas>();

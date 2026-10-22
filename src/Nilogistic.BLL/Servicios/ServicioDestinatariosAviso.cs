@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -13,6 +12,7 @@ using Nilogistic.Utility.Avisos;
 using Nilogistic.Utility.Configuracion;
 using Nilogistic.Utility.Contratos;
 using Nilogistic.Utility.Correo;
+using Nilogistic.Utility.Utilidades;
 
 namespace Nilogistic.BLL.Servicios;
 
@@ -153,7 +153,7 @@ public sealed class ServicioDestinatariosAviso(
         {
             ["url_base"] = opciones.Value.UrlBaseSitio,
             ["lista"] = NombreLegible(solicitud.Lista),
-            ["fecha_hora"] = FormatoHoraNicaragua(horaUtc)
+            ["fecha_hora"] = FechaNicaragua.Formatear(horaUtc)
         };
 
         var resultado = await plantillas.EncolarAsync(
@@ -243,26 +243,6 @@ public sealed class ServicioDestinatariosAviso(
         ListasAviso.Continuidad => "Continuidad",
         _ => lista
     };
-
-    private static string FormatoHoraNicaragua(DateTime horaUtc)
-    {
-        var zona = ZonaNicaragua();
-        var local = TimeZoneInfo.ConvertTimeFromUtc(horaUtc, zona);
-        var cultura = new CultureInfo("es-NI");
-        return local.ToString("f", cultura);
-    }
-
-    private static TimeZoneInfo ZonaNicaragua()
-    {
-        try
-        {
-            return TimeZoneInfo.FindSystemTimeZoneById("America/Managua");
-        }
-        catch (TimeZoneNotFoundException)
-        {
-            return TimeZoneInfo.FindSystemTimeZoneById("Central America Standard Time");
-        }
-    }
 
     private RegistroAuditoria ConstruirAsiento(string lista, string accion, object? antes, object? despues) => new()
     {

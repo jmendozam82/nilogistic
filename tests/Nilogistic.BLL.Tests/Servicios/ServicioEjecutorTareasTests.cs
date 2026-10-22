@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Nilogistic.BLL.Interfaces;
 using Nilogistic.BLL.Servicios;
 using Nilogistic.BLL.Tareas;
 using Nilogistic.DAL.Interfaces;
@@ -17,14 +18,30 @@ public class ServicioEjecutorTareasTests
         RepositorioTareasFalso repositorio,
         IEnumerable<ITareaProgramada> manejadores,
         IEspera? espera = null,
-        int esperaBase = 5) =>
+        int esperaBase = 5,
+        AlertasTareasFalso? alertas = null) =>
         new(
             repositorio,
             manejadores,
             new RelojFalso(Ahora),
             espera ?? new EsperaFalsa(),
             Options.Create(new OpcionesEjecutorTareas { EsperaBaseReintentoSegundos = esperaBase, MargenReservaSegundos = 60 }),
+            alertas ?? new AlertasTareasFalso(),
             NullLogger<ServicioEjecutorTareas>.Instance);
+
+    private sealed class AlertasTareasFalso : IServicioAlertasTareas
+    {
+        public List<(string Tarea, bool Exitoso, string? Error)> Desenlaces { get; } = [];
+
+        public Task RegistrarDesenlaceAsync(string tarea, bool exitoso, string? error, CancellationToken cancelacion = default)
+        {
+            Desenlaces.Add((tarea, exitoso, error));
+            return Task.CompletedTask;
+        }
+
+        public Task<int> EvaluarRetrasosAsync(CancellationToken cancelacion = default) =>
+            Task.FromResult(0);
+    }
 
     [Fact]
     [Hu("HU-034", "E1")]
@@ -343,5 +360,20 @@ public class ServicioEjecutorTareasTests
             Programaciones.Add((tareaNombre, ultimaEjecucionUtc, proximaEjecucionUtc));
             return Task.CompletedTask;
         }
+
+        public Task<DesenlaceTarea> RegistrarDesenlaceAsync(string tareaNombre, bool exitoso, CancellationToken cancelacion = default) =>
+            Task.FromResult(new DesenlaceTarea(0, null));
+
+        public Task<bool> ReclamarAlertaFallosAsync(string tareaNombre, int umbral, DateTime ahoraUtc, CancellationToken cancelacion = default) =>
+            Task.FromResult(false);
+
+        public Task<bool> ReclamarAlertaRetrasoAsync(string tareaNombre, DateTime ahoraUtc, CancellationToken cancelacion = default) =>
+            Task.FromResult(false);
+
+        public Task<IReadOnlyList<EstadoTareaFila>> ListarEstadoAsync(CancellationToken cancelacion = default) =>
+            Task.FromResult<IReadOnlyList<EstadoTareaFila>>([]);
+
+        public Task<IReadOnlyList<TareaEjecucion>> ListarEjecucionesAsync(string tareaNombre, int saltar, int tomar, CancellationToken cancelacion = default) =>
+            Task.FromResult<IReadOnlyList<TareaEjecucion>>([]);
     }
 }
