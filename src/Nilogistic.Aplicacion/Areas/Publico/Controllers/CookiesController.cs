@@ -96,6 +96,12 @@ public sealed class CookiesController : Controller
                         Path = "/",
                         Secure = Request.IsHttps
                     });
+                    Response.Cookies.Delete(nombre, new CookieOptions
+                    {
+                        Path = "/",
+                        Domain = Request.Host.Host,
+                        Secure = Request.IsHttps
+                    });
                 }
             }
         }
