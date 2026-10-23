@@ -1,5 +1,7 @@
 using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
+using Nilogistic.Aplicacion.Analitica;
+using Nilogistic.Aplicacion.Cookies;
 using Nilogistic.Utility.Constantes;
 using Nilogistic.Utility.Seguridad;
 
@@ -9,10 +11,13 @@ namespace Nilogistic.Aplicacion.Seguridad;
 /// Cabeceras de seguridad en toda respuesta (HU-012): HSTS, CSP con nonce, X-Content-Type-Options,
 /// Referrer-Policy, Permissions-Policy, frame-ancestors, y noindex fuera de Producción indexable.
 /// Se aplican en OnStarting para que también acompañen redirecciones y respuestas de error.
+/// La CSP solo abre los orígenes de Google Analytics con ID válido y consentimiento de analítica
+/// (HU-066 §4.3).
 /// </summary>
 public sealed class CabecerasSeguridadMiddleware(
     RequestDelegate siguiente,
     IOptions<OpcionesSeguridad> opciones,
+    IOptions<OpcionesAnalitica> analitica,
     IHostEnvironment entorno)
 {
     private const string ClaveNonce = "Nilogistic.CspNonce";
@@ -20,6 +25,7 @@ public sealed class CabecerasSeguridadMiddleware(
         "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()";
 
     private readonly OpcionesSeguridad _opciones = opciones.Value;
+    private readonly OpcionesAnalitica _analitica = analitica.Value;
 
     public static string ObtenerNonce(HttpContext contexto) =>
         contexto.Items.TryGetValue(ClaveNonce, out var nonce) ? nonce as string ?? string.Empty : string.Empty;
@@ -78,17 +84,42 @@ public sealed class CabecerasSeguridadMiddleware(
             return "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; frame-ancestors 'none'";
         }
 
+        var analiticaPermitida = AnaliticaPermitida(contexto);
         var imagenes = string.Join(' ', _opciones.Csp.ImgOrigenes.Prepend("data:").Prepend("'self'"));
+        var scriptAnalitica = analiticaPermitida ? " https://www.googletagmanager.com" : string.Empty;
+        var connectAnalitica = analiticaPermitida
+            ? " https://www.googletagmanager.com https://www.google-analytics.com" +
+              " https://*.google-analytics.com https://*.analytics.google.com"
+            : string.Empty;
+        var imagenesAnalitica = analiticaPermitida
+            ? " https://www.google-analytics.com https://www.googletagmanager.com"
+            : string.Empty;
         var csp =
             "default-src 'self'; " +
-            $"script-src 'self' 'nonce-{nonce}' https://challenges.cloudflare.com; " +
+            $"script-src 'self' 'nonce-{nonce}' https://challenges.cloudflare.com{scriptAnalitica}; " +
             $"style-src 'self' 'nonce-{nonce}'; " +
-            $"img-src {imagenes}; " +
-            "connect-src 'self'; " +
+            $"img-src {imagenes}{imagenesAnalitica}; " +
+            $"connect-src 'self'{connectAnalitica}; " +
             "frame-src https://challenges.cloudflare.com; " +
             "font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
 
         return reporte ? csp + "; report-uri /api/v1/csp-reportes" : csp;
+    }
+
+    /// <summary>
+    /// La CSP solo se amplía con ID válido y una cookie de consentimiento legible que acepte la
+    /// analítica. No consulta la versión ni la fecha: una decisión caducada no carga ningún script.
+    /// </summary>
+    private bool AnaliticaPermitida(HttpContext contexto)
+    {
+        if (_analitica.IdMedicionValido is null)
+        {
+            return false;
+        }
+
+        var valor = contexto.Request.Cookies[PreferenciasCookies.NombreCookie];
+        return PreferenciasCookies.TryLeer(valor, out var preferencias)
+            && preferencias is { Analitica: true };
     }
 }
 
