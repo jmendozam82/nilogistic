@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Nilogistic.API.Configuracion;
+using Nilogistic.Aplicacion.Analitica;
 using Nilogistic.Aplicacion.Cookies;
 using Nilogistic.Aplicacion.Seguridad;
 using Nilogistic.Aplicacion.Tareas;
@@ -30,6 +31,7 @@ public static class NilogisticWebExtensions
 
         servicios.Configure<OpcionesSeguridad>(configuracion.GetSection("Seguridad"));
         servicios.Configure<OpcionesProxy>(configuracion.GetSection("Proxy"));
+        servicios.Configure<OpcionesAnalitica>(configuracion.GetSection("Analitica"));
 
         servicios.Configure<ForwardedHeadersOptions>(opciones =>
         {
@@ -93,6 +95,13 @@ public static class NilogisticWebExtensions
             app.Logger.LogWarning(
                 "La bandera de indexación solo es válida en Producción; en {Entorno} se mantiene noindex.",
                 app.Environment.EnvironmentName);
+        }
+
+        var analitica = app.Services.GetRequiredService<IOptions<OpcionesAnalitica>>().Value;
+        if (!string.IsNullOrWhiteSpace(analitica.IdMedicion) && analitica.IdMedicionValido is null)
+        {
+            app.Logger.LogWarning(
+                "Analitica:IdMedicion no tiene un formato válido; Google Analytics queda desactivado.");
         }
 
         app.UseForwardedHeaders();
