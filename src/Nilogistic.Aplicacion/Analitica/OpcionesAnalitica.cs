@@ -9,7 +9,7 @@ namespace Nilogistic.Aplicacion.Analitica;
 public sealed class OpcionesAnalitica
 {
     private static readonly Regex PatronId = new(
-        "^G-[A-Z0-9]{6,12}$",
+        @"^G-[A-Z0-9]{6,12}\z",
         RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
     /// <summary>
