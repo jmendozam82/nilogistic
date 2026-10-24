@@ -60,10 +60,10 @@ El identificador **no se versiona** en el repositorio; se inyecta como variable 
 
 ## 4. Cómo se integra con el sitio (HU-066)
 
-- **Solo con consentimiento:** `analitica.js` se carga únicamente si hay `data-analitica="permitida"` en `<body>`, el layout público monta el parcial y `OpcionesAnalitica.IdMedicionValido` no es nulo.
+- **Solo con consentimiento:** `analitica.js` se carga únicamente si `OpcionesAnalitica.IdMedicionValido` no es nulo, `Context.ObtenerConsentimientoCookies().AnaliticaPermitida` es `true` y la vista no marca `ViewData["SinBannerCookies"]` (`_ScriptsAnalitica` en `_LayoutPublico`). Las páginas que usan `SinBannerCookies` (por ejemplo las galerías) no deben cargar Analytics. No se depende de un atributo `data-analitica` en `<body>`.
 - **Privacidad:** `gtag` se configura con `allow_google_signals: false`, `allow_ad_personalization_signals: false`, `cookie_domain` en el host exacto y `cookie_flags: 'SameSite=Lax;Secure'`. Sin `user_id`.
-- **CSP condicionada:** los orígenes `googletagmanager.com`, `google-analytics.com`, `*.google-analytics.com` y `*.analytics.google.com` solo se añaden a la CSP cuando hay ID válido y la cookie `nl_consent_cookies` acepta analítica. Si no hay consentimiento, la CSP es idéntica a la actual.
-- **Retirada del consentimiento:** al rechazar o guardar sin analítica, el servidor expira `_ga`, `_gid` y `_ga_<ID>` (cookies de host exacto). Las demás cookies no se tocan.
+- **CSP condicionada:** los orígenes `googletagmanager.com`, `google-analytics.com`, `*.google-analytics.com` y `*.analytics.google.com` solo se añaden a la CSP cuando hay ID válido y la cookie `nl_consent_cookies` acepta analítica. Si no hay consentimiento, la CSP debe permanecer idéntica a la base (puede variar solo el `nonce` por petición).
+- **Retirada del consentimiento:** al rechazar o guardar sin analítica, el servidor expira `_ga`, `_gid` y cualquier `_ga_<ID>` tanto con `Path="/"` como con `Path="/"` y `Domain = Request.Host.Host` (y con/sin `Secure` según el contexto). Las demás cookies no se tocan.
 
 ## 5. Comprobación manual
 1. Ventana privada, sin decisión: pestaña **Red** sin solicitudes a `googletagmanager.com`/`google-analytics.com`; HTML sin `analitica.js`; CSP sin orígenes de Google.
