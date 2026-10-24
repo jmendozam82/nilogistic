@@ -1,0 +1,41 @@
+{
+  "capturado_utc": "2026-10-24T21:16:10Z",
+  "consultas": {
+    "MX news.nilogistic.com": [],
+    "MX nilogistic.com": [
+      "10 mx10.antispam.mailspamprotection.com.",
+      "20 mx20.antispam.mailspamprotection.com.",
+      "30 mx30.antispam.mailspamprotection.com."
+    ],
+    "MX send.news.nilogistic.com": [
+      "10 feedback.forge.rmta.net."
+    ],
+    "MX send.nilogistic.com": [
+      "10 feedback.forge.rmta.net."
+    ],
+    "TXT _dmarc.news.nilogistic.com": [],
+    "TXT _dmarc.nilogistic.com": [
+      "v=DMARC1; p=none; aspf=r; adkim=r; rua=mailto:rua@dmarc.brevo.com,mailto:analista@nilogistic.com"
+    ],
+    "TXT news.nilogistic.com": [],
+    "TXT nilogistic.com": [
+      "v=spf1 +a +mx include:nilogistic.com.spf.auto.dnssmarthost.net ~all",
+      "brevo-code:39b2a153eb4b25b9e4c59bfd664717d8"
+    ],
+    "TXT resend._domainkey.news.nilogistic.com": [
+      "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDTaWD02OBCN09o4qZLlnQb88URJkDDImCl9E/Pitcw9trhcideQI4MiYDn48jjbXf4Rlw0Qe0b9lJJJu3Lm54J2N7m9xbcl5fJwzuWLmTo5x0fdgQlniPCezjXWIeDjJedC79CAuDFSJ+PDwiseffcv6coe/r7ibzDfT00LUp9QwIDAQAB"
+    ],
+    "TXT resend._domainkey.nilogistic.com": [
+      "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/CYdnWeAAaXvei/RSvbHgxhaBIp8WDU/u5hZuRn+KwaM5Gi6TECrzlaN/sh12hD/kXEGgVDkD9E2yIXWb3NdPnnLMw/P5bXzVXjyGmNQomtrGzUo5tyOsF9lC8PP6C/llCSnM1TGy61qUN934ARm4aIZR04CMzsxTIcQP664M5QIDAQAB"
+    ],
+    "TXT send.news.nilogistic.com": [
+      "v=spf1 ip4:52.3.252.119 ip4:44.222.39.36 ip4:199.249.231.0/24 ~all"
+    ],
+    "TXT send.nilogistic.com": [
+      "v=spf1 ip4:52.3.252.119 ip4:44.222.39.36 ip4:199.249.231.0/24 ~all"
+    ]
+  },
+  "dominio": "nilogistic.com",
+  "marketing": "news.nilogistic.com",
+  "selector": "resend"
+}
