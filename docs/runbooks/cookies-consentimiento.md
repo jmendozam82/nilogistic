@@ -59,8 +59,9 @@ La HU-045 no carga ningún script de analítica: solo deja el estado preparado.
 - El filtro global `FiltroConsentimientoCookies` es el único que lee la cookie y el único que
   pregunta por la versión; las vistas no llaman a la BLL ni al proveedor.
 
-HU-066 debe condicionar la carga de la analítica a ese atributo (o al estado de `HttpContext.Items`)
-y no a un valor por defecto.
+HU-066 ya lo consume: ver `docs/runbooks/search-console-analytics.md`. La carga de Analytics se
+condiciona al atributo o al estado del consentimiento, con CSP ampliada solo cuando hay ID válido y
+consentimiento de analítica. Al retirar el consentimiento se borran `_ga`, `_gid` y `_ga_*`.
 
 ## Páginas y rutas
 

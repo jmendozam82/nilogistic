@@ -1,0 +1,10 @@
+@inject Microsoft.Extensions.Options.IOptions<Nilogistic.Aplicacion.Analitica.OpcionesAnalitica> OpcionesAnalitica
+@{
+    var idMedicion = OpcionesAnalitica.Value.IdMedicionValido;
+}
+@if (idMedicion is not null
+    && Context.ObtenerConsentimientoCookies().AnaliticaPermitida
+    && ViewData["SinBannerCookies"] is not true)
+{
+    <script src="~/js/analitica.js" asp-append-version="true" data-id-medicion="@idMedicion"></script>
+}

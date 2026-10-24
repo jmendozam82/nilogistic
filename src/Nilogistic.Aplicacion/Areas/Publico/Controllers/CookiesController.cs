@@ -85,6 +85,27 @@ public sealed class CookiesController : Controller
         var ahora = DateTime.UtcNow;
         var preferencias = new PreferenciasCookies(decision.Value, ahora, version);
 
+        if (!decision.Value)
+        {
+            foreach (var nombre in Request.Cookies.Keys.ToList())
+            {
+                if (EsCookieDeAnalitica(nombre))
+                {
+                    Response.Cookies.Delete(nombre, new CookieOptions
+                    {
+                        Path = "/",
+                        Secure = Request.IsHttps
+                    });
+                    Response.Cookies.Delete(nombre, new CookieOptions
+                    {
+                        Path = "/",
+                        Domain = Request.Host.Host,
+                        Secure = Request.IsHttps
+                    });
+                }
+            }
+        }
+
         Response.Cookies.Append(PreferenciasCookies.NombreCookie, preferencias.Serializar(), new CookieOptions
         {
             Path = "/",
@@ -133,6 +154,15 @@ public sealed class CookiesController : Controller
 
         return valor;
     }
+
+    /// <summary>
+    /// Cookies de Google Analytics que se expiran al retirar el consentimiento (HU-066 §4.4):
+    /// <c>_ga</c>, <c>_gid</c> y cualquier <c>_ga_&lt;ID&gt;</c>.
+    /// </summary>
+    private static bool EsCookieDeAnalitica(string nombre) =>
+        string.Equals(nombre, "_ga", StringComparison.Ordinal)
+        || string.Equals(nombre, "_gid", StringComparison.Ordinal)
+        || nombre.StartsWith("_ga_", StringComparison.Ordinal);
 
     /// <summary>Caracteres admitidos en una ruta local: ASCII alfanuméricos y los de la URL.</summary>
     private static bool CaracterPermitido(char caracter) =>
