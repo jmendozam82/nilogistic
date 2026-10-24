@@ -171,4 +171,70 @@ public class CabecerasSeguridadTests
         swagger.Headers.GetValues("Content-Security-Policy").Single().Should().Contain("'unsafe-inline'");
         inicio.Headers.GetValues("Content-Security-Policy").Single().Should().NotContain("'unsafe-inline'");
     }
+
+    [Fact]
+    [Hu("HU-066", "E3")]
+    public async Task Con_cookie_de_aceptacion_y_id_valido_la_csp_amplia_origenes_de_google()
+    {
+        using var fabrica = Fabrica("Staging", new Dictionary<string, string>
+        {
+            ["Analitica:IdMedicion"] = "G-TEST123456"
+        });
+        using var cliente = fabrica.ClienteHttps();
+
+        using var peticion = new HttpRequestMessage(HttpMethod.Get, "/");
+        peticion.Headers.Add("Cookie", $"nl_consent_cookies={Nilogistic.Aplicacion.Tests.Cookies.AyudasCookies.Cookie(true, DateTime.UtcNow)}");
+        var respuesta = await cliente.SendAsync(peticion);
+
+        var csp = respuesta.Headers.GetValues("Content-Security-Policy").Single();
+        csp.Should().Contain("https://www.googletagmanager.com");
+        csp.Should().Contain("https://www.google-analytics.com");
+    }
+
+    [Theory]
+    [Hu("HU-066", "E3")]
+    [InlineData("abc")]
+    [InlineData("1.0.123.3")]
+    public async Task Con_cookie_ilegible_o_sin_analitica_la_csp_base_no_cambia(string valorCookie)
+    {
+        using var fabrica = Fabrica("Staging", new Dictionary<string, string>
+        {
+            ["Analitica:IdMedicion"] = "G-TEST123456"
+        });
+        using var cliente = fabrica.ClienteHttps();
+
+        var respuestaBase = await cliente.GetAsync("/");
+        var cspBase = SinNonce(respuestaBase.Headers.GetValues("Content-Security-Policy").Single());
+
+        using var cliente2 = fabrica.ClienteHttps();
+        using var peticion = new HttpRequestMessage(HttpMethod.Get, "/");
+        peticion.Headers.Add("Cookie", $"nl_consent_cookies={valorCookie}");
+        var respuesta = await cliente2.SendAsync(peticion);
+        var csp = SinNonce(respuesta.Headers.GetValues("Content-Security-Policy").Single());
+
+        csp.Should().Be(cspBase);
+    }
+
+    private static string SinNonce(string csp) =>
+        System.Text.RegularExpressions.Regex.Replace(csp, "'nonce-[^']*'", "'nonce-X'");
+
+    [Fact]
+    [Hu("HU-066", "E3")]
+    public async Task Sin_cookie_o_sin_id_la_csp_base_no_cambia()
+    {
+        using var fabrica = Fabrica("Staging", new Dictionary<string, string>
+        {
+            ["Analitica:IdMedicion"] = "G-TEST123456"
+        });
+        using var cliente = fabrica.ClienteHttps();
+        var baseResp = await cliente.GetAsync("/");
+        var cspBase = SinNonce(baseResp.Headers.GetValues("Content-Security-Policy").Single());
+
+        using var fabrica2 = Fabrica("Staging");
+        using var cliente2 = fabrica2.ClienteHttps();
+        using var peticion = new HttpRequestMessage(HttpMethod.Get, "/");
+        peticion.Headers.Add("Cookie", $"nl_consent_cookies={Nilogistic.Aplicacion.Tests.Cookies.AyudasCookies.Cookie(true, DateTime.UtcNow)}");
+        var respuesta = await cliente2.SendAsync(peticion);
+        SinNonce(respuesta.Headers.GetValues("Content-Security-Policy").Single()).Should().Be(cspBase);
+    }
 }
