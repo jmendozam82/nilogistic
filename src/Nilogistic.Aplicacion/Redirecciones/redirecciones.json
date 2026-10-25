@@ -1,1 +1,155 @@
-{"version":1,"redirecciones":[{"origen":"/feed","destino":"/blog","estado":"pendiente","hu":"HU-051","conservarConsulta":[],"nota":"E6; documentar consumo para reevaluar FT-043"}]}
+{
+  "version": 1,
+  "redirecciones": [
+    {
+      "origen": "/home-2-2-2-2",
+      "destino": "/quienes-somos",
+      "estado": "disponible",
+      "conservarConsulta": [],
+      "nota": "Pagina Somos del sitio WordPress actual"
+    },
+    {
+      "origen": "/privacy-policy",
+      "destino": "/legal/privacidad",
+      "estado": "disponible",
+      "conservarConsulta": [],
+      "nota": "Politica de privacidad"
+    },
+    {
+      "origen": "/feed",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "E6; documentar consumo para reevaluar FT-043"
+    },
+    {
+      "origen": "/comments/feed",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "Feed de comentarios de WordPress"
+    },
+    {
+      "origen": "/estrategia-el-punto-de-partida-correcto-para-la-logistica-en-2026",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "Post sin migrar (D-015); va al listado"
+    },
+    {
+      "origen": "/la-importancia-critica-de-la-ciberseguridad-en-la-supply-chain",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "Post sin migrar (D-015); va al listado"
+    },
+    {
+      "origen": "/por-que-la-supply-chain-necesita-pensar-en-modo-sprint",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "Post sin migrar (D-015); va al listado"
+    },
+    {
+      "origen": "/category/sostenibilidad-nearshoring-logistica-verde-economia-circular",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "Categoria antigua de WordPress"
+    },
+    {
+      "origen": "/category/tableros-kanban-ciclos-sprint-cultura-agil-empoderamiento-operativo",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "Categoria antigua de WordPress"
+    },
+    {
+      "origen": "/category/wms-tms-erp-automatizacion-iot-inteligencia-artificial-blockchain",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "Categoria antigua de WordPress"
+    },
+    {
+      "origen": "/2025/07",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "Archivo por fecha de WordPress"
+    },
+    {
+      "origen": "/2026/02",
+      "destino": "/blog",
+      "estado": "pendiente",
+      "hu": "HU-051",
+      "conservarConsulta": [],
+      "nota": "Archivo por fecha de WordPress"
+    },
+    {
+      "origen": "/unete",
+      "destino": "/solicitar-alta",
+      "estado": "pendiente",
+      "hu": "HU-025",
+      "conservarConsulta": [],
+      "nota": "Formulario de union del sitio actual"
+    },
+    {
+      "origen": "/registro-de-estudiante",
+      "destino": "/solicitar-alta",
+      "estado": "pendiente",
+      "hu": "HU-025",
+      "conservarConsulta": [],
+      "nota": "Registro; la cuenta se crea por solicitud de alta"
+    },
+    {
+      "origen": "/clnclausura2025",
+      "destino": "/eventos",
+      "estado": "pendiente",
+      "hu": "HU-060",
+      "conservarConsulta": [],
+      "nota": "Evento pasado CLN 2025"
+    },
+    {
+      "origen": "/cursos",
+      "destino": "/servicios",
+      "estado": "pendiente",
+      "hu": "HU-042",
+      "conservarConsulta": [],
+      "nota": "Cursos son R2; la pagina de membresias es lo mas cercano"
+    },
+    {
+      "origen": "/cursos/curso-gestion-de-almacen",
+      "destino": "/servicios",
+      "estado": "pendiente",
+      "hu": "HU-042",
+      "conservarConsulta": [],
+      "nota": "Cursos son R2; la pagina de membresias es lo mas cercano"
+    },
+    {
+      "origen": "/producto/curso-de-gestion-de-almacen",
+      "destino": "/servicios",
+      "estado": "pendiente",
+      "hu": "HU-042",
+      "conservarConsulta": [],
+      "nota": "Cursos son R2; la pagina de membresias es lo mas cercano"
+    },
+    {
+      "origen": "/course-category/almacen",
+      "destino": "/servicios",
+      "estado": "pendiente",
+      "hu": "HU-042",
+      "conservarConsulta": [],
+      "nota": "Cursos son R2; la pagina de membresias es lo mas cercano"
+    }
+  ]
+}

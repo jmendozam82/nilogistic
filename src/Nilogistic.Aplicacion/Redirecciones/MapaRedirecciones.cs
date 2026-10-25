@@ -188,7 +188,7 @@ public sealed class MapaRedirecciones
         }
     }
 
-    internal static string? NormalizarRuta(string? ruta, bool yaDecodificada = false)
+    public static string? NormalizarRuta(string? ruta, bool yaDecodificada = false)
     {
         if (string.IsNullOrWhiteSpace(ruta))
         {

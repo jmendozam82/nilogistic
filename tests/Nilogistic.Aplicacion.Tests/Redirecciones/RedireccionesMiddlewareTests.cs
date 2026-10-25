@@ -3,14 +3,24 @@ using Nilogistic.Aplicacion.Redirecciones;
 using Nilogistic.Aplicacion.Tests.Infraestructura;
 using System.Net;
 
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Nilogistic.BLL.Interfaces;
+using Nilogistic.DTO.Legal;
+using Nilogistic.Utility.Legal;
+
 namespace Nilogistic.Aplicacion.Tests.Redirecciones;
 
 public class RedireccionesMiddlewareTests
 {
-    private static FabricaAplicacion Fabrica(string? mapaJson) =>
-        new(servicios: mapaJson is null
-            ? null
-            : (Action<IServiceCollection>)(coleccion => coleccion.AddSingleton(new MapaRedireccionesServicio(mapaJson))));
+    private static FabricaAplicacion Fabrica(string? mapaJson, Action<IServiceCollection>? configurarServicios = null) =>
+        new(servicios: coleccion =>
+        {
+            if (mapaJson is not null)
+            {
+                coleccion.AddSingleton(new MapaRedireccionesServicio(mapaJson));
+            }
+            configurarServicios?.Invoke(coleccion);
+        });
 
     [Fact]
     [Hu("HU-067", "E2")]
@@ -138,10 +148,35 @@ public class RedireccionesMiddlewareTests
     [Hu("HU-067", "E5")]
     public async Task Los_destinos_disponibles_responden_200()
     {
-        using var fabrica = Fabrica("{\"version\":1,\"redirecciones\":[{\"origen\":\"/old\",\"destino\":\"/quienes-somos\",\"estado\":\"disponible\"}]}");
+        var servicioLegal = new ServicioDocumentosLegalesFalso
+        {
+            Vigentes =
+            {
+                [TiposDocumentoLegal.Privacidad] = new DocumentoLegalResponse(
+                    Guid.NewGuid(),
+                    TiposDocumentoLegal.Privacidad,
+                    1,
+                    "<h2>Privacidad</h2>",
+                    DateTime.UtcNow,
+                    null,
+                    false)
+            }
+        };
+
+        using var fabrica = Fabrica(null, coleccion =>
+        {
+            coleccion.RemoveAll<IServicioDocumentosLegales>();
+            coleccion.AddScoped<IServicioDocumentosLegales>(_ => servicioLegal);
+        });
         using var cliente = fabrica.ClienteHttps();
-        var resp = await cliente.GetAsync("/quienes-somos");
-        resp.StatusCode.Should().Be(HttpStatusCode.OK);
+        var mapa = fabrica.Services.GetRequiredService<MapaRedireccionesServicio>().Mapa;
+        var disponibles = mapa.Redirecciones.Where(e => e.Estado == "disponible").ToList();
+        disponibles.Should().NotBeEmpty();
+        foreach (var entrada in disponibles)
+        {
+            var resp = await cliente.GetAsync(entrada.Destino);
+            resp.StatusCode.Should().Be(HttpStatusCode.OK, $"destino disponible {entrada.Destino}");
+        }
     }
 
     [Fact]
@@ -151,9 +186,10 @@ public class RedireccionesMiddlewareTests
         using var fabrica = Fabrica(null);
         using var cliente = fabrica.ClienteHttps();
         var mapa = fabrica.Services.GetRequiredService<MapaRedireccionesServicio>().Mapa;
-        foreach (var entrada in mapa.Redirecciones)
+        var pendientes = mapa.Redirecciones.Where(e => e.Estado == "pendiente").ToList();
+        pendientes.Should().NotBeEmpty();
+        foreach (var entrada in pendientes)
         {
-            entrada.Estado.Should().Be("pendiente");
             entrada.Hu.Should().NotBeNullOrEmpty();
             var resp = await cliente.GetAsync(entrada.Destino);
             resp.StatusCode.Should().Be(HttpStatusCode.NotFound, $"destino pendiente {entrada.Destino}");
@@ -172,5 +208,53 @@ public class RedireccionesMiddlewareTests
         var resp2 = await cliente.GetAsync("/feed/");
         resp2.StatusCode.Should().Be(HttpStatusCode.MovedPermanently);
         resp2.Headers.Location!.ToString().Should().Be("/blog");
+    }
+
+    [Fact]
+    [Hu("HU-067", "E3")]
+    public async Task Mapa_real_home_y_privacy_policy_responden_301_a_sus_destinos()
+    {
+        using var fabrica = Fabrica(null);
+        using var cliente = fabrica.ClienteHttps();
+
+        var respHome = await cliente.GetAsync("/home-2-2-2-2");
+        respHome.StatusCode.Should().Be(HttpStatusCode.MovedPermanently);
+        respHome.Headers.Location!.ToString().Should().Be("/quienes-somos");
+
+        var respPrivacy = await cliente.GetAsync("/privacy-policy");
+        respPrivacy.StatusCode.Should().Be(HttpStatusCode.MovedPermanently);
+        respPrivacy.Headers.Location!.ToString().Should().Be("/legal/privacidad");
+    }
+
+    [Fact]
+    [Hu("HU-067", "E3")]
+    public async Task Mapa_real_cursos_con_query_responde_301_a_servicios_sin_query()
+    {
+        using var fabrica = Fabrica(null);
+        using var cliente = fabrica.ClienteHttps();
+
+        var resp = await cliente.GetAsync("/cursos?utm_source=x");
+        resp.StatusCode.Should().Be(HttpStatusCode.MovedPermanently);
+        resp.Headers.Location!.ToString().Should().Be("/servicios");
+    }
+
+    [Fact]
+    [Hu("HU-067", "E3")]
+    public async Task Mapa_real_rutas_fuera_del_mapa_siguen_camino_normal_404()
+    {
+        using var fabrica = Fabrica(null);
+        using var cliente = fabrica.ClienteHttps();
+
+        var mapa = fabrica.Services.GetRequiredService<MapaRedireccionesServicio>().Mapa;
+        var origenes = mapa.Redirecciones.Select(r => MapaRedirecciones.NormalizarRuta(r.Origen)).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        origenes.Should().NotContain("/carrito");
+        origenes.Should().NotContain(MapaRedirecciones.NormalizarRuta("/wp-content/uploads/2025/03/Curso-Gestion-de-Almacen.png"));
+
+        var respCarrito = await cliente.GetAsync("/carrito");
+        respCarrito.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        var respArchivo = await cliente.GetAsync("/wp-content/uploads/2025/03/Curso-Gestion-de-Almacen.png");
+        respArchivo.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 }

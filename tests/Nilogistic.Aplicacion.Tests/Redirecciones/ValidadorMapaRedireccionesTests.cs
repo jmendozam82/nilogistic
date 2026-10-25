@@ -183,4 +183,49 @@ public class ValidadorMapaRedireccionesTests
         ex.Message.Should().Contain("hu");
         ex.Message.Should().Contain("?");
     }
+
+    [Fact]
+    [Hu("HU-067", "E3")]
+    public void Mapa_real_construye_sin_error_mediante_servicio()
+    {
+        var servicio = new MapaRedireccionesServicio();
+        servicio.Mapa.Should().NotBeNull();
+        servicio.Mapa.Version.Should().BeGreaterThanOrEqualTo(1);
+    }
+
+    [Fact]
+    [Hu("HU-067", "E3")]
+    public void Mapa_real_tiene_exactamente_19_entradas()
+    {
+        var servicio = new MapaRedireccionesServicio();
+        servicio.Mapa.Redirecciones.Count.Should().Be(19);
+    }
+
+    [Fact]
+    [Hu("HU-067", "E3")]
+    public void Mapa_real_ningun_destino_es_origen()
+    {
+        var servicio = new MapaRedireccionesServicio();
+        var origenes = servicio.Mapa.Redirecciones.Select(r => MapaRedirecciones.NormalizarRuta(r.Origen)).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        foreach (var entrada in servicio.Mapa.Redirecciones)
+        {
+            var destinoNorm = MapaRedirecciones.NormalizarRuta(entrada.Destino);
+            origenes.Should().NotContain(destinoNorm, $"el destino {entrada.Destino} no debe coincidir con ningún origen");
+        }
+    }
+
+    [Fact]
+    [Hu("HU-067", "E3")]
+    public void Mapa_real_cada_entrada_pendiente_trae_hu_con_formato_valido()
+    {
+        var servicio = new MapaRedireccionesServicio();
+        var regexHu = new System.Text.RegularExpressions.Regex(@"^HU-\d{3}$", System.Text.RegularExpressions.RegexOptions.Compiled);
+        var pendientes = servicio.Mapa.Redirecciones.Where(r => r.Estado == "pendiente").ToList();
+        pendientes.Should().NotBeEmpty();
+        foreach (var entrada in pendientes)
+        {
+            entrada.Hu.Should().NotBeNullOrWhiteSpace($"la entrada con origen {entrada.Origen} debe tener código HU");
+            regexHu.IsMatch(entrada.Hu!).Should().BeTrue($"HU '{entrada.Hu}' de origen {entrada.Origen} debe cumplir formato HU-xxx");
+        }
+    }
 }
