@@ -42,9 +42,18 @@ Quitar la entrada del mapa y desplegar. Un 301 puede quedar cacheado en navegado
 ## 8. Consumo de `/feed/`
 | Fecha | Fuente | Solicitudes |
 |---|---|---|
-| (pendiente) | (pendiente) | (pendiente) |
+| (pendiente, Jorge) | (pendiente, Jorge) | (pendiente) |
 
 Documentar el consumo real (registros/acceso SiteGround o estadísticas) para reevaluar FT-043 en R4 (E6).
 
 ## 9. Nota
 Un origen bajo `/blog/` podría chocar con el detalle de posts (HU-052); revisar cuando llegue.
+
+## 10. Resultado del inventario
+39 URLs rastreadas en total:
+- 19 redirecciones 301 (2 disponibles, 17 pendientes)
+- 17 respuestas 404
+- 2 conservadas
+
+El subdominio `expologistic-cln2026.nilogistic.com` queda fuera del mapa (D-159).
+
