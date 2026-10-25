@@ -17,7 +17,7 @@ Solo usar `http://127.0.0.1` o `http://localhost` para pruebas. El rastreo inici
 
 ## 4. Columnas del inventario y decisión
 Columnas: `url, ruta, tipo, estado_http, redireccion_a, titulo, fuente, profundidad, encontrada_en, clics, impresiones, decision, destino_propuesto, nota`.
-`tipo`: `pagina`, `entrada`, `archivo`, `feed`, `api`, `otro`. `fuente`: `sitemap`, `enlace`, `robots`, `search_console` o combinaciones.
+`tipo`: `pagina`, `entrada`, `archivo`, `feed`, `api`, `sitemap`, `otro`. `fuente`: `sitemap`, `enlace`, `robots`, `search_console` o combinaciones.
 - Equivalente claro -> `decision=301`, `destino_propuesto=/ruta-nueva`
 - Sin equivalente -> sección más cercana o `decision=404`
 - Las columnas de decisión las rellenan Jorge y Claude.

@@ -284,6 +284,113 @@ class RastrearSitioTests(unittest.TestCase):
         r = ejecutar(VERIFICADOR)
         self.assertEqual(r.returncode, 1)
 
+    def test_sitemap_index_con_hijos_expande_urls_reales_y_clasifica_sitemaps(self):
+        with tempfile.TemporaryDirectory() as d:
+            os.makedirs(os.path.join(d, 'u1'))
+            os.makedirs(os.path.join(d, 'u2'))
+            os.makedirs(os.path.join(d, 'u3'))
+            with open(os.path.join(d, 'u1', 'index.html'), 'w', encoding='utf-8') as f:
+                f.write('<html><body>u1</body></html>')
+            with open(os.path.join(d, 'u2', 'index.html'), 'w', encoding='utf-8') as f:
+                f.write('<html><body>u2</body></html>')
+            with open(os.path.join(d, 'u3', 'index.html'), 'w', encoding='utf-8') as f:
+                f.write('<html><body>u3</body></html>')
+            with ServidorLocal(d) as servidor:
+                with open(os.path.join(d, 'sitemap_index.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<?xml version="1.0"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                            f'<sitemap><loc>{servidor.base}/hijo1-sitemap.xml</loc></sitemap>'
+                            f'<sitemap><loc>{servidor.base}/hijo2-sitemap.xml</loc></sitemap></sitemapindex>')
+                with open(os.path.join(d, 'hijo1-sitemap.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                            f'<url><loc>{servidor.base}/u1/</loc></url>'
+                            f'<url><loc>{servidor.base}/u2/</loc></url></urlset>')
+                with open(os.path.join(d, 'hijo2-sitemap.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                            f'<url><loc>{servidor.base}/u3/</loc></url></urlset>')
+                salida = os.path.join(d, 'inv.csv')
+                r = ejecutar(RASTREADOR, '--base', servidor.base, '--salida', salida,
+                             '--max-paginas', '20', '--demora', '0')
+                self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            datos = filas(salida)
+            self.assertIn('/u1', datos)
+            self.assertIn('/u2', datos)
+            self.assertIn('/u3', datos)
+            self.assertEqual(datos['/u1']['tipo'], 'pagina')
+            self.assertEqual(datos['/u2']['tipo'], 'pagina')
+            self.assertEqual(datos['/u3']['tipo'], 'pagina')
+            # Los sitemaps salen con tipo "sitemap" y no como "pagina"
+            if '/sitemap_index.xml' in datos:
+                self.assertEqual(datos['/sitemap_index.xml']['tipo'], 'sitemap')
+            if '/hijo1-sitemap.xml' in datos:
+                self.assertEqual(datos['/hijo1-sitemap.xml']['tipo'], 'sitemap')
+            if '/hijo2-sitemap.xml' in datos:
+                self.assertEqual(datos['/hijo2-sitemap.xml']['tipo'], 'sitemap')
+
+    def test_sitemap_hijo_con_xml_invalido_no_aborta_y_continua(self):
+        with tempfile.TemporaryDirectory() as d:
+            os.makedirs(os.path.join(d, 'bueno'))
+            with open(os.path.join(d, 'bueno', 'index.html'), 'w', encoding='utf-8') as f:
+                f.write('<html><body>bueno</body></html>')
+            with ServidorLocal(d) as servidor:
+                with open(os.path.join(d, 'sitemap_index.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<?xml version="1.0"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                            f'<sitemap><loc>{servidor.base}/invalido-sitemap.xml</loc></sitemap>'
+                            f'<sitemap><loc>{servidor.base}/valido-sitemap.xml</loc></sitemap></sitemapindex>')
+                with open(os.path.join(d, 'invalido-sitemap.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<xml sin cerrar')
+                with open(os.path.join(d, 'valido-sitemap.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                            f'<url><loc>{servidor.base}/bueno/</loc></url></urlset>')
+                salida = os.path.join(d, 'inv.csv')
+                r = ejecutar(RASTREADOR, '--base', servidor.base, '--salida', salida,
+                             '--max-paginas', '10', '--demora', '0')
+                self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+                self.assertIn('Aviso:', r.stderr)
+            datos = filas(salida)
+            self.assertIn('/bueno', datos)
+
+    def test_sitemap_hijo_que_se_referencia_a_si_mismo_termina_sin_bucle(self):
+        with tempfile.TemporaryDirectory() as d:
+            os.makedirs(os.path.join(d, 'final'))
+            with open(os.path.join(d, 'final', 'index.html'), 'w', encoding='utf-8') as f:
+                f.write('<html><body>final</body></html>')
+            with ServidorLocal(d) as servidor:
+                with open(os.path.join(d, 'sitemap_index.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<?xml version="1.0"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                            f'<sitemap><loc>{servidor.base}/bucle-sitemap.xml</loc></sitemap></sitemapindex>')
+                with open(os.path.join(d, 'bucle-sitemap.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<?xml version="1.0"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                            f'<sitemap><loc>{servidor.base}/bucle-sitemap.xml</loc></sitemap>'
+                            f'<url><loc>{servidor.base}/final/</loc></url></sitemapindex>')
+                salida = os.path.join(d, 'inv.csv')
+                r = ejecutar(RASTREADOR, '--base', servidor.base, '--salida', salida,
+                             '--max-paginas', '10', '--demora', '0')
+                self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            datos = filas(salida)
+            self.assertIn('/final', datos)
+
+    def test_sitemap_hijo_de_otro_host_se_ignora(self):
+        with tempfile.TemporaryDirectory() as d:
+            os.makedirs(os.path.join(d, 'local'))
+            with open(os.path.join(d, 'local', 'index.html'), 'w', encoding='utf-8') as f:
+                f.write('<html><body>local</body></html>')
+            with ServidorLocal(d) as servidor:
+                with open(os.path.join(d, 'sitemap_index.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<?xml version="1.0"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                            '<sitemap><loc>https://externo.com/externo-sitemap.xml</loc></sitemap>'
+                            f'<sitemap><loc>{servidor.base}/local-sitemap.xml</loc></sitemap></sitemapindex>')
+                with open(os.path.join(d, 'local-sitemap.xml'), 'w', encoding='utf-8') as f:
+                    f.write('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                            f'<url><loc>{servidor.base}/local/</loc></url></urlset>')
+                salida = os.path.join(d, 'inv.csv')
+                r = ejecutar(RASTREADOR, '--base', servidor.base, '--salida', salida,
+                             '--max-paginas', '10', '--demora', '0')
+                self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            datos = filas(salida)
+            self.assertIn('/local', datos)
+            self.assertNotIn('externo.com', str(datos))
+
+
 
 class VerificarRedireccionesTests(unittest.TestCase):
     """E5 (parte Python): verificacion del mapa contra un entorno local."""

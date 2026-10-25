@@ -102,41 +102,108 @@ def sin_tildes(texto):
     return ''.join(c for c in unicodedata.normalize('NFKD', texto) if not unicodedata.combining(c))
 
 
-def leer_sitemaps(base, obtenedor, demora):
+def leer_sitemaps(base, obtenedor, demora, max_paginas=500):
+    bparse = urllib.parse.urlparse(base)
+    base_host = bparse.netloc
     decisiones = ['/robots.txt', '/wp-sitemap.xml', '/sitemap_index.xml', '/sitemap.xml', '/feed/', '/comments/feed/']
     encontrados = []
-    for c in decisiones:
-        url = urllib.parse.urljoin(base, c)
-        try:
-            req = urllib.request.Request(url, method='GET')
-            req.add_header('User-Agent', USER_AGENT)
-            with obtenedor.open(req, timeout=15) as resp:
-                datos = resp.read().decode('utf-8', errors='replace')
-            if c == '/robots.txt':
-                for linea in datos.splitlines():
-                    if linea.strip().lower().startswith('sitemap:'):
-                        encontrados.append(linea.split(':', 1)[1].strip())
-            elif c.endswith('.xml') or 'sitemap' in c:
-                try:
-                    raiz = ElementTree.fromstring(datos)
-                    for nodo in raiz.iter():
-                        if nodo is raiz:
-                            continue
-                        if _nombre_local(nodo.tag) not in ('sitemap', 'url'):
-                            continue
-                        loc = next((hijo.text.strip() for hijo in nodo
-                                    if _nombre_local(hijo.tag) == 'loc' and hijo.text), None)
-                        if loc:
-                            encontrados.append(loc)
-                except Exception:
-                    pass
-            else:
-                encontrados.append(url)
-        except Exception:
-            pass
+    sitemaps_visitados = set()
+    sitemaps_leidos = 0
+    sitemaps_fallidos = 0
+
+    def procesar_sitemap(url_sitemap, prof=0):
+        nonlocal sitemaps_leidos, sitemaps_fallidos
+        if prof > 3:
+            return
+        p_sm = urllib.parse.urlparse(url_sitemap)
+        if not mismo_host(base_host, p_sm.netloc):
+            return
+        ruta_sm = normalizar_ruta(url_sitemap)
+        if ruta_sm in sitemaps_visitados:
+            return
+        if len(encontrados) >= max_paginas:
+            return
+        sitemaps_visitados.add(ruta_sm)
         if demora > 0:
             time.sleep(demora)
+
+        try:
+            req = urllib.request.Request(url_sitemap, method='GET')
+            req.add_header('User-Agent', USER_AGENT)
+            with obtenedor.open(req, timeout=15) as resp:
+                codigo = resp.getcode()
+                if codigo != 200:
+                    print(f'Aviso: sitemap {url_sitemap} respondio {codigo}', file=sys.stderr)
+                    sitemaps_fallidos += 1
+                    return
+                datos = resp.read().decode('utf-8', errors='replace')
+        except urllib.error.HTTPError as e:
+            print(f'Aviso: sitemap {url_sitemap} respondio {e.code}', file=sys.stderr)
+            sitemaps_fallidos += 1
+            return
+        except Exception as e:
+            print(f'Aviso: fallo al descargar sitemap {url_sitemap}: {e}', file=sys.stderr)
+            sitemaps_fallidos += 1
+            return
+
+        try:
+            raiz = ElementTree.fromstring(datos)
+        except Exception as e:
+            print(f'Aviso: XML invalido en {url_sitemap}: {e}', file=sys.stderr)
+            sitemaps_fallidos += 1
+            return
+
+        sitemaps_leidos += 1
+        hijos_sitemap = []
+        for nodo in raiz.iter():
+            if nodo is raiz:
+                continue
+            nombre = _nombre_local(nodo.tag)
+            if nombre == 'sitemap':
+                loc = next((hijo.text.strip() for hijo in nodo
+                            if _nombre_local(hijo.tag) == 'loc' and hijo.text), None)
+                if loc:
+                    hijos_sitemap.append(loc)
+            elif nombre == 'url':
+                loc = next((hijo.text.strip() for hijo in nodo
+                            if _nombre_local(hijo.tag) == 'loc' and hijo.text), None)
+                if loc and loc not in encontrados:
+                    encontrados.append(loc)
+                    if len(encontrados) >= max_paginas:
+                        break
+
+        for hijo_url in hijos_sitemap:
+            if len(encontrados) >= max_paginas:
+                break
+            procesar_sitemap(hijo_url, prof + 1)
+
+    for c in decisiones:
+        if len(encontrados) >= max_paginas:
+            break
+        url = urllib.parse.urljoin(base, c)
+        if c.endswith('.xml') or 'sitemap' in c:
+            procesar_sitemap(url, 0)
+        else:
+            try:
+                req = urllib.request.Request(url, method='GET')
+                req.add_header('User-Agent', USER_AGENT)
+                with obtenedor.open(req, timeout=15) as resp:
+                    datos = resp.read().decode('utf-8', errors='replace')
+                if c == '/robots.txt':
+                    for linea in datos.splitlines():
+                        if linea.strip().lower().startswith('sitemap:'):
+                            sm_url = linea.split(':', 1)[1].strip()
+                            procesar_sitemap(sm_url, 0)
+                else:
+                    encontrados.append(url)
+            except Exception:
+                pass
+            if demora > 0:
+                time.sleep(demora)
+
+    print(f'Sitemaps procesados: {sitemaps_leidos} leidos, {sitemaps_fallidos} fallidos', file=sys.stderr)
     return encontrados
+
 
 
 def leer_sc_csv(ruta):
@@ -219,7 +286,7 @@ def rastrear(base, obtenedor, sc, args):
         url_abs = url if p.scheme else base + ruta
         cola.append((url_abs, ruta, fuente, encontrada_en, profundidad))
 
-    for sm in leer_sitemaps(base, obtenedor, args.demora):
+    for sm in leer_sitemaps(base, obtenedor, args.demora, args.max_paginas):
         agregar(sm, 'sitemap')
     agregar(base + '/feed/', 'robots')
     agregar(base + '/comments/feed/', 'robots')
@@ -274,7 +341,7 @@ def rastrear(base, obtenedor, sc, args):
             p2 = urllib.parse.urlparse(urllib.parse.urljoin(url_cur, location))
             if (mismo_host(base_host, p2.netloc) or not p2.netloc) and not location.startswith('#'):
                 agregar(urllib.parse.urljoin(url_cur, location), fuente_cur, url_cur, profundidad + 1)
-        elif estado == 200 and datos:
+        elif estado == 200 and datos and tipo != 'sitemap':
             try:
                 hp = EnlaceParser()
                 hp.feed(texto)
@@ -303,7 +370,10 @@ def rastrear(base, obtenedor, sc, args):
 
 
 def tipo_archivo(ruta):
-    if ruta.startswith('/wp-json/'):
+    ruta_baja = ruta.lower()
+    if ruta_baja.endswith('.xml') and 'sitemap' in ruta_baja:
+        return 'sitemap'
+    elif ruta.startswith('/wp-json/'):
         return 'api'
     elif PREFIJO_ARCHIVOS in ruta:
         return 'archivo'
