@@ -84,6 +84,7 @@ public static class NilogisticWebExtensions
         servicios.AgregarCorreoNilogistic(configuracion, entorno);
         servicios.AgregarNilogisticApi(configuracion, entorno);
         servicios.AddHostedService<EjecutorTareasHostedService>();
+        servicios.AddSingleton<Nilogistic.Aplicacion.Redirecciones.MapaRedireccionesServicio>();
         return servicios;
     }
 
@@ -110,6 +111,7 @@ public static class NilogisticWebExtensions
         app.UseExceptionHandler();
         app.UseMiddleware<CabecerasSeguridadMiddleware>();
         app.UseHttpsRedirection();
+        app.UseMiddleware<Nilogistic.Aplicacion.Redirecciones.RedireccionesMiddleware>();
         app.UseStatusCodePages();
         app.UsarNilogisticApi();
         app.UseStaticFiles(new StaticFileOptions

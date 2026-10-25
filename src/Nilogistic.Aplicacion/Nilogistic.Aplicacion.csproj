@@ -15,4 +15,7 @@
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Formatting.Compact" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Redirecciones\redirecciones.json" />
+  </ItemGroup>
 </Project>

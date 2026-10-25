@@ -38,3 +38,9 @@ HU-035 E1
 HU-035 E2
 HU-035 E3
 # HU-035 E1: estado por tarea con ultima ejecucion, resultado, proxima ejecucion e historial paginado sin duplicados. E2: tres fallos consecutivos encolan una alerta por destinatario tecnico con clave idempotente; los intentos intermedios no suman y el apagado del host no registra desenlace. E3: una tarea sin ejecutarse durante el doble de su intervalo genera una sola alerta por episodio, sin duplicar con dos instancias.
+HU-067 E2
+HU-067 E3
+HU-067 E4
+HU-067 E5
+HU-067 E6
+# HU-067 E2: redirección 301 de un solo salto desde URL antigua a destino equivalente. E3: validación de cadenas, bucles, duplicados y orígenes reservados. E4: URL sin equivalente responde 404 o redirige a la sección más cercana. E5: prueba previa al corte con el mapa y verificación con destinos vivos. E6: /feed y /feed/ redirigen 301 a /blog con estado pendiente HU-051.
