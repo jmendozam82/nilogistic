@@ -163,6 +163,16 @@ public sealed class MapaRedirecciones
             errores.Add($"{etiqueta}: la ruta no debe contener '#'.");
         }
 
+        if (ruta.Contains('\\'))
+        {
+            errores.Add($"{etiqueta}: la ruta no debe contener la barra invertida '\\'.");
+        }
+
+        if (ruta.Any(char.IsControl) || ruta.Any(char.IsWhiteSpace))
+        {
+            errores.Add($"{etiqueta}: la ruta no debe contener espacios ni caracteres de control.");
+        }
+
         if (ruta.Contains("://"))
         {
             errores.Add($"{etiqueta}: no se permiten host ni esquema.");

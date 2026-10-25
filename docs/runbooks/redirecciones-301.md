@@ -13,7 +13,7 @@ Inventariar URLs del sitio WordPress actual, validar un mapa de redirecciones 30
 ```bash
 python scripts/ops/rastrear_sitio.py --base https://ejemplo.com --salida docs/migracion/inventario-urls.csv --search-console docs/migracion/search-console-paginas.csv --max-paginas 500 --demora 0.5
 ```
-Solo usar `http://127.0.0.1` o `http://localhost` para pruebas. No ejecutar contra `nilogistic.com` ni contra Staging.
+Solo usar `http://127.0.0.1` o `http://localhost` para pruebas. El rastreo inicial lo ejecuta Jorge contra el sitio WordPress actual (`https://nilogistic.com`), que es de solo lectura. Las pruebas automatizadas y el ejecutor usan solo `http://127.0.0.1`.
 
 ## 4. Columnas del inventario y decisión
 Columnas: `url, ruta, tipo, estado_http, redireccion_a, titulo, fuente, profundidad, encontrada_en, clics, impresiones, decision, destino_propuesto, nota`.

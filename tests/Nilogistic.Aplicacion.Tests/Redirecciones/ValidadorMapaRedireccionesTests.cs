@@ -121,6 +121,21 @@ public class ValidadorMapaRedireccionesTests
         ex.Message.Should().ContainAny("?", "#", "host", "esquema", "//");
     }
 
+    [Theory]
+    [Hu("HU-067", "E3")]
+    [InlineData("/\\evil.com", "barra invertida")]
+    [InlineData("/a\\b", "barra invertida")]
+    [InlineData("/a b", "espacios")]
+    [InlineData("/a\tb", "espacios")]
+    public void Destino_con_barra_invertida_espacio_o_control_no_es_valido(string destino, string fragmento)
+    {
+        var json = $"{{\"version\":1,\"redirecciones\":[{{\"origen\":\"/a\",\"destino\":\"{EscaparJson(destino)}\",\"estado\":\"disponible\"}}]}}";
+        var ex = Assert.Throws<InvalidOperationException>(() => MapaRedirecciones.Crear(json));
+        ex.Message.Should().Contain(fragmento);
+    }
+
+    private static string EscaparJson(string texto) => texto.Replace("\\", "\\\\").Replace("\t", "\\t");
+
     [Fact]
     [Hu("HU-067", "E3")]
     public void Estado_invalido_no_es_valido()
