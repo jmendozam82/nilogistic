@@ -60,8 +60,8 @@ def _git(argumentos, raiz="."):
             text=True,
             check=False,
         )
-    except FileNotFoundError as error:
-        raise ErrorGit("no se encontro el ejecutable de git") from error
+    except (FileNotFoundError, OSError) as error:
+        raise ErrorGit(f"fallo al ejecutar git: {error}") from error
     if resultado.returncode != 0:
         raise ErrorGit(resultado.stderr.strip() or f"git {' '.join(argumentos)} fallo")
     return [linea.strip() for linea in resultado.stdout.splitlines() if linea.strip()]
