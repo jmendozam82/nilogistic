@@ -1,6 +1,6 @@
 # NILOGISTIC — Cierre formal del Sprint 3 (25/10/2026)
 
-> Estado: **borrador a la espera de la puerta G1** (run de CI sobre `develop` tras el merge del PR #83; ver §2). Sprint 3 — Cumplimiento y base de arranque; planificado del 21/12/2026 al 01/01/2027 (21 SP) y entregado por adelanto entre el 18/10 y el 25/10/2026.
+> Estado: **cerrado el 25/10/2026** con G1 en verde (run `40247844962`, §2). Sprint 3 — Cumplimiento y base de arranque; planificado del 21/12/2026 al 01/01/2027 (21 SP) y entregado por adelanto entre el 18/10 y el 25/10/2026.
 
 ## 1. Resultado
 - **8 de 8 HUs del plan de S3 cerradas, 25 SP** frente a 21 planificados: HU-032 (3), HU-035 (3; el plan decía 2), HU-039a (2), HU-044 (5; el plan decía 3), HU-045 (3; el plan decía 2), HU-063 (3), HU-066 (3) y HU-067 (3). Los 4 SP de diferencia salen de reestimaciones al ejecutar y los absorbe el adelanto del calendario (D-072).
@@ -11,7 +11,7 @@
 ## 2. Puertas de cierre
 | Puerta | Criterio | Estado | Evidencia / acción |
 |---|---|---|---|
-| **G1** | Cobertura de BLL ≥ 70 % y todos los jobs en verde | ⬜ pendiente | Lanzar `ci.yml` con `workflow_dispatch` sobre `develop` después del merge del PR #83; anotar el número de run y la cobertura aquí (en S2: 95,0 %) |
+| **G1** | Cobertura de BLL ≥ 70 % y todos los jobs en verde | ✅ | Run **`40247844962`** sobre `develop` tras el merge del PR #83: `completed / success`; cobertura de `Nilogistic.BLL` **93,9 %** (mínimo 70 %). Run del PR #83: `40247546505`, todos los checks en verde. Datos informados por Jorge desde GitHub |
 | **G2** | Validación visual de las pantallas del sprint | ✅ | HU-044 (páginas legales) y HU-045 (banner y preferencias) validadas por Jorge en Staging; HU-066 y HU-067 no añaden pantallas (analítica sin interfaz y redirecciones) |
 | Pruebas unitarias | Verdes en CI | ✅ | Cada PR del sprint pasó sus jobs; `desplegar-staging` en verde salvo el incidente de HU-035 (resuelto con DT-5 y el PR #80) |
 | Trazabilidad | `docs/hu/S3.txt` coherente con las pruebas | ✅ | 0 escenarios sin prueba |
@@ -46,7 +46,7 @@ D-145 a D-160 (tabla de decisiones de `ESTADO_PROYECTO.md`). Las que condicionan
 4. Los commits y pushes los hace Jorge; Claude no tiene identidad de git ni permiso para borrar archivos temporales en el repositorio.
 
 ## 5. Pendientes que pasan a S4
-- **Reestimar HU-014** (D-078, debía hacerse al inicio de S3): S4 está en 26 de 26 SP; con 7 SP o más R1 se corre un sprint. Si no se hizo, es lo primero de S4.
+- **HU-014 reestimada (D-078, D-161 propuesta):** de 5 a **9 SP** (supera el umbral de 6). Propuesta de Claude: dividirla en HU-014a (inicio de sesión y persistencia de llaves con certificado y respaldo; E1 a E6 y E8; 6 SP, en S4) y HU-014b (restauración ensayada, aviso de vencimiento y rotación; E7, E9 y E10; 3 SP, antes de la G3 preliminar al cierre de S6). S4 queda en 27 de 26 SP (+1, absorbido por el adelanto). Pendiente de aprobación de Jorge.
 - **DT-6** (ficha lista, antes del 04/01/2027) y DT-7 (purga del historial de tareas, antes de S10; sin ficha).
 - Textos legales reales (tarea #6), DNS y G6 (D-157), marca y medios (D-25, el favicon da 404).
 - HU-068 con D-160 (HEAD) y el sitemap (G7b).
