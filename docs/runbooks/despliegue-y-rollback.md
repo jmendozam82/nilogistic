@@ -165,15 +165,22 @@ Operacion de la etiqueta `staging-desplegado`:
   ```bash
   git ls-remote --tags origin staging-desplegado
   ```
-- **Forzar una reevaluacion / despliegue en frio:**
-  Si se necesita que el siguiente push compare unicamente contra su commit anterior (`--antes`),
-  o forzar que se evalue sin etiqueta previa, se puede borrar la etiqueta remota:
+- **Forzar un despliegue** (por ejemplo, para repetir un despliegue cuyo CI fallo):
+  mover la etiqueta a un commit anterior cuyo diff contenga cambios en `src/` o `supabase/`.
+  El siguiente push comparara desde ese commit y desplegara.
+  ```bash
+  git tag -f staging-desplegado <sha-anterior>
+  git push --force origin refs/tags/staging-desplegado
+  ```
+- **Volver a la comparacion anterior a DT-6** (solo contra el push previo):
+  borrar la etiqueta remota. **No fuerza un despliegue:** el siguiente push compara contra
+  `--antes`, como antes de DT-6, y la etiqueta se recrea tras el siguiente despliegue sano.
   ```bash
   git push --delete origin staging-desplegado
   ```
-  Si la etiqueta no existe en el repositorio remoto, `cambios_despliegue.py` recurre de forma
-  automatica a `--antes` (arranque en frio). Ante cualquier error de git o si la etiqueta no es
-  ancestro, ante la duda se activa el despliegue (`desplegar=true`).
+- **Casos de duda:** si la etiqueta no existe, `cambios_despliegue.py` usa `--antes`
+  (arranque en frio). Si la etiqueta existe pero no es ancestro del commit a desplegar,
+  o git falla, se despliega (`desplegar=true`).
 
 ## Límites conocidos
 
