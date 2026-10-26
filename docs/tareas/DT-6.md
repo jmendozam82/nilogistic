@@ -178,3 +178,27 @@ Ninguna. Se detectó en las pruebas del Caso 5 (error de git) que rutas inválid
 
 ## 11. Entrega
 Commits: `feat(ci): comparar el despliegue con la etiqueta staging-desplegado (DT-6)`, `test(ci): pruebas de la etiqueta de despliegue (DT-6)`, `docs(ci): etiqueta de despliegue en el runbook (DT-6)`, `docs(ci): informe de DT-6`. El cambio de `ci.yml` va en un commit aparte de Jorge: `ci(despliegue): marcar el commit desplegado de Staging (DT-6)`.
+
+## 15. Revisión de Claude (25/10/2026)
+- **Código:** `resolver_base_comparacion` cumple §3 (ancestro valido compara `etiqueta..despues`; etiqueta ausente usa `--antes`; no ancestro o fallo de git despliega; sin `--etiqueta`, comportamiento anterior). `GITHUB_OUTPUT` intacto. Cambio extra aceptado: `_git` captura `OSError` (en Windows un directorio inexistente lanza `OSError` antes de llegar a git).
+- **Pruebas:** 7 casos nuevos en `test_despliegue_etiqueta.py`; `test_scripts.py` intacto (numstat vacio); 123 pruebas, `OK`.
+- **Runbook:** correccion de Claude (commit `171a61b`): el texto inicial decia que borrar la etiqueta fuerza el despliegue; no es asi (vuelve a comparar contra `--antes`). Para forzar hay que mover la etiqueta a un commit anterior con cambios en `src/` o `supabase/`.
+- **`ci.yml`:** parche de Jorge (`62b49bb`) igual a §5; `contents: write` solo en `desplegar-staging`; la etiqueta se mueve despues de la verificacion de salud.
+- **Error mio en §8, punto 1:** afirme que el merge de DT-6 forzaria el despliegue por el arranque en frio. Falso: con la etiqueta ausente se usa `--antes`, y un push solo de `.github/`, `scripts/` y `docs/` da `desplegar=false` (run `40252628448`). Hizo falta un cambio en `src/`. Accion: comprobar el resultado esperado del script antes de prometer un efecto.
+- **Veredicto:** aprobado.
+
+## 16. Cierre (25/10/2026)
+- **PR #85** (DT-6, merge `91b32fb`) y **PR #86** (cambio de comentario en `src/`, merge `f16eeb2`).
+- **Run `40252628448`** (merge de DT-6, sin etiqueta): `base=fa8bebc origen=antes`, `desplegar=false`; la etiqueta no se creo.
+- **Run `40254886407`** (merge de #86): `base=91b32fb origen=antes`, `desplegar=true`; el resumen del job muestra `Etiqueta staging-desplegado: ninguno -> f16eeb2de91641cb7c56f96de8ae8babf377707d` y el push crea la etiqueta (`[new tag]`).
+- **Etiqueta remota:** `git ls-remote --tags origin staging-desplegado` devuelve `f16eeb2de91641cb7c56f96de8ae8babf377707d`, igual al commit del merge.
+- **Staging:** `/health/ready` responde `Healthy` (200) y `/api/v1/estado` sirve `commit: f16eeb2de91641cb7c56f96de8ae8babf377707d`.
+
+| Comprobacion §8 | Estado |
+|---|---|
+| 1. La etiqueta se crea tras un despliegue sano | ✅ verificado |
+| 2. Push solo de documentacion: `origen=etiqueta`, `desplegar=false`, etiqueta sin cambios | ⬜ pendiente; lo demuestra el run del PR que incluye esta seccion |
+| 3. Push con cambios en `src/`: despliega y la etiqueta pasa al SHA nuevo | ⬜ pendiente; se confirma en el siguiente push con codigo |
+
+- **Solo probada con pruebas unitarias:** la rama que repite el incidente del 22/10 (etiqueta ancestro y `desplegar=true` con un push solo de documentacion). No se reprodujo en vivo.
+- **Decision de proceso:** DT-6 se da por implementada; las comprobaciones 2 y 3 se anotan en `ESTADO_PROYECTO.md` cuando ocurran.
