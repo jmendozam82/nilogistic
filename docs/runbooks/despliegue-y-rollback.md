@@ -142,7 +142,7 @@ Ensayo obligatorio antes de dar por buena la HU; se anota en la sección 14 de l
 
 **Lección de E3 (limpieza):** una migración que falla **no** queda registrada en `supabase_migrations.schema_migrations`, así que `supabase db push` la reintentaría en cada despliegue. Ante una migración de ensayo fallida, primero se corrige el estado en la base (DROP del marcador con el rol propietario) y **después** se revierte el commit de la migración; si se hace al revés, el siguiente despliegue vuelve a fallar.
 
-## Despliegue condicionado (D-141)
+## Despliegue condicionado (D-141, DT-6)
 
 El job `desplegar-staging` detecta automaticamente si el push contiene cambios que
 afecten la aplicacion o la infraestructura: archivos bajo `src/`, `supabase/`,
@@ -154,17 +154,33 @@ pruebas o configuracion de GitHub Actions, el job termina en verde **sin aplicar
 migraciones ni disparar el despliegue en Render**. Esto reduce despliegues
 innecesarios y el uso de recursos.
 
-El job `desplegar-staging` solo se dispara con un push a `develop`; no hay una
-via `workflow_dispatch` para forzarlo. Si por algun motivo se necesita desplegar
-despues de un cambio que no activa el despliegue, se debe incluir al menos una
-modificacion minima en algun archivo que lo active (por ejemplo, un comentario
-en codigo fuente o una correccion de migracion).
+A partir de DT-6, la comparacion no se limita al commit anterior (`--antes`), sino que
+utiliza una **etiqueta Git ligera `staging-desplegado`** que marca el ultimo commit
+desplegado con exito (salud verificada en Staging). De este modo, si un CI falla en un
+push que traia codigo, el siguiente push (aunque solo sea de documentacion o scripts)
+detecta los cambios pendientes acumulados desde `staging-desplegado` y **si despliega**.
 
-La decision compara solo el ultimo push, no el ultimo commit desplegado: si el CI
-fallo en el push que traia codigo, el siguiente push que solo toque docs/scripts
-no despliega y hay que forzarlo con un cambio minimo en `src/` o `supabase/`
-(caso 22/10/2026, HU-035). La correccion de fondo (comparar contra el ultimo
-commit desplegado) requiere tocar `.github/` y queda propuesta como DT-6.
+Operacion de la etiqueta `staging-desplegado`:
+- **Ver el commit desplegado:**
+  ```bash
+  git ls-remote --tags origin staging-desplegado
+  ```
+- **Forzar un despliegue** (por ejemplo, para repetir un despliegue cuyo CI fallo):
+  mover la etiqueta a un commit anterior cuyo diff contenga cambios en `src/` o `supabase/`.
+  El siguiente push comparara desde ese commit y desplegara.
+  ```bash
+  git tag -f staging-desplegado <sha-anterior>
+  git push --force origin refs/tags/staging-desplegado
+  ```
+- **Volver a la comparacion anterior a DT-6** (solo contra el push previo):
+  borrar la etiqueta remota. **No fuerza un despliegue:** el siguiente push compara contra
+  `--antes`, como antes de DT-6, y la etiqueta se recrea tras el siguiente despliegue sano.
+  ```bash
+  git push --delete origin staging-desplegado
+  ```
+- **Casos de duda:** si la etiqueta no existe, `cambios_despliegue.py` usa `--antes`
+  (arranque en frio). Si la etiqueta existe pero no es ancestro del commit a desplegar,
+  o git falla, se despliega (`desplegar=true`).
 
 ## Límites conocidos
 

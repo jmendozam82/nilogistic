@@ -60,8 +60,8 @@ def _git(argumentos, raiz="."):
             text=True,
             check=False,
         )
-    except FileNotFoundError as error:
-        raise ErrorGit("no se encontro el ejecutable de git") from error
+    except (FileNotFoundError, OSError) as error:
+        raise ErrorGit(f"fallo al ejecutar git: {error}") from error
     if resultado.returncode != 0:
         raise ErrorGit(resultado.stderr.strip() or f"git {' '.join(argumentos)} fallo")
     return [linea.strip() for linea in resultado.stdout.splitlines() if linea.strip()]
@@ -72,20 +72,69 @@ def nombres_del_diff(antes, despues, raiz="."):
     return _git(["diff", "--name-only", antes, despues], raiz)
 
 
+def resolver_base_comparacion(antes, despues, etiqueta=None, raiz="."):
+    """Resuelve la referencia base de comparacion y su origen (etiqueta o antes).
+
+    Reglas (DT-6 §3):
+    1. Si se proporciona etiqueta:
+       a. La etiqueta resuelve a un commit y es ancestro de despues: se compara etiqueta..despues (origen='etiqueta').
+       b. La etiqueta no existe (rev-parse falla): se usa antes (origen='antes').
+       c. La etiqueta existe pero no es ancestro o git falla: se devuelve (None, None) para forzar despliegue.
+    2. Sin etiqueta:
+       Se usa antes (origen='antes').
+    """
+    if etiqueta:
+        try:
+            lineas = _git(["rev-parse", "-q", "--verify", f"refs/tags/{etiqueta}^{{commit}}"], raiz)
+            sha_etiqueta = lineas[0] if lineas else None
+        except ErrorGit:
+            sha_etiqueta = None
+
+        if sha_etiqueta:
+            try:
+                # Comprobar si sha_etiqueta es ancestro de despues (exit 0 si es ancestro, exit 1 si no)
+                _git(["merge-base", "--is-ancestor", sha_etiqueta, despues], raiz)
+                return sha_etiqueta, "etiqueta"
+            except ErrorGit:
+                # No es ancestro o fallo de git -> forzar despliegue
+                return None, None
+        else:
+            # Etiqueta no existe -> arranque en frio, usar antes
+            return antes, "antes"
+
+    return antes, "antes"
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--antes", required=True)
     parser.add_argument("--despues", required=True)
+    parser.add_argument("--etiqueta", default=None)
     parser.add_argument("--raiz", default=".")
     args = parser.parse_args(argv)
 
+    base, origen = resolver_base_comparacion(args.antes, args.despues, args.etiqueta, args.raiz)
+
     desplegar = True
-    if args.antes != SHA_NULO:
+    if base is not None:
         try:
-            rutas = nombres_del_diff(args.antes, args.despues, args.raiz)
-            desplegar = requiere_despliegue(rutas)
+            sha_corto_lineas = _git(["rev-parse", "--short", base], args.raiz)
+            sha_corto = sha_corto_lineas[0] if sha_corto_lineas else base[:7]
         except ErrorGit:
+            sha_corto = base[:7] if base else "desconocido"
+        print(f"base={sha_corto} origen={origen}")
+
+        if base != SHA_NULO:
+            try:
+                rutas = nombres_del_diff(base, args.despues, args.raiz)
+                desplegar = requiere_despliegue(rutas)
+            except ErrorGit:
+                desplegar = True
+        else:
             desplegar = True
+    else:
+        # Fallo de git o etiqueta no ancestro: ante la duda, desplegar
+        desplegar = True
 
     valor = "true" if desplegar else "false"
     print(f"desplegar={valor}")

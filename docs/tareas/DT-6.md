@@ -87,10 +87,94 @@ No tocar `desplegar-produccion`, secretos, `render.yaml`, migraciones ni pruebas
 Si la etiqueta no se puede crear (regla de repositorio que bloquea etiquetas), revisar **Settings → Rules** en GitHub y avisar a Claude; el despliegue no debe quedar bloqueado: el paso solo afecta a la siguiente comparación.
 
 ## 9. Dudas del ejecutor
-*(vacío: se llena durante la ejecución)*
+Ninguna. Se detectó en las pruebas del Caso 5 (error de git) que rutas inválidas de directorio levantaban `NotADirectoryError`/`OSError` en Windows antes de que `subprocess.run` llegara al ejecutable de git, por lo que se amplió la captura en `_git` a `(FileNotFoundError, OSError)` garantizando que cualquier fallo al invocar git se traduzca limpiamente en `ErrorGit` y active `desplegar=true` por precaución.
 
 ## 10. Informe del ejecutor
-*(vacío: horas desde `git log`, `git log --oneline origin/develop..HEAD`, `git status --short` limpio, salida real de `python -m unittest discover -s scripts/tests` con «Ran N tests» y de `python scripts/ci/verificar_workflows.py`; sin resumir)*
+
+- **Hora de inicio:** `2026-10-25 18:25:53 -06:00`
+- **Hora de fin:** `2026-10-25 18:34:18 -0600` (`d777b57`, último commit previo al informe)
+- **Commits del rango `origin/develop..HEAD`:**
+  ```text
+  d777b57 docs(ci): etiqueta de despliegue en el runbook (DT-6)
+  47d4359 test(ci): pruebas de la etiqueta de despliegue (DT-6)
+  cb9d034 feat(ci): comparar el despliegue con la etiqueta staging-desplegado (DT-6)
+  ```
+- **Verificación de no modificación de pruebas existentes:**
+  ```powershell
+  git --no-pager diff --numstat origin/develop..HEAD -- scripts/tests/test_scripts.py
+  ```
+  *(salida vacía, archivo intacto)*
+
+- **Salida de `python scripts/ci/verificar_workflows.py`:**
+  ```text
+  OK: 1 workflow(s) revisado(s)
+  ```
+
+- **Salida de `python scripts/ci/verificar_codificacion.py`:**
+  ```text
+  OK: 562 archivo(s) revisado(s)
+  ```
+
+- **Salida de `python -m unittest discover -s scripts/tests`:**
+  ```text
+  ..................................................ERROR: C:\Users\DELL55~1\AppData\Local\Temp\tmpztojbz2y\g\coverage.cobertura.xml no contiene el paquete "Nilogistic.BLL"; sin él no se puede evaluar la puerta G1
+  .ERROR: no se encontró coverage.cobertura.xml
+  ............ERROR: el directorio no existe: C:\Users\dev\CLN\nilogistic\no\existe\jamas
+  .ERROR: b'fatal: not a git repository (or any of the parent directories): .git'
+  ...........................ERROR: fatal: Not a valid object name ref_que_no_existe
+  .ERROR: no existe el directorio no/existe/jamas
+  ...............................
+  ----------------------------------------------------------------------
+  Ran 123 tests in 57.548s
+
+  OK
+  ID   RESULTADO COMPROBACION
+  C1   OK       SPF de la raiz sin cambios (registros: 1)
+  C2   FALLA    los MX de la raiz cambiaron
+  C3   OK       un unico DMARC con p=none y rua
+  C4   OK       DKIM presente (inicio: p=MIGfMA0GCS...)
+  C5   OK       MX de retorno de Resend presente
+
+  1 comprobacion(es) fallidas
+  ID   RESULTADO COMPROBACION
+  C1   OK       SPF de la raiz sin cambios (registros: 1)
+  C2   OK       MX de la raiz sin cambios
+  C3   OK       un unico DMARC con p=none y rua
+  C4   OK       DKIM presente (inicio: p=MIGfMA0GCS...)
+  C5   OK       MX de retorno de Resend presente
+
+  Todas las comprobaciones pasan
+  Cobertura de líneas (Nilogistic.BLL): 60.0 % (mínimo 70.0 %)
+  Cobertura de líneas (Nilogistic.BLL): 95.0 % (mínimo 70.0 %)
+  KO bom.md: R1: BOM UTF-8
+  OK: 1 archivo(s) revisado(s)
+  Evaluando 1 commit(s) del rango c8986a46266938918c61c91e047c9de7dc5d7b8f..HEAD
+  KO formato no convencional        : Actualizar archivos
+  Evaluando 1 commit(s) del rango 04c5208a6f48d380e909abf97bc938e44be00be5..HEAD
+  KO formato no convencional        : HU-035: alertas y estado de tareas programadas (#78)
+  KO descripcion mayor a 72 chars   : feat: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  KO formato no convencional        : Actualizar archivos
+  KO formato no convencional        : Feat: tipo en mayusculas
+  KO formato no convencional        : fix(CI): contexto con mayusculas
+  KO formato no convencional        : fix:
+  KO formato no convencional        : fix : sin dos punto pegados
+  KO contiene caracteres no ascii   : fix: corregir aplicación
+  KO regla 1: nombre fuera del patron <14 digitos>_<descripcion>.sql: malo.sql
+  OK: 2 migracion(es) con nombre valido
+  SIN PRUEBA: HU-001 E2 (S0.txt)
+  1 escenario(s) sin prueba en 1 archivo(s)
+  0 escenario(s) sin prueba en 1 archivo(s)
+  AVISO: no hay archivos de escenarios para 'S0' en C:\Users\DELL55~1\AppData\Local\Temp\tmp5879je1d; trazabilidad no evaluada.
+  SIN PRUEBA: HU-007 E2 (S1.txt)
+  1 escenario(s) sin prueba en 2 archivo(s)
+  0 escenario(s) sin prueba en 2 archivo(s)
+  0 escenario(s) sin prueba en 1 archivo(s)
+  ```
+
+- **Estado de `git status --short`:**
+  ```text
+  (vacío)
+  ```
 
 ## 11. Entrega
 Commits: `feat(ci): comparar el despliegue con la etiqueta staging-desplegado (DT-6)`, `test(ci): pruebas de la etiqueta de despliegue (DT-6)`, `docs(ci): etiqueta de despliegue en el runbook (DT-6)`, `docs(ci): informe de DT-6`. El cambio de `ci.yml` va en un commit aparte de Jorge: `ci(despliegue): marcar el commit desplegado de Staging (DT-6)`.
