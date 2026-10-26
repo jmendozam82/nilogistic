@@ -40,11 +40,13 @@ python scripts/ops/verificar_redirecciones.py --base https://nilogistic-staging.
 Quitar la entrada del mapa y desplegar. Un 301 puede quedar cacheado en navegadores hasta ~1 hora (`Cache-Control: public, max-age=3600`).
 
 ## 8. Consumo de `/feed/`
-| Fecha | Fuente | Solicitudes |
-|---|---|---|
-| (pendiente, Jorge) | (pendiente, Jorge) | (pendiente) |
+| Fecha | Fuente | Periodo | Resultado |
+|---|---|---|---|
+| 2026-10-25 | SiteGround Site Tools > Estadisticas > Trafico > Comportamiento > Paginas mas visitadas | oct 2026 | `/feed/` no figura entre las filas revisadas; la octava fila tiene 29 vistas (la portada tiene 223 y `/blog/` 30) |
+| 2026-10-25 | idem | ago 2026 | `/feed/` no figura entre las filas revisadas; la octava fila tiene unas 14 vistas |
+| 2026-10-25 | idem | sep 2026 | `/feed/` no aparece en la lista (revisado por Jorge) |
 
-Documentar el consumo real (registros/acceso SiteGround o estadísticas) para reevaluar FT-043 en R4 (E6).
+**Conclusion (provisional):** el consumo de `/feed/` es insignificante frente al resto del sitio (menos de 29 vistas al mes en octubre y unas 14 en agosto, como maximo), por lo que FT-043 (RSS nuevo) no se prioriza en R4. Limites: la tabla de SiteGround solo se reviso en sus primeras filas (octubre y agosto) y no mide lectores que reciben el feed por agregadores; en septiembre `/feed/` no aparece. Reevaluar FT-043 en R4 (E6).
 
 ## 9. Nota
 Un origen bajo `/blog/` podría chocar con el detalle de posts (HU-052); revisar cuando llegue.
