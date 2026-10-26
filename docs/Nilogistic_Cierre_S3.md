@@ -46,7 +46,7 @@ D-145 a D-160 (tabla de decisiones de `ESTADO_PROYECTO.md`). Las que condicionan
 4. Los commits y pushes los hace Jorge; Claude no tiene identidad de git ni permiso para borrar archivos temporales en el repositorio.
 
 ## 5. Pendientes que pasan a S4
-- **HU-014 reestimada (D-078, D-161 propuesta):** de 5 a **9 SP** (supera el umbral de 6). Propuesta de Claude: dividirla en HU-014a (inicio de sesión y persistencia de llaves con certificado y respaldo; E1 a E6 y E8; 6 SP, en S4) y HU-014b (restauración ensayada, aviso de vencimiento y rotación; E7, E9 y E10; 3 SP, antes de la G3 preliminar al cierre de S6). S4 queda en 27 de 26 SP (+1, absorbido por el adelanto). Pendiente de aprobación de Jorge.
+- **HU-014 reestimada (D-078, D-161 aprobada, opción C):** de 5 a **9 SP** (supera el umbral de 6). Jorge aprobó el 25/10/2026 no dividirla ni mover nada. Consecuencia aceptada: S4 con riesgo de 30 de 26 SP y, si no se recupera, R1 se corre un sprint (regla 6.4). Control: revisión a mitad de S4 con la velocidad medida. Alternativas descartadas: dividir en HU-014a (6 SP) y HU-014b (3 SP), o mover HU-071 a S5.
 - **DT-6** (ficha lista, antes del 04/01/2027) y DT-7 (purga del historial de tareas, antes de S10; sin ficha).
 - Textos legales reales (tarea #6), DNS y G6 (D-157), marca y medios (D-25, el favicon da 404).
 - HU-068 con D-160 (HEAD) y el sitemap (G7b).
