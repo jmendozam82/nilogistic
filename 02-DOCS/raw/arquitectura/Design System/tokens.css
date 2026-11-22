@@ -1,0 +1,173 @@
+/* ==========================================================================
+   NILOGISTIC — tokens.css  (v1.0)
+   Fuente única de tokens de diseño (HU-036 E5). Solo modo claro en R1 (UX-1):
+   los colores semánticos se definen aparte de la paleta para poder añadir
+   un tema oscuro redefiniendo únicamente la capa "semántica".
+   Colores de marca extraídos de los logos oficiales:
+     CLN:        navy #1D347D · azul #184493 · oro #EDC845
+     Nilogistic: ámbar #F7A915 · azul #1160A1 · negro #000000
+   Contraste verificado (WCAG 2.2 AA): ver comentarios "AA".
+   ========================================================================== */
+
+:root {
+  /* ---------- 1. PALETA (primitivos) ---------- */
+  /* Navy — primario (CLN) */
+  --nl-navy-950: #0A1233;
+  --nl-navy-900: #0F1B45;
+  --nl-navy-800: #16275F;
+  --nl-navy-700: #1D347D; /* marca CLN */
+  --nl-navy-600: #2A4599;
+  --nl-navy-500: #3F5CB5;
+  --nl-navy-300: #9DAEDD;
+  --nl-navy-100: #E4E9F6;
+  --nl-navy-50:  #F3F5FB;
+
+  /* Azul Nilogistic — secundario / información */
+  --nl-blue-700: #145D99;
+  --nl-blue-600: #1160A1; /* marca Nilogistic */
+  --nl-blue-100: #E8F1F9;
+
+  /* Ámbar — acento (Nilogistic). Solo relleno; nunca texto sobre blanco */
+  --nl-amber-500: #F7A915; /* marca Nilogistic */
+  --nl-amber-400: #F9BE4D;
+  --nl-amber-700: #8A5A00; /* texto sobre blanco: 5,93:1 AA */
+  --nl-amber-800: #7A4E00;
+  --nl-amber-100: #FEF1D6;
+
+  /* Oro CLN — solo decorativo / texto sobre navy oscuro (10,25:1) */
+  --nl-gold-500: #EDC845;
+
+  /* Neutros */
+  --nl-gray-950: #0E1117;
+  --nl-gray-900: #14181F;
+  --nl-gray-800: #2B323D;
+  --nl-gray-700: #3F4856; /* 9,24:1 */
+  --nl-gray-600: #5A6472; /* 6,00:1 texto secundario */
+  --nl-gray-500: #7B8492; /* 3,78:1 solo bordes de controles (UI 3:1) */
+  --nl-gray-300: #C9CED6;
+  --nl-gray-200: #E2E5EA;
+  --nl-gray-100: #F0F2F5;
+  --nl-gray-50:  #F7F8FA;
+  --nl-white:    #FFFFFF;
+
+  /* Estados (verde y rojo de CLN, solo estados) */
+  --nl-green-700: #0A7A32; /* 5,46:1 sobre blanco */
+  --nl-green-100: #E6F4EA;
+  --nl-red-700:   #B42318; /* 6,57:1 sobre blanco */
+  --nl-red-600:   #C81E1E; /* 5,74:1 */
+  --nl-red-100:   #FDECEC;
+
+  /* ---------- 2. COLORES SEMÁNTICOS (capa que cambiaría en oscuro) ---------- */
+  --nl-color-primary:        var(--nl-navy-700);
+  --nl-color-primary-hover:  var(--nl-navy-800);
+  --nl-color-primary-active: var(--nl-navy-900);
+  --nl-color-on-primary:     var(--nl-white);       /* 11,42:1 */
+  --nl-color-secondary:      var(--nl-blue-700);
+  --nl-color-on-secondary:   var(--nl-white);       /* 6,87:1 */
+  --nl-color-accent:         var(--nl-amber-500);
+  --nl-color-accent-hover:   var(--nl-amber-400);
+  --nl-color-on-accent:      var(--nl-navy-900);    /* 8,42:1 */
+
+  --nl-color-text:           var(--nl-gray-900);
+  --nl-color-text-muted:     var(--nl-gray-600);
+  --nl-color-text-inverse:   var(--nl-white);
+  --nl-color-link:           var(--nl-navy-700);
+  --nl-color-link-hover:     var(--nl-navy-900);
+
+  --nl-color-bg:             var(--nl-white);
+  --nl-color-bg-subtle:      var(--nl-gray-50);
+  --nl-color-bg-tint:        var(--nl-navy-50);
+  --nl-color-bg-inverse:     var(--nl-navy-900);
+  --nl-color-surface:        var(--nl-white);
+  --nl-color-border:         var(--nl-gray-200);
+  --nl-color-border-strong:  var(--nl-gray-500);    /* bordes de campos: 3,78:1 */
+
+  --nl-color-success:        var(--nl-green-700);
+  --nl-color-success-bg:     var(--nl-green-100);
+  --nl-color-danger:         var(--nl-red-700);
+  --nl-color-danger-bg:      var(--nl-red-100);
+  --nl-color-warning:        var(--nl-amber-800);   /* 6,43:1 sobre amber-100 */
+  --nl-color-warning-bg:     var(--nl-amber-100);
+  --nl-color-info:           var(--nl-blue-700);    /* 6,02:1 sobre blue-100 */
+  --nl-color-info-bg:        var(--nl-blue-100);
+
+  /* Foco (WCAG 2.4.7 / 2.4.11): anillo 3 px, ≥3:1 contra el fondo */
+  --nl-focus-ring-color:     var(--nl-navy-700);          /* fondos claros: 11,42:1 */
+  --nl-focus-ring-on-dark:   var(--nl-amber-500);         /* fondos navy: 8,42:1 */
+  --nl-focus-ring-width:     3px;
+  --nl-focus-ring-offset:    2px;
+
+  /* ---------- 3. TIPOGRAFÍA ---------- */
+  --nl-font-heading: "Poppins", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --nl-font-body:    "Inter", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --nl-font-mono:    ui-monospace, "Cascadia Mono", "Consolas", monospace;
+
+  /* Escala (base 16 px; cuerpo público 18 px: texto no pequeño) */
+  --nl-fs-xs:   0.875rem;   /* 14 — mínimo permitido (leyendas) */
+  --nl-fs-sm:   1rem;       /* 16 */
+  --nl-fs-md:   1.125rem;   /* 18 — cuerpo público */
+  --nl-fs-lg:   1.25rem;    /* 20 */
+  --nl-fs-xl:   1.5rem;     /* 24 */
+  --nl-fs-2xl:  1.875rem;   /* 30 */
+  --nl-fs-3xl:  2.25rem;    /* 36 */
+  --nl-fs-4xl:  3rem;       /* 48 */
+  --nl-fs-5xl:  3.75rem;    /* 60 — héroe en escritorio */
+  --nl-fs-body-panel: 1rem; /* panel: 16 px */
+
+  --nl-fw-regular:  400;
+  --nl-fw-medium:   500;
+  --nl-fw-semibold: 600;
+  --nl-fw-bold:     700;
+
+  --nl-lh-tight:   1.2;
+  --nl-lh-snug:    1.35;
+  --nl-lh-normal:  1.6;
+  --nl-ls-eyebrow: 0.08em;   /* sobretítulos en mayúsculas */
+
+  /* ---------- 4. ESPACIADO (base 4 px) ---------- */
+  --nl-space-0:  0;
+  --nl-space-1:  0.25rem;  /*  4 */
+  --nl-space-2:  0.5rem;   /*  8 */
+  --nl-space-3:  0.75rem;  /* 12 */
+  --nl-space-4:  1rem;     /* 16 */
+  --nl-space-5:  1.5rem;   /* 24 */
+  --nl-space-6:  2rem;     /* 32 */
+  --nl-space-7:  3rem;     /* 48 */
+  --nl-space-8:  4rem;     /* 64 */
+  --nl-space-9:  6rem;     /* 96 — separación de secciones */
+  --nl-section-y:        var(--nl-space-8);
+  --nl-section-y-lg:     var(--nl-space-9);
+  --nl-target-min:       2.75rem;  /* 44 px; WCAG 2.5.8 exige ≥24 px */
+
+  /* ---------- 5. RADIOS (formal: contenidos) ---------- */
+  --nl-radius-sm:   2px;
+  --nl-radius-md:   4px;   /* controles */
+  --nl-radius-lg:   6px;   /* tarjetas */
+  --nl-radius-xl:   10px;  /* modales */
+  --nl-radius-pill: 999px; /* etiquetas de estado */
+
+  /* ---------- 6. SOMBRAS ---------- */
+  --nl-shadow-xs: 0 1px 2px rgba(15, 27, 69, 0.08);
+  --nl-shadow-sm: 0 1px 3px rgba(15, 27, 69, 0.10), 0 1px 2px rgba(15, 27, 69, 0.06);
+  --nl-shadow-md: 0 4px 12px rgba(15, 27, 69, 0.10);
+  --nl-shadow-lg: 0 12px 28px rgba(15, 27, 69, 0.16);
+
+  /* ---------- 7. RETÍCULA Y CONTENEDORES ---------- */
+  --nl-bp-sm: 576px;
+  --nl-bp-md: 768px;
+  --nl-bp-lg: 992px;
+  --nl-bp-xl: 1280px;
+  --nl-container-max: 1240px;   /* contenido; héroes y bandas van a ancho completo */
+  --nl-container-narrow: 720px; /* lectura de posts y formularios */
+  --nl-card-auth-max: 440px;    /* layout Cuenta */
+  --nl-gutter: 1.5rem;
+
+  /* ---------- 8. MOVIMIENTO ---------- */
+  --nl-ease: cubic-bezier(0.2, 0, 0, 1);
+  --nl-duration-fast: 120ms;
+  --nl-duration-base: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --nl-duration-fast: 0ms; --nl-duration-base: 0ms; }
+}

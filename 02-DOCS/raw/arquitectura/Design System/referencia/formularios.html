@@ -1,0 +1,48 @@
+<!-- @dsCard group="Formularios" height=1176 subtitle="Campos, validación por campo, resumen de errores y código 2FA" -->
+<div class="nl-doc" style="max-width:720px">
+  <h3>Resumen de errores (al enviar)</h3>
+  <div class="nl-error-summary mb-4" role="alert" tabindex="-1">
+    <h2>Revisa 2 campos antes de continuar</h2>
+    <ul class="mb-0"><li><a href="#c-correo">Correo electrónico: escribe un correo válido.</a></li><li><a href="#c-consent">Consentimiento: debes aceptar el tratamiento de tus datos.</a></li></ul>
+  </div>
+  <h3>Texto, ayuda, error y válido</h3>
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <label for="c-nombre" class="form-label">Nombre completo</label>
+      <input id="c-nombre" class="form-control" type="text" autocomplete="name" aria-describedby="c-nombre-ayuda">
+      <div id="c-nombre-ayuda" class="form-text">Como aparece en tu documento de identidad.</div>
+    </div>
+    <div class="col-md-6">
+      <label for="c-correo" class="form-label">Correo electrónico</label>
+      <input id="c-correo" class="form-control is-invalid" type="email" value="jorge@empresa" aria-invalid="true" aria-describedby="c-correo-error">
+      <div id="c-correo-error" class="invalid-feedback" aria-live="polite">Error: escribe un correo válido, por ejemplo nombre@empresa.com.</div>
+    </div>
+    <div class="col-md-6">
+      <label for="c-ruc" class="form-label">RUC</label>
+      <input id="c-ruc" class="form-control is-valid" type="text" value="J0310000000001" aria-describedby="c-ruc-ok">
+      <div id="c-ruc-ok" class="valid-feedback">Formato válido. Administración lo verificará manualmente.</div>
+    </div>
+    <div class="col-md-6">
+      <label for="c-area" class="form-label">Área de la cadena de suministro</label>
+      <select id="c-area" class="form-select"><option>Selecciona un área</option><option>Transporte</option><option>Almacenes</option><option>Comercio exterior</option><option>Compras</option></select>
+    </div>
+    <div class="col-12">
+      <label for="c-msg" class="form-label">Mensaje</label>
+      <textarea id="c-msg" class="form-control" rows="3"></textarea>
+      <div class="nl-draft-saved mt-2" role="status">Borrador guardado automáticamente a las 15:24.</div>
+    </div>
+  </div>
+  <h3>Casilla, opción e interruptor</h3>
+  <div class="mb-4">
+    <div class="form-check mb-2"><input class="form-check-input is-invalid" type="checkbox" id="c-consent" aria-describedby="c-consent-e"><label class="form-check-label" for="c-consent">Acepto el tratamiento de mis datos según la política de privacidad.</label><div id="c-consent-e" class="invalid-feedback">Error: debes aceptar para continuar.</div></div>
+    <div class="form-check mb-2"><input class="form-check-input" type="radio" name="tipo" id="r1" checked><label class="form-check-label" for="r1">Profesional</label></div>
+    <div class="form-check mb-2"><input class="form-check-input" type="radio" name="tipo" id="r2"><label class="form-check-label" for="r2">Empresa</label></div>
+    <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="sw1" checked><label class="form-check-label" for="sw1">Recibir la Newsletter (activado)</label></div>
+  </div>
+  <h3>Código 2FA</h3>
+  <div class="mb-3" style="max-width:320px">
+    <label for="c-otp" class="form-label">Código de verificación de 6 dígitos</label>
+    <input id="c-otp" class="form-control nl-otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" aria-describedby="c-otp-a">
+    <div id="c-otp-a" class="form-text">Ábrelo en tu aplicación de autenticación. ¿Sin acceso? Usa un código de respaldo.</div>
+  </div>
+</div>

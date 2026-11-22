@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<meta name="x-apple-disable-message-reformatting">
+<title>{{asunto}}</title>
+<style>
+  body{margin:0;padding:0}
+  a{text-decoration:underline}
+  @media only screen and (max-width:620px){
+    .nl-px{padding-left:20px!important;padding-right:20px!important}
+    .nl-h1{font-size:24px!important}
+    .nl-btn a{display:block!important;text-align:center!important}
+    .nl-det td{display:block!important;width:100%!important;padding-bottom:2px!important}
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#F3F5FB">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#F3F5FB;font-size:1px;line-height:1px">{{preheader}}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F3F5FB" style="background:#F3F5FB"><tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px"><tr><td align="center" style="padding:0 0 12px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:14px;line-height:1.4;color:#5A6472">¿Problemas para ver este correo? <a href="{{enlace_navegador}}" style="color:#1D347D">Ábrelo en tu navegador</a></td></tr></table>
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#FFFFFF;border:1px solid #E2E5EA;border-radius:6px">
+<tr><td bgcolor="#0F1B45" class="nl-px" style="background:#0F1B45;padding:24px 32px;border-radius:6px 6px 0 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="left"><a href="{{url_base}}" style="text-decoration:none"><img src="{{url_base}}/img/nilogistic-logo-blanco.png" width="140" alt="Nilogistic" style="display:block;border:0;height:auto;color:#FFFFFF;font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:20px;font-weight:600"></a></td><td align="right" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:14px;line-height:1.4;color:#9DAEDD">Edición {{numero_edicion}} · {{fecha_edicion}}</td></tr></table></td></tr>
+<tr><td height="4" bgcolor="#F7A915" style="background:#F7A915;font-size:0;line-height:0;height:4px">&nbsp;</td></tr>
+<tr><td class="nl-px" style="padding:32px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#14181F">
+<h1 class="nl-h1" style="margin:0 0 16px;font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:30px;line-height:1.25;font-weight:600;color:#1D347D">{{titulo_edicion}}</h1>
+<p style="margin:0 0 24px;font-size:18px;line-height:1.55">{{introduccion}}</p>
+<img src="{{imagen_url}}" width="536" alt="{{imagen_alt}}" style="display:block;width:100%;max-width:536px;height:auto;border:0;border-radius:4px;margin:0 0 24px;background:#E4E9F6;color:#1D347D">
+<h2 style="margin:0 0 8px;font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:22px;line-height:1.3;font-weight:600;color:#14181F">{{titulo_principal}}</h2>
+<p style="margin:0 0 16px">{{resumen_principal}}</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" class="nl-btn" style="margin:8px 0 24px"><tr><td bgcolor="#1D347D" style="background:#1D347D;border-radius:4px"><a href="{{enlace_principal}}" style="display:inline-block;padding:14px 28px;font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:16px;font-weight:600;line-height:20px;color:#FFFFFF;text-decoration:none;border-radius:4px">Leer el artículo completo</a></td></tr></table>
+<h2 style="margin:32px 0 0;padding-top:24px;border-top:1px solid #E2E5EA;font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:20px;line-height:1.3;font-weight:600;color:#14181F">También en esta edición</h2>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-bottom:1px solid #E2E5EA;padding:16px 0"><a href="{{enlace_1}}" style="font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:18px;line-height:1.35;font-weight:600;color:#1D347D">{{titulo_1}}</a><p style="margin:4px 0 0;font-size:16px;line-height:1.5;color:#14181F">{{resumen_1}}</p></td></tr><tr><td style="border-bottom:1px solid #E2E5EA;padding:16px 0"><a href="{{enlace_2}}" style="font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:18px;line-height:1.35;font-weight:600;color:#1D347D">{{titulo_2}}</a><p style="margin:4px 0 0;font-size:16px;line-height:1.5;color:#14181F">{{resumen_2}}</p></td></tr><tr><td style="padding:16px 0"><a href="{{enlace_3}}" style="font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:18px;line-height:1.35;font-weight:600;color:#1D347D">{{titulo_3}}</a><p style="margin:4px 0 0;font-size:16px;line-height:1.5;color:#14181F">{{resumen_3}}</p></td></tr></table>
+</td></tr>
+<tr><td bgcolor="#0F1B45" class="nl-px" style="background:#0F1B45;padding:32px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#FFFFFF"><p style="margin:0 0 8px;font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:22px;line-height:1.3;font-weight:600;color:#FFFFFF">{{cierre_titulo}}</p><p style="margin:0 0 20px;color:#E4E9F6">{{cierre_texto}}</p><table role="presentation" cellpadding="0" cellspacing="0" border="0" class="nl-btn" style="margin:0"><tr><td bgcolor="#F7A915" style="background:#F7A915;border-radius:4px"><a href="{{cierre_enlace}}" style="display:inline-block;padding:14px 28px;font-family:Poppins,'Segoe UI',Arial,Helvetica,sans-serif;font-size:16px;font-weight:600;line-height:20px;color:#0A1233;text-decoration:none;border-radius:4px">{{cierre_cta}}</a></td></tr></table></td></tr>
+<tr><td bgcolor="#F7F8FA" class="nl-px" style="background:#F7F8FA;border-top:1px solid #E2E5EA;border-radius:0 0 6px 6px;padding:24px 32px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5A6472">
+<p style="margin:0 0 12px">Recibes este boletín porque te suscribiste con <strong style="color:#14181F">{{correo_destinatario}}</strong> el {{fecha_consentimiento}}.</p>
+<p style="margin:0 0 12px"><a href="{{enlace_baja}}" style="color:#1D347D;font-weight:600">Cancelar suscripción</a> (un clic, sin iniciar sesión) · <a href="{{enlace_preferencias}}" style="color:#1D347D">Preferencias</a> · <a href="{{url_base}}/legal/privacidad" style="color:#1D347D">Política de privacidad</a></p>
+<p style="margin:0">© 2026 Nilogistic · Managua, Nicaragua</p></td></tr>
+</table></td></tr></table></body></html>

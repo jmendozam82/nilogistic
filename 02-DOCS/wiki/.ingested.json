@@ -1,0 +1,996 @@
+[
+    {
+        "source":  "AGENTS.md",
+        "raw":  "02-DOCS/raw/project/AGENTS.md",
+        "sha256":  "29ACBEE64C1AE2BC19BC6687525CB46F23A63CE282DFD43B130CCB5F3B0D70EF",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "ESTADO_PROYECTO.md",
+        "raw":  "02-DOCS/raw/project/ESTADO_PROYECTO.md",
+        "sha256":  "48FE64D3195C266335116E23CCBF2EF0F54BE3809D8D6DA44882EB313CE1CF82",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "README.md",
+        "raw":  "02-DOCS/raw/project/README.md",
+        "sha256":  "134F7F8D7408D7CA7F1FD9F72F6CC05717F633E209D6A1BF9C0586B4D7BA3940",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Cierre_S1.md",
+        "raw":  "02-DOCS/raw/cierres/docs/Nilogistic_Cierre_S1.md",
+        "sha256":  "265DE16BCF1A993542ECF572561D88BFA1EA245D15DBE2C651BA991DD70C608F",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Cierre_S2.md",
+        "raw":  "02-DOCS/raw/cierres/docs/Nilogistic_Cierre_S2.md",
+        "sha256":  "36CD2A325D7852EB42FCA18A30B9CC16925E803EF99C6D464E63D324FEE3F63F",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Cierre_S3.md",
+        "raw":  "02-DOCS/raw/cierres/docs/Nilogistic_Cierre_S3.md",
+        "sha256":  "E669CD0C96FBAE8846D0041A9CD6A8EC8A6F23833C1EF6C463EE8F259ED74FFD",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Fase7_S0_Kickoff.md",
+        "raw":  "02-DOCS/raw/cierres/docs/Nilogistic_Fase7_S0_Kickoff.md",
+        "sha256":  "58B1E119EC6A549A1B4BAF3CE016DC38F25C3774EDB5142A6E4734CEDA1C18AA",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Fase7_S0_Kickoff.md",
+        "raw":  "02-DOCS/raw/cierres/docs fase/Nilogistic_Fase7_S0_Kickoff.md",
+        "sha256":  "B49C89F3063C63EF7AE8C54DDA32E141DFA4EB2C1BB3C941A17BF07BF1A105C6",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Fase6_Plan_de_Sprints.md",
+        "raw":  "02-DOCS/raw/cierres/docs fase/Nilogistic_Fase6_Plan_de_Sprints.md",
+        "sha256":  "8B8C6439D106A6CF36ADAD4CEEDD52FAF10D10F85F1F44F6F7D97AB7703E8A08",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D072_D087.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D072_D087.md",
+        "sha256":  "117A5A0F473FFB4D39325822B8935FD656C45B80CD00B1710A815B90FB6AE062",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D088_D092.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D088_D092.md",
+        "sha256":  "7029A8680EF05E6D749819B9C9C33407B50AFBD48B07E1A30D7F9CC17215C7DF",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D093_D101.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D093_D101.md",
+        "sha256":  "205F83E46ADD4DAEC89F3D0DF4E1484B8D19CBA2A48E711FAEC63DAB38369759",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D102_D104.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D102_D104.md",
+        "sha256":  "A9EDBCF6D69C065A2E0B69E9C63D28FEE67DCD7A668E440783D92D9BC66C44B7",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D105_D106.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D105_D106.md",
+        "sha256":  "2FCE3A5DDF389AD278B32C1C59C520B4BCFA17314B355B109EEECEAFC28D5ECF",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D107_D111.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D107_D111.md",
+        "sha256":  "AA08612FB2515546C84C037671F20EE72A95B2EBF473A48E4A2141500BD76FF1",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D112.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D112.md",
+        "sha256":  "3DA60F5159FFA93892DBC65052E9A54A1C61611484CA590654B27058FFCF27B9",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D113.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D113.md",
+        "sha256":  "7DB3229A8D9DDF2D6EEF9BCB84EA286FE006E9D4660144C0925CDA90BEB5445D",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D114.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D114.md",
+        "sha256":  "E12AC72D826B7671C066B3AAE63F30561B4C50D07C280F37715147125AF0674E",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D115.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D115.md",
+        "sha256":  "2AC65A60AFB8AB870F8F41F6C20CA7DE22CEC7BFD1CE3F3E63E231CB6D9F7140",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D116.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D116.md",
+        "sha256":  "90136C69B0EA818731ED7303647AF1FC4F022CB239D492C06CF5B0E247C458C5",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D117_D118.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D117_D118.md",
+        "sha256":  "1AE7AF99328F7A52AC4D01F744B1D214A6392B7AD123D9812F8554D60874D729",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D119.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D119.md",
+        "sha256":  "5D7F2136AC3A74D94668CDE51743AF14522F93BFE08C30F3F0D6EB7E2B5B73BC",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D121.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D121.md",
+        "sha256":  "108B20BFBE907154105041043650213566F6FDA292D43DE7E6F7F27A6B02C17C",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D122_D126.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D122_D126.md",
+        "sha256":  "AFE62433A299931C5D7F61CBC613A7676ADE50B27C3CB5615F9CFB849B03AAF0",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D133.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D133.md",
+        "sha256":  "825553121EB6CB7A563B34D92DF1E6A08DCB72BB3F4B30513140FCD77AAD2971",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/Nilogistic_Registro_Decisiones_D140.md",
+        "raw":  "02-DOCS/raw/decisiones/Nilogistic_Registro_Decisiones_D140.md",
+        "sha256":  "7C849A24A0CBC2E3CDAFD81007F7829DEC72F2DD4CEC986750F9D5510DECEEE4",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/D-18.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/D-18.md",
+        "sha256":  "327E2DD0E00C3D386465A7D984468043741E71555512DE682EF0A6E146BC7DE9",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/DT-1.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/DT-1.md",
+        "sha256":  "8B57D8C7D09A2B2E429383A59B5DA9A170A918D00592FD25C9D715443F252EB5",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/DT-2.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/DT-2.md",
+        "sha256":  "83F4DAFACA19C410F39648D3513A60A96C917CF3E0D5778E351920D4638780BD",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/DT-3.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/DT-3.md",
+        "sha256":  "9B83671BA7247889E96C1DD9C00041F7B50729E5A00A41E57A35183169479975",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/DT-4.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/DT-4.md",
+        "sha256":  "69236D0B7D370235C5372C7A5A8ABF01A1AD2E152123E684858B17D90454F1F7",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/DT-5.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/DT-5.md",
+        "sha256":  "885F17670E2EBA48BA51FDC1265EF3738C05837746D3F45A452CF1EC868D8DBF",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/DT-6.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/DT-6.md",
+        "sha256":  "95CC2692CDD70EF5C1E74DC45E8EDC554BF7A804E2348FC8DABD8FF15B9C9F0D",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-006.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-006.md",
+        "sha256":  "825DA73CB193E69402443B7F92CFC6E686A307A457C3933556B2EE75CDDD8179",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-007.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-007.md",
+        "sha256":  "3AD67E6AA65432C645FB3969C6CD76ECD8E5E1FDA5D5824857C14094E5888A12",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-008.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-008.md",
+        "sha256":  "60146F3563A5B940BD288FA8341F4D2F85EB1C7FC267E91EEBB700115B8FC130",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-009.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-009.md",
+        "sha256":  "B6DADE18B4FFC094A79965ECB6D94363C24F813019384DBEEAA57CD5C91417AA",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-010.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-010.md",
+        "sha256":  "D22D9E1F3524737320CB0C14EFC54262F1993FDEFE2F87B3F0AEC8C5ED16B2AA",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-011.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-011.md",
+        "sha256":  "F9C225B87C96A84F9891E66A54D416B22AFCBD39ADCDE566D3C49F9DF750FE47",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-030.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-030.md",
+        "sha256":  "042CED4FEF4F02A77CA104C8E7B8BE81ADDAFE3B8F63E6A149A5CEC6A0D3AE1D",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-032.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-032.md",
+        "sha256":  "E921333CC344D79567E505B8979CCD32B7479B8D62981771E8826D5E666079A7",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-034.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-034.md",
+        "sha256":  "23DD0D1F5E1059329016EC7B48190780BD808E38BD134AF3C83BD477895381A4",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-035.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-035.md",
+        "sha256":  "FE05D750B483662D2364A81B1687B4DD7AC67FB3163D559B0A6F4899450E2968",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-036.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-036.md",
+        "sha256":  "7E1F5C19A1B4BA29902BC153E39956AF2D03740F2D5F5356EF4B1AD0260A77B9",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-037.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-037.md",
+        "sha256":  "5C16861DB1D471EADBCFBE193C7E6102A397F877D86152796D5036D0DA14CDF2",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-039a.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-039a.md",
+        "sha256":  "A9DC01912EA8F8EB72E6687CD6A1F2257230C55A1F994F07D3185F7B068CB053",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-041.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-041.md",
+        "sha256":  "F2FBA33C3793597958E4B8D69B6F59203674725308F0B08B0CBA042B521E032F",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-044.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-044.md",
+        "sha256":  "5E94BC749E8442CB4E8067997B61021BF2878D9FAB4F0542A47358E4C07C63C4",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-045.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-045.md",
+        "sha256":  "738F51D754D55F33CEF30B007FD7FD9BE1E4CA65AD7A31BE78E5711E9AD574E5",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-062a.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-062a.md",
+        "sha256":  "A89D70C33D0CD3E0E0FCDC8C7CF47ADC11C0645B222444BA5116476408EA927D",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-063.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-063.md",
+        "sha256":  "2A90F48237141BCB20BF82B1E26AE46CBDC135E3D76A8074065B9E114E0C14D4",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-066.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-066.md",
+        "sha256":  "F8CF82575DA7A82471CF6E6A56D2F1FE4F745A89B49C7B324E5541DB5F0369DC",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/HU-067.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/HU-067.md",
+        "sha256":  "62D5FA1191A7E0B5550873ABAB5D926DCDA44235EC2591E8634C74130C1985AD",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/tareas/_plantilla.md",
+        "raw":  "02-DOCS/raw/tareas/tareas/_plantilla.md",
+        "sha256":  "EA9A3B85DE71FFCD354C019CE8FB250F58639E4B55AD8C08A867D8093A926785",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/hu/S0.txt",
+        "raw":  "02-DOCS/raw/tareas/hu/S0.txt",
+        "sha256":  "4315A5AD4E28E92021E5C080A25BC6C7C0E627C1C8D18CA00BF97504DA8A90E1",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/hu/S1.txt",
+        "raw":  "02-DOCS/raw/tareas/hu/S1.txt",
+        "sha256":  "D5D1670A118BC1B2080F22DCA9C02504F9CCE7DAB2CB1C84E90080244736AF26",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/hu/S2.txt",
+        "raw":  "02-DOCS/raw/tareas/hu/S2.txt",
+        "sha256":  "D08ED0D6BFC6BEB220DEC8A77B7F9A3C74CAF4410FAFCD0DEEE312C0868B79EB",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/hu/S3.txt",
+        "raw":  "02-DOCS/raw/tareas/hu/S3.txt",
+        "sha256":  "7C3CC9E4A3CB94BD60AD35559882980BE791DC934F68E15925B763F09BD17AE9",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/ENTORNOS.md",
+        "raw":  "02-DOCS/raw/operaciones/docs/ENTORNOS.md",
+        "sha256":  "A31E79D46377D25B2678E46D0E2B36BDC8651FCFB4AE7313AA87259F4C8B517E",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/auditoria.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/auditoria.md",
+        "sha256":  "A0F07D4F383792E2183782D70DAE88836092B816DC8AC7DC2B659C52F0420EA8",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/catalogos-y-planes.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/catalogos-y-planes.md",
+        "sha256":  "3F7FEF333C93A1F664D6C5FE9E1001E01472D61F3F5FA6FAD3BC7869CC68D5EA",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/cookies-consentimiento.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/cookies-consentimiento.md",
+        "sha256":  "F054BEB985101C24F920F7CB0E53E8F787003DB749D488A60C824DB98FD86C47",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/correo-transaccional.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/correo-transaccional.md",
+        "sha256":  "16D5A335A258D0D4A70CB962385906B9580AFAAA8D6AE4284BEDB78D2CD201B5",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/despliegue-y-rollback.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/despliegue-y-rollback.md",
+        "sha256":  "AF1E7DEC859428F9BCBA92F6881418BD836E709AE27761DD33373CF9373A2456",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/destinatarios-y-remitentes.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/destinatarios-y-remitentes.md",
+        "sha256":  "6BD24D36113FEB30B9D52AF9FDCE069D3C8ACC0F8664C1FC4019B9D9A2472E36",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/diseno.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/diseno.md",
+        "sha256":  "91C10B3C67E504A6D566064C4D2923F7844A62C14E4D1B786071D8456A8F78F4",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/dominio-correo.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/dominio-correo.md",
+        "sha256":  "94CC264916A0319D3B4F11E9820727D2957FD65DA41DC7279B97ABFA22BD6569",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/P-314_custodia_certificado.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/P-314_custodia_certificado.md",
+        "sha256":  "E162C3FB56906640C6F6182FA290A263B723E2AB917205696DA4464F7FF47AD2",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/parametros.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/parametros.md",
+        "sha256":  "8B014F7DB2FA5B6E857DC1D1D051D476301732336CFD0CAA74CB0067D177AF81",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/plantillas-correo.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/plantillas-correo.md",
+        "sha256":  "1ECE8658B208E6B582D6B3223B7C966E73F7529B6448EC94FDB305A00DB5B7E3",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/redirecciones-301.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/redirecciones-301.md",
+        "sha256":  "E9F49E84AFB5D31F4A7161A8119BCFC7DDA9BB904FB0C53BA9945CB0C99FA3C6",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/search-console-analytics.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/search-console-analytics.md",
+        "sha256":  "DC0104BB2C39A678586330BB954CD854BE29AB4C955F38DDD430964CE31D7996",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/T-ROT_rotacion_de_credenciales.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/T-ROT_rotacion_de_credenciales.md",
+        "sha256":  "315E4D76430625D92B53EF8272C1180DDD9350216BA54FA3C3585FF5C536B75C",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/T-SUPR_supresion_de_datos.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/T-SUPR_supresion_de_datos.md",
+        "sha256":  "83054B9CC19F30D3B5370FF2DF80751BE1EFA24BC5EFC66ED81DEBE23CEB96C4",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/tareas-segundo-plano.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/tareas-segundo-plano.md",
+        "sha256":  "718BA0F539F9DD64BECA0CA7529478026332529C8A8859ABBFA9F33DC46DD72B",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/textos-legales.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/textos-legales.md",
+        "sha256":  "C737A3D02AC1183FC23054C7C9FDEEC875B6A7294058EA8236A01CD3FEC6AD02",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/verificacion-local.md",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/verificacion-local.md",
+        "sha256":  "A1836FD19742CDCFCD52F0354CDA1396EEF9989252CCD1B663413DC2A2A54769",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/spikes/SPK-01_proxy_render.md",
+        "raw":  "02-DOCS/raw/operaciones/spikes/SPK-01_proxy_render.md",
+        "sha256":  "8BC265473F9EADAFE98AEB32FA11020BC1BC391EEA4D904127FE689507060AB3",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/spikes/SPK-02_db1_security_definer.md",
+        "raw":  "02-DOCS/raw/operaciones/spikes/SPK-02_db1_security_definer.md",
+        "sha256":  "F2F9B8568CDE211D7427D52701E175D1BA5DF69E2021C9CDDD257F7F2D34E5C7",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/revision/checklist-revision.md",
+        "raw":  "02-DOCS/raw/operaciones/revision/checklist-revision.md",
+        "sha256":  "5A03F351E11A00B61F742F3259D334319652FDF49C56B06629386FCBF2ADAE77",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/legal/provisionales/cookies.html",
+        "raw":  "02-DOCS/raw/legal/provisionales/cookies.html",
+        "sha256":  "46AF7D5D0629CE7D305E4B4202E15D0747978D6A70DD9319C3CFFB5791D07712",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/legal/provisionales/privacidad.html",
+        "raw":  "02-DOCS/raw/legal/provisionales/privacidad.html",
+        "sha256":  "1EB12DFD792464AD1C9E5EB5D914A939E44F4ADBCBFDBE25F6ADBF29DDD54953",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/legal/provisionales/terminos.html",
+        "raw":  "02-DOCS/raw/legal/provisionales/terminos.html",
+        "sha256":  "D312FAA9B6661BFEB7714D52CB1F36CA3CBDB860FB4F76DEEEF4E601E5B3E557",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/migracion/inventario-urls.csv",
+        "raw":  "02-DOCS/raw/migracion/migracion/inventario-urls.csv",
+        "sha256":  "5AE246C10E98E2A0FFECD1C299A3497766E0FA6E414774E63196D9EFB0686D21",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/migracion/redirecciones-aprobadas.json",
+        "raw":  "02-DOCS/raw/migracion/migracion/redirecciones-aprobadas.json",
+        "sha256":  "46E3FDEFFF89C1A4B142318F6DF85FFDB9FCEE416DA9169F928CC81DC1D61A08",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/migracion/search-console-paginas.csv",
+        "raw":  "02-DOCS/raw/migracion/migracion/search-console-paginas.csv",
+        "sha256":  "CD1377F26D82CB8018A683C0D199FAF861AE06462F68BE202A9B7250E0DF259C",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Fase2_Requerimientos.md",
+        "raw":  "02-DOCS/raw/producto/docs fase/Nilogistic_Fase2_Requerimientos.md",
+        "sha256":  "85E8B051DA5B93D7B389AEEC65D1B74CDB80730092D04A33B41483AC771E7F8A",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Fase3_Backlog.md",
+        "raw":  "02-DOCS/raw/producto/docs fase/Nilogistic_Fase3_Backlog.md",
+        "sha256":  "F94B59C18FECF5EB59758558C9273A323DEAAF06B8868543DAD3B77652C75C2E",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Fase4_HU_Lote1.md",
+        "raw":  "02-DOCS/raw/producto/docs fase/Nilogistic_Fase4_HU_Lote1.md",
+        "sha256":  "43F28B0A0AD7CCBDDD16881B298FE7B88E02EFF1253B4E132C2F3CBBCC4D7E41",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Fase4_HU_Lote2.md",
+        "raw":  "02-DOCS/raw/producto/docs fase/Nilogistic_Fase4_HU_Lote2.md",
+        "sha256":  "8048F7A75BB9AB62EF851427D502754D8F3803DAFA3D0B6B1AD4C91C8ED5A150",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Trazabilidad_RF_HU.md",
+        "raw":  "02-DOCS/raw/producto/docs fase/Nilogistic_Trazabilidad_RF_HU.md",
+        "sha256":  "847F9CEF40FD8CEE7A9BE43489F7B0D6EB27C1EB722A461B5D4021A6992CB716",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/_archivo/Nilogistic_Fase4_HU_Lote1_v1.1.md",
+        "raw":  "02-DOCS/raw/producto/_archivo/Nilogistic_Fase4_HU_Lote1_v1.1.md",
+        "sha256":  "31F60336560A34E69A71AF2953E1EBCF6E37EF280CC7B805D88151C9B5F8DC89",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/_archivo/Nilogistic_Fase4_HU_Lote2_v1.0.md",
+        "raw":  "02-DOCS/raw/producto/_archivo/Nilogistic_Fase4_HU_Lote2_v1.0.md",
+        "sha256":  "ABFFC3365002D74B6D35486F1978E7D3CDEC866CF97B24046740713FA878787A",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Fase5_A_Arquitectura.md",
+        "raw":  "02-DOCS/raw/arquitectura/docs fase/Nilogistic_Fase5_A_Arquitectura.md",
+        "sha256":  "E68348E75B0EC483BFB3044B730B4DA21E0E9BDA5DD66218425E3A94EE6A01EB",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Fase5_B_Modelo_de_Datos.md",
+        "raw":  "02-DOCS/raw/arquitectura/docs fase/Nilogistic_Fase5_B_Modelo_de_Datos.md",
+        "sha256":  "4EC3D90D27423BC43C259983470E6617446A78640BEC36756A8B4593C7BAE826",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Nilogistic_Fase5_C_UX_y_API.md",
+        "raw":  "02-DOCS/raw/arquitectura/docs fase/Nilogistic_Fase5_C_UX_y_API.md",
+        "sha256":  "5A341D998BC263D3C3DF05F9BEA045C305F2CEAB9796E70B615047DF58BBC81D",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/bootstrap-theme.css",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/bootstrap-theme.css",
+        "sha256":  "27915D70F06B88CBF4DA1385F106CE837E01DAF08DB155AF42A4017D7EC34751",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/email-transaccional-activacion.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/email-transaccional-activacion.html",
+        "sha256":  "95A21A2C4182D1BEED0DFFE7DF7DC2917933105701D0FC6A639390D3EBB468D3",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/email-transaccional-solicitud-recibida.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/email-transaccional-solicitud-recibida.html",
+        "sha256":  "0CC5C3ED5C30EDB4FD1437ADF753B1F49B763B78254D60845097880BD1D85181",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/nilogistic.css",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/nilogistic.css",
+        "sha256":  "411E60CB401778B9ACF356339B8B22E27569AFF517B605D404B6B003AD257801",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/Nilogistic_Fase5_D_Design_System_Entrega_N0.md",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/Nilogistic_Fase5_D_Design_System_Entrega_N0.md",
+        "sha256":  "0194B6D3B009949F67295AEE5C38DF1B3E0B08D9F86236970A020ADA915EF207",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/tokens.css",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/tokens.css",
+        "sha256":  "65A467AB14893240A83E43D5318B66AFAFB405ACE063AEC55D531A288E4725B8",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/_variables.scss",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/_variables.scss",
+        "sha256":  "1B747E3478E2314BD675DFB2DB7C4FBF9C75BDA12ED9E580C36A9D557D56CC5F",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/correo-aviso.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/correo-aviso.html",
+        "sha256":  "C1369299D220BCCBA3850F0590D7DD35FED8DF06EBD9AFE14776EDA903922FFB",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/correo-aviso.txt",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/correo-aviso.txt",
+        "sha256":  "67BAB5EADD39AA886A0B3A34275350495004753C0F2D674354442900A30B8E92",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/correo-newsletter.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/correo-newsletter.html",
+        "sha256":  "D2C3CBD089DBA7EFCF0A54D261785B29344432DEC2725FDF1D3C3343375C249D",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/correo-newsletter.txt",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/correo-newsletter.txt",
+        "sha256":  "7756D973E590ED288C511D5B5AFF4C14FBB946F25F88B4B8FC0A357DD262B2EA",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/correo-transaccional.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/correo-transaccional.html",
+        "sha256":  "9233E53C0B1CC6BCF02E9700B4A79C38D5B704930D8D39775DA590D117A04210",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/correo-transaccional.txt",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/correo-transaccional.txt",
+        "sha256":  "39FC88718188A2FF64EDF54C040F9FB7B24354671525EEC576EE9A198463AE49",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/README-correo.md",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/README-correo.md",
+        "sha256":  "9D62D97C945DADC57DF147C58D785156D64F073EC9EFCE13D7F0AAD2238244B9",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/vista-previa-aviso.png",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/vista-previa-aviso.png",
+        "sha256":  "C5BD1E967ABDCD1130D7BD38893DB9DC3AE570DFA6D6211B6F6BEE59D3F462FC",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/vista-previa-newsletter.png",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/vista-previa-newsletter.png",
+        "sha256":  "008DFE7356A984B1F524C829CA2600C3DC7AED41B438E706BA8D42C036AB99E0",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/correo/vista-previa-transaccional.png",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/correo/vista-previa-transaccional.png",
+        "sha256":  "802999A0EEBD5AEB6AD0F150B93A9D500F61C6EB140F3EDC1D4EBB928D634CBB",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/fonts/Inter-400.woff2",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/fonts/Inter-400.woff2",
+        "sha256":  "DD05E326CF8EAC3B55ACECF29C842ED73E6E6DD06491CF47F7E8800680AB3E33",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/fonts/Inter-500.woff2",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/fonts/Inter-500.woff2",
+        "sha256":  "B0E7558F4710A1E255B93E3DEEFE3AEBB19F3BB41C150F685A74D3B1A1C79E87",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/fonts/Inter-600.woff2",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/fonts/Inter-600.woff2",
+        "sha256":  "62553D159189834AF73C9A6264704BE5B2BEE9A08DA66A14768D8E5C6FFD2CDB",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/fonts/Inter-700.woff2",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/fonts/Inter-700.woff2",
+        "sha256":  "AAC638F7503CEBB084EC494CF00F75F7D8260D50C2F4E7820BCCABBA09626A3A",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/fonts/Poppins-400.woff2",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/fonts/Poppins-400.woff2",
+        "sha256":  "7D93459D86585BFCDBB7E0376056226ADB25821EE54B96236FE2123E9560929F",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/fonts/Poppins-500.woff2",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/fonts/Poppins-500.woff2",
+        "sha256":  "CD36DE204ACA2D5FA263A731F7C20009B5E3D754BA1F1E03C33E93A48F3E7446",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/fonts/Poppins-600.woff2",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/fonts/Poppins-600.woff2",
+        "sha256":  "F4E80D9DFD374D02989B87A27B5ED4CB78FBB177C27F1478E9A8B0AFB7513149",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/fonts/Poppins-700.woff2",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/fonts/Poppins-700.woff2",
+        "sha256":  "9338E65FC077355C7A87AE0D64CC101E23B9BF8AD78AE65F0F319C857311B526",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/logos/cln-logo.png",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/logos/cln-logo.png",
+        "sha256":  "D7D26108DDEE54E04AF49B2666907F17288226D665D81FFE09249A8A0022E444",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/logos/nilogistic-logo-blanco.png",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/logos/nilogistic-logo-blanco.png",
+        "sha256":  "FB41D728CA6D49A9D2DEC4B34237800783F4605EBBDD6A6D2ADF90A5D74C4E02",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/logos/nilogistic-logo.png",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/logos/nilogistic-logo.png",
+        "sha256":  "886DF8A49DB4DCC68F46A60B800D247B03E3AF1CE78A57CF48D2F632D468459B",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/logos/web/cln-logo.png",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/logos/web/cln-logo.png",
+        "sha256":  "EA40423D64D59EADA43A71DF43195D7737B6242C8EC718A313DADB3F61B5A765",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/logos/web/nilogistic-logo-blanco.png",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/logos/web/nilogistic-logo-blanco.png",
+        "sha256":  "4636795FCF9D2D8A4BE7E26CDB2DDFDCC8042414F9ED18B840C48C12B9AD59FF",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/logos/web/nilogistic-logo.png",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/logos/web/nilogistic-logo.png",
+        "sha256":  "8538BB2FA4406187CFD606F58B19AD3D7B7260C9E993873FFADF7FEAE531A103",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/referencia/cookies.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/referencia/cookies.html",
+        "sha256":  "33E105F5DEF8B493F1012B7E8418FE0A332B9BA2F231062DC9A418626221D126",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/referencia/formularios.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/referencia/formularios.html",
+        "sha256":  "E064EE4708624776B94432180DDC747A35A7D07E9780D16E54E4B8C53FB9B48F",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/referencia/layout-cuenta.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/referencia/layout-cuenta.html",
+        "sha256":  "A8DF9DA500FCF2C0E09CF4D3917F8F2C1DD958C120B2DD440EC491CA9FFCED3F",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/referencia/layout-panel.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/referencia/layout-panel.html",
+        "sha256":  "05408A132536387DFB47EC58A24D01B38A1806E841393DDB055702B26E49D2B0",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/referencia/layout-publico.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/referencia/layout-publico.html",
+        "sha256":  "CD37E041A3346006D6AC8336644FC8C1B0C9618EC41F581DD2B01AC6BDD8B896",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/referencia/navbar.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/referencia/navbar.html",
+        "sha256":  "82FA312782139E310E997653CCC9DF90514564584A6DD112499F234B12602D42",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/referencia/pie.html",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/referencia/pie.html",
+        "sha256":  "3EC382476182CCAA1A426D5A72C6B5D0D25510C6F5A890F849E634E2E5422424",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs fase/Design System/referencia/README-componentes.md",
+        "raw":  "02-DOCS/raw/arquitectura/Design System/referencia/README-componentes.md",
+        "sha256":  "3360CE6B088F0F3D91CE304D04AF49890196D0BED41773F6452A8B1C72FF66B4",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "render.yaml",
+        "raw":  "02-DOCS/raw/operaciones/render.yaml",
+        "sha256":  "309B3BF2DE27DAD11FD00E3FE5711F1B6A98EEF24FCA5E63F18D5A2F2128CD35",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docker-compose.yml",
+        "raw":  "02-DOCS/raw/operaciones/docker-compose.yml",
+        "sha256":  "65278E400F6C233268B48967DB708682B5347A95AB958AFFF78FD558C933C3BC",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/dns-correo/antes.json",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/dns-correo/antes.json",
+        "sha256":  "743573EFC8FA2C42C105637788075F2C24C4A7CD44FDD419BA2151CB10F029EB",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/dns-correo/antes-hu066.json",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/dns-correo/antes-hu066.json",
+        "sha256":  "310E24D4A143B9F5FE1635C1C6FCF5C549752CFA93193F449FA3B593051EB52B",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/dns-correo/despues-hu066.json",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/dns-correo/despues-hu066.json",
+        "sha256":  "380DC0A71D4F80DAB8E4BD3EE62F1C7DFE5984D38F935864C948B13D3452E24B",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "docs/runbooks/dns-correo/despues.json",
+        "raw":  "02-DOCS/raw/operaciones/runbooks/dns-correo/despues.json",
+        "sha256":  "4197A95A5F3ABA3E1D28C4C96BD1E7158290064B9B735AF61B5A462F72965C57",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    },
+    {
+        "source":  "Directory.Packages.props",
+        "raw":  "02-DOCS/raw/arquitectura/Directory.Packages.props",
+        "sha256":  "94DA5705A9358106F1F28183C60A33A7A935CDE8BBDDA72FC169D28FA3CE1BFE",
+        "collected":  "2026-11-21",
+        "status":  "processed"
+    }
+]

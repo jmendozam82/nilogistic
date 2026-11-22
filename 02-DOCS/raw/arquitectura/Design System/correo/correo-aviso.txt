@@ -1,0 +1,23 @@
+Cambiaste tu contraseña
+
+Hola {{nombre}},
+
+Te confirmamos que la contraseña de tu cuenta de Nilogistic se cambió correctamente. Estos son los datos del cambio:
+
+  Fecha y hora: {{fecha_hora}}
+  Dispositivo: {{dispositivo}}
+  Ubicación aproximada: {{ubicacion_aproximada}}
+
+Si fuiste tú, no necesitas hacer nada más.
+
+¿NO FUISTE TÚ?
+Alguien más pudo haber entrado a tu cuenta. Restablece tu contraseña ahora para cerrar el acceso:
+{{enlace_recuperacion}}
+
+Equipo Nilogistic
+
+--
+Recibes este correo porque se realizó una gestión con esta dirección en nilogistic.com. Este mensaje se envió desde una cuenta que no recibe respuestas (no-reply@nilogistic.com); para consultas escribe desde la página de Contacto: {{url_base}}/contacto
+Política de privacidad: {{url_base}}/legal/privacidad
+Términos y condiciones: {{url_base}}/legal/terminos
+© 2026 Nilogistic · Managua, Nicaragua

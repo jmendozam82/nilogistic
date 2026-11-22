@@ -1,0 +1,46 @@
+# Escenarios de S3 con prueba esperada. HU-032 (Pase B): E1-E4 en BLL.Tests; los DoD DAL de la HU viven en DAL.Tests.
+HU-032 E1
+HU-032 E2
+HU-032 E3
+HU-032 E4
+# HU-032 E1: publicar la version siguiente y auditar version_legal_publicada. E2: registro de la aceptacion con documento, version, fecha UTC, IP y hash del user agent. E3: dos publicaciones simultaneas no dejan dos vigentes. E4: formulario abierto durante un cambio de version devuelve VersionObsoleta sin escribir.
+HU-044 E1
+HU-044 E2
+HU-044 E3
+HU-044 E4
+HU-044 E5
+HU-044 E6
+HU-044 E7
+# HU-044 E1: paginas legales vigentes muestran titulo, version, fecha y aviso provisional; contenido saneado. E2: versiones anteriores publicas con aviso de no vigente, noindex y canonical a la vigente; redireccion 301 si se pide la vigente por numero. E3: tipo sin version vigente responde 404. E4: parcial de enlaces de consentimiento a privacidad/terminos en pestana nueva y enlaces del pie. E5: politica de privacidad sembrada menciona Cloudflare Turnstile. E6: politica declara supresion, plazo en dias habiles, 24 meses y Ley 787. E7: BLL rechaza publicar privacidad sin dias habiles; G6 lo detecta.
+HU-039a E1
+HU-039a E2
+HU-039a E3
+HU-039a E4
+HU-039a E5
+# HU-039a E1: la base recien migrada tiene 3 catalogos, 28 valores, 4 planes, 8 precios, 16 beneficios provisionales y el asiento del Sistema. E2: reaplicar la semilla no duplica, no audita de nuevo ni pisa un valor editado; el esquema tambien es idempotente. E3: todo registro sembrado queda marcado provisional leido por EF. E4: el script de G6 lista los planes provisionales con bloquea_g6 y sin ellos no bloquea. E5: reemplazar un valor real retira la marca y se audita la actualizacion con antes y despues.
+HU-063 E1
+HU-063 E2
+HU-063 E3
+HU-063 E4
+HU-063 E5
+HU-063 E6
+# HU-063 E1: reemplazar una lista de destinatarios valida minimos, aplica la diferencia y audita destinatarios_actualizados. E2: rechazar un remitente con dominio no verificado o subdominio, y guardar uno valido con auditoria. E3: bloquear una lista vacia. E4: encolar prueba_avisos con idempotencia por direccion y hora, y auditar. E5: minimo 2 destinatarios en contacto. E6: al menos un buzon compartido en contacto.
+HU-045 E1
+HU-045 E2
+HU-045 E3
+HU-045 E4
+HU-045 E5
+# HU-045 E1: sin decision la portada muestra el aviso con los tres controles de igual prominencia, sin script de analitica y sin atributo data-analitica en el body. E2: aceptar todo escribe la cookie 1.1.<unix>.<version> con HttpOnly, Secure y SameSite=Lax, redirige 303 al origen y el body lleva data-analitica=permitida. E3: retirar el consentimiento guarda analitica 0, el body pierde el atributo y guardar preferencias vuelve a la pagina con el mensaje. E4: una decision de mas de 12 meses o de una version anterior de la politica vuelve a mostrar el aviso sin analitica; una cookie ilegible o con fecha futura se trata como sin decision o vencida; si la BLL falla la pagina responde 200; la version de la politica se consulta una vez por ventana de cache. E5: el aviso es una region etiquetada no modal con controles nativos y va despues del enlace de salto y antes de la barra superior; la pagina de preferencias tiene un unico h1, casillas con etiqueta y la necesaria deshabilitada; con teclado se alcanzan los tres controles antes del menu y se decide con Enter sin atrapar el foco.
+HU-066 E3
+HU-066 E4
+# HU-066 E3: Analytics solo se carga con consentimiento vigente e ID valido; sin consentimiento, ID invalido o decision caducada no hay script ni orígenes de Google en la CSP. E4: al retirar el consentimiento se expiran las cookies _ga, _ga_* y _gid sin tocar otras cookies; tras retirarlo no se carga Analytics.
+HU-035 E1
+HU-035 E2
+HU-035 E3
+# HU-035 E1: estado por tarea con ultima ejecucion, resultado, proxima ejecucion e historial paginado sin duplicados. E2: tres fallos consecutivos encolan una alerta por destinatario tecnico con clave idempotente; los intentos intermedios no suman y el apagado del host no registra desenlace. E3: una tarea sin ejecutarse durante el doble de su intervalo genera una sola alerta por episodio, sin duplicar con dos instancias.
+HU-067 E2
+HU-067 E3
+HU-067 E4
+HU-067 E5
+HU-067 E6
+# HU-067 E2: redirección 301 de un solo salto desde URL antigua a destino equivalente. E3: validación de cadenas, bucles, duplicados y orígenes reservados. E4: URL sin equivalente responde 404 o redirige a la sección más cercana. E5: prueba previa al corte con el mapa y verificación con destinos vivos. E6: /feed y /feed/ redirigen 301 a /blog con estado pendiente HU-051.

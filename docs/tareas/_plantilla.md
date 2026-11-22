@@ -15,6 +15,25 @@
 ## 2. Objetivo
 Una o dos frases: qué debe poder hacer el usuario al terminar.
 
+## 2b. Contrato ASDD (lo llena Claude con `specify` y `clarify`)
+> Esta sección es la fuente única del contrato. `02-DOCS/wiki/sdd/specs/HU-XXX.md` es solo su proyección para la puerta del harness; si difieren, **manda la ficha**.
+
+### Problema & por qué
+### Objetivos
+### No-objetivos (fuera de alcance)
+### Usuarios & contexto
+### Comportamiento
+### Criterios de aceptación
+(se detallan en la sección 7, con Gherkin y prueba esperada)
+### Qué podrá hacer el usuario
+### Qué resultado obtiene
+### Qué debe respetar
+### Cómo lo demuestra
+### Qué pasa si no lo construimos
+### La alternativa más barata
+### Puntos a clarificar
+(tipados: pregunta abierta · suposición tomada · decisión diferida · área no formulable)
+
 ## 3. Lee solo esto
 - `ESTADO_PROYECTO.md`
 - `AGENTS.md` §7 (arquitectura) y §8 (buenas prácticas)
@@ -65,7 +84,7 @@ dotnet test
 Ambos deben terminar en verde. Pega en el PR la salida resumida (total de pruebas, fallidas, omitidas).
 
 ## 10. Entrega
-1. Commits con Conventional Commits (`feat(HU-XXX): …`, `test(HU-XXX): …`) **dentro de la rama de la HU** (D-140). **Sin push y sin PR:** el push y el PR únicos los hace Jorge al cerrar la HU, con la revisión de Claude y su validación visual local ya hechas. El asunto va en **ASCII sin acentos** y la descripción mide 72 caracteres o menos; comprueba con `python3 scripts/ci/validar_conventional_commits.py --base develop` antes de entregar.
+1. Commits con Conventional Commits (`feat(hu-xxx): …`, `test(hu-xxx): …` (el contexto va en minúsculas: el validador lo exige)) **dentro de la rama de la HU** (D-140). **Sin push y sin PR:** el push y el PR únicos los hace Jorge al cerrar la HU, con la revisión de Claude y su validación visual local ya hechas. El asunto va en **ASCII sin acentos** y la descripción mide 72 caracteres o menos; comprueba con `python3 scripts/ci/validar_conventional_commits.py --base develop` antes de entregar.
 2. Actualiza `ESTADO_PROYECTO.md` según el paso 8 del ciclo (AGENTS.md §12).
 3. Completa la sección 11, con las **horas reales** y la hora de inicio y de fin (la de fin sale de `git log --format=%ci`), y avisa a Jorge para pedir revisión a Claude.
 

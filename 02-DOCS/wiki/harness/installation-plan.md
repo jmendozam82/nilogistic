@@ -1,3 +1,14 @@
+---
+type: brief
+title: Accepted harness plan
+description: Plan RSC aceptado para el workspace de Nilogistic.
+timestamp: 2026-11-21T23:55:00Z
+topic: harness
+status: stable
+sources: []
+score: 0.0
+---
+
 # Accepted harness plan
 
 Plan id: `c630bc96b5dcd573343ed81ebd6355fc829370211880481dddde532932632cfe`
@@ -10,7 +21,7 @@ Plan id: `c630bc96b5dcd573343ed81ebd6355fc829370211880481dddde532932632cfe`
 | agent | refuter-security | selected | The accepted substantial software workflow requires this implementation or review role. | — |
 | agent | refuter-tests | selected | The accepted substantial software workflow requires this implementation or review role. | — |
 | capability | memory | selected | Local bounded project memory supports continuity without an external account. | — |
-| guard | gitmoji-guard | selected | Claude Code supports the commit guard and the accepted code policy includes it. | — |
+| guard | gitmoji-guard | selected | El guard bloquea gitmoji y emoji en commits; coincide con AGENTS §13 (Conventional Commits sin emoji). | — |
 | hook | code-hooks | selected | The accepted software workflow needs its deterministic code gates. | — |
 | integration | context7 | excluded | External MCP connections require a separate, provider-specific consent flow and are outside this local harness plan. | — |
 | route | harness-documents | selected | The accepted profile and plan are persisted under 02-DOCS/wiki/harness/. | — |
