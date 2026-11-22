@@ -1,0 +1,204 @@
+# Ficha de tarea — DT-6 — Despliegue de Staging comparado con el último commit desplegado
+
+> **v1.0 (2026-10-25).** Deuda técnica, fuera de velocidad (D-06). Escrita por Claude. Parte de código y pruebas para un ejecutor; **el cambio de `.github/workflows/ci.yml` lo aplica solo Jorge** (D-155) con el parche exacto de §5. **No improvises:** si algo es ambiguo, detente, anótalo en §9 y no inventes APIs, paquetes ni nombres.
+> Origen: el 22/10/2026 el CI falló en el push que traía código (`34b7ef7`, PR #78); el push siguiente solo tocaba scripts y documentación, `cambios_despliegue.py` comparó únicamente ese push y **no desplegó**; hubo que forzarlo con el PR #80. Aprobada por Jorge el 24/10/2026 (D-155); diseño con **etiqueta Git** aprobado el 25/10/2026.
+
+## 1. Cabecera
+| Campo | Valor |
+|---|---|
+| Tarea | DT-6 |
+| Sprint / Release | Entre S3 y S4; **debe estar cerrada antes del 04/01/2027** (inicio de S4) |
+| Rama | `chore/DT-6-despliegue-por-etiqueta` (base `develop` actualizada). **Sin push, sin PR y sin merge** (D-153). |
+| Dependencias | D-141 (despliegue condicionado), D-144 (validación de workflows), D-153 |
+| Tamaño | S (≈ 2 SP; consume capacidad de S4, D-155) |
+| Modelo asignado | Gemini (código y pruebas); Jorge (workflow) |
+
+## 2. Objetivo
+Que `desplegar-staging` decida si hay que desplegar comparando contra **el último commit desplegado con éxito** y no contra el push anterior, para que un CI rojo nunca deje cambios de código sin desplegar.
+
+## 3. Diseño (aprobado)
+- Una **etiqueta Git ligera `staging-desplegado`** apunta al último commit cuyo despliegue en Staging terminó con salud verificada.
+- `cambios_despliegue.py` gana el parámetro opcional `--etiqueta NOMBRE`. Con él, la base de comparación es el commit de esa etiqueta:
+  1. La etiqueta resuelve a un commit y es **ancestro** de `--despues`: se compara `etiqueta..despues`.
+  2. La etiqueta no existe: se usa `--antes`, como hoy (arranque en frío).
+  3. La etiqueta existe pero **no es ancestro** (historial reescrito) o `git` falla: `desplegar=true` (ante la duda, se despliega).
+  4. Sin `--etiqueta` el comportamiento actual no cambia (ninguna prueba existente se toca).
+- Tras un despliegue con salud verificada, un paso nuevo mueve la etiqueta al `GITHUB_SHA`. Si el despliegue no ocurre o falla, la etiqueta **no se mueve**.
+- Bonus: si `concurrency` descarta un run pendiente, los commits omitidos quedan cubiertos porque el siguiente compara contra la etiqueta.
+
+## 4. Código y pruebas (ejecutor)
+- `scripts/ci/cambios_despliegue.py`: añadir `--etiqueta`, la resolución de §3 y una línea informativa `base=<sha corto> origen=<etiqueta|antes>` (sin cambiar `desplegar=true|false`). Códigos de salida iguales (0; 2 solo por error de uso o de `GITHUB_OUTPUT`).
+- **Archivo nuevo** `scripts/tests/test_despliegue_etiqueta.py` (unittest, repos Git temporales, sin red ni dependencias): **no modifiques ni borres ninguna prueba existente**, en particular `DespliegueTests` de `test_scripts.py` debe seguir pasando sin cambios. Casos:
+  1. **Reproduce el incidente:** etiqueta en A; B (código) no desplegado; C (solo docs). Con `--antes B --despues C --etiqueta`: `desplegar=true`. Sin `--etiqueta`: `false` (el defecto actual).
+  2. Etiqueta en el mismo commit y solo cambios de documentación: `false`.
+  3. Etiqueta ausente: usa `--antes` (true o false según el diff).
+  4. Etiqueta que no es ancestro: `true`.
+  5. Error de git: `true`.
+  6. `--antes` nulo (40 ceros) con etiqueta válida: compara contra la etiqueta.
+  7. Se escribe `desplegar=` en `GITHUB_OUTPUT` en todos los casos.
+- `docs/runbooks/despliegue-y-rollback.md`, sección «Despliegue condicionado (D-141)»: describir la etiqueta, cómo ver el commit desplegado (`git ls-remote --tags origin staging-desplegado`), y cómo forzar una reevaluación (borrar la etiqueta con `git push --delete origin staging-desplegado`).
+
+## 5. Parche de `ci.yml` (solo Jorge)
+En el job `desplegar-staging` (no se toca `desplegar-produccion`):
+
+1. Permisos del job (justo después de `environment: staging`):
+```yaml
+    permissions:
+      contents: write
+```
+2. Sustituir el paso «Detectar cambios…» por:
+```yaml
+      - name: Detectar cambios que requieren despliegue (D-141, DT-6)
+        id: cambios
+        run: python3 scripts/ci/cambios_despliegue.py --antes ${{ github.event.before }} --despues ${{ github.sha }} --etiqueta staging-desplegado
+```
+3. Nuevo paso, **inmediatamente después** de «Verificar salud tras el despliegue» y antes de «Sin cambios de codigo»:
+```yaml
+      - name: Marcar el commit desplegado (DT-6)
+        if: steps.cambios.outputs.desplegar == 'true'
+        run: |
+          set -euo pipefail
+          anterior=$(git rev-parse -q --verify "refs/tags/staging-desplegado^{commit}" || echo "ninguno")
+          git tag -f staging-desplegado "$GITHUB_SHA"
+          git push --force origin refs/tags/staging-desplegado
+          echo "Etiqueta staging-desplegado: $anterior -> $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+```
+Los pasos de despliegue y salud ya terminan el job en error si algo falla, así que este paso solo corre tras una verificación correcta (comportamiento por defecto de `success()`).
+
+Después de editar: `python scripts/ci/verificar_workflows.py` debe pasar, y **Claude revisa el YAML** (regla del cierre de S2).
+
+## 6. Prohibiciones
+No tocar `desplegar-produccion`, secretos, `render.yaml`, migraciones ni pruebas existentes. No dar `contents: write` al resto de jobs ni a nivel global. No añadir acciones de terceros: solo `git` y los pasos mostrados.
+
+## 7. Criterios de aceptación
+| # | Escenario | Prueba |
+|---|---|---|
+| E1 | Tras un CI rojo en un push con código, el siguiente push solo de docs o scripts **sí despliega** | `test_despliegue_etiqueta.py` caso 1 |
+| E2 | Sin código nuevo desde el último despliegue no se despliega | caso 2 |
+| E3 | Sin etiqueta se usa `--antes` (arranque en frío) | caso 3 |
+| E4 | Etiqueta inalcanzable o fallo de git: se despliega | casos 4 y 5 |
+| E5 | La etiqueta se mueve solo tras un despliegue con salud verificada | §8 puntos 1 y 2 en Staging |
+
+## 8. Comprobación en Staging (tras el merge, la hace Jorge)
+1. Tras el merge del PR de DT-6 (toca `scripts/` y `.github`; **fuerza el despliegue**: cambiar un archivo de `src/` no es necesario si la etiqueta no existe, porque el arranque en frío usa `--antes`): al terminar el run, `git ls-remote --tags origin staging-desplegado` devuelve el SHA del run y el resumen del job muestra `ninguno -> <sha>`.
+2. Push de solo documentación: el job imprime «Sin cambios de codigo» y la etiqueta **no cambia**.
+3. Push con un cambio en `src/`: despliega y la etiqueta pasa al SHA nuevo.
+4. Anotar el SHA, el run y el resultado en `ESTADO_PROYECTO.md`.
+Si la etiqueta no se puede crear (regla de repositorio que bloquea etiquetas), revisar **Settings → Rules** en GitHub y avisar a Claude; el despliegue no debe quedar bloqueado: el paso solo afecta a la siguiente comparación.
+
+## 9. Dudas del ejecutor
+Ninguna. Se detectó en las pruebas del Caso 5 (error de git) que rutas inválidas de directorio levantaban `NotADirectoryError`/`OSError` en Windows antes de que `subprocess.run` llegara al ejecutable de git, por lo que se amplió la captura en `_git` a `(FileNotFoundError, OSError)` garantizando que cualquier fallo al invocar git se traduzca limpiamente en `ErrorGit` y active `desplegar=true` por precaución.
+
+## 10. Informe del ejecutor
+
+- **Hora de inicio:** `2026-10-25 18:25:53 -06:00`
+- **Hora de fin:** `2026-10-25 18:34:18 -0600` (`d777b57`, último commit previo al informe)
+- **Commits del rango `origin/develop..HEAD`:**
+  ```text
+  d777b57 docs(ci): etiqueta de despliegue en el runbook (DT-6)
+  47d4359 test(ci): pruebas de la etiqueta de despliegue (DT-6)
+  cb9d034 feat(ci): comparar el despliegue con la etiqueta staging-desplegado (DT-6)
+  ```
+- **Verificación de no modificación de pruebas existentes:**
+  ```powershell
+  git --no-pager diff --numstat origin/develop..HEAD -- scripts/tests/test_scripts.py
+  ```
+  *(salida vacía, archivo intacto)*
+
+- **Salida de `python scripts/ci/verificar_workflows.py`:**
+  ```text
+  OK: 1 workflow(s) revisado(s)
+  ```
+
+- **Salida de `python scripts/ci/verificar_codificacion.py`:**
+  ```text
+  OK: 562 archivo(s) revisado(s)
+  ```
+
+- **Salida de `python -m unittest discover -s scripts/tests`:**
+  ```text
+  ..................................................ERROR: C:\Users\DELL55~1\AppData\Local\Temp\tmpztojbz2y\g\coverage.cobertura.xml no contiene el paquete "Nilogistic.BLL"; sin él no se puede evaluar la puerta G1
+  .ERROR: no se encontró coverage.cobertura.xml
+  ............ERROR: el directorio no existe: C:\Users\dev\CLN\nilogistic\no\existe\jamas
+  .ERROR: b'fatal: not a git repository (or any of the parent directories): .git'
+  ...........................ERROR: fatal: Not a valid object name ref_que_no_existe
+  .ERROR: no existe el directorio no/existe/jamas
+  ...............................
+  ----------------------------------------------------------------------
+  Ran 123 tests in 57.548s
+
+  OK
+  ID   RESULTADO COMPROBACION
+  C1   OK       SPF de la raiz sin cambios (registros: 1)
+  C2   FALLA    los MX de la raiz cambiaron
+  C3   OK       un unico DMARC con p=none y rua
+  C4   OK       DKIM presente (inicio: p=MIGfMA0GCS...)
+  C5   OK       MX de retorno de Resend presente
+
+  1 comprobacion(es) fallidas
+  ID   RESULTADO COMPROBACION
+  C1   OK       SPF de la raiz sin cambios (registros: 1)
+  C2   OK       MX de la raiz sin cambios
+  C3   OK       un unico DMARC con p=none y rua
+  C4   OK       DKIM presente (inicio: p=MIGfMA0GCS...)
+  C5   OK       MX de retorno de Resend presente
+
+  Todas las comprobaciones pasan
+  Cobertura de líneas (Nilogistic.BLL): 60.0 % (mínimo 70.0 %)
+  Cobertura de líneas (Nilogistic.BLL): 95.0 % (mínimo 70.0 %)
+  KO bom.md: R1: BOM UTF-8
+  OK: 1 archivo(s) revisado(s)
+  Evaluando 1 commit(s) del rango c8986a46266938918c61c91e047c9de7dc5d7b8f..HEAD
+  KO formato no convencional        : Actualizar archivos
+  Evaluando 1 commit(s) del rango 04c5208a6f48d380e909abf97bc938e44be00be5..HEAD
+  KO formato no convencional        : HU-035: alertas y estado de tareas programadas (#78)
+  KO descripcion mayor a 72 chars   : feat: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  KO formato no convencional        : Actualizar archivos
+  KO formato no convencional        : Feat: tipo en mayusculas
+  KO formato no convencional        : fix(CI): contexto con mayusculas
+  KO formato no convencional        : fix:
+  KO formato no convencional        : fix : sin dos punto pegados
+  KO contiene caracteres no ascii   : fix: corregir aplicación
+  KO regla 1: nombre fuera del patron <14 digitos>_<descripcion>.sql: malo.sql
+  OK: 2 migracion(es) con nombre valido
+  SIN PRUEBA: HU-001 E2 (S0.txt)
+  1 escenario(s) sin prueba en 1 archivo(s)
+  0 escenario(s) sin prueba en 1 archivo(s)
+  AVISO: no hay archivos de escenarios para 'S0' en C:\Users\DELL55~1\AppData\Local\Temp\tmp5879je1d; trazabilidad no evaluada.
+  SIN PRUEBA: HU-007 E2 (S1.txt)
+  1 escenario(s) sin prueba en 2 archivo(s)
+  0 escenario(s) sin prueba en 2 archivo(s)
+  0 escenario(s) sin prueba en 1 archivo(s)
+  ```
+
+- **Estado de `git status --short`:**
+  ```text
+  (vacío)
+  ```
+
+## 11. Entrega
+Commits: `feat(ci): comparar el despliegue con la etiqueta staging-desplegado (DT-6)`, `test(ci): pruebas de la etiqueta de despliegue (DT-6)`, `docs(ci): etiqueta de despliegue en el runbook (DT-6)`, `docs(ci): informe de DT-6`. El cambio de `ci.yml` va en un commit aparte de Jorge: `ci(despliegue): marcar el commit desplegado de Staging (DT-6)`.
+
+## 15. Revisión de Claude (25/10/2026)
+- **Código:** `resolver_base_comparacion` cumple §3 (ancestro valido compara `etiqueta..despues`; etiqueta ausente usa `--antes`; no ancestro o fallo de git despliega; sin `--etiqueta`, comportamiento anterior). `GITHUB_OUTPUT` intacto. Cambio extra aceptado: `_git` captura `OSError` (en Windows un directorio inexistente lanza `OSError` antes de llegar a git).
+- **Pruebas:** 7 casos nuevos en `test_despliegue_etiqueta.py`; `test_scripts.py` intacto (numstat vacio); 123 pruebas, `OK`.
+- **Runbook:** correccion de Claude (commit `171a61b`): el texto inicial decia que borrar la etiqueta fuerza el despliegue; no es asi (vuelve a comparar contra `--antes`). Para forzar hay que mover la etiqueta a un commit anterior con cambios en `src/` o `supabase/`.
+- **`ci.yml`:** parche de Jorge (`62b49bb`) igual a §5; `contents: write` solo en `desplegar-staging`; la etiqueta se mueve despues de la verificacion de salud.
+- **Error mio en §8, punto 1:** afirme que el merge de DT-6 forzaria el despliegue por el arranque en frio. Falso: con la etiqueta ausente se usa `--antes`, y un push solo de `.github/`, `scripts/` y `docs/` da `desplegar=false` (run `40252628448`). Hizo falta un cambio en `src/`. Accion: comprobar el resultado esperado del script antes de prometer un efecto.
+- **Veredicto:** aprobado.
+
+## 16. Cierre (25/10/2026)
+- **PR #85** (DT-6, merge `91b32fb`) y **PR #86** (cambio de comentario en `src/`, merge `f16eeb2`).
+- **Run `40252628448`** (merge de DT-6, sin etiqueta): `base=fa8bebc origen=antes`, `desplegar=false`; la etiqueta no se creo.
+- **Run `40254886407`** (merge de #86): `base=91b32fb origen=antes`, `desplegar=true`; el resumen del job muestra `Etiqueta staging-desplegado: ninguno -> f16eeb2de91641cb7c56f96de8ae8babf377707d` y el push crea la etiqueta (`[new tag]`).
+- **Etiqueta remota:** `git ls-remote --tags origin staging-desplegado` devuelve `f16eeb2de91641cb7c56f96de8ae8babf377707d`, igual al commit del merge.
+- **Staging:** `/health/ready` responde `Healthy` (200) y `/api/v1/estado` sirve `commit: f16eeb2de91641cb7c56f96de8ae8babf377707d`.
+
+| Comprobacion §8 | Estado |
+|---|---|
+| 1. La etiqueta se crea tras un despliegue sano | ✅ verificado |
+| 2. Push solo de documentacion: `origen=etiqueta`, `desplegar=false`, etiqueta sin cambios | ⬜ pendiente; lo demuestra el run del PR que incluye esta seccion |
+| 3. Push con cambios en `src/`: despliega y la etiqueta pasa al SHA nuevo | ⬜ pendiente; se confirma en el siguiente push con codigo |
+
+- **Solo probada con pruebas unitarias:** la rama que repite el incidente del 22/10 (etiqueta ancestro y `desplegar=true` con un push solo de documentacion). No se reprodujo en vivo.
+- **Decision de proceso:** DT-6 se da por implementada; las comprobaciones 2 y 3 se anotan en `ESTADO_PROYECTO.md` cuando ocurran.

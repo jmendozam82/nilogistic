@@ -15,6 +15,25 @@
 ## 2. Objetivo
 Una o dos frases: qué debe poder hacer el usuario al terminar.
 
+## 2b. Contrato ASDD (lo llena Claude con `specify` y `clarify`)
+> Esta sección es la fuente única del contrato. `02-DOCS/wiki/sdd/specs/HU-XXX.md` es solo su proyección para la puerta del harness; si difieren, **manda la ficha**.
+
+### Problema & por qué
+### Objetivos
+### No-objetivos (fuera de alcance)
+### Usuarios & contexto
+### Comportamiento
+### Criterios de aceptación
+(se detallan en la sección 7, con Gherkin y prueba esperada)
+### Qué podrá hacer el usuario
+### Qué resultado obtiene
+### Qué debe respetar
+### Cómo lo demuestra
+### Qué pasa si no lo construimos
+### La alternativa más barata
+### Puntos a clarificar
+(tipados: pregunta abierta · suposición tomada · decisión diferida · área no formulable)
+
 ## 3. Lee solo esto
 - `ESTADO_PROYECTO.md`
 - `AGENTS.md` §7 (arquitectura) y §8 (buenas prácticas)

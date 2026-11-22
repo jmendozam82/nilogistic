@@ -1,0 +1,7 @@
+# NILOGISTIC — Registro vivo: decisión D-113 (11/10/2026)
+
+Continúa `Nilogistic_Registro_Decisiones_D112.md`.
+
+| ID | Decisión | Afecta |
+|---|---|---|
+| D-113 | **Cambio de orden de ejecución aprobado por Jorge (11/10/2026).** HU-036 y HU-037 dependen del diseño visual (D-02, entrega comprometida antes del 20/11/2026), por lo que se adelantan sin cambiar su sprint de origen: **D-18** (commit desplegado en `/api/v1/estado`, 1 SP), **HU-008** (auditoría atómica, 5 SP), **HU-009** (auditoría inmutable, 3 SP) y **HU-062a** (almacén de parámetros, 3 SP) pasan a ejecutarse ahora, antes de HU-036/037. Supuestos aprobados: **D-18 SUP-1..4** (Render entrega `RENDER_GIT_COMMIT`; el primer despliegue puede dar rojo y se reejecuta; un commit descendiente cuenta como éxito; se expone el SHA completo) y **HU-008 SUP-1..11** (tabla particionada por mes con partición `default`, auditoría de toda entidad que herede `EntidadBase`, acciones crear/actualizar/activar/desactivar, campos sensibles excluidos por `[NoAuditar]` y lista negra, truncado a 2 000 caracteres, `Rol` nulo hasta Identity, eventos de seguridad fuera, `Id` asignado en el cliente, particiones solo vía tabla padre, IP de referencia en Staging, sin ensayo propio en Staging). El **Design System** se construye en una conversación aparte dentro del Project (entrega para HU-036/037 y pantallas de S1/S2 antes del 20/11/2026). Deuda nueva: **D-23** (tarea mensual de particiones de `auditoria.registros` antes del 2027-11-01). | D-18, HU-008, HU-009, HU-062a, HU-036, HU-037, D-02, D-12, D-23 |

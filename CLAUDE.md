@@ -26,6 +26,19 @@ Claude **no** implementa features completas salvo que Jorge lo pida de forma exp
 4. Con la CI en verde, Claude revisa **solo el diff** con `docs/revision/checklist-revision.md`.
 5. Jorge valida y hace el merge.
 
+## Ciclo ASDD con ficha única (C-003, 21/11/2026)
+La ficha `docs/tareas/HU-XXX.md` es el **artefacto único** de cada HU; el harness ASDD alimenta sus secciones y no se modifica.
+
+| Fase ASDD | Dónde queda el contenido |
+|---|---|
+| `specify` + `clarify` | Ficha §2b (contrato). Se proyecta a `02-DOCS/wiki/sdd/specs/HU-XXX.md` con `branch: feature/HU-XXX` y `ficha: docs/tareas/HU-XXX.md`; es lo que exige `asdd-gate` antes de un push de rama tier 2. Si difieren, manda la ficha |
+| `plan` + `tasks` + `analyze` | Ficha §4 (alcance por capa y pases), §7 (CA ↔ pruebas) y §8. Sin `plans/` aparte salvo que el análisis lo exija |
+| `implement` (verify + review por tarea) | Informe del ejecutor en la ficha §11. El libro append-only del bucle va en `02-DOCS/wiki/sdd/progress/HU-XXX.md` con su `## Decision queue`; la ficha lo enlaza |
+| Decisiones | D-XXX del proyecto en `ESTADO_PROYECTO.md`; C-NNN del harness en `02-DOCS/wiki/sdd/decisions.md` |
+| Cierre | Paso 8 del ciclo de `AGENTS.md` §12; la ficha enlaza el PR y el commit |
+
+Reglas: la aprobación de Jorge de la ficha (§2b y §4) es la puerta humana de la fase Spec. `rsc risk` decide el nivel de revisión; las «rutas siempre humanas» de `REVIEW.md` no se autointegran. Todo lo demás de este archivo sigue vigente.
+
 ## Reglas que nunca se rompen
 - Ninguna capa se salta otra: Vista → Controller → BLL → DAL → PostgreSQL. Ningún Controller llama al DAL; el DAL no tiene lógica de negocio; la Vista no llama a la BLL.
 - Namespaces y nombres con `Nilogistic`; nunca nombres de otros proyectos.
