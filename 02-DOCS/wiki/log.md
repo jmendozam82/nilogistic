@@ -21,3 +21,7 @@ Corregidos los hallazgos del revisor tier 1: estado real de S4, fechas de HU-044
 ## [2026-11-21] adopt single-ficha ASDD cycle
 
 Decisión C-003 (`wiki/sdd/decisions.md`): la ficha `docs/tareas/HU-XXX.md` es el artefacto único y ASDD alimenta sus secciones; `CLAUDE.md` y `docs/tareas/_plantilla.md` actualizados. Borradas las 9 copias raw duplicadas del ingest defectuoso (idénticas por SHA-256 a sus pares en el ledger; autorizado por Jorge). `ESTADO_PROYECTO.md` v0.78 corrige rama, criterio y cifras. Inicio de S4 con HU-013 (HU-014 depende de ella).
+
+## [2026-11-21] approve HU-013 ficha
+
+Jorge aprobó SUP-1 a SUP-7: ficha `docs/tareas/HU-013.md` a v1.0 y spec `wiki/sdd/specs/HU-013.md` a aprobada. Registrada la decisión D-162 en `ESTADO_PROYECTO.md`.
