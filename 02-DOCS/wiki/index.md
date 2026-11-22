@@ -60,7 +60,8 @@ Referencia rápida para localizar una decisión, una regla o un procedimiento. L
 | [harness/decisions.md](harness/decisions.md) | Decisiones de configuración del harness RSC. |
 | [harness/installation-plan.md](harness/installation-plan.md) | Plan de instalación y alcance del harness. |
 | [sdd/constitution.md](sdd/constitution.md) | Constitución v1.0.0: principios no negociables para ASDD/SDD. |
-| [sdd/decisions.md](sdd/decisions.md) | Decisión C-001 del ciclo SDD; C-002 está en `harness/decisions.md`. |
+| [sdd/decisions.md](sdd/decisions.md) | Decisiones C-001 (constitución) y C-003 (ficha única con ASDD); C-002 está en `harness/decisions.md`. |
+| [sdd/specs/HU-013.md](sdd/specs/HU-013.md) | Spec de HU-013 (borrador), proyección de la ficha `docs/tareas/HU-013.md`. |
 
 ## Mantenimiento
 
