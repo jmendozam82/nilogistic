@@ -35,6 +35,14 @@ public static class ClavesParametro
 
     public const string LimiteSolicitudesAltaPorHoraIp = "limites.solicitudes_alta_por_hora_ip";
 
+    public const string LimiteLoginPorMinutoIp = "limites.login_por_minuto_ip";
+
+    public const string LimiteRecuperacionPorHoraIp = "limites.recuperacion_por_hora_ip";
+
+    public const string LimiteContactoPorHoraIp = "limites.contacto_por_hora_ip";
+
+    public const string LimiteSuscripcionPorHoraIp = "limites.suscripcion_por_hora_ip";
+
     public const string LimiteReenvioActivacionPorHora = "limites.reenvio_activacion_por_hora";
 
     public const string LimitePruebasNewsletterPorHoraUsuario = "limites.pruebas_newsletter_por_hora_usuario";

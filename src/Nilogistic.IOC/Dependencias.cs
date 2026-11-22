@@ -66,6 +66,8 @@ public static class Dependencias
         // IRepositorioAuditoria vive en PersistenciaExtensions desde HU-062a (D-24, SUP-10).
         servicios.AddScoped<IServicioAuditoria, ServicioAuditoria>();
 
+        servicios.AddScoped<IServicioEventosSeguridad, ServicioEventosSeguridad>();
+
         // Almacen de parametros (HU-062a): cache singleton (TTL 60 s) y servicio scoped; sin
         // superficie HTTP (SUP-3). El repositorio (scoped) se lo pasa el servicio a la cache.
         servicios.AddSingleton<CacheParametros>();

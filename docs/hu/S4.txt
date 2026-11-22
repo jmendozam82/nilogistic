@@ -1,0 +1,6 @@
+# Escenarios de S4 con prueba esperada. HU-013 Pase A: E1, E2, E5 y E6.
+HU-013 E1
+HU-013 E2
+HU-013 E5
+HU-013 E6
+# HU-013 E1: POST sin token CSRF se rechaza y no ejecuta la accion. E2: al superar el limite hay 429 con Retry-After entero y vista/JSON amables con correlacion. E5: X-Forwarded-For del cliente se ignora; manda la IP del proxy de confianza. E6: varias IPv6 del mismo /64 comparten contador y un /64 distinto tiene el suyo.

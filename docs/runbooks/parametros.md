@@ -7,7 +7,7 @@ validan **en la BLL** contra el tipo, el rango y los límites no relajables. Tod
 ni endpoint** para editarlos (HU-062b, S7): hoy se cambia por SQL con el rol propietario o por
 migración.
 
-## Catálogo (19 parámetros)
+## Catálogo (23 parámetros)
 
 `NR` = cota **no relajable** (RN-069): la cota marcada es la que el sistema nunca debe poder
 relajar; vive también en `LimitesNoRelajables.cs` como defensa en profundidad.
@@ -28,6 +28,10 @@ relajar; vive también en `LimitesNoRelajables.cs` como defensa en profundidad.
 | `seguridad.enlace_recuperacion_min` | enlaces | minutos | 60 | 5 | **60** | sí | sí (máx) | El enlace de recuperación no puede durar más de 60 min |
 | `seguridad.2fa_tolerancia_pasos` | 2fa | int | 1 | 0 | 1 | sí | no | Tolerancia del TOTP en pasos (±). **No existe** una clave para desactivar el 2FA (E11) |
 | `limites.solicitudes_alta_por_hora_ip` | limites | int | 5 | 1 | 60 | sí | no | — |
+| `limites.login_por_minuto_ip` | limites | int | 10 | 1 | 120 | sí | no | Intentos de login por minuto y por IP (HU-013, SUP-1) |
+| `limites.recuperacion_por_hora_ip` | limites | int | 5 | 1 | 60 | sí | no | Recuperaciones por hora y por IP (HU-013, SUP-1) |
+| `limites.contacto_por_hora_ip` | limites | int | 5 | 1 | 60 | no | no | Contactos por hora y por IP (HU-013, SUP-1) |
+| `limites.suscripcion_por_hora_ip` | limites | int | 5 | 1 | 60 | no | no | Suscripciones por hora y por IP (HU-013, SUP-1) |
 | `limites.reenvio_activacion_por_hora` | limites | int | 3 | 1 | 20 | sí | no | — |
 | `limites.pruebas_newsletter_por_hora_usuario` | limites | int | 10 | 1 | 60 | no | no | — |
 | `contacto.acuses_max_por_hora` | contacto | int | 10 | 1 | 100 | no | no | No puede superar `acuses_max_por_dia` (R2) |

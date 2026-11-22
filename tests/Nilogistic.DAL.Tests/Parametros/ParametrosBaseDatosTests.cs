@@ -10,7 +10,7 @@ using Npgsql;
 namespace Nilogistic.DAL.Tests.Parametros;
 
 /// <summary>
-/// E1, E2, E3 y E11 (parte DAL) y DoD de HU-062a: la semilla carga los 19 parámetros de la ficha
+/// E1, E2, E3 y E11 (parte DAL), DoD de HU-062a y HU-013 SUP-1: la semilla carga los 23 parámetros
 /// (4.1.a), el trigger de rango defiende incluso al propietario, los privilegios por columna dejan
 /// a la aplicación cambiar solo el valor, y el compare-and-set escribe el asiento en la misma
 /// transacción que el cambio.
@@ -39,9 +39,13 @@ public class ParametrosBaseDatosTests(PostgresFixture bd)
         ("seguridad.contrasena_longitud_minima", "contrasena", "int", "12", "12", "128", true, true),
         ("seguridad.enlace_activacion_horas", "enlaces", "horas", "72", "1", "72", true, true),
         ("seguridad.enlace_recuperacion_min", "enlaces", "minutos", "60", "5", "60", true, true),
+        ("limites.contacto_por_hora_ip", "limites", "int", "5", "1", "60", false, false),
+        ("limites.login_por_minuto_ip", "limites", "int", "10", "1", "120", true, false),
         ("limites.pruebas_newsletter_por_hora_usuario", "limites", "int", "10", "1", "60", false, false),
+        ("limites.recuperacion_por_hora_ip", "limites", "int", "5", "1", "60", true, false),
         ("limites.reenvio_activacion_por_hora", "limites", "int", "3", "1", "20", true, false),
         ("limites.solicitudes_alta_por_hora_ip", "limites", "int", "5", "1", "60", true, false),
+        ("limites.suscripcion_por_hora_ip", "limites", "int", "5", "1", "60", false, false),
         ("planes.publicar_valores", "planes", "bool", "false", null, null, false, false),
         ("seguridad.sesion_duracion_absoluta_horas", "sesion", "horas", "12", "1", "12", true, true),
         ("seguridad.sesion_inactividad_clientes_min", "sesion", "minutos", "30", "5", "120", true, false),
@@ -191,7 +195,7 @@ public class ParametrosBaseDatosTests(PostgresFixture bd)
     }
 
     [Fact]
-    public async Task La_semilla_carga_los_19_parametros_con_sus_valores_por_defecto()
+    public async Task La_semilla_carga_los_23_parametros_con_sus_valores_por_defecto()
     {
         var nombre = await bd.CrearBaseAsync();
         var cadena = bd.CadenaApp(nombre);
@@ -200,7 +204,7 @@ public class ParametrosBaseDatosTests(PostgresFixture bd)
         var repositorio = new RepositorioParametros(contexto);
         var parametros = await repositorio.ListarAsync(CancellationToken.None);
 
-        parametros.Should().HaveCount(Semilla.Length, "19 parametros en la semilla (4.1.a)");
+        parametros.Should().HaveCount(Semilla.Length, "23 parametros en la semilla (4.1.a y HU-013 SUP-1)");
 
         // ListarAsync ordena por (grupo, clave); la semilla esperada va en ese orden.
         parametros.Select(parametro => parametro.Clave)

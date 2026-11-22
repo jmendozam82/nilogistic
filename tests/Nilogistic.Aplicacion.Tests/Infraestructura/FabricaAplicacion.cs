@@ -43,6 +43,13 @@ public sealed class FabricaAplicacion(
             constructor.UseSetting(clave, valor);
         }
 
+        constructor.ConfigureServices(s =>
+        {
+            s.AddTransient<IStartupFilter, RemoteIpPruebaStartupFilter>();
+            s.AddControllersWithViews()
+                .AddApplicationPart(typeof(FabricaAplicacion).Assembly);
+        });
+
         constructor.ConfigureTestServices(coleccion => servicios?.Invoke(coleccion));
     }
 

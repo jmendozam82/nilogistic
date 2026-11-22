@@ -6,9 +6,9 @@ namespace Nilogistic.Aplicacion.Areas.Publico.Controllers;
 
 /// <summary>
 /// Página de preferencias de cookies (HU-045 §4.4, SUP-7). No depende de la BLL ni del DAL: solo
-/// del proveedor de versión de la política. El POST se protege con verificación de procedencia
-/// (<c>Sec-Fetch-Site</c> y <c>Origin</c>) mientras no exista antifalsificación con llaves
-/// persistentes (D-150).
+/// del proveedor de versión de la política. El POST conserva la verificación de procedencia
+/// (<c>Sec-Fetch-Site</c> y <c>Origin</c>) y queda exento del filtro global de antifalsificación
+/// (D-150, HU-013 SUP-5).
 /// </summary>
 [Area("Publico")]
 public sealed class CookiesController : Controller
@@ -58,6 +58,7 @@ public sealed class CookiesController : Controller
     /// origen (o a la propia página de preferencias con el mensaje de guardado).
     /// </summary>
     [HttpPost("/preferencias-cookies")]
+    [IgnoreAntiforgeryToken]
     public async Task<IActionResult> Guardar(
         [FromForm] string? accion,
         [FromForm] bool? analitica,

@@ -46,7 +46,7 @@ internal static class ParametrosDePrueba
         ActualizadoPor = parametro.ActualizadoPor
     };
 
-    /// <summary>Los 19 parámetros de la semilla con sus valores por defecto (4.1.a).</summary>
+    /// <summary>Los 23 parámetros de la semilla con sus valores por defecto (4.1.a y HU-013 SUP-1).</summary>
     public static List<Parametro> Catalogo() =>
     [
         P(ClavesParametro.ContrasenaLongitudMinima, "contrasena", "int", "12", "12", "12", "128", true, true),
@@ -63,6 +63,10 @@ internal static class ParametrosDePrueba
         P(ClavesParametro.EnlaceRecuperacionMin, "enlaces", "minutos", "60", "60", "5", "60", true, true),
         P(ClavesParametro.DosFaToleranciaPasos, "2fa", "int", "1", "1", "0", "1"),
         P(ClavesParametro.LimiteSolicitudesAltaPorHoraIp, "limites", "int", "5", "5", "1", "60"),
+        P(ClavesParametro.LimiteLoginPorMinutoIp, "limites", "int", "10", "10", "1", "120", true),
+        P(ClavesParametro.LimiteRecuperacionPorHoraIp, "limites", "int", "5", "5", "1", "60", true),
+        P(ClavesParametro.LimiteContactoPorHoraIp, "limites", "int", "5", "5", "1", "60", false),
+        P(ClavesParametro.LimiteSuscripcionPorHoraIp, "limites", "int", "5", "5", "1", "60", false),
         P(ClavesParametro.LimiteReenvioActivacionPorHora, "limites", "int", "3", "3", "1", "20"),
         P(ClavesParametro.LimitePruebasNewsletterPorHoraUsuario, "limites", "int", "10", "10", "1", "60", false),
         P(ClavesParametro.ContactoAcusesMaxPorHora, "contacto", "int", "10", "10", "1", "100", false),

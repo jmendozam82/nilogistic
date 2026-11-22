@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Nilogistic.API.Configuracion;
 using Nilogistic.Aplicacion.Analitica;
@@ -70,12 +71,16 @@ public static class NilogisticWebExtensions
         // El filtro global publica el estado del consentimiento de cookies a las vistas (HU-045).
         // Solo actúa sobre resultados de vista: la API y los estáticos no preguntan a la BLL.
         servicios.AddControllersWithViews(opciones =>
-                opciones.Filters.Add<FiltroConsentimientoCookies>())
+            {
+                opciones.Filters.Add<FiltroConsentimientoCookies>();
+                opciones.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            })
             .AddApplicationPart(typeof(ApiExtensions).Assembly);
 
         // Versión vigente de la política de cookies con caché en memoria (HU-045 §4.2).
         servicios.AddMemoryCache();
         servicios.AddScoped<ProveedorVersionPoliticaCookies>();
+        servicios.AgregarRateLimitingNilogistic();
 
         servicios.AgregarNilogistic(configuracion, entorno);
         // El contexto HTTP sustituye al de Sistema que registra el DAL (HU-008 E1/E4); debe ir después.
@@ -106,6 +111,7 @@ public static class NilogisticWebExtensions
         }
 
         app.UseForwardedHeaders();
+        app.UseMiddleware<RefrescarLimitesMiddleware>();
         app.UseMiddleware<CorrelacionMiddleware>();
         app.UseSerilogRequestLogging();
         app.UseExceptionHandler();
@@ -130,6 +136,7 @@ public static class NilogisticWebExtensions
             }
         });
         app.UseRouting();
+        app.UseRateLimiter();
 
         app.MapearSaludNilogistic();
         app.MapGet("/robots.txt", () =>

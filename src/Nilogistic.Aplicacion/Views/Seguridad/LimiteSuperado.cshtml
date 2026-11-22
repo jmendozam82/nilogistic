@@ -1,0 +1,18 @@
+@{
+    Layout = null;
+    var minutos = ViewData["MinutosReintento"] as int? ?? 1;
+}
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demasiados intentos — Nilogistic</title>
+</head>
+<body>
+    <main>
+        <h1 role="alert">Demasiados intentos</h1>
+        <p>Has hecho demasiadas solicitudes. Espera @minutos @(minutos == 1 ? "minuto" : "minutos") y vuelve a intentarlo.</p>
+    </main>
+</body>
+</html>
