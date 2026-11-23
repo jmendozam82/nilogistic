@@ -4,6 +4,9 @@
     <UserSecretsId>nilogistic-aplicacion-dev</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Nilogistic.Aplicacion.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <!-- MVC: nunca referencia DAL ni Entity (ADR-01). El host monta la API y el IOC. -->
     <ProjectReference Include="..\Nilogistic.API\Nilogistic.API.csproj" />
     <ProjectReference Include="..\Nilogistic.BLL\Nilogistic.BLL.csproj" />

@@ -23,6 +23,9 @@ public sealed class FabricaAplicacion(
         constructor.UseSetting("ConnectionStrings:Nilogistic",
             $"Host=127.0.0.1;Port=1;Database=postgres;Username=postgres.{ReferenciaProyecto};Password=no-se-usa;Timeout=1");
         constructor.UseSetting("Supabase:ReferenciaProyecto", ReferenciaProyecto);
+        constructor.UseSetting("Turnstile:SiteKey", "1x00000000000000000000AA");
+        constructor.UseSetting("Turnstile:SecretKey", "1x0000000000000000000000000000000AA");
+        constructor.UseSetting("Turnstile:UrlVerificacion", "https://challenges.cloudflare.com/turnstile/v0/siteverify");
         // El ejecutor de tareas no debe consultar una base inexistente en las pruebas web (HU-034).
         constructor.UseSetting("TareasSegundoPlano:Habilitado", "false");
         // El entorno por defecto de la fábrica es Staging: sin una clave real, el correo va al buzón
@@ -42,6 +45,13 @@ public sealed class FabricaAplicacion(
         {
             constructor.UseSetting(clave, valor);
         }
+
+        constructor.ConfigureServices(s =>
+        {
+            s.AddTransient<IStartupFilter, RemoteIpPruebaStartupFilter>();
+            s.AddControllersWithViews()
+                .AddApplicationPart(typeof(FabricaAplicacion).Assembly);
+        });
 
         constructor.ConfigureTestServices(coleccion => servicios?.Invoke(coleccion));
     }

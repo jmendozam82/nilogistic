@@ -1,0 +1,22 @@
+@{
+    Layout = null;
+    var mensaje = ViewData["Mensaje"] as string ?? "No pudimos verificar el formulario.";
+}
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Verificación no completada — Nilogistic</title>
+</head>
+<body>
+    <main>
+        <h1 role="alert">Verificación no completada</h1>
+        <p>@mensaje</p>
+        <p>
+            Si el problema continúa, escríbenos a
+            <a href="mailto:contacto@nilogistic.com">contacto@nilogistic.com</a>.
+        </p>
+    </main>
+</body>
+</html>

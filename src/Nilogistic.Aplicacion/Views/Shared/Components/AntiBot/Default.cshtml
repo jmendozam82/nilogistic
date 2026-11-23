@@ -1,0 +1,27 @@
+@model string
+@{
+    var sitekey = Model ?? string.Empty;
+}
+<div class="nl-antibot" data-nl-antibot>
+    <div class="cf-turnstile"
+         data-sitekey="@sitekey"
+         data-size="flexible"
+         data-theme="auto"
+         data-appearance="always"
+         data-callback="nlAntibotExito"
+         data-error-callback="nlAntibotError"
+         role="region"
+         aria-label="Verificación anti-bot de Cloudflare"></div>
+    <p class="form-text mb-0" data-nl-antibot-fallo hidden>
+        No pudimos cargar la verificación. Inténtalo de nuevo o escríbenos a
+        <a href="mailto:contacto@nilogistic.com">contacto@nilogistic.com</a>.
+    </p>
+    <noscript>
+        <p class="form-text mb-0">
+            La verificación anti-bot necesita JavaScript. Si no puedes usarlo, escríbenos a
+            <a href="mailto:contacto@nilogistic.com">contacto@nilogistic.com</a>.
+        </p>
+    </noscript>
+</div>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+<script src="~/js/antibot.js" asp-append-version="true" defer></script>

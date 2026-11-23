@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "Galería de diseño · Formulario protegido";
+    var enviado = TempData["FormularioProtegidoEnviado"] as bool? == true;
+}
+<section class="nl-band">
+    <div class="container">
+        <p class="nl-eyebrow">Galería provisional</p>
+        <h1>Formulario protegido</h1>
+        <p class="nl-lead">
+            Ejemplo de los componentes transversales de HU-013: token antifalsificación, límite de
+            frecuencia por IP y verificación anti-bot de Cloudflare Turnstile.
+        </p>
+    </div>
+</section>
+<section class="nl-band nl-band--subtle">
+    <div class="container">
+        @if (enviado)
+        {
+            <div class="alert alert-success" role="status">
+                El formulario de ejemplo se verificó y envió correctamente.
+            </div>
+        }
+
+        <form method="post"
+              action="/diseno/formulario-protegido"
+              class="row g-4"
+              novalidate
+              aria-labelledby="titulo-formulario-protegido">
+            <div class="col-12">
+                <h2 id="titulo-formulario-protegido" class="h4">Enviar un mensaje de ejemplo</h2>
+            </div>
+            <div class="col-12">
+                <label for="mensaje-protegido" class="form-label">Mensaje</label>
+                <textarea id="mensaje-protegido"
+                          name="mensaje"
+                          class="form-control"
+                          rows="3"
+                          aria-describedby="mensaje-protegido-ayuda"></textarea>
+                <div id="mensaje-protegido-ayuda" class="form-text">
+                    Este formulario no guarda datos; solo demuestra la protección transversal.
+                </div>
+            </div>
+            <div class="col-12">
+                @await Component.InvokeAsync("AntiBot")
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Enviar formulario protegido</button>
+            </div>
+        </form>
+    </div>
+</section>

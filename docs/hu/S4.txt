@@ -1,0 +1,10 @@
+# Escenarios de S4 con prueba esperada. HU-013 Pase A: E1, E2, E5 y E6. Pase B: E3, E4, E7 y E8.
+HU-013 E1
+HU-013 E2
+HU-013 E3
+HU-013 E4
+HU-013 E5
+HU-013 E6
+HU-013 E7
+HU-013 E8
+# HU-013 E1: POST sin token CSRF se rechaza y no ejecuta la accion. E2: al superar el limite hay 429 con Retry-After entero y vista/JSON amables con correlacion. E3: un token anti-bot ausente o invalido se rechaza en el servidor sin ejecutar la accion. E4: un token anti-bot ya usado o vencido se rechaza. E5: X-Forwarded-For del cliente se ignora; manda la IP del proxy de confianza. E6: varias IPv6 del mismo /64 comparten contador y un /64 distinto tiene el suyo. E7: la galeria del formulario protegido y el componente anti-bot pasan axe sin violaciones graves ni criticas. E8: si Turnstile no responde, el envio se rechaza sin ejecutar la accion y queda registrado en logs estructurados.
