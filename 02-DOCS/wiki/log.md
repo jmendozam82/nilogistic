@@ -25,3 +25,7 @@ Decisión C-003 (`wiki/sdd/decisions.md`): la ficha `docs/tareas/HU-XXX.md` es e
 ## [2026-11-21] approve HU-013 ficha
 
 Jorge aprobó SUP-1 a SUP-7: ficha `docs/tareas/HU-013.md` a v1.0 y spec `wiki/sdd/specs/HU-013.md` a aprobada. Registrada la decisión D-162 en `ESTADO_PROYECTO.md`.
+
+## [2026-11-21] verify HU-013 Pase A
+
+Creada `wiki/sdd/verifications/HU-013-pase-a-2026-11-21.md` con stack gate en verde (build, 446 pruebas de Aplicación, 390 de BLL, 25 de Arquitectura, trazabilidad, migraciones, codificación y cobertura) sobre `6075351` + `5de75ff`. Registro por pase: E3/E4/E7/E8 siguen en el Pase B. Decisión C-004 (`wiki/sdd/decisions.md`) registra la ventana fija propia de `LimitadorConParametro`.
