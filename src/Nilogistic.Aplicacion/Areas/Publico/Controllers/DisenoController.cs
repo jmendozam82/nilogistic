@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using Nilogistic.Aplicacion.Seguridad;
 using Nilogistic.BLL.Interfaces;
 using Nilogistic.Utility.Seguridad;
 using System.Security.Claims;
@@ -29,6 +31,33 @@ public sealed class DisenoController : Controller
 
     [HttpGet("/diseno/componentes")]
     public IActionResult Componentes() => VistaDemo(nameof(Componentes), "anonimo", "anonimo");
+
+    [HttpGet("/diseno/formulario-protegido")]
+    public IActionResult FormularioProtegido()
+    {
+        if (_entorno.IsProduction())
+        {
+            return NotFound();
+        }
+
+        ViewData["SinBannerCookies"] = true;
+        return View(nameof(FormularioProtegido));
+    }
+
+    [HttpPost("/diseno/formulario-protegido")]
+    [ValidateAntiForgeryToken]
+    [ValidarAntiBot]
+    [EnableRateLimiting(PoliticasLimiteFrecuencia.Suscripcion)]
+    public IActionResult EnviarFormularioProtegido(string? mensaje)
+    {
+        if (_entorno.IsProduction())
+        {
+            return NotFound();
+        }
+
+        TempData["FormularioProtegidoEnviado"] = true;
+        return RedirectToAction(nameof(FormularioProtegido));
+    }
 
     [HttpGet("/diseno/correo")]
     public IActionResult Correo()

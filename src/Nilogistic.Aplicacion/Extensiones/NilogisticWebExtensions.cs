@@ -87,6 +87,7 @@ public static class NilogisticWebExtensions
         servicios.AddHttpContextAccessor();
         servicios.AddScoped<IContextoAuditoria, ContextoAuditoriaHttp>();
         servicios.AgregarCorreoNilogistic(configuracion, entorno);
+        servicios.AgregarAntiBotNilogistic(configuracion, entorno);
         servicios.AgregarNilogisticApi(configuracion, entorno);
         servicios.AddHostedService<EjecutorTareasHostedService>();
         servicios.AddSingleton<Nilogistic.Aplicacion.Redirecciones.MapaRedireccionesServicio>();
