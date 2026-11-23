@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Logging;
 using Nilogistic.BLL.Interfaces;
 using Nilogistic.DTO.Seguridad;
 
@@ -24,13 +25,19 @@ public sealed class ValidarAntiBotAttribute : Attribute, IAsyncActionFilter
 
         if (token.Length > LongitudMaximaToken)
         {
+            var claveOrigen = ParticionIpCliente.Clave(http);
+            var registro = http.RequestServices.GetService<ILogger<ValidarAntiBotAttribute>>();
+            registro?.LogWarning(
+                "Verificacion anti-bot rechazada localmente con {CodigoError} desde el origen {ClaveOrigen}.",
+                "TokenDemasiadoLargo",
+                claveOrigen);
             contexto.Result = CrearResultado(http, EstadoAntiBot.Rechazado, "TokenDemasiadoLargo");
             return;
         }
 
         var servicio = http.RequestServices.GetRequiredService<IServicioAntiBot>();
-        var origen = ParticionIpCliente.Clave(http);
-        var resultado = await servicio.VerificarAsync(token, origen, http.RequestAborted);
+        var ipCliente = http.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+        var resultado = await servicio.VerificarAsync(token, ipCliente, http.RequestAborted);
 
         if (resultado.Estado != EstadoAntiBot.Valido)
         {

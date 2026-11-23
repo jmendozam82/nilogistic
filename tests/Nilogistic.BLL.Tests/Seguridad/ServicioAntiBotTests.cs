@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Nilogistic.BLL.Interfaces;
@@ -61,12 +62,16 @@ public sealed class ServicioAntiBotTests
                 EstadoVerificacionAntiBot.NoDisponible,
                 "TiempoAgotado"));
 
-        var servicio = new ServicioAntiBot(verificador.Object, NullLogger<ServicioAntiBot>.Instance);
+        var registro = new RegistroLogger();
+        var servicio = new ServicioAntiBot(verificador.Object, registro);
 
         var resultado = await servicio.VerificarAsync("token-valido", "127.0.0.1");
 
         resultado.Estado.Should().Be(EstadoAntiBot.NoDisponible);
         resultado.CodigoError.Should().Be("TiempoAgotado");
+        registro.Entradas.Should().Contain(entrada =>
+            entrada.Nivel == LogLevel.Warning &&
+            entrada.Mensaje.Contains("Verificacion anti-bot no disponible", StringComparison.OrdinalIgnoreCase));
     }
 
     [Fact]
@@ -84,5 +89,24 @@ public sealed class ServicioAntiBotTests
 
         resultado.Estado.Should().Be(EstadoAntiBot.Valido);
         resultado.CodigoError.Should().BeNull();
+    }
+
+    private sealed class RegistroLogger : ILogger<ServicioAntiBot>
+    {
+        public List<(LogLevel Nivel, string Mensaje)> Entradas { get; } = [];
+
+        public IDisposable? BeginScope<TState>(TState estado) where TState : notnull => null;
+
+        public bool IsEnabled(LogLevel nivel) => true;
+
+        public void Log<TState>(
+            LogLevel nivel,
+            EventId identificador,
+            TState estado,
+            Exception? excepcion,
+            Func<TState, Exception?, string> formateador)
+        {
+            Entradas.Add((nivel, formateador(estado, excepcion)));
+        }
     }
 }

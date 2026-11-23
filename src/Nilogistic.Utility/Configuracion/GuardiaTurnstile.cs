@@ -1,33 +1,38 @@
+using Nilogistic.Utility.Seguridad.AntiBot;
+
 namespace Nilogistic.Utility.Configuracion;
 
 /// <summary>
-/// Defensa de arranque para HU-013 (SUP-2): Turnstile siempre debe estar configurado con clave
-/// publica y secreta, y la URL de verificacion debe ser HTTPS. Los mensajes de error no incluyen
-/// valores de configuracion (por ejemplo, la clave secreta).
+/// Defensa de arranque para HU-013 (SUP-2). En Produccion exige claves y URL HTTPS validas;
+/// en el resto de entornos permite arrancar sin configuracion y devuelve <c>false</c> para que el
+/// host registre un verificador que siempre falle cerrado (nunca se omite la verificacion).
 /// </summary>
 public static class GuardiaTurnstile
 {
-    public static void Validar(string entorno, OpcionesTurnstile opciones)
+    public static bool ConfiguracionCompleta(OpcionesTurnstile opciones) =>
+        !string.IsNullOrWhiteSpace(opciones.SiteKey) &&
+        !string.IsNullOrWhiteSpace(opciones.SecretKey);
+
+    public static bool Validar(string entorno, OpcionesTurnstile opciones)
     {
-        if (string.IsNullOrWhiteSpace(opciones.SiteKey))
+        if (ConfiguracionCompleta(opciones))
         {
-            throw new InvalidOperationException("Turnstile:SiteKey es obligatoria.");
+            if (!Uri.TryCreate(opciones.UrlVerificacion, UriKind.Absolute, out var url) ||
+                !string.Equals(url.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    "Turnstile:UrlVerificacion debe ser una URL absoluta con esquema https.");
+            }
+
+            return true;
         }
 
-        if (string.IsNullOrWhiteSpace(opciones.SecretKey))
+        if (string.Equals(entorno, "Production", StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException("Turnstile:SecretKey es obligatoria.");
+            throw new InvalidOperationException(
+                "Produccion exige configurar Turnstile:SiteKey y Turnstile:SecretKey.");
         }
 
-        if (!Uri.TryCreate(opciones.UrlVerificacion, UriKind.Absolute, out var url) ||
-            !string.Equals(url.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
-        {
-            throw new InvalidOperationException("Turnstile:UrlVerificacion debe ser una URL absoluta con esquema https.");
-        }
-
-        if (opciones.TimeoutSegundos is < 1 or > 10)
-        {
-            throw new InvalidOperationException("Turnstile:TimeoutSegundos debe estar entre 1 y 10.");
-        }
+        return false;
     }
 }

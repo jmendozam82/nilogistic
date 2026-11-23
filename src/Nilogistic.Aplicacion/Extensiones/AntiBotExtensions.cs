@@ -20,13 +20,20 @@ public static class AntiBotExtensions
         IHostEnvironment entorno)
     {
         var opciones = configuracion.GetSection("Turnstile").Get<OpcionesTurnstile>() ?? new OpcionesTurnstile();
-        GuardiaTurnstile.Validar(entorno.EnvironmentName, opciones);
+        var configuracionCompleta = GuardiaTurnstile.Validar(entorno.EnvironmentName, opciones);
 
         servicios.AddSingleton(opciones);
         servicios.AddSingleton<IOptions<OpcionesTurnstile>>(Options.Create(opciones));
+        servicios.AddScoped<IServicioAntiBot, ServicioAntiBot>();
+
+        if (!configuracionCompleta)
+        {
+            servicios.AddSingleton<IVerificadorAntiBot, VerificadorAntiBotNoDisponible>();
+            return servicios;
+        }
+
         servicios.AddHttpClient<IVerificadorAntiBot, VerificadorTurnstile>(cliente =>
             cliente.Timeout = TimeSpan.FromSeconds(opciones.TimeoutSegundos));
-        servicios.AddScoped<IServicioAntiBot, ServicioAntiBot>();
         return servicios;
     }
 }

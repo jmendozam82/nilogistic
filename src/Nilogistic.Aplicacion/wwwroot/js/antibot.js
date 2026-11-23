@@ -14,8 +14,9 @@
     aviso.hidden = false;
   }
 
-  window.addEventListener('cf:challenges:rendered', ocultarAviso);
-  window.addEventListener('cf:challenges:error', mostrarAviso);
+  window.nlAntibotExito = ocultarAviso;
+  window.nlAntibotError = mostrarAviso;
+
   window.addEventListener('load', function () {
     if (!('turnstile' in window)) {
       mostrarAviso();

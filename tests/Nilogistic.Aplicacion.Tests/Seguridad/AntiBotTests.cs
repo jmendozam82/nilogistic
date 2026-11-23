@@ -138,6 +138,63 @@ public sealed class AntiBotTests
         servicio.Verify(s => s.VerificarAsync("token-valido", It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
+    [Fact]
+    [Hu("HU-013", "E3")]
+    public async Task PostConTokenEnormeSeRechazaSinLlamarAlServicio()
+    {
+        ReiniciarContador();
+        var servicio = CrearServicio(EstadoAntiBot.Valido);
+        using var fabrica = CrearFabrica(servicio.Object);
+        using var cliente = fabrica.ClienteHttps();
+        var token = await ObtenerTokenAsync(cliente);
+        var enorme = new string('x', 2049);
+
+        var contenido = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["__RequestVerificationToken"] = token,
+            ["cf-turnstile-response"] = enorme,
+            ["dato"] = "token-enorme"
+        });
+
+        var respuesta = await cliente.PostAsync(Ruta, contenido);
+
+        respuesta.StatusCode.Should().Be(HttpStatusCode.BadRequest,
+            "un token anti-bot gigante debe rechazarse localmente");
+        PruebaAntiBotController.ContadorEjecuciones.Should().Be(0);
+        servicio.Verify(s => s.VerificarAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    [Hu("HU-013", "E8")]
+    public async Task RespuestaJsonDelRechazoIncluyeProblemDetails()
+    {
+        ReiniciarContador();
+        var servicio = CrearServicio(EstadoAntiBot.NoDisponible, "TiempoAgotado");
+        using var fabrica = CrearFabrica(servicio.Object);
+        using var cliente = fabrica.ClienteHttps();
+        var token = await ObtenerTokenAsync(cliente);
+
+        using var solicitud = new HttpRequestMessage(HttpMethod.Post, Ruta)
+        {
+            Content = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                ["__RequestVerificationToken"] = token,
+                ["cf-turnstile-response"] = "token-valido",
+                ["dato"] = "json"
+            })
+        };
+        solicitud.Headers.Accept.ParseAdd("application/json");
+
+        var respuesta = await cliente.SendAsync(solicitud);
+        var cuerpo = await respuesta.Content.ReadFromJsonAsync<System.Text.Json.JsonElement>();
+
+        respuesta.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        respuesta.Content.Headers.ContentType!.MediaType.Should().Be("application/problem+json");
+        cuerpo.GetProperty("status").GetInt32().Should().Be(400);
+        cuerpo.GetProperty("correlationId").GetString().Should().NotBeNullOrWhiteSpace();
+        PruebaAntiBotController.ContadorEjecuciones.Should().Be(0);
+    }
+
     private static Mock<IServicioAntiBot> CrearServicio(EstadoAntiBot estado, string? codigo = null)
     {
         var servicio = new Mock<IServicioAntiBot>();

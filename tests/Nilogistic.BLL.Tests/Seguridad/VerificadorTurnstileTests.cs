@@ -102,6 +102,43 @@ public sealed class VerificadorTurnstileTests
         resultado.CodigoError.Should().Be("RespuestaInvalida");
     }
 
+    [Fact]
+    [Hu("HU-013", "E3")]
+    public async Task LaPeticionUsaElContratoDeSiteverify()
+    {
+        string? formulario = null;
+        using var http = CrearHttpClient(solicitud =>
+        {
+            formulario = solicitud.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
+            return RespuestaJson(HttpStatusCode.OK, "{\"success\":true,\"error-codes\":[]}");
+        });
+        var verificador = new VerificadorTurnstile(http, Opciones);
+
+        await verificador.VerificarAsync("token-valido", "127.0.0.1");
+
+        formulario.Should().NotBeNull();
+        formulario.Should().Contain($"secret={Uri.EscapeDataString(Opciones.SecretKey!)}");
+        formulario.Should().Contain("response=token-valido");
+        formulario.Should().Contain("remoteip=127.0.0.1");
+    }
+
+    [Fact]
+    [Hu("HU-013", "E8")]
+    public async Task TiempoAgotadoDevuelveNoDisponible()
+    {
+        var controlador = new ControladorHttpLento(TimeSpan.FromMilliseconds(200));
+        using var http = new HttpClient(controlador)
+        {
+            Timeout = TimeSpan.FromMilliseconds(10)
+        };
+        var verificador = new VerificadorTurnstile(http, Opciones);
+
+        var resultado = await verificador.VerificarAsync("token-valido", "127.0.0.1");
+
+        resultado.Estado.Should().Be(EstadoVerificacionAntiBot.NoDisponible);
+        resultado.CodigoError.Should().Be("TiempoAgotado");
+    }
+
     private static HttpClient CrearHttpClient(Func<HttpRequestMessage, HttpResponseMessage> responder)
     {
         var controlador = new ControladorHttp(responder);
@@ -122,5 +159,16 @@ public sealed class VerificadorTurnstileTests
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage solicitud,
             CancellationToken cancelacion) => Task.FromResult(responder(solicitud));
+    }
+
+    private sealed class ControladorHttpLento(TimeSpan espera) : HttpMessageHandler
+    {
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage solicitud,
+            CancellationToken cancelacion)
+        {
+            await Task.Delay(espera, cancelacion);
+            return RespuestaJson(HttpStatusCode.OK, "{\"success\":true,\"error-codes\":[]}");
+        }
     }
 }
