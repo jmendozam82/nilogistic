@@ -26,6 +26,12 @@ public sealed class ProveedorLimitesFrecuencia(
 
     public InstantaneaLimitesFrecuencia Obtener() => _actual;
 
+    internal void Aplicar(InstantaneaLimitesFrecuencia limites)
+    {
+        _actual = limites;
+        _ultimoRefrescoUtc = DateTime.UtcNow;
+    }
+
     public async Task RefrescarSiEsNecesarioAsync(CancellationToken cancelacion = default)
     {
         if (DateTime.UtcNow - _ultimoRefrescoUtc < _intervalo)

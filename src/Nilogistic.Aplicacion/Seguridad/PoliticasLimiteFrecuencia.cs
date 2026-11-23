@@ -111,31 +111,42 @@ public static class RateLimitingExtensions
             };
 
             opciones.AddPolicy(PoliticasLimiteFrecuencia.Login, contexto =>
-                Particion(contexto, contexto.ObtenerLimites().LoginPorMinuto, VentanaCorta));
+            {
+                var proveedor = contexto.ObtenerProveedor();
+                return Particion(contexto, () => proveedor.Obtener().LoginPorMinuto, VentanaCorta);
+            });
             opciones.AddPolicy(PoliticasLimiteFrecuencia.Recuperacion, contexto =>
-                Particion(contexto, contexto.ObtenerLimites().RecuperacionPorHora, VentanaLarga));
+            {
+                var proveedor = contexto.ObtenerProveedor();
+                return Particion(contexto, () => proveedor.Obtener().RecuperacionPorHora, VentanaLarga);
+            });
             opciones.AddPolicy(PoliticasLimiteFrecuencia.SolicitudAlta, contexto =>
-                Particion(contexto, contexto.ObtenerLimites().SolicitudAltaPorHora, VentanaLarga));
+            {
+                var proveedor = contexto.ObtenerProveedor();
+                return Particion(contexto, () => proveedor.Obtener().SolicitudAltaPorHora, VentanaLarga);
+            });
             opciones.AddPolicy(PoliticasLimiteFrecuencia.Contacto, contexto =>
-                Particion(contexto, contexto.ObtenerLimites().ContactoPorHora, VentanaLarga));
+            {
+                var proveedor = contexto.ObtenerProveedor();
+                return Particion(contexto, () => proveedor.Obtener().ContactoPorHora, VentanaLarga);
+            });
             opciones.AddPolicy(PoliticasLimiteFrecuencia.Suscripcion, contexto =>
-                Particion(contexto, contexto.ObtenerLimites().SuscripcionPorHora, VentanaLarga));
+            {
+                var proveedor = contexto.ObtenerProveedor();
+                return Particion(contexto, () => proveedor.Obtener().SuscripcionPorHora, VentanaLarga);
+            });
         });
         return servicios;
     }
 
     private static RateLimitPartition<string> Particion(
         HttpContext contexto,
-        int limite,
+        Func<int> leerLimite,
         TimeSpan ventana) =>
-        RateLimitPartition.GetFixedWindowLimiter(ParticionIpCliente.Clave(contexto), _ => new FixedWindowRateLimiterOptions
-        {
-            PermitLimit = Math.Max(1, limite),
-            Window = ventana,
-            QueueLimit = 0,
-            AutoReplenishment = true
-        });
+        RateLimitPartition.Get(
+            ParticionIpCliente.Clave(contexto),
+            _ => new LimitadorConParametro(leerLimite, ventana));
 
-    private static InstantaneaLimitesFrecuencia ObtenerLimites(this HttpContext contexto) =>
-        contexto.RequestServices.GetRequiredService<ProveedorLimitesFrecuencia>().Obtener();
+    private static ProveedorLimitesFrecuencia ObtenerProveedor(this HttpContext contexto) =>
+        contexto.RequestServices.GetRequiredService<ProveedorLimitesFrecuencia>();
 }
