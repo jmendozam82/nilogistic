@@ -29,3 +29,7 @@ Jorge aprobó SUP-1 a SUP-7: ficha `docs/tareas/HU-013.md` a v1.0 y spec `wiki/s
 ## [2026-11-21] verify HU-013 Pase A
 
 Creada `wiki/sdd/verifications/HU-013-pase-a-2026-11-21.md` con stack gate en verde (build, 446 pruebas de Aplicación, 390 de BLL, 25 de Arquitectura, trazabilidad, migraciones, codificación y cobertura) sobre `6075351` + `5de75ff`. Registro por pase: E3/E4/E7/E8 siguen en el Pase B. Decisión C-004 (`wiki/sdd/decisions.md`) registra la ventana fija propia de `LimitadorConParametro`.
+
+## [2026-11-22] verify HU-013 Pase B
+
+Creada `wiki/sdd/verifications/HU-013-pase-b-2026-11-22.md` con stack gate local en verde (build, 450 pruebas de Aplicación, 400 de BLL, 25 de Arquitectura, trazabilidad, cobertura 90,8 %, migraciones, codificación y commits) sobre `804d054`. E7 queda pendiente de la validación visual con Turnstile real en Staging.
