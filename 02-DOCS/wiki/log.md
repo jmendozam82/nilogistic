@@ -37,3 +37,7 @@ Creada `wiki/sdd/verifications/HU-013-pase-b-2026-11-22.md` con stack gate local
 ## [2026-11-22] draft HU-014 ficha and spec
 
 Borrador v0.1 de `docs/tareas/HU-014.md` y `wiki/sdd/specs/HU-014.md` (tres pases, 9 SP por D-161). Decisiones SUP-1 a SUP-11 pendientes de Jorge; destacan Identity en capas, alcance de E5 sin 2FA y destinatarios del aviso de vencimiento.
+
+## [2026-11-22] approve HU-014 ficha
+
+Jorge aprobó SUP-1 a SUP-11: ficha `docs/tareas/HU-014.md` a v1.0 y spec `wiki/sdd/specs/HU-014.md` a aprobada. Registrada la decisión D-163 en `ESTADO_PROYECTO.md`.
