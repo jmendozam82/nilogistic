@@ -10,5 +10,5 @@ namespace Nilogistic.Aplicacion.Seguridad;
 /// </summary>
 public sealed class AntiBotViewComponent(IOptions<OpcionesTurnstile> opciones) : ViewComponent
 {
-    public IViewComponentResult Invoke() => View(opciones.Value.SiteKey ?? string.Empty);
+    public IViewComponentResult Invoke() => View("Default", opciones.Value.SiteKey ?? string.Empty);
 }
