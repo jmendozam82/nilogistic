@@ -63,6 +63,7 @@ Referencia rápida para localizar una decisión, una regla o un procedimiento. L
 | [sdd/decisions.md](sdd/decisions.md) | Decisiones C-001 (constitución) y C-003 (ficha única con ASDD); C-002 está en `harness/decisions.md`. |
 | [sdd/specs/HU-013.md](sdd/specs/HU-013.md) | Spec de HU-013 (aprobada), proyección de la ficha `docs/tareas/HU-013.md`. |
 | [sdd/specs/HU-014.md](sdd/specs/HU-014.md) | Spec de HU-014 (borrador), proyección de la ficha `docs/tareas/HU-014.md`. |
+| [sdd/specs/HU-018.md](sdd/specs/HU-018.md) | Spec de HU-018 (aprobada), proyección de la ficha `docs/tareas/HU-018.md`. |
 | [sdd/verifications/HU-013-pase-a-2026-11-21.md](sdd/verifications/HU-013-pase-a-2026-11-21.md) | Verificación PASS del Pase A y sus correcciones sobre `6075351` + `5de75ff`. |
 | [sdd/verifications/HU-013-pase-b-2026-11-22.md](sdd/verifications/HU-013-pase-b-2026-11-22.md) | Verificación PASS local del Pase B de HU-013 sobre `804d054`. |
 
