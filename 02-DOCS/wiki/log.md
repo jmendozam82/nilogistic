@@ -45,3 +45,7 @@ Jorge aprobó SUP-1 a SUP-11: ficha `docs/tareas/HU-014.md` a v1.0 y spec `wiki/
 ## [2026-11-26] draft HU-018 ficha
 
 Claude redactó la ficha `docs/tareas/HU-018.md` (v0.1) y la spec `wiki/sdd/specs/HU-018.md` (borrador, rama `feature/HU-018`), con SUP-1 a SUP-10 pendientes de la aprobación de Jorge.
+
+## [2026-11-26] approve HU-018 ficha
+
+Jorge aprobó SUP-1 a SUP-10: ficha `docs/tareas/HU-018.md` a v1.0 y spec `wiki/sdd/specs/HU-018.md` a aprobada. Registrada la decisión D-165 en `ESTADO_PROYECTO.md`.
