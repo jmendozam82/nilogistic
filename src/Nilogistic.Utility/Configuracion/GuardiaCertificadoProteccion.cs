@@ -41,8 +41,20 @@ public static class GuardiaCertificadoProteccion
         }
         catch (CryptographicException)
         {
-            throw new InvalidOperationException(
-                $"El PFX de '{rutaPfx}' no se pudo abrir (contrasena incorrecta o archivo daniado).");
+            // Los secret files de Render viajan como texto: el PFX puede estar en base64
+            // (scripts/ops/generar_certificado_dp.cs lo deja listo así). Reintenta leyendo texto.
+            try
+            {
+                var contenido = File.ReadAllText(rutaPfx).Trim();
+                certificado = X509CertificateLoader.LoadPkcs12(
+                    Convert.FromBase64String(contenido),
+                    contrasena);
+            }
+            catch (Exception ex) when (ex is CryptographicException or FormatException)
+            {
+                throw new InvalidOperationException(
+                    $"El PFX de '{rutaPfx}' no se pudo abrir (contrasena incorrecta o archivo daniado).");
+            }
         }
 
         if (DateTimeOffset.UtcNow >= certificado.NotAfter)

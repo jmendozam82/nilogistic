@@ -31,6 +31,27 @@ public class GuardiaCertificadoProteccionTests
     }
 
     [Fact]
+    public void Un_pfx_en_base64_se_carga_desde_un_secret_file()
+    {
+        // Los secret files de Render viajan como texto: el generador deja el PFX en base64.
+        using var certificado = CertificadoDePrueba.CrearVigente();
+        var pfx = certificado.Export(X509ContentType.Pfx, CertificadoDePrueba.Contrasena);
+        var ruta = Path.Combine(Path.GetTempPath(), $"nilogistic-dp-b64-{Guid.NewGuid():N}.txt");
+        File.WriteAllText(ruta, Convert.ToBase64String(pfx));
+        Environment.SetEnvironmentVariable("VAR_DP_PRUEBA", CertificadoDePrueba.Contrasena);
+
+        try
+        {
+            using var cargado = GuardiaCertificadoProteccion.Cargar(ruta, "VAR_DP_PRUEBA");
+            cargado.HasPrivateKey.Should().BeTrue("la guardia decodifica el base64 del secret file");
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("VAR_DP_PRUEBA", null);
+        }
+    }
+
+    [Fact]
     public void Ruta_vacia_o_archivo_ausente_falla_con_mensaje_claro()
     {
         var vacio = () => GuardiaCertificadoProteccion.Cargar("  ", "VAR_DP_PRUEBA");
