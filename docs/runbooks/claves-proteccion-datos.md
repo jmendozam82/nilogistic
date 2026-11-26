@@ -12,6 +12,22 @@
 | Respaldo del anillo (JSON) | Fuera del servicio (equipo de Jorge); contiene filas **ya cifradas** con el certificado | Junto al PFX ni junto a su contraseña |
 | Anillo en caliente | `identidad.claves_proteccion_datos` (solo INSERT/SELECT para `nilogistic_app`) | — |
 
+## Emisión del certificado (SUP-9)
+
+En el equipo de Jorge (SDK .NET 10), sin que el secreto pase por ninguna sesión de agente:
+
+```powershell
+dotnet run scripts/ops/generar_certificado_dp.cs -- "$env:USERPROFILE\Documents\nilogistic-dp-staging.pfx"
+```
+
+- Crea el PFX (RSA 3072, vigencia 2 años, S-612) y un `<ruta>.render.txt` con el mismo PFX en
+  **base64**: los secret files de Render viajan como texto y el binario directo se corrompe al
+  pegarlo; la guardia de la app acepta ambas formas.
+- La contraseña se genera al azar y se muestra **una sola vez**: cópiala de inmediato al gestor.
+- Custodia inmediata: PFX → gestor (entrada 1) + Render secret file; contraseña → gestor
+  (entrada **distinta**) + sobre sellado para la persona de la tarea #13.
+- Borra el `.render.txt` cuando Render ya lo tenga cargado. Nunca versiones ninguna salida.
+
 ## Configuración por entorno
 
 | Variable | Dónde | Notas |
