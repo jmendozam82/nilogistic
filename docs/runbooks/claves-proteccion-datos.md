@@ -67,18 +67,37 @@ dotnet Nilogistic.Aplicacion.dll restaurar-claves /ruta/segura/claves-2026xxxx.j
 4. Comprueba: una cookie emitida antes sigue siendo válida y el aviso D-156 no aparece en el arranque.
    La prueba completa en Staging queda documentada al cierre de la HU (§12 de la ficha).
 
-## Rotación (E10; el verbo `rotar-claves` llega con el Pase C)
+## Rotación (E10; implementada en el Pase C)
 
-1. Emite el PFX nuevo (vigencia 2 años, S-612) y guárdalo según la tabla de arriba.
-2. Render: sube el PFX nuevo como secret file en `ProteccionDatos__RutaPfx` y el **anterior** en
-   `ProteccionDatos__RutaPfxAnterior` (con sus contraseñas en variables distintas).
-3. Despliega: la app protege con el nuevo y desprotege con cualquiera de los dos.
-4. `rotar-claves` re-protege todas las filas con el certificado nuevo (Pase C); las cookies siguen válidas.
-5. Verifica sesiones vigentes y retira el certificado anterior de Render y del gestor.
+1. Emite el PFX nuevo (2 años, S-612) con el generador y guárdalo según la tabla de arriba.
+2. Render: sube el PFX nuevo como secret file en `ProteccionDatos__RutaPfx` (el anterior pasa a
+   `ProteccionDatos__RutaPfxAnterior`, con sus contraseñas en variables distintas:
+   `CERTIFICADO_DP_CONTRASENA` y `CERTIFICADO_DP_CONTRASENA_ANTERIOR`).
+3. Despliega: la app protege con el nuevo y desprotege con cualquiera de los dos
+   (`UnprotectKeysWithAnyCertificate`).
+4. Ejecuta la rotación (crea la clave nueva protegida con el certificado nuevo; las filas viejas
+   no se reescriben — el anillo es de solo inserción — y el anterior las sigue desprotegiendo):
+
+   ```bash
+   dotnet Nilogistic.Aplicacion.dll rotar-claves --confirmo
+   ```
+
+   - Verifica que la clave nueva quedó en la base (el verbo la cuenta antes y después y rechaza
+     si no cuadra: o todo o nada; queda asiento `rotacion_certificado_dp`).
+   - Si la base no respondiera, el anillo degrada al proceso con error visible: el verbo lo
+     detecta y no audita ni autoriza a retirar el anterior.
+5. Comprueba que las sesiones y las cookies siguen válidas (el `§12` del cierre lo hizo en
+   Staging; en Producción se repite tras la primera rotación real).
+6. **Solo entonces** retira el anterior: borra `RutaPfxAnterior` y su contraseña de Render, y el
+   PFX viejo del gestor. Los avisos de vencimiento (E9) se rearman solos con la nueva fecha.
 
 ## Vigencia y avisos
 
-- Vigencia de 2 años; el aviso por correo a 60 y 30 días llega con la tarea del Pase C (E9).
-- El arranque rechaza un certificado ya vencido: la rotación debe hacerse antes (este runbook).
+- Vigencia de 2 años (S-612). La tarea `vigilar_certificado` corre a diario (siembra de la
+  migración `20261125150000`) y avisa a la lista `alertas_tecnicas` a los **60 y a los 30 días**
+  (E9): un aviso por umbral, certificado y destinatario (la clave de idempotencia lo garantiza;
+  rotar el certificado rearma los avisos con la nueva fecha). El correo sugiere este runbook.
+- El arranque rechaza un certificado ya vencido: la rotación debe hacerse antes (este runbook);
+  si el certificado venciera de noche, la app no arranca hasta montar el nuevo.
 - Sin base de datos disponible, el anillo degrada a claves del proceso con un error visible en el
   log: el sitio sirve, pero esas sesiones no sobreviven a un reinicio (aviso D-156 temporal).

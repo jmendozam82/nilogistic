@@ -241,4 +241,38 @@ public class ServicioClavesProteccionTests
         resultado.Motivo.Should().Be("fila_duplicada");
         registro.Insertadas.Should().BeEmpty();
     }
+
+    [Fact]
+    [Hu("HU-014", "E10")]
+    public async Task Rotacion_es_atomica()
+    {
+        var registro = new RegistroDePruebas();
+        registro.ConAnillo(Clave("key-1"), Clave("key-2"), Clave("key-3"));
+        var vence = Ahora.AddYears(2);
+
+        var resultado = await registro.Servicio.RegistrarRotacionAsync(clavesAntes: 2, vence);
+
+        resultado.Estado.Should().Be(EstadoRotacionClaves.Correcto,
+            "la clave nueva quedó en el anillo (3 = 2 + 1)");
+        resultado.ClavesTotales.Should().Be(3);
+        resultado.VenceNuevoUtc.Should().Be(vence);
+        registro.AsientosInmediatos.Should().ContainSingle(a => a.Accion == "rotacion_certificado_dp");
+        registro.AsientosInmediatos[0].Detalle.Should().Contain("\"claves_totales\":3");
+    }
+
+    [Fact]
+    [Hu("HU-014", "E10")]
+    public async Task Rotacion_incompleta_se_rechaza_sin_asiento()
+    {
+        var registro = new RegistroDePruebas();
+        registro.ConAnillo(Clave("key-1"), Clave("key-2"));
+        var vence = Ahora.AddYears(2);
+
+        var resultado = await registro.Servicio.RegistrarRotacionAsync(clavesAntes: 2, vence);
+
+        resultado.Estado.Should().Be(EstadoRotacionClaves.Rechazado);
+        resultado.Motivo.Should().Be("rotacion_incompleta");
+        registro.AsientosInmediatos.Should().BeEmpty(
+            "o todo o nada: sin la clave nueva no hay asiento y el anterior no se retira");
+    }
 }

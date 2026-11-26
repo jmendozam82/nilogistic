@@ -185,5 +185,20 @@
     "sha256Html": "ad1e3c000634fb2f1a67a0d1340bd93d9c0273ac6d05c391b428575404e508a4",
     "sha256Txt": "48b3dbe1936c91905f3f18be208e263e0f0a3d2c99480bbf807faa23f836af92",
     "historial": []
+  },
+  {
+    "nombre": "aviso_vencimiento_certificado",
+    "version": "1.0",
+    "tipo": "transaccional",
+    "asunto": "Alerta técnica: el certificado de Nilogistic vence en {{dias_restantes}} días",
+    "variables": [
+      { "nombre": "url_base", "tipo": "url", "ejemplo": "https://staging.nilogistic.com" },
+      { "nombre": "dias_restantes", "tipo": "entero", "ejemplo": "60" },
+      { "nombre": "fecha_vencimiento", "tipo": "texto", "ejemplo": "25 de noviembre de 2028, 12:00" },
+      { "nombre": "fecha_hora", "tipo": "texto", "ejemplo": "25 de noviembre de 2026, 06:00" }
+    ],
+    "sha256Html": "20cc3c5d629bc1ac18c3082856b5a4794ef98815b72d708bffb74c1d16456e81",
+    "sha256Txt": "cee6378a248baf09f96c8e3c7614d22970893d9526b455ddca3566ba40d3357f",
+    "historial": []
   }
 ]

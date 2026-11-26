@@ -67,6 +67,13 @@ public static class Dependencias
         servicios.AddScoped<ITareaProgramada, TareaProcesarColaCorreo>();
         servicios.AddScoped<ITareaProgramada, TareaVigilarTareas>();
 
+        // Vigilancia del vencimiento del certificado de Data Protection (HU-014 C1): las opciones
+        // viajan como instancia concreta porque la tarea lee el PFX directamente (SUP-4).
+        var opcionesCertificado = configuracion.GetSection("ProteccionDatos").Get<OpcionesCertificadoProteccion>()
+            ?? new OpcionesCertificadoProteccion();
+        servicios.AddSingleton(opcionesCertificado);
+        servicios.AddScoped<ITareaProgramada, TareaVigilarCertificado>();
+
         // Catalogo y renderizado de plantillas de correo (HU-030). El catalogo se carga una sola vez.
         servicios.AddSingleton<CatalogoPlantillas>();
         servicios.AddScoped<IServicioPlantillasCorreo, ServicioPlantillasCorreo>();

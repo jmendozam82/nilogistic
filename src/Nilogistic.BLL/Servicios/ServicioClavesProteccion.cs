@@ -90,6 +90,38 @@ public sealed class ServicioClavesProteccion(
             yaPresentes);
     }
 
+    public async Task<ResultadoRotacionClavesDto> RegistrarRotacionAsync(
+        int clavesAntes,
+        DateTime venceNuevoUtc,
+        CancellationToken cancelacion = default)
+    {
+        var claves = await repositorio.ListarAsync(cancelacion);
+
+        if (claves.Count != clavesAntes + 1)
+        {
+            // O todo o nada (E10): la clave nueva no quedó persistida (p. ej. la base no
+            // respondió y el anillo degradó al proceso). Sin asiento y sin retirar el anterior.
+            logger.LogError(
+                "Rotacion incompleta: el anillo tiene {Claves} clave(s) y se esperaban {Esperadas}. No se audita y el certificado anterior no se retira.",
+                claves.Count,
+                clavesAntes + 1);
+
+            return new ResultadoRotacionClavesDto(
+                EstadoRotacionClaves.Rechazado,
+                claves.Count,
+                Motivo: "rotacion_incompleta");
+        }
+
+        await auditoria.AgregarAsync(Asiento(
+            "rotacion_certificado_dp",
+            new { claves_totales = claves.Count, vence_nuevo_utc = venceNuevoUtc }), cancelacion);
+
+        return new ResultadoRotacionClavesDto(
+            EstadoRotacionClaves.Correcto,
+            claves.Count,
+            venceNuevoUtc);
+    }
+
     private static bool FilaInvalida(FilaClaveProteccionDto fila) =>
         string.IsNullOrWhiteSpace(fila.Nombre) || string.IsNullOrWhiteSpace(fila.XmlProtegido);
 

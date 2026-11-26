@@ -20,3 +20,7 @@ HU-014 E8
 HU-014 E6
 HU-014 E7
 # HU-014 E6: el verbo respaldar-claves escribe fuera del servicio una copia ya cifrada con fecha registrada (respaldo_claves_dp) y sin PFX ni contrasena (D-075). E7: el anillo restaurado en un entorno recreado, con el mismo certificado, mantiene validos los datos protegidos y las cookies; sin certificado fuera de Local el arranque falla (B3).
+# HU-014 Pase C (aviso de vencimiento y rotación).
+HU-014 E9
+HU-014 E10
+# HU-014 E9: la tarea vigilar_certificado, a 60 y 30 dias del vencimiento, avisa a alertas_tecnicas con la plantilla aviso_vencimiento_certificado y deja asiento, un solo aviso por umbral y certificado (E10 de la cola lo garantiza). E10: la rotación crea la clave nueva protegida con el certificado nuevo, las sesiones emitidas con el anterior siguen validas y el anterior solo se retira después.

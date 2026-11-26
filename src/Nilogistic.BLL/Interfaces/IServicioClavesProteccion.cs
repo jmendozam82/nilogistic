@@ -24,4 +24,15 @@ public interface IServicioClavesProteccion
     Task<ResultadoRestauracionClavesDto> RestaurarAsync(
         IReadOnlyList<FilaClaveProteccionDto> filas,
         CancellationToken cancelacion = default);
+
+    /// <summary>
+    /// Registra una rotación de certificado (HU-014 C3, E10): comprueba que la clave nueva quedó
+    /// en el anillo (una fila más que antes) y deja el asiento <c>rotacion_certificado_dp</c>.
+    /// Si el conteo no cuadra, devuelve <see cref="EstadoRotacionClaves.Rechazado"/> **sin**
+    /// asiento: o todo o nada, y el certificado anterior no se retira.
+    /// </summary>
+    Task<ResultadoRotacionClavesDto> RegistrarRotacionAsync(
+        int clavesAntes,
+        DateTime venceNuevoUtc,
+        CancellationToken cancelacion = default);
 }

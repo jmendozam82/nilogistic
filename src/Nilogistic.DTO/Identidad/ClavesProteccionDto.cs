@@ -24,3 +24,22 @@ public sealed record ResultadoRestauracionClavesDto(
     int Insertadas = 0,
     int YaPresentes = 0,
     string? Motivo = null);
+
+/// <summary>Estado de una rotación de certificado (HU-014 C3, E10).</summary>
+public enum EstadoRotacionClaves
+{
+    Correcto,
+
+    /// <summary>La clave nueva no quedó en el anillo: no se audita y el anterior no se retira.</summary>
+    Rechazado
+}
+
+/// <summary>
+/// Resultado de registrar una rotación (E10): verifica que la clave nueva quedó en el anillo y
+/// deja el asiento <c>rotacion_certificado_dp</c>.
+/// </summary>
+public sealed record ResultadoRotacionClavesDto(
+    EstadoRotacionClaves Estado,
+    int ClavesTotales = 0,
+    DateTime VenceNuevoUtc = default,
+    string? Motivo = null);
