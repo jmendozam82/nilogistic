@@ -70,6 +70,15 @@ public static class PersistenciaExtensions
         servicios.AddScoped<IUserPasswordStore<Usuario>>(p => p.GetRequiredService<AlmacenUsuariosIdentity>());
         servicios.AddScoped<IUserSecurityStampStore<Usuario>>(p => p.GetRequiredService<AlmacenUsuariosIdentity>());
         servicios.AddScoped<IUserEmailStore<Usuario>>(p => p.GetRequiredService<AlmacenUsuariosIdentity>());
+
+        // Anillo de claves de Data Protection (HU-014 B2): la BLL lo consume por
+        // IRepositorioClavesProteccion para respaldo y restauracion (B4). El enchufe con Data
+        // Protection va por KeyManagementOptions (en .NET 10 el IXmlRepository en DI no se toma
+        // solo); el repositorio abre un scope por operacion, como el oficial de EF.
+        servicios.AddScoped<IRepositorioClavesProteccion, RepositorioClavesProteccion>();
+        servicios.AddOptions<Microsoft.AspNetCore.DataProtection.KeyManagement.KeyManagementOptions>()
+            .Configure<IServiceProvider>((opciones, proveedor) =>
+                opciones.XmlRepository = new Seguridad.RepositorioXmlClaves(proveedor));
         return servicios;
     }
 

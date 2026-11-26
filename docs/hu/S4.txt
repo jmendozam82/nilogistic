@@ -16,3 +16,7 @@ HU-014 E4
 HU-014 E5
 HU-014 E8
 # HU-014 E1: cliente activo y activado entra a su area con cookie HttpOnly/Secure/SameSite=Lax y caducidad del parametro seguridad.sesion_duracion_absoluta_horas; se audita login_exitoso. E2: contrasena incorrecta, mensaje generico unico (CV-01) y login_fallido auditado, sin sesion. E3: cuenta inactiva o sin activar, mismo mensaje y sin sesion. E4: URL de retorno externa ignorada; se va al area por defecto. E5: con 2FA habilitado no hay sesion completa y se indica el segundo factor (la pantalla llega con HU-022, SUP-2). E8: el verbo de usuarios de prueba se detiene en Produccion sin crear cuentas; las migraciones no traen usuarios (RP-9).
+# HU-014 Pase B (claves en PostgreSQL y certificado X.509). E9 y E10 llegan con el Pase C (aviso y rotacion).
+HU-014 E6
+HU-014 E7
+# HU-014 E6: el verbo respaldar-claves escribe fuera del servicio una copia ya cifrada con fecha registrada (respaldo_claves_dp) y sin PFX ni contrasena (D-075). E7: el anillo restaurado en un entorno recreado, con el mismo certificado, mantiene validos los datos protegidos y las cookies; sin certificado fuera de Local el arranque falla (B3).

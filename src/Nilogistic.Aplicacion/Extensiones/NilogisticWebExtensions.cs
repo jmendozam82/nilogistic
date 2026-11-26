@@ -82,6 +82,7 @@ public static class NilogisticWebExtensions
         servicios.AddScoped<ProveedorVersionPoliticaCookies>();
         servicios.AgregarRateLimitingNilogistic();
         servicios.AgregarAutenticacionNilogistic();
+        servicios.AgregarProteccionDatosNilogistic(configuracion, entorno);
 
         servicios.AgregarNilogistic(configuracion, entorno);
         // El contexto HTTP sustituye al de Sistema que registra el DAL (HU-008 E1/E4); debe ir después.

@@ -26,6 +26,23 @@ public class ContratoServicioIdentidadTests
             "la BLL devuelve DTO; las entidades y el DAL no cruzan el contrato (HU-014 §4.5)");
     }
 
+    [Fact]
+    public void IServicioClavesProteccion_solo_expone_DTO_y_tipos_primitivos()
+    {
+        var expuestos = typeof(IServicioClavesProteccion).GetMethods()
+            .SelectMany(metodo => metodo.GetParameters()
+                .Select(parametro => parametro.ParameterType)
+                .Append(metodo.ReturnType))
+            .SelectMany(TiposInvolucrados)
+            .Where(EsTipoDeDatos)
+            .Select(tipo => tipo.FullName ?? tipo.Name)
+            .Distinct()
+            .ToList();
+
+        expuestos.Should().BeEmpty(
+            "el respaldo mueve DTO; el anillo y el DAL no cruzan el contrato (HU-014 B4)");
+    }
+
     private static bool EsTipoDeDatos(Type tipo) =>
         (tipo.Namespace ?? string.Empty).StartsWith("Nilogistic.Entity", StringComparison.Ordinal)
         || (tipo.Namespace ?? string.Empty).StartsWith("Nilogistic.DAL", StringComparison.Ordinal);

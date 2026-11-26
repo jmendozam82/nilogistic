@@ -18,6 +18,9 @@
     <!-- Identidad (HU-014 SUP-1): unico paquete nuevo del Pase A. UserManager, stores y hasher
          sin SignInManager (HTTP). Su espacio de nombres es Microsoft.AspNetCore.Identity. -->
     <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="10.0.13" />
+    <!-- Data Protection (HU-014 B2): IXmlRepository del anillo de claves en PostgreSQL.
+         El tipo vive en el paquete principal, no en Abstractions (verificado contra .NET 10). -->
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection" Version="10.0.13" />
     <!-- API -->
     <PackageVersion Include="Asp.Versioning.Mvc" Version="8.1.1" />
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />

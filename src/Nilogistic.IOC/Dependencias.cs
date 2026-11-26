@@ -81,6 +81,10 @@ public static class Dependencias
         // de enganche de HU-018. Sin SignInManager (HTTP en BLL, prohibido).
         servicios.AddScoped<IServicioAutenticacion, ServicioAutenticacion>();
 
+        // Respaldo y restauracion del anillo de claves (HU-014 Pase B): solo filas ya cifradas;
+        // el PFX y su contrasena jamas pasan por aqui (P-314).
+        servicios.AddScoped<IServicioClavesProteccion, ServicioClavesProteccion>();
+
         // Almacen de parametros (HU-062a): cache singleton (TTL 60 s) y servicio scoped; sin
         // superficie HTTP (SUP-3). El repositorio (scoped) se lo pasa el servicio a la cache.
         servicios.AddSingleton<CacheParametros>();
