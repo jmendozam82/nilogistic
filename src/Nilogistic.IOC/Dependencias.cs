@@ -8,6 +8,7 @@ using Nilogistic.BLL.Parametros;
 using Nilogistic.BLL.Servicios;
 using Nilogistic.BLL.Tareas;
 using Nilogistic.DAL.Extensiones;
+using Nilogistic.Entity.Identidad;
 using Nilogistic.Utility.Configuracion;
 using Nilogistic.Utility.Contratos;
 using Nilogistic.Utility.Utilidades;
@@ -41,6 +42,14 @@ public static class Dependencias
         servicios.AddSingleton<IRelojUtc, RelojSistema>();
         servicios.AddScoped<IActorActual, ActorSistema>();
 
+        // Identidad (HU-014, SUP-1): UserManager e IPasswordHasher de Identity sobre el almacén
+        // propio del DAL. La BLL no ve tipos de Identity (ReglasDeTipoTests prohíbe Microsoft.AspNetCore
+        // en la BLL): llega solo a IRepositorioUsuarios e IHasherContrasenas.
+        servicios.AddIdentityCore<Usuario>(opciones =>
+        {
+            opciones.User.RequireUniqueEmail = true;
+            opciones.Password.RequiredLength = 12; // RN-069; el mínimo real se valida con el parámetro
+        });
         servicios.AgregarPersistencia(cadenaConexion!);
 
         servicios.AddScoped<IServicioSalud, ServicioSalud>();
@@ -58,6 +67,13 @@ public static class Dependencias
         servicios.AddScoped<ITareaProgramada, TareaProcesarColaCorreo>();
         servicios.AddScoped<ITareaProgramada, TareaVigilarTareas>();
 
+        // Vigilancia del vencimiento del certificado de Data Protection (HU-014 C1): las opciones
+        // viajan como instancia concreta porque la tarea lee el PFX directamente (SUP-4).
+        var opcionesCertificado = configuracion.GetSection("ProteccionDatos").Get<OpcionesCertificadoProteccion>()
+            ?? new OpcionesCertificadoProteccion();
+        servicios.AddSingleton(opcionesCertificado);
+        servicios.AddScoped<ITareaProgramada, TareaVigilarCertificado>();
+
         // Catalogo y renderizado de plantillas de correo (HU-030). El catalogo se carga una sola vez.
         servicios.AddSingleton<CatalogoPlantillas>();
         servicios.AddScoped<IServicioPlantillasCorreo, ServicioPlantillasCorreo>();
@@ -67,6 +83,14 @@ public static class Dependencias
         servicios.AddScoped<IServicioAuditoria, ServicioAuditoria>();
 
         servicios.AddScoped<IServicioEventosSeguridad, ServicioEventosSeguridad>();
+
+        // Inicio de sesion (HU-014 Pase A): CV-01, auditoria login_exitoso/login_fallido y punto
+        // de enganche de HU-018. Sin SignInManager (HTTP en BLL, prohibido).
+        servicios.AddScoped<IServicioAutenticacion, ServicioAutenticacion>();
+
+        // Respaldo y restauracion del anillo de claves (HU-014 Pase B): solo filas ya cifradas;
+        // el PFX y su contrasena jamas pasan por aqui (P-314).
+        servicios.AddScoped<IServicioClavesProteccion, ServicioClavesProteccion>();
 
         // Almacen de parametros (HU-062a): cache singleton (TTL 60 s) y servicio scoped; sin
         // superficie HTTP (SUP-3). El repositorio (scoped) se lo pasa el servicio a la cache.

@@ -16,6 +16,9 @@
 | `RENDER_GIT_COMMIT` | Render | Define Render con el SHA del commit desplegado; se expone en `/api/v1/estado` (D-18); no se configura a mano |
 | `Correo__ForzarBuzon` | Pruf (local/tests) | Fuerza el buzón en memoria; **prohibido en Production** |
 | `Correo__Remitentes__Transaccional` / `Contacto` | Render | Por defecto `Nilogistic <no-reply@nilogistic.com>` |
+| `ProteccionDatos__RutaPfx` | Render (secret file) | PFX del certificado de Data Protection (HU-014 B3). **Obligatorio en Staging/Production: sin él la app no arranca**; en Local arranca sin cifrar |
+| `CERTIFICADO_DP_CONTRASENA` | Render (variable) | Contraseña del PFX; en lugar distinto al PFX (P-314, D-075). Rotación: `ProteccionDatos__RutaPfxAnterior` + `CERTIFICADO_DP_CONTRASENA_ANTERIOR` |
+| `ProteccionDatos__PermitirSinCertificado` | Solo hosts de pruebas sin base real (job `accesibilidad`) | Última salida documentada: arranca sin cifrar con error visible en el log; nunca en Render |
 
 **Proveedor de correo (HU-010, SUP-1):** Staging y Production envían por **Resend** (se exige
 `Resend__ApiKey`); cualquier otro entorno usa el **buzón en memoria** salvo que `Correo:ForzarBuzon`

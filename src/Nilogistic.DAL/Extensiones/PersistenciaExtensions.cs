@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Nilogistic.DAL.Contexto;
 using Nilogistic.DAL.Interceptores;
 using Nilogistic.DAL.Interfaces;
+using Nilogistic.DAL.Interfaces.Identidad;
 using Nilogistic.DAL.Repositorios;
+using Nilogistic.DAL.Repositorios.Identidad;
+using Nilogistic.Entity.Identidad;
 using Nilogistic.Utility.Contratos;
 using Nilogistic.Utility.Utilidades;
 using Npgsql;
@@ -56,6 +60,25 @@ public static class PersistenciaExtensions
         servicios.AddScoped<IRepositorioDocumentosLegales, RepositorioDocumentosLegales>();
         servicios.AddScoped<IRepositorioDestinatariosAviso, RepositorioDestinatariosAviso>();
         servicios.AddScoped<IRepositorioRemitentesCorreo, RepositorioRemitentesCorreo>();
+
+        // Identidad (HU-014 A3, SUP-1): repositorio, hasher de contrasenas y almacen de Identity.
+        // El almacen se registra una sola vez y sirve a sus cuatro interfaces de Identity.
+        servicios.AddScoped<IRepositorioUsuarios, RepositorioUsuarios>();
+        servicios.AddScoped<IHasherContrasenas, HasherContrasenas>();
+        servicios.AddScoped<AlmacenUsuariosIdentity>();
+        servicios.AddScoped<IUserStore<Usuario>>(p => p.GetRequiredService<AlmacenUsuariosIdentity>());
+        servicios.AddScoped<IUserPasswordStore<Usuario>>(p => p.GetRequiredService<AlmacenUsuariosIdentity>());
+        servicios.AddScoped<IUserSecurityStampStore<Usuario>>(p => p.GetRequiredService<AlmacenUsuariosIdentity>());
+        servicios.AddScoped<IUserEmailStore<Usuario>>(p => p.GetRequiredService<AlmacenUsuariosIdentity>());
+
+        // Anillo de claves de Data Protection (HU-014 B2): la BLL lo consume por
+        // IRepositorioClavesProteccion para respaldo y restauracion (B4). El enchufe con Data
+        // Protection va por KeyManagementOptions (en .NET 10 el IXmlRepository en DI no se toma
+        // solo); el repositorio abre un scope por operacion, como el oficial de EF.
+        servicios.AddScoped<IRepositorioClavesProteccion, RepositorioClavesProteccion>();
+        servicios.AddOptions<Microsoft.AspNetCore.DataProtection.KeyManagement.KeyManagementOptions>()
+            .Configure<IServiceProvider>((opciones, proveedor) =>
+                opciones.XmlRepository = new Seguridad.RepositorioXmlClaves(proveedor));
         return servicios;
     }
 

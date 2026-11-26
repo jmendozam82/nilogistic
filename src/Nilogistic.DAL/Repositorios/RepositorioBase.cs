@@ -15,6 +15,9 @@ public class RepositorioBase<T>(NilogisticDbContext contexto) : IRepositorioBase
 {
     private const int TamanoMaximo = 100;
 
+    /// <summary>Contexto compartido con los repositorios derivados (HU-014 A3).</summary>
+    protected NilogisticDbContext Contexto => contexto;
+
     public Task<T?> ObtenerAsync(Guid id, bool incluirInactivos = false, CancellationToken cancelacion = default) =>
         Consulta(incluirInactivos).FirstOrDefaultAsync(entidad => entidad.Id == id, cancelacion);
 

@@ -40,13 +40,13 @@ public class RepositorioTareasTests(PostgresFixture bd)
     }
 
     /// <summary>
-    /// Las migraciones de HU-010 y HU-035 siembran <c>procesar_cola_correo</c> y
-    /// <c>vigilar_tareas</c>; quedan ocultas para que cada prueba aisle el escenario que planta
-    /// (la siembra se verifica en sus HU).
+    /// Las migraciones de HU-010, HU-035 y HU-014 siembran <c>procesar_cola_correo</c>,
+    /// <c>vigilar_tareas</c> y <c>vigilar_certificado</c>; quedan ocultas para que cada prueba
+    /// aisle el escenario que planta (la siembra se verifica en sus HU).
     /// </summary>
     private Task OcultarTareaSembradaAsync(string baseDatos) =>
         bd.EjecutarComoAdminAsync(
-            "update app.tareas set activa = false where nombre in ('procesar_cola_correo', 'vigilar_tareas')",
+            "update app.tareas set activa = false where nombre in ('procesar_cola_correo', 'vigilar_tareas', 'vigilar_certificado')",
             baseDatos);
 
     [Fact]

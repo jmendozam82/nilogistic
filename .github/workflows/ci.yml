@@ -92,6 +92,10 @@ jobs:
       Supabase__ReferenciaProyecto: "refpruebas"
       TareasSegundoPlano__Habilitado: "false"
       Correo__ForzarBuzon: "true"
+      # HU-014 B3: este host de pruebas no tiene base real ni certificado (SUP-4 de HU-037);
+      # con el arranque fallo-cerrado fuera de Local, necesita la salida documentada.
+      # Nunca se activa en Render (Staging/Produccion cargan el secret file del PFX, P-314).
+      ProteccionDatos__PermitirSinCertificado: "true"
     steps:
       - uses: actions/checkout@v4
 
