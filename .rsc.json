@@ -48,9 +48,10 @@
     "refuter-tests"
   ],
   "ownSkills": [],
-  "catalogVersion": "4.1.8",
+  "catalogVersion": "4.2.1",
   "tier": null,
   "optOuts": [
+    "auto-update",
     "emoji",
     "knowledge-sync",
     "trunk-open"
