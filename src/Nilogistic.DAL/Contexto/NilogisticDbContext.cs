@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Nilogistic.DAL.Mapeos;
 using Nilogistic.Entity.Catalogos;
+using Nilogistic.Entity.Identidad;
 using Nilogistic.Entity.Planes;
 
 namespace Nilogistic.DAL.Contexto;
@@ -20,6 +21,8 @@ public class NilogisticDbContext(DbContextOptions<NilogisticDbContext> opciones)
     public DbSet<PlanPrecio> PlanPrecios => Set<PlanPrecio>();
 
     public DbSet<PlanBeneficio> PlanBeneficios => Set<PlanBeneficio>();
+
+    public DbSet<Usuario> Usuarios => Set<Usuario>();
 
     protected override void OnModelCreating(ModelBuilder constructor)
     {

@@ -81,6 +81,7 @@ public static class NilogisticWebExtensions
         servicios.AddMemoryCache();
         servicios.AddScoped<ProveedorVersionPoliticaCookies>();
         servicios.AgregarRateLimitingNilogistic();
+        servicios.AgregarAutenticacionNilogistic();
 
         servicios.AgregarNilogistic(configuracion, entorno);
         // El contexto HTTP sustituye al de Sistema que registra el DAL (HU-008 E1/E4); debe ir después.
@@ -138,6 +139,10 @@ public static class NilogisticWebExtensions
         });
         app.UseRouting();
         app.UseRateLimiter();
+        // HU-014 A7: la autenticación va después del limitador y antes de la autorización;
+        // [Authorize] de /cuenta y /admin se evalúa en UseAuthorization.
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapearSaludNilogistic();
         app.MapGet("/robots.txt", () =>

@@ -8,6 +8,7 @@ using Nilogistic.BLL.Parametros;
 using Nilogistic.BLL.Servicios;
 using Nilogistic.BLL.Tareas;
 using Nilogistic.DAL.Extensiones;
+using Nilogistic.Entity.Identidad;
 using Nilogistic.Utility.Configuracion;
 using Nilogistic.Utility.Contratos;
 using Nilogistic.Utility.Utilidades;
@@ -41,6 +42,14 @@ public static class Dependencias
         servicios.AddSingleton<IRelojUtc, RelojSistema>();
         servicios.AddScoped<IActorActual, ActorSistema>();
 
+        // Identidad (HU-014, SUP-1): UserManager e IPasswordHasher de Identity sobre el almacén
+        // propio del DAL. La BLL no ve tipos de Identity (ReglasDeTipoTests prohíbe Microsoft.AspNetCore
+        // en la BLL): llega solo a IRepositorioUsuarios e IHasherContrasenas.
+        servicios.AddIdentityCore<Usuario>(opciones =>
+        {
+            opciones.User.RequireUniqueEmail = true;
+            opciones.Password.RequiredLength = 12; // RN-069; el mínimo real se valida con el parámetro
+        });
         servicios.AgregarPersistencia(cadenaConexion!);
 
         servicios.AddScoped<IServicioSalud, ServicioSalud>();
@@ -67,6 +76,10 @@ public static class Dependencias
         servicios.AddScoped<IServicioAuditoria, ServicioAuditoria>();
 
         servicios.AddScoped<IServicioEventosSeguridad, ServicioEventosSeguridad>();
+
+        // Inicio de sesion (HU-014 Pase A): CV-01, auditoria login_exitoso/login_fallido y punto
+        // de enganche de HU-018. Sin SignInManager (HTTP en BLL, prohibido).
+        servicios.AddScoped<IServicioAutenticacion, ServicioAutenticacion>();
 
         // Almacen de parametros (HU-062a): cache singleton (TTL 60 s) y servicio scoped; sin
         // superficie HTTP (SUP-3). El repositorio (scoped) se lo pasa el servicio a la cache.

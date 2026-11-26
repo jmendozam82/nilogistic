@@ -15,6 +15,9 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.13" />
     <!-- Excepcion autorizada por Jorge (D-101): binder estandar para enlazar secciones de configuracion -->
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.13" />
+    <!-- Identidad (HU-014 SUP-1): unico paquete nuevo del Pase A. UserManager, stores y hasher
+         sin SignInManager (HTTP). Su espacio de nombres es Microsoft.AspNetCore.Identity. -->
+    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="10.0.13" />
     <!-- API -->
     <PackageVersion Include="Asp.Versioning.Mvc" Version="8.1.1" />
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />
